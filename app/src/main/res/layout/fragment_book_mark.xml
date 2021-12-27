@@ -4,13 +4,13 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/cl_homeContainer"
+        android:id="@+id/cl_bookmarkContainer"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".CityListFragment">
+        tools:context=".BookMarkFragment">
 
         <androidx.appcompat.widget.Toolbar
-            android:id="@+id/tb_toolbar1"
+            android:id="@+id/tb_toolbar2"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
             app:layout_constraintTop_toTopOf="parent"/>
@@ -19,7 +19,7 @@
             android:id="@+id/rv_cityList"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            app:layout_constraintTop_toBottomOf="@+id/tb_toolbar1"
+            app:layout_constraintTop_toBottomOf="@+id/tb_toolbar2"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent" />
 

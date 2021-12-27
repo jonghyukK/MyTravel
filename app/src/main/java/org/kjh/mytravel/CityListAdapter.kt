@@ -15,7 +15,8 @@ import org.kjh.mytravel.databinding.ItemCityHorizontalBinding
  */
 class CityListAdapter(
     private val cityList: List<CityItem>,
-    private val viewType: Int = 0
+    private val viewType: Int = 0,
+    private val onClickItem: (CityItem) -> Unit
 ): RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     override fun getItemViewType(position: Int): Int {
@@ -28,7 +29,7 @@ class CityListAdapter(
                 ItemCityHorizontalBinding.inflate(LayoutInflater.from(parent.context), parent, false)
             )
             else -> CityListViewHolder(
-                ItemCityBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+                ItemCityBinding.inflate(LayoutInflater.from(parent.context), parent, false), onClickItem
             )
         }
     }
@@ -44,10 +45,14 @@ class CityListAdapter(
 
     class CityListViewHolder(
         private val binding: ItemCityBinding,
+        private val onClickItem: (CityItem) -> Unit
     ) : RecyclerView.ViewHolder(binding.root) {
 
         fun bind(cityItem: CityItem) {
             binding.cityItem = cityItem
+            binding.clCityItemContainer.setOnClickListener {
+                onClickItem(cityItem)
+            }
         }
     }
 

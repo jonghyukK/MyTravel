@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/bookmark"
+    app:route="bookmark_route"
+    app:startDestination="@+id/bookMarkFragment">
+
+    <fragment
+        android:id="@+id/bookMarkFragment"
+        android:name="org.kjh.mytravel.BookMarkFragment"
+        android:label="BookMarkFragment"
+        tools:layout="@layout/fragment_book_mark">
+        <action
+            android:id="@+id/action_bookMarkFragment_to_bookMarkDetailFragment"
+            app:destination="@id/bookMarkDetailFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/bookMarkDetailFragment"
+        android:name="org.kjh.mytravel.BookMarkDetailFragment"
+        android:label="fragment_book_mark_detail"
+        tools:layout="@layout/fragment_book_mark_detail" />
+</navigation>
