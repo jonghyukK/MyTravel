@@ -3,15 +3,15 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/home"
-    app:startDestination="@+id/cityListFragment">
+    app:startDestination="@+id/homeFragment">
 
     <fragment
-        android:id="@+id/cityListFragment"
-        android:name="org.kjh.mytravel.CityListFragment"
-        android:label="CityListFragment"
-        tools:layout="@layout/fragment_city_list">
+        android:id="@+id/homeFragment"
+        android:name="org.kjh.mytravel.HomeFragment"
+        android:label="HomeFragment"
+        tools:layout="@layout/fragment_home">
         <action
-            android:id="@+id/action_cityListFragment_to_cityDetailFragment"
+            android:id="@+id/action_homeFragment_to_cityDetailFragment"
             app:destination="@id/cityDetailFragment" />
     </fragment>
     <fragment

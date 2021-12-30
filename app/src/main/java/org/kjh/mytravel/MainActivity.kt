@@ -26,7 +26,7 @@ class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
     val appBarConfiguration = AppBarConfiguration(
-        setOf(R.id.cityListFragment, R.id.bookMarkFragment, R.id.profileFragment)
+        setOf(R.id.homeFragment, R.id.bookMarkFragment, R.id.profileFragment)
     )
 
     private val mainViewModel: MainViewModel by viewModels()

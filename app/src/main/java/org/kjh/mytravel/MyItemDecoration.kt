@@ -1,10 +1,13 @@
 package org.kjh.mytravel
 
 import android.content.Context
-import android.graphics.Rect
+import android.content.res.Resources
+import android.graphics.*
+import android.util.Log
 import android.util.TypedValue
 import android.view.View
 import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 
 /**
@@ -83,6 +86,23 @@ class LinearLayoutItemDecoration(
     private val _top    : Int = top.dpToPx(ctx)
     private val _bottom : Int = bottom.dpToPx(ctx)
 
+    private val DP = Resources.getSystem().displayMetrics.density
+
+    private val textPaint = Paint().apply {
+        textSize = 11 * DP
+        textAlign = Paint.Align.CENTER
+        color = Color.WHITE
+        isAntiAlias = true
+    }
+
+    private val rectPaint = Paint().apply {
+        color = Color.BLACK
+        setARGB(150, 0, 0, 0)
+        isAntiAlias = true
+        strokeWidth = 12 * DP
+        style = Paint.Style.FILL_AND_STROKE
+    }
+
     override fun getItemOffsets(
         outRect: Rect,
         view: View,
@@ -113,5 +133,31 @@ class LinearLayoutItemDecoration(
 
         outRect.top = _top
         outRect.bottom = _bottom
+    }
+
+    override fun onDrawOver(c: Canvas, parent: RecyclerView, state: RecyclerView.State) {
+        super.onDrawOver(c, parent, state)
+
+        val itemTotalCount = parent.adapter?.itemCount ?: 0
+        val currentChildPosition =
+            (parent.layoutManager as LinearLayoutManager).findFirstVisibleItemPosition()
+
+        val text = "${(currentChildPosition % (itemTotalCount / 2)) + 1}/${itemTotalCount / 2}"
+
+        val padding20 = 20 * DP
+        val padding30 = 30 * DP
+
+        val startX = parent.width - padding30 - textPaint.measureText(text)
+        val startY = parent.height - padding20
+
+        val background = getTextBackgroundSize(startX, startY, text, textPaint)
+        c.drawRoundRect(background, 50F, 50F, rectPaint)
+        c.drawText(text, startX, startY, textPaint)
+    }
+
+    private fun getTextBackgroundSize(x: Float, y: Float, text: String, paint: Paint): RectF {
+        val fm = paint.fontMetrics
+        val halfTextLength = (paint.measureText(text) + (10 * DP)) / 2
+        return RectF((x - halfTextLength), (y + fm.top), (x + halfTextLength), (y + fm.bottom))
     }
 }

@@ -49,7 +49,7 @@ dependencies {
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.4.0'
 
     // Fragment
-    def fragment_version = "1.4.0-alpha01"
+    def fragment_version = "1.4.0"
     implementation "androidx.fragment:fragment-ktx:$fragment_version"
 
     // Navigation
