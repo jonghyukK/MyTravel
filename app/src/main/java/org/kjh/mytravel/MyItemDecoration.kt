@@ -74,18 +74,13 @@ class GridLayoutItemDecoration(
     }
 }
 
-class LinearLayoutItemDecoration(
-    ctx     : Context,
+class LinearLayoutItemDecorationWithTextIndicator(
+    ctx: Context,
     left    : Int = DEFAULT_PADDING_20,
     right   : Int = DEFAULT_PADDING_20,
     top     : Int = DEFAULT_PADDING_0,
     bottom  : Int = DEFAULT_PADDING_0
-): RecyclerView.ItemDecoration() {
-    private val _left   : Int = left.dpToPx(ctx)
-    private val _right  : Int = right.dpToPx(ctx)
-    private val _top    : Int = top.dpToPx(ctx)
-    private val _bottom : Int = bottom.dpToPx(ctx)
-
+): LinearLayoutItemDecoration(ctx, left, right, top, bottom) {
     private val DP = Resources.getSystem().displayMetrics.density
 
     private val textPaint = Paint().apply {
@@ -102,6 +97,45 @@ class LinearLayoutItemDecoration(
         strokeWidth = 12 * DP
         style = Paint.Style.FILL_AND_STROKE
     }
+
+    override fun onDrawOver(c: Canvas, parent: RecyclerView, state: RecyclerView.State) {
+        super.onDrawOver(c, parent, state)
+
+        val itemTotalCount = parent.adapter?.itemCount ?: 0
+        val currentChildPosition =
+            (parent.layoutManager as LinearLayoutManager).findFirstVisibleItemPosition()
+
+        val text = "${(currentChildPosition % (itemTotalCount / 2)) + 1}/${itemTotalCount / 2}"
+
+        val padding20 = 20 * DP
+        val padding30 = 30 * DP
+
+        val startX = parent.width - padding30 - textPaint.measureText(text)
+        val startY = parent.height - padding20
+
+        val background = getTextBackgroundSize(startX, startY, text, textPaint)
+        c.drawRoundRect(background, 50F, 50F, rectPaint)
+        c.drawText(text, startX, startY, textPaint)
+    }
+
+    private fun getTextBackgroundSize(x: Float, y: Float, text: String, paint: Paint): RectF {
+        val fm = paint.fontMetrics
+        val halfTextLength = (paint.measureText(text) + (10 * DP)) / 2
+        return RectF((x - halfTextLength), (y + fm.top), (x + halfTextLength), (y + fm.bottom))
+    }
+}
+
+open class LinearLayoutItemDecoration(
+    ctx     : Context,
+    left    : Int = DEFAULT_PADDING_20,
+    right   : Int = DEFAULT_PADDING_20,
+    top     : Int = DEFAULT_PADDING_0,
+    bottom  : Int = DEFAULT_PADDING_0
+): RecyclerView.ItemDecoration() {
+    private val _left   : Int = left.dpToPx(ctx)
+    private val _right  : Int = right.dpToPx(ctx)
+    private val _top    : Int = top.dpToPx(ctx)
+    private val _bottom : Int = bottom.dpToPx(ctx)
 
     override fun getItemOffsets(
         outRect: Rect,
@@ -133,31 +167,5 @@ class LinearLayoutItemDecoration(
 
         outRect.top = _top
         outRect.bottom = _bottom
-    }
-
-    override fun onDrawOver(c: Canvas, parent: RecyclerView, state: RecyclerView.State) {
-        super.onDrawOver(c, parent, state)
-
-        val itemTotalCount = parent.adapter?.itemCount ?: 0
-        val currentChildPosition =
-            (parent.layoutManager as LinearLayoutManager).findFirstVisibleItemPosition()
-
-        val text = "${(currentChildPosition % (itemTotalCount / 2)) + 1}/${itemTotalCount / 2}"
-
-        val padding20 = 20 * DP
-        val padding30 = 30 * DP
-
-        val startX = parent.width - padding30 - textPaint.measureText(text)
-        val startY = parent.height - padding20
-
-        val background = getTextBackgroundSize(startX, startY, text, textPaint)
-        c.drawRoundRect(background, 50F, 50F, rectPaint)
-        c.drawText(text, startX, startY, textPaint)
-    }
-
-    private fun getTextBackgroundSize(x: Float, y: Float, text: String, paint: Paint): RectF {
-        val fm = paint.fontMetrics
-        val halfTextLength = (paint.measureText(text) + (10 * DP)) / 2
-        return RectF((x - halfTextLength), (y + fm.top), (x + halfTextLength), (y + fm.bottom))
     }
 }

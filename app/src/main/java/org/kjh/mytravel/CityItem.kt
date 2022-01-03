@@ -23,3 +23,29 @@ val cityItemList = listOf(
     CityItem(6, "경상도", "여기는 경상도!", R.drawable.temp_img_gyeongsangdo),
     CityItem(7, "제주도", "여기는 제주도!", R.drawable.temp_img_jeju)
 )
+
+
+
+data class EventItem(
+    val id: Long,
+    val bigTitle: String,
+    val itemList: List<CityItem>
+)
+
+val eventItemList = listOf(
+    EventItem(
+        id = 1,
+        bigTitle = "서울, 여기 가보는 건 어때요?",
+        itemList = cityItemList
+    ),
+    EventItem(
+        id = 2,
+        bigTitle = "인천의 핫한 곳은 여기!!",
+        itemList = cityItemList
+    ),
+    EventItem(
+        id = 3,
+        bigTitle = "강원도의 정취, 느껴보실래요?",
+        itemList = cityItemList
+    ),
+)

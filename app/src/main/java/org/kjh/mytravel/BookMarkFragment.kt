@@ -14,7 +14,9 @@ import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.setupWithNavController
 import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.LinearLayoutManager
 import org.kjh.mytravel.databinding.FragmentBookMarkBinding
+import org.kjh.mytravel.databinding.FragmentHomeBinding
 
 class BookMarkFragment : Fragment() {
 
@@ -52,16 +54,22 @@ class BookMarkFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val appConfiguration = (requireActivity() as MainActivity).appBarConfiguration
-        binding.tbToolbar2.setupWithNavController(findNavController(), appConfiguration)
-
-        binding.rvCityList.apply {
-            layoutManager = GridLayoutManager(view.context, 2)
-            adapter = CityListAdapter(cityItemList, viewType = 1) { item ->
-                val action = BookMarkFragmentDirections.actionBookMarkFragmentToBookMarkDetailFragment()
-                findNavController().navigate(action)
-            }
-            addItemDecoration(GridLayoutItemDecoration(this.context))
+        if (savedInstanceState == null) {
+            Log.e("v1", "book")
         }
+
+
+
+//        val appConfiguration = (requireActivity() as MainActivity).appBarConfiguration
+//        binding.tbToolbar2.setupWithNavController(findNavController(), appConfiguration)
+
+//        binding.rvCityList.apply {
+//            layoutManager = GridLayoutManager(view.context, 2)
+//            adapter = CityListAdapter(cityItemList, viewType = 1) { item ->
+//                val action = BookMarkFragmentDirections.actionBookMarkFragmentToBookMarkDetailFragment()
+//                findNavController().navigate(action)
+//            }
+//            addItemDecoration(GridLayoutItemDecoration(this.context))
+//        }
     }
 }

@@ -56,6 +56,10 @@ class ProfileFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        if (savedInstanceState == null) {
+            Log.e("v1", "profile")
+        }
+
         val appConfig = (requireActivity() as MainActivity).appBarConfiguration
         binding.tbToolbar3.setupWithNavController(findNavController(), appConfig)
     }

@@ -31,8 +31,8 @@ class HomeBannersAdapter(
     override fun getItemCount() = bannerList.size * 2
 
     override fun getItemId(position: Int): Long {
-        val str = bannerList + bannerList
-        return str[position].id
+        val itemId = bannerList + bannerList
+        return itemId[position].id
     }
 
     class HomeBannerViewHolder(
