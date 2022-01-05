@@ -1,5 +1,6 @@
 package org.kjh.mytravel
 
+import android.graphics.Color
 import android.widget.ImageView
 import androidx.databinding.BindingAdapter
 
@@ -17,5 +18,11 @@ object MyBindingAdapter {
     @BindingAdapter("imgResource")
     fun setImageDrawable(v: ImageView, imgResource: Int) {
         v.setImageResource(imgResource)
+    }
+
+    @JvmStatic
+    @BindingAdapter("tint")
+    fun setIconColorFilter(v: ImageView, colorCode: String) {
+        v.setColorFilter(Color.parseColor(colorCode))
     }
 }

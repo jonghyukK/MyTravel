@@ -42,10 +42,5 @@ val eventItemList = listOf(
         id = 2,
         bigTitle = "인천의 핫한 곳은 여기!!",
         itemList = cityItemList
-    ),
-    EventItem(
-        id = 3,
-        bigTitle = "강원도의 정취, 느껴보실래요?",
-        itemList = cityItemList
-    ),
+    )
 )

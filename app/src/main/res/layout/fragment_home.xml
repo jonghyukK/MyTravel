@@ -70,18 +70,76 @@
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:id="@+id/cl_home1"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:background="#f7f7f7">
+                    android:layout_height="match_parent">
+
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:id="@+id/cl_popularRankingContainer"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:background="#f7f7f7"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent">
+
+                        <TextView
+                            android:id="@+id/tv_popularRanking"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            style="@style/style_title"
+                            android:text="이번 주 가장 핫한 장소 BEST 7"/>
+
+                        <androidx.recyclerview.widget.RecyclerView
+                            android:id="@+id/rv_popularRankingList"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            app:layout_constraintTop_toBottomOf="@+id/tv_popularRanking"
+                            android:nestedScrollingEnabled="false"
+                            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                            android:orientation="horizontal"
+                            tools:listitem="@layout/item_popular_place"/>
+                    </androidx.constraintlayout.widget.ConstraintLayout>
 
                     <androidx.recyclerview.widget.RecyclerView
                         android:id="@+id/rv_eventList"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:nestedScrollingEnabled="false"
-                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/cl_popularRankingContainer"
                         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                         android:orientation="vertical"
                         tools:listitem="@layout/item_event_list"/>
+
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:id="@+id/cl_recentPlaceContainer"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:background="#f7f7f7"
+                        app:layout_constraintTop_toBottomOf="@+id/rv_eventList"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent">
+
+                        <TextView
+                            android:id="@+id/tv_recentPlace"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            style="@style/style_title"
+                            android:text="트레블러들이 최근 방문한 여행지들"/>
+
+                        <androidx.recyclerview.widget.RecyclerView
+                            android:id="@+id/rv_recentPlaceList"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:nestedScrollingEnabled="false"
+                            app:layout_constraintTop_toBottomOf="@+id/tv_recentPlace"
+                            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                            tools:listitem="@layout/item_recent_visit"
+                            android:orientation="vertical" />
+
+                    </androidx.constraintlayout.widget.ConstraintLayout>
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
             </androidx.core.widget.NestedScrollView>

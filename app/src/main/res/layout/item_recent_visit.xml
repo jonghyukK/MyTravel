@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+        <variable
+            name="eventItem"
+            type="org.kjh.mytravel.EventItem" />
+    </data>
+
+    <androidx.cardview.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="20dp"
+        android:layout_marginBottom="20dp"
+        app:cardElevation="1dp"
+        app:cardCornerRadius="8dp">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <ImageView
+                android:id="@+id/iv_recentPlaceImg1"
+                android:layout_width="0dp"
+                android:layout_height="180dp"
+                android:paddingEnd="1.5dp"
+                android:scaleType="centerCrop"
+                app:imgResource="@{eventItem.itemList[0].cityImg}"
+                app:layout_constraintEnd_toStartOf="@+id/iv_recentPlaceImg2"
+                app:layout_constraintHorizontal_weight="6"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <ImageView
+                android:id="@+id/iv_recentPlaceImg2"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:paddingStart="1.5dp"
+                android:paddingBottom="0.75dp"
+                android:scaleType="centerCrop"
+                app:imgResource="@{eventItem.itemList[1].cityImg}"
+                app:layout_constraintBottom_toTopOf="@+id/iv_recentPlaceImg3"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_weight="2"
+                app:layout_constraintStart_toEndOf="@+id/iv_recentPlaceImg1"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <ImageView
+                android:id="@+id/iv_recentPlaceImg3"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:paddingStart="1.5dp"
+                android:paddingTop="0.75dp"
+                android:scaleType="centerCrop"
+                app:imgResource="@{eventItem.itemList[2].cityImg}"
+                app:layout_constraintBottom_toBottomOf="@+id/iv_recentPlaceImg1"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_weight="2"
+                app:layout_constraintStart_toEndOf="@+id/iv_recentPlaceImg1"
+                app:layout_constraintTop_toBottomOf="@+id/iv_recentPlaceImg2" />
+
+            <TextView
+                android:id="@+id/tv_placeName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toBottomOf="@+id/iv_recentPlaceImg1"
+                app:layout_constraintStart_toStartOf="parent"
+                android:layout_marginTop="10dp"
+                android:layout_marginStart="8dp"
+                android:textSize="16sp"
+                android:textColor="#444444"
+                android:textStyle="bold"
+                android:text="르디투어 베이커리" />
+
+            <TextView
+                android:id="@+id/tv_placeAddress"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toBottomOf="@+id/tv_placeName"
+                app:layout_constraintStart_toStartOf="parent"
+                android:layout_marginTop="7dp"
+                android:layout_marginStart="8dp"
+                android:paddingBottom="15dp"
+                android:textSize="14sp"
+                android:textColor="#999999"
+                android:text="경기 수원시 영통구 이의동 광교로 114"/>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.cardview.widget.CardView>
+
+</layout>

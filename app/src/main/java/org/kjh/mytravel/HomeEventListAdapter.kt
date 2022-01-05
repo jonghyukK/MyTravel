@@ -56,15 +56,12 @@ class HomeEventListOuterAdapter(
             binding.eventItem = item
 
             binding.rvEventInnerList.apply {
-                layoutManager = LinearLayoutManager(binding.root.context).apply {
-                    orientation = HORIZONTAL
-                }
                 adapter = HomeEventInnerAdapter(item.itemList) { item ->
                     onClickEventItem(item)
                 }
                 setHasFixedSize(true)
                 setRecycledViewPool(viewPool)
-                addItemDecoration(LinearLayoutItemDecoration(binding.root.context, 20, 20, 15, 15))
+                addItemDecoration(LinearLayoutItemDecoration(binding.root.context, 20, 20, 0, 15))
             }
 
             restoreViewState()
@@ -91,13 +88,11 @@ class HomeEventInnerAdapter(
     override fun onCreateViewHolder(
         parent: ViewGroup,
         viewType: Int
-    ): CityListHorizontalViewHolder {
-        return CityListHorizontalViewHolder(
-            ItemEventInnerListBinding.inflate(
-                LayoutInflater.from(parent.context), parent, false
-            ), onClickItem
-        )
-    }
+    ) = CityListHorizontalViewHolder(
+        ItemEventInnerListBinding.inflate(
+            LayoutInflater.from(parent.context), parent, false
+        ), onClickItem
+    )
 
     override fun onBindViewHolder(holder: CityListHorizontalViewHolder, position: Int) {
         holder.bind(eventInnerList[position])
@@ -112,7 +107,7 @@ class HomeEventInnerAdapter(
 
         fun bind(cityItem: CityItem) {
             binding.cityItem = cityItem
-            binding.ivEventImg.setOnClickListener {
+            binding.clEventListContainer.setOnClickListener {
                 onClickItem(cityItem)
             }
         }

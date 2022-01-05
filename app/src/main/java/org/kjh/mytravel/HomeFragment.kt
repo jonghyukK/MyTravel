@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.PagerSnapHelper
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.OnScrollListener
 import org.kjh.mytravel.databinding.FragmentHomeBinding
+import org.kjh.mytravel.databinding.ItemRecentVisitBinding
 
 
 class HomeFragment : Fragment() {
@@ -43,7 +44,9 @@ class HomeFragment : Fragment() {
         initToolbarWithNavigation()
         initHomeBanners()
         initCityCategories()
+        initPopularRankingList()
         initEventList()
+        initRecentPlaceList()
     }
 
     override fun onResume() {
@@ -112,13 +115,70 @@ class HomeFragment : Fragment() {
         }
     }
 
+
     /***************************************************************
-     *  Home City Categories
+     *  Home Popular Place Ranking
+     ***************************************************************/
+    private fun initPopularRankingList() {
+        binding.rvPopularRankingList.apply {
+            adapter = PopularRankingListAdapter(cityItemList)
+            addItemDecoration(
+                LinearLayoutItemDecoration(
+                    this.context, 20, 20, 0, 20))
+            setHasFixedSize(true)
+
+            val pageSnapHelper = PagerSnapHelper()
+            pageSnapHelper.attachToRecyclerView(this)
+        }
+    }
+
+    /***************************************************************
+     *  Home Event List
      ***************************************************************/
     private fun initEventList() {
         binding.rvEventList.apply {
             adapter = homeEventListAdapter
             setHasFixedSize(true)
+        }
+    }
+
+
+    /***************************************************************
+     *  Recent Place List
+     ***************************************************************/
+    private fun initRecentPlaceList() {
+        binding.rvRecentPlaceList.apply {
+            adapter = RecentPlaceListAdapter(eventItemList)
+            setHasFixedSize(true)
+        }
+    }
+}
+
+
+class RecentPlaceListAdapter(
+    private val recentList: List<EventItem>
+): RecyclerView.Adapter<RecentPlaceListAdapter.RecentPlaceViewHolder>() {
+
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecentPlaceViewHolder {
+        return RecentPlaceViewHolder(
+            ItemRecentVisitBinding.inflate(
+                LayoutInflater.from(parent.context), parent, false
+            )
+        )
+    }
+
+    override fun onBindViewHolder(holder: RecentPlaceViewHolder, position: Int) {
+        holder.bind(recentList[position])
+    }
+
+    override fun getItemCount() = recentList.size
+
+    class RecentPlaceViewHolder(
+        val binding: ItemRecentVisitBinding
+    ): RecyclerView.ViewHolder(binding.root) {
+
+        fun bind(item: EventItem) {
+            binding.eventItem = item
         }
     }
 }
