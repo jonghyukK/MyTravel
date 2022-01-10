@@ -5,26 +5,56 @@
     android:id="@+id/home"
     app:startDestination="@+id/homeFragment">
 
+    <action
+        android:id="@+id/action_global_placeFragment"
+        app:destination="@id/placePagerFragment"
+        app:enterAnim="@anim/slide_in_right"
+        app:exitAnim="@anim/slide_out_left"
+        app:popEnterAnim="@anim/slide_in_left"
+        app:popExitAnim="@anim/slide_out_right"/>
+    <action
+        android:id="@+id/action_global_userFragment"
+        app:destination="@id/userFragment"
+        app:enterAnim="@anim/slide_in_right"
+        app:exitAnim="@anim/slide_out_left"
+        app:popEnterAnim="@anim/slide_in_left"
+        app:popExitAnim="@anim/slide_out_right"/>
+
+    <fragment
+        android:id="@+id/placePagerFragment"
+        android:name="org.kjh.mytravel.place.PlacePagerFragment"
+        android:label="PlaceFragment"
+        tools:layout="@layout/fragment_place_pager">
+        <argument
+            android:name="cityName"
+            app:argType="string" />
+    </fragment>
+
     <fragment
         android:id="@+id/homeFragment"
-        android:name="org.kjh.mytravel.HomeFragment"
+        android:name="org.kjh.mytravel.home.HomeFragment"
         android:label="HomeFragment"
         tools:layout="@layout/fragment_home">
         <action
-            android:id="@+id/action_homeFragment_to_cityDetailFragment"
-            app:destination="@id/cityDetailFragment"
+            android:id="@+id/action_homeFragment_to_homeSpecificCityPagerFragment"
+            app:destination="@id/homeSpecificCityPagerFragment"
             app:enterAnim="@anim/slide_in_right"
             app:exitAnim="@anim/slide_out_left"
             app:popEnterAnim="@anim/slide_in_left"
-            app:popExitAnim="@anim/slide_out_right" />
+            app:popExitAnim="@anim/slide_out_right"/>
     </fragment>
     <fragment
-        android:id="@+id/cityDetailFragment"
-        android:name="org.kjh.mytravel.CityDetailFragment"
-        android:label="CityDetailFragment"
-        tools:layout="@layout/fragment_city_detail">
+        android:id="@+id/userFragment"
+        android:name="org.kjh.mytravel.UserFragment"
+        android:label="fragment_user"
+        tools:layout="@layout/fragment_user" />
+    <fragment
+        android:id="@+id/homeSpecificCityPagerFragment"
+        android:name="org.kjh.mytravel.home.HomeSpecificCityPagerFragment"
+        android:label="지역별 여행지"
+        tools:layout="@layout/fragment_home_specific_city_pager">
         <argument
-            android:name="myArg"
+            android:name="cityName"
             app:argType="string" />
     </fragment>
 </navigation>

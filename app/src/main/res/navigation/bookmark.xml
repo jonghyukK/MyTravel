@@ -8,7 +8,7 @@
 
     <fragment
         android:id="@+id/bookMarkFragment"
-        android:name="org.kjh.mytravel.BookMarkFragment"
+        android:name="org.kjh.mytravel.bookmark.BookMarkFragment"
         android:label="BookMarkFragment"
         tools:layout="@layout/fragment_book_mark">
         <action
@@ -17,7 +17,7 @@
     </fragment>
     <fragment
         android:id="@+id/bookMarkDetailFragment"
-        android:name="org.kjh.mytravel.BookMarkDetailFragment"
+        android:name="org.kjh.mytravel.bookmark.BookMarkDetailFragment"
         android:label="fragment_book_mark_detail"
         tools:layout="@layout/fragment_book_mark_detail" />
 </navigation>

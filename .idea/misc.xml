@@ -3,6 +3,7 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="app/src/main/res/drawable/ic_launcher_background.xml" value="0.3962962962962963" />
         <entry key="app/src/main/res/drawable/style_img_circle.xml" value="0.6246153846153846" />
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.1" />
         <entry key="app/src/main/res/layout/fragment_book_mark.xml" value="0.2916666666666667" />
@@ -10,18 +11,36 @@
         <entry key="app/src/main/res/layout/fragment_city_detail.xml" value="0.2916666666666667" />
         <entry key="app/src/main/res/layout/fragment_city_list.xml" value="0.2833333333333333" />
         <entry key="app/src/main/res/layout/fragment_detail.xml" value="0.15833333333333333" />
-        <entry key="app/src/main/res/layout/fragment_home.xml" value="0.34040770734431725" />
+        <entry key="app/src/main/res/layout/fragment_home.xml" value="0.23836527180289402" />
+        <entry key="app/src/main/res/layout/fragment_home_specific_city_list.xml" value="0.3089887640449438" />
+        <entry key="app/src/main/res/layout/fragment_home_specific_city_pager.xml" value="0.25555555555555554" />
         <entry key="app/src/main/res/layout/fragment_list.xml" value="0.9102564102564102" />
+        <entry key="app/src/main/res/layout/fragment_place_day_log.xml" value="0.36046511627906974" />
+        <entry key="app/src/main/res/layout/fragment_place_detail.xml" value="0.4995366079703429" />
+        <entry key="app/src/main/res/layout/fragment_place_info.xml" value="0.6148255813953488" />
+        <entry key="app/src/main/res/layout/fragment_place_pager.xml" value="0.4084084084084084" />
         <entry key="app/src/main/res/layout/fragment_profile.xml" value="0.1" />
+        <entry key="app/src/main/res/layout/fragment_user.xml" value="0.6276923076923077" />
         <entry key="app/src/main/res/layout/item_city.xml" value="0.1" />
         <entry key="app/src/main/res/layout/item_city_category.xml" value="0.6182291666666667" />
         <entry key="app/src/main/res/layout/item_city_horizontal.xml" value="0.33" />
+        <entry key="app/src/main/res/layout/item_city_list.xml" value="0.7208029197080292" />
         <entry key="app/src/main/res/layout/item_event_inner_list.xml" value="0.33" />
         <entry key="app/src/main/res/layout/item_event_list.xml" value="0.5" />
-        <entry key="app/src/main/res/layout/item_home_banner.xml" value="0.48760330578512395" />
+        <entry key="app/src/main/res/layout/item_home_banner.xml" value="0.16" />
         <entry key="app/src/main/res/layout/item_list.xml" value="0.5953703703703703" />
-        <entry key="app/src/main/res/layout/item_popular_place.xml" value="0.9" />
-        <entry key="app/src/main/res/layout/item_recent_visit.xml" value="0.6348958333333333" />
+        <entry key="app/src/main/res/layout/item_popular_place.xml" value="0.67" />
+        <entry key="app/src/main/res/layout/item_recent_visit.xml" value="0.25" />
+        <entry key="app/src/main/res/layout/vh_place_inner.xml" value="0.6375" />
+        <entry key="app/src/main/res/layout/vh_place_item.xml" value="0.75" />
+        <entry key="app/src/main/res/layout/vh_place_outer.xml" value="0.6375" />
+        <entry key="app/src/main/res/layout/vh_post_in_place_outer.xml" value="0.8804448563484708" />
+        <entry key="app/src/main/res/layout/vh_post_item.xml" value="0.12777777777777777" />
+        <entry key="app/src/main/res/layout/vh_post_timeline.xml" value="0.6113416320885201" />
+        <entry key="app/src/main/res/layout/vh_preview_slide_inner.xml" value="0.2875912408759124" />
+        <entry key="app/src/main/res/layout/vh_preview_slide_outer.xml" value="0.6156202143950995" />
+        <entry key="app/src/main/res/layout/vh_ranking.xml" value="0.6375" />
+        <entry key="app/src/main/res/layout/vh_rect_image.xml" value="0.48973143759873616" />
         <entry key="app/src/main/res/menu/menu_bottom_nav.xml" value="0.1" />
         <entry key="app/src/main/res/menu/menu_city_list.xml" value="0.1" />
       </map>

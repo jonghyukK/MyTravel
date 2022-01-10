@@ -10,6 +10,7 @@
 
 
     <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/cl_homeCityCategoriesContainer"
         android:layout_width="60dp"
         android:layout_height="60dp">
 

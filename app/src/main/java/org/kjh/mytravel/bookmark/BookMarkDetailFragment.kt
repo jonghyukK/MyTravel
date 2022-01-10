@@ -1,4 +1,4 @@
-package org.kjh.mytravel
+package org.kjh.mytravel.bookmark
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment

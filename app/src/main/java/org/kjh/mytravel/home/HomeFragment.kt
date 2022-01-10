@@ -1,30 +1,42 @@
-package org.kjh.mytravel
+package org.kjh.mytravel.home
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.navigation.NavOptions
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.setupWithNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.PagerSnapHelper
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.OnScrollListener
+import org.kjh.mytravel.*
 import org.kjh.mytravel.databinding.FragmentHomeBinding
-import org.kjh.mytravel.databinding.ItemRecentVisitBinding
+import org.kjh.mytravel.home.banner.HomeBannersAdapter
+import org.kjh.mytravel.home.citycategory.HomeCityCategoriesAdapter
+import org.kjh.mytravel.home.event.HomeEventOuterAdapter
+import org.kjh.mytravel.home.ranking.PopularRankingListAdapter
 
 
 class HomeFragment : Fragment() {
     private lateinit var binding: FragmentHomeBinding
 
-    private val viewModel: HomeViewModel by viewModels()
-
     private val homeEventListAdapter by lazy {
-        HomeEventListOuterAdapter(eventItemList) { item ->
+        HomeEventOuterAdapter(eventItemList) { item ->
             val action =
-                HomeFragmentDirections.actionHomeFragmentToCityDetailFragment(item.cityName)
+                HomeFragmentDirections.actionGlobalPlaceFragment(item.cityName)
+            findNavController().navigate(action)
+        }
+    }
+
+    private val recentPlaceAdapter by lazy {
+        PlaceListAdapter(tempPlaceItemList) { item ->
+            val action =
+                HomeFragmentDirections.actionGlobalPlaceFragment(item.cityName)
             findNavController().navigate(action)
         }
     }
@@ -33,7 +45,6 @@ class HomeFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-
         binding = FragmentHomeBinding.inflate(inflater, container, false)
         return binding.root
     }
@@ -51,16 +62,18 @@ class HomeFragment : Fragment() {
 
     override fun onResume() {
         super.onResume()
-
         if (binding.rvEventList.adapter == null) {
             binding.rvEventList.adapter = homeEventListAdapter
+            binding.rvRecentPlaceList.adapter = recentPlaceAdapter
         }
     }
 
     override fun onStop() {
         super.onStop()
         binding.rvEventList.adapter = null
+        binding.rvRecentPlaceList.adapter = null
     }
+
 
     private fun initToolbarWithNavigation() {
         val appConfiguration = (requireActivity() as MainActivity).appBarConfiguration
@@ -78,7 +91,8 @@ class HomeFragment : Fragment() {
             setHasFixedSize(true)
             addItemDecoration(
                 LinearLayoutItemDecorationWithTextIndicator(
-                    requireContext(), 0, 0, 0, 0))
+                    requireContext(), 0, 0, 0, 0)
+            )
 
             val pagerSnapHelper = PagerSnapHelper()
             pagerSnapHelper.attachToRecyclerView(binding.rvHomeBanners)
@@ -107,24 +121,31 @@ class HomeFragment : Fragment() {
      ***************************************************************/
     private fun initCityCategories() {
         binding.rvCityCategoryList.apply {
-            adapter = HomeCityCategoriesAdapter(cityItemList)
+            adapter = HomeCityCategoriesAdapter(cityItemList) { item ->
+                val action = HomeFragmentDirections.actionHomeFragmentToHomeSpecificCityPagerFragment(item.cityName)
+                findNavController().navigate(action)
+            }
             setHasFixedSize(true)
             addItemDecoration(
                 LinearLayoutItemDecoration(
-                    requireContext(), 10, 10, 0, 15))
+                    requireContext(), 10, 10, 0, 15)
+            )
         }
     }
-
 
     /***************************************************************
      *  Home Popular Place Ranking
      ***************************************************************/
     private fun initPopularRankingList() {
         binding.rvPopularRankingList.apply {
-            adapter = PopularRankingListAdapter(cityItemList)
+            adapter = PopularRankingListAdapter(tempPlaceItemList) { item ->
+                val action = HomeFragmentDirections.actionGlobalPlaceFragment(item.cityName)
+                findNavController().navigate(action)
+            }
             addItemDecoration(
                 LinearLayoutItemDecoration(
-                    this.context, 20, 20, 0, 20))
+                    this.context, 20, 20, 0, 20)
+            )
             setHasFixedSize(true)
 
             val pageSnapHelper = PagerSnapHelper()
@@ -142,43 +163,13 @@ class HomeFragment : Fragment() {
         }
     }
 
-
     /***************************************************************
      *  Recent Place List
      ***************************************************************/
     private fun initRecentPlaceList() {
         binding.rvRecentPlaceList.apply {
-            adapter = RecentPlaceListAdapter(eventItemList)
+            adapter = recentPlaceAdapter
             setHasFixedSize(true)
-        }
-    }
-}
-
-
-class RecentPlaceListAdapter(
-    private val recentList: List<EventItem>
-): RecyclerView.Adapter<RecentPlaceListAdapter.RecentPlaceViewHolder>() {
-
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecentPlaceViewHolder {
-        return RecentPlaceViewHolder(
-            ItemRecentVisitBinding.inflate(
-                LayoutInflater.from(parent.context), parent, false
-            )
-        )
-    }
-
-    override fun onBindViewHolder(holder: RecentPlaceViewHolder, position: Int) {
-        holder.bind(recentList[position])
-    }
-
-    override fun getItemCount() = recentList.size
-
-    class RecentPlaceViewHolder(
-        val binding: ItemRecentVisitBinding
-    ): RecyclerView.ViewHolder(binding.root) {
-
-        fun bind(item: EventItem) {
-            binding.eventItem = item
         }
     }
 }

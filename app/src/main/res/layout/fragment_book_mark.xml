@@ -7,7 +7,7 @@
         android:id="@+id/cl_bookmarkContainer"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".BookMarkFragment">
+        tools:context=".bookmark.BookMarkFragment">
 
         <androidx.appcompat.widget.Toolbar
             android:id="@+id/tb_toolbar2"

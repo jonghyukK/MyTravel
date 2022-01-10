@@ -1,8 +1,9 @@
-package org.kjh.mytravel
+package org.kjh.mytravel.home
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import org.kjh.mytravel.EventItem
 
 /**
  * MyTravel

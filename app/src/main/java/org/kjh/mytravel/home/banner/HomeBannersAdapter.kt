@@ -1,8 +1,9 @@
-package org.kjh.mytravel
+package org.kjh.mytravel.home.banner
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import org.kjh.mytravel.CityItem
 import org.kjh.mytravel.databinding.ItemHomeBannerBinding
 
 /**
@@ -15,7 +16,7 @@ import org.kjh.mytravel.databinding.ItemHomeBannerBinding
 
 class HomeBannersAdapter(
     private val bannerList: List<CityItem>
-): RecyclerView.Adapter<HomeBannersAdapter.HomeBannerViewHolder>() {
+) : RecyclerView.Adapter<HomeBannerViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) =
         HomeBannerViewHolder(
@@ -32,15 +33,6 @@ class HomeBannersAdapter(
 
     override fun getItemId(position: Int): Long {
         val itemId = bannerList + bannerList
-        return itemId[position].id
-    }
-
-    class HomeBannerViewHolder(
-        private val binding: ItemHomeBannerBinding
-    ): RecyclerView.ViewHolder(binding.root) {
-
-        fun bind(item: CityItem) {
-            binding.cityItem = item
-        }
+        return itemId[position].cityId
     }
 }

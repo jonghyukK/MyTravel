@@ -1,8 +1,9 @@
-package org.kjh.mytravel
+package org.kjh.mytravel.home.citycategory
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import org.kjh.mytravel.CityItem
 import org.kjh.mytravel.databinding.ItemCityCategoryBinding
 
 /**
@@ -13,14 +14,15 @@ import org.kjh.mytravel.databinding.ItemCityCategoryBinding
  * Description:
  */
 class HomeCityCategoriesAdapter(
-    private val categoryList: List<CityItem>
-): RecyclerView.Adapter<HomeCityCategoriesAdapter.HomeCityCategoryViewHolder>() {
+    private val categoryList: List<CityItem>,
+    private val onClickCityCategory: (CityItem) -> Unit
+): RecyclerView.Adapter<HomeCityCategoryViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) =
         HomeCityCategoryViewHolder(
             ItemCityCategoryBinding.inflate(
                 LayoutInflater.from(parent.context), parent, false
-            )
+            ), onClickCityCategory
         )
 
     override fun onBindViewHolder(holder: HomeCityCategoryViewHolder, position: Int) {
@@ -28,13 +30,4 @@ class HomeCityCategoriesAdapter(
     }
 
     override fun getItemCount() = categoryList.size
-
-    class HomeCityCategoryViewHolder(
-        val binding: ItemCityCategoryBinding
-    ): RecyclerView.ViewHolder(binding.root) {
-
-        fun bind(item: CityItem) {
-            binding.cityItem = item
-        }
-    }
 }

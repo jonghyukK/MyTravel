@@ -1,4 +1,4 @@
-package org.kjh.mytravel
+package org.kjh.mytravel.bookmark
 
 import android.os.Bundle
 import android.util.Log
@@ -10,13 +10,10 @@ import androidx.activity.addCallback
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavOptions
-import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
-import androidx.navigation.ui.setupWithNavController
-import androidx.recyclerview.widget.GridLayoutManager
-import androidx.recyclerview.widget.LinearLayoutManager
+import org.kjh.mytravel.MainViewModel
+import org.kjh.mytravel.R
 import org.kjh.mytravel.databinding.FragmentBookMarkBinding
-import org.kjh.mytravel.databinding.FragmentHomeBinding
 
 class BookMarkFragment : Fragment() {
 
@@ -37,9 +34,9 @@ class BookMarkFragment : Fragment() {
                         saveState = true
                     ).build()
 
-            val backStackId = mainViewModel.tabBackStack[mainViewModel.tabBackStack.size - 2]
-            mainViewModel.deleteTabBackStack(mainViewModel.tabBackStack[mainViewModel.tabBackStack.size - 1])
-            findNavController().navigate(backStackId, null, navOptions)
+//            val backStackId = mainViewModel.tabBackStack[mainViewModel.tabBackStack.size - 2]
+//            mainViewModel.deleteTabBackStack(mainViewModel.tabBackStack[mainViewModel.tabBackStack.size - 1])
+            findNavController().navigate(R.id.home, null, navOptions)
         }
     }
 
@@ -55,7 +52,6 @@ class BookMarkFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         if (savedInstanceState == null) {
-            Log.e("v1", "book")
         }
 
 

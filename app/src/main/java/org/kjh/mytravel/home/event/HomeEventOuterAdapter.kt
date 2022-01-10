@@ -1,25 +1,26 @@
-package org.kjh.mytravel
+package org.kjh.mytravel.home.event
 
 import android.os.Parcelable
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import androidx.recyclerview.widget.RecyclerView.HORIZONTAL
-import org.kjh.mytravel.databinding.ItemEventInnerListBinding
+import org.kjh.mytravel.EventItem
+import org.kjh.mytravel.HomeEventInnerAdapter
+import org.kjh.mytravel.LinearLayoutItemDecoration
+import org.kjh.mytravel.PlaceItem
 import org.kjh.mytravel.databinding.ItemEventListBinding
 
 /**
  * MyTravel
- * Class: HomeEventListAdapter
- * Created by mac on 2022/01/03.
+ * Class: HomeEventListOuterAdapter
+ * Created by mac on 2022/01/07.
  *
  * Description:
  */
-class HomeEventListOuterAdapter(
+class HomeEventOuterAdapter(
     private val eventList: List<EventItem>,
-    private val onClickEventItem: (CityItem) -> Unit
-): RecyclerView.Adapter<HomeEventListOuterAdapter.HomeEventListOuterViewHolder>() {
+    private val onClickEventItem: (PlaceItem) -> Unit
+): RecyclerView.Adapter<HomeEventOuterAdapter.HomeEventListOuterViewHolder>() {
 
     private val scrollState = mutableMapOf<Int, Parcelable?>()
     private val viewPool = RecyclerView.RecycledViewPool()
@@ -30,7 +31,7 @@ class HomeEventListOuterAdapter(
     ) = HomeEventListOuterViewHolder(
         ItemEventListBinding.inflate(
             LayoutInflater.from(parent.context), parent, false
-        ), onClickEventItem, viewPool
+        ), viewPool
     )
 
     override fun onBindViewHolder(holder: HomeEventListOuterViewHolder, position: Int) {
@@ -48,7 +49,6 @@ class HomeEventListOuterAdapter(
 
     inner class HomeEventListOuterViewHolder(
         val binding: ItemEventListBinding,
-        val onClickEventItem: (CityItem) -> Unit,
         private val viewPool: RecyclerView.RecycledViewPool
     ) : RecyclerView.ViewHolder(binding.root) {
 
@@ -75,40 +75,6 @@ class HomeEventListOuterAdapter(
                 binding.rvEventInnerList.layoutManager?.onRestoreInstanceState(state)
             } else {
                 binding.rvEventInnerList.layoutManager?.scrollToPosition(0)
-            }
-        }
-    }
-}
-
-class HomeEventInnerAdapter(
-    private val eventInnerList: List<CityItem>,
-    private val onClickItem: (CityItem) -> Unit
-) : RecyclerView.Adapter<HomeEventInnerAdapter.CityListHorizontalViewHolder>() {
-
-    override fun onCreateViewHolder(
-        parent: ViewGroup,
-        viewType: Int
-    ) = CityListHorizontalViewHolder(
-        ItemEventInnerListBinding.inflate(
-            LayoutInflater.from(parent.context), parent, false
-        ), onClickItem
-    )
-
-    override fun onBindViewHolder(holder: CityListHorizontalViewHolder, position: Int) {
-        holder.bind(eventInnerList[position])
-    }
-
-    override fun getItemCount() = eventInnerList.size
-
-    class CityListHorizontalViewHolder(
-        private val binding: ItemEventInnerListBinding,
-        private val onClickItem: (CityItem) -> Unit
-    ) : RecyclerView.ViewHolder(binding.root) {
-
-        fun bind(cityItem: CityItem) {
-            binding.cityItem = cityItem
-            binding.clEventListContainer.setOnClickListener {
-                onClickItem(cityItem)
             }
         }
     }
