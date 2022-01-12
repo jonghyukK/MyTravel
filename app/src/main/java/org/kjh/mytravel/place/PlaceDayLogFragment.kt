@@ -21,18 +21,11 @@ import org.kjh.mytravel.databinding.FragmentPlaceDayLogBinding
 class PlaceDayLogFragment : Fragment() {
     private lateinit var binding: FragmentPlaceDayLogBinding
 
-    var scrollState : Parcelable? = null
-
     private val postListAdapter by lazy {
-        PostListAdapter(tempPostItemList) {
-            findNavController().navigate(R.id.action_global_userFragment)
+        PostListAdapter(tempPostItemList) { item ->
+            val action = NavGraphDirections.actionGlobalUserFragment(item.writer)
+            findNavController().navigate(action)
         }
-    }
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-        Log.e("ttt", "onCreate")
     }
 
     override fun onCreateView(
@@ -41,14 +34,11 @@ class PlaceDayLogFragment : Fragment() {
     ): View {
         binding = FragmentPlaceDayLogBinding.inflate(inflater, container, false)
 
-        Log.e("ttt", "onCreateView")
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        Log.e("ttt", "onViewCreated")
 
         val concatAdapter = ConcatAdapter()
         concatAdapter.addAdapter(postListAdapter)
@@ -67,24 +57,10 @@ class PlaceDayLogFragment : Fragment() {
         }
     }
 
-    override fun onStop() {
-        super.onStop()
-
-        Log.e("ttt", "onStop")
-
-    }
-
     override fun onDestroyView() {
         super.onDestroyView()
 
         binding.rvPlaceDayLogList.adapter = null
-        Log.e("ttt", "onDestroyView")
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-
-        Log.e("ttt", "onDestroy")
     }
 
     companion object {

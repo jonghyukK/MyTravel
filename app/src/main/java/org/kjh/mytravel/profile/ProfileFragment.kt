@@ -13,15 +13,13 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.setupWithNavController
 import org.kjh.mytravel.databinding.FragmentProfileBinding
 import androidx.navigation.NavOptions
-import org.kjh.mytravel.MainActivity
-import org.kjh.mytravel.MainViewModel
-import org.kjh.mytravel.R
+import androidx.recyclerview.widget.GridLayoutManager
+import org.kjh.mytravel.*
 
 
 class ProfileFragment : Fragment() {
 
     private lateinit var binding: FragmentProfileBinding
-    private val mainViewModel: MainViewModel by activityViewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -36,11 +34,6 @@ class ProfileFragment : Fragment() {
                         inclusive = false,
                         saveState = true
                     ).build()
-
-//            findNavController().popBackStack()
-
-//            val backStackId = mainViewModel.tabBackStack[mainViewModel.tabBackStack.size - 2]
-//            mainViewModel.deleteTabBackStack(mainViewModel.tabBackStack[mainViewModel.tabBackStack.size - 1])
             findNavController().navigate(R.id.home, null, navOptions)
         }
     }
@@ -56,11 +49,25 @@ class ProfileFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        if (savedInstanceState == null) {
+        initToolbarWithNavigation()
+        initMyProfile()
+    }
 
-        }
-
+    private fun initToolbarWithNavigation() {
         val appConfig = (requireActivity() as MainActivity).appBarConfiguration
-        binding.tbToolbar3.setupWithNavController(findNavController(), appConfig)
+        binding.tbProfileToolbar.setupWithNavController(findNavController(), appConfig)
+    }
+
+    private fun initMyProfile() {
+        binding.rvMyPostList.apply {
+            layoutManager = GridLayoutManager(requireContext(), 2)
+            adapter = PostSmallListAdapter(tempPostItemList) { item ->
+                val action =
+                    NavGraphDirections.actionGlobalPlacePagerFragment(item.placeName)
+                findNavController().navigate(action)
+            }
+            setHasFixedSize(true)
+            addItemDecoration(GridLayoutItemDecoration(requireContext()))
+        }
     }
 }

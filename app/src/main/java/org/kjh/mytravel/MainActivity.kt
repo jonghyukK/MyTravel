@@ -2,6 +2,8 @@ package org.kjh.mytravel
 
 import android.os.Bundle
 import android.os.PersistableBundle
+import android.util.Log
+import android.view.View
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
@@ -61,6 +63,19 @@ class MainActivity : AppCompatActivity() {
 //                NavigationUI.onNavDestinationSelected(item, navController)
 //                true
 //            }
+        }
+
+        navController.addOnDestinationChangedListener { navController, destination, bundle ->
+
+            binding.bnvBottomNav.visibility =
+                if (destination.id != R.id.homeFragment
+                    && destination.id != R.id.bookMarkFragment
+                    && destination.id != R.id.profileFragment
+                ) {
+                    View.GONE
+                } else {
+                    View.VISIBLE
+                }
         }
     }
 }

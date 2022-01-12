@@ -143,7 +143,6 @@
                             android:nestedScrollingEnabled="false"
                             app:layout_constraintTop_toBottomOf="@+id/tv_recentPlace"
                             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-                            tools:listitem="@layout/item_recent_visit"
                             android:orientation="vertical" />
 
                     </androidx.constraintlayout.widget.ConstraintLayout>

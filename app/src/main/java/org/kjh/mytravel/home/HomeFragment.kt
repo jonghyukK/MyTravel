@@ -5,6 +5,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.NavOptions
@@ -28,7 +29,7 @@ class HomeFragment : Fragment() {
     private val homeEventListAdapter by lazy {
         HomeEventOuterAdapter(eventItemList) { item ->
             val action =
-                HomeFragmentDirections.actionGlobalPlaceFragment(item.cityName)
+                NavGraphDirections.actionGlobalPlacePagerFragment(item.placeName)
             findNavController().navigate(action)
         }
     }
@@ -36,7 +37,7 @@ class HomeFragment : Fragment() {
     private val recentPlaceAdapter by lazy {
         PlaceListAdapter(tempPlaceItemList) { item ->
             val action =
-                HomeFragmentDirections.actionGlobalPlaceFragment(item.cityName)
+                NavGraphDirections.actionGlobalPlacePagerFragment(item.placeName)
             findNavController().navigate(action)
         }
     }
@@ -68,12 +69,12 @@ class HomeFragment : Fragment() {
         }
     }
 
-    override fun onStop() {
-        super.onStop()
+    override fun onDestroyView() {
+        super.onDestroyView()
+
         binding.rvEventList.adapter = null
         binding.rvRecentPlaceList.adapter = null
     }
-
 
     private fun initToolbarWithNavigation() {
         val appConfiguration = (requireActivity() as MainActivity).appBarConfiguration
@@ -139,7 +140,8 @@ class HomeFragment : Fragment() {
     private fun initPopularRankingList() {
         binding.rvPopularRankingList.apply {
             adapter = PopularRankingListAdapter(tempPlaceItemList) { item ->
-                val action = HomeFragmentDirections.actionGlobalPlaceFragment(item.cityName)
+                val action =
+                    NavGraphDirections.actionGlobalPlacePagerFragment(item.placeName)
                 findNavController().navigate(action)
             }
             addItemDecoration(

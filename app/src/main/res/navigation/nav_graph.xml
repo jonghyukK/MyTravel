@@ -5,8 +5,41 @@
     android:id="@+id/nav_graph"
     app:startDestination="@+id/home">
 
-    <include app:graph="@navigation/home" />
-    <include app:graph="@navigation/bookmark"/>
-    <include app:graph="@navigation/profile"/>
+    <action
+        android:id="@+id/action_global_placePagerFragment"
+        app:destination="@id/placePagerFragment"
+        app:enterAnim="@animator/nav_default_enter_anim"
+        app:exitAnim="@animator/nav_default_exit_anim"
+        app:popEnterAnim="@animator/nav_default_pop_enter_anim"
+        app:popExitAnim="@anim/nav_default_pop_exit_anim" />
 
+    <action
+        android:id="@+id/action_global_userFragment"
+        app:destination="@id/userFragment"
+        app:enterAnim="@anim/slide_in_right"
+        app:exitAnim="@anim/slide_out_left"
+        app:popEnterAnim="@anim/slide_in_left"
+        app:popExitAnim="@anim/slide_out_right" />
+
+    <fragment
+        android:id="@+id/userFragment"
+        android:name="org.kjh.mytravel.UserFragment"
+        tools:layout="@layout/fragment_user">
+        <argument
+            android:name="userEmail"
+            app:argType="string" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/placePagerFragment"
+        android:name="org.kjh.mytravel.place.PlacePagerFragment"
+        tools:layout="@layout/fragment_place_pager">
+        <argument
+            android:name="cityName"
+            app:argType="string" />
+    </fragment>
+
+    <include app:graph="@navigation/bookmark" />
+    <include app:graph="@navigation/profile" />
+    <include app:graph="@navigation/home" />
 </navigation>

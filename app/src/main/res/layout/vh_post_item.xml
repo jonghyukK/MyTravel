@@ -17,6 +17,12 @@
         android:layout_marginTop="20dp"
         android:layout_marginBottom="20dp">
 
+        <androidx.constraintlayout.widget.Group
+            android:id="@+id/group"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:constraint_referenced_ids="siv_profileImg, tv_writerEmail" />
+
         <com.google.android.material.imageview.ShapeableImageView
             android:id="@+id/siv_profileImg"
             android:layout_width="30dp"
@@ -32,15 +38,16 @@
 
         <TextView
             android:id="@+id/tv_writerEmail"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
             android:layout_marginStart="10dp"
             android:text="@{postItem.writer}"
             android:textColor="@color/black"
             android:textSize="13sp"
             app:layout_constraintTop_toTopOf="@+id/siv_profileImg"
             app:layout_constraintBottom_toBottomOf="@+id/siv_profileImg"
-            app:layout_constraintStart_toEndOf="@+id/siv_profileImg"/>
+            app:layout_constraintStart_toEndOf="@+id/siv_profileImg"
+            app:layout_constraintEnd_toEndOf="parent"/>
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/vp_postItemPager"

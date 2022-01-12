@@ -3,6 +3,7 @@ package org.kjh.mytravel
 import android.os.Parcelable
 import android.util.DisplayMetrics
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.PagerSnapHelper
 import androidx.recyclerview.widget.RecyclerView
@@ -52,15 +53,15 @@ class PostListAdapter(
         fun bind(item: PostItem) {
             binding.postItem = item
 
-            binding.clPostItemContainer.setOnClickListener {
-                onClick(item)
+            binding.group.referencedIds.forEach { id ->
+                binding.root.findViewById<View>(id).setOnClickListener {
+                    onClick(item)
+                }
             }
 
             binding.vpPostItemPager.apply {
                 setRecycledViewPool(viewPool)
-                adapter = RectImageListAdapter(item.postImages) {
-                    onClick(item)
-                }
+                adapter = RectImageListAdapter(item.postImages) {}
                 setHasFixedSize(true)
 
                 val pagerSnapHelper = PagerSnapHelper()
