@@ -6,6 +6,8 @@
         <entry key="app/src/main/res/drawable/ic_launcher_background.xml" value="0.3962962962962963" />
         <entry key="app/src/main/res/drawable/style_img_circle.xml" value="0.6246153846153846" />
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.1" />
+        <entry key="app/src/main/res/layout/bs_fragment_login.xml" value="0.1" />
+        <entry key="app/src/main/res/layout/bs_fragment_sign_up.xml" value="0.1" />
         <entry key="app/src/main/res/layout/fragment_book_mark.xml" value="0.2916666666666667" />
         <entry key="app/src/main/res/layout/fragment_book_mark_detail.xml" value="0.6010416666666667" />
         <entry key="app/src/main/res/layout/fragment_city_detail.xml" value="0.2916666666666667" />
@@ -15,11 +17,12 @@
         <entry key="app/src/main/res/layout/fragment_home_specific_city_list.xml" value="0.3089887640449438" />
         <entry key="app/src/main/res/layout/fragment_home_specific_city_pager.xml" value="0.25555555555555554" />
         <entry key="app/src/main/res/layout/fragment_list.xml" value="0.9102564102564102" />
+        <entry key="app/src/main/res/layout/fragment_login.xml" value="0.5" />
         <entry key="app/src/main/res/layout/fragment_place_day_log.xml" value="0.36046511627906974" />
         <entry key="app/src/main/res/layout/fragment_place_detail.xml" value="0.4995366079703429" />
         <entry key="app/src/main/res/layout/fragment_place_info.xml" value="0.6148255813953488" />
         <entry key="app/src/main/res/layout/fragment_place_pager.xml" value="0.4084084084084084" />
-        <entry key="app/src/main/res/layout/fragment_profile.xml" value="0.33" />
+        <entry key="app/src/main/res/layout/fragment_profile.xml" value="0.1" />
         <entry key="app/src/main/res/layout/fragment_user.xml" value="0.5993788819875776" />
         <entry key="app/src/main/res/layout/item_city.xml" value="0.1" />
         <entry key="app/src/main/res/layout/item_city_category.xml" value="0.6182291666666667" />

@@ -1,8 +1,10 @@
 package org.kjh.mytravel
 
 import android.graphics.Color
+import android.widget.EditText
 import android.widget.ImageView
 import androidx.databinding.BindingAdapter
+import com.google.android.material.textfield.TextInputEditText
 
 /**
  * MyTravel
@@ -24,5 +26,13 @@ object MyBindingAdapter {
     @BindingAdapter("tint")
     fun setIconColorFilter(v: ImageView, colorCode: String) {
         v.setColorFilter(Color.parseColor(colorCode))
+    }
+
+    @JvmStatic
+    @BindingAdapter("app:onFocusLost")
+    fun TextInputEditText.onFocusLost(callback: FocusEventHandler) {
+        setOnFocusChangeListener { _, hasFocus ->
+            callback.onFocusLost(this, hasFocus)
+        }
     }
 }

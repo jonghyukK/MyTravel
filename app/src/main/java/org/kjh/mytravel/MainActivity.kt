@@ -67,6 +67,8 @@ class MainActivity : AppCompatActivity() {
 
         navController.addOnDestinationChangedListener { navController, destination, bundle ->
 
+
+
             binding.bnvBottomNav.visibility =
                 if (destination.id != R.id.homeFragment
                     && destination.id != R.id.bookMarkFragment
