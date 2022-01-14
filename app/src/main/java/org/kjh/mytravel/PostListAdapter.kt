@@ -5,9 +5,11 @@ import android.util.DisplayMetrics
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.PagerSnapHelper
 import androidx.recyclerview.widget.RecyclerView
 import org.kjh.mytravel.databinding.VhPostItemBinding
+import org.kjh.mytravel.uistate.PostItemUiState
 
 /**
  * MyTravel
@@ -18,9 +20,8 @@ import org.kjh.mytravel.databinding.VhPostItemBinding
  */
 
 class PostListAdapter(
-    private val items: List<PostItem>,
-    private val onClick: (PostItem) -> Unit,
-): RecyclerView.Adapter<PostListAdapter.PostItemViewHolder>() {
+    private val onClick: (PostItemUiState) -> Unit,
+): ListAdapter<PostItemUiState, PostListAdapter.PostItemViewHolder>(PostItemUiState.DiffCallback) {
     private val viewPool = RecyclerView.RecycledViewPool()
     private val snapState = mutableMapOf<Int, Parcelable?>()
 
@@ -33,10 +34,8 @@ class PostListAdapter(
     }
 
     override fun onBindViewHolder(holder: PostItemViewHolder, position: Int) {
-        holder.bind(items[position])
+        holder.bind(getItem(position))
     }
-
-    override fun getItemCount() = items.size
 
     override fun onViewRecycled(holder: PostItemViewHolder) {
         super.onViewRecycled(holder)
@@ -47,11 +46,11 @@ class PostListAdapter(
 
     inner class PostItemViewHolder(
         val binding: VhPostItemBinding,
-        val onClick: (PostItem) -> Unit
+        val onClick: (PostItemUiState) -> Unit
     ): RecyclerView.ViewHolder(binding.root) {
 
-        fun bind(item: PostItem) {
-            binding.postItem = item
+        fun bind(item: PostItemUiState) {
+            binding.postItemUiState = item
 
             binding.group.referencedIds.forEach { id ->
                 binding.root.findViewById<View>(id).setOnClickListener {

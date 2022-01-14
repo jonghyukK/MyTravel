@@ -2,8 +2,10 @@ package org.kjh.mytravel
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import org.kjh.mytravel.databinding.VhPostSmallItemBinding
+import org.kjh.mytravel.uistate.PostItemUiState
 
 /**
  * MyTravel
@@ -13,9 +15,8 @@ import org.kjh.mytravel.databinding.VhPostSmallItemBinding
  * Description:
  */
 class PostSmallListAdapter(
-    private val items: List<PostItem>,
-    private val onClickItem: (PostItem) -> Unit
-): RecyclerView.Adapter<PostItemSmallViewHolder>() {
+    private val onClickItem: (PostItemUiState) -> Unit
+): ListAdapter<PostItemUiState, PostItemSmallViewHolder>(PostItemUiState.DiffCallback) {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) =
         PostItemSmallViewHolder(
             VhPostSmallItemBinding.inflate(
@@ -24,19 +25,17 @@ class PostSmallListAdapter(
         )
 
     override fun onBindViewHolder(holder: PostItemSmallViewHolder, position: Int) {
-        holder.bind(items[position])
+        holder.bind(getItem(position))
     }
-
-    override fun getItemCount() = items.size
 }
 
 class PostItemSmallViewHolder(
     val binding: VhPostSmallItemBinding,
-    private val onClickItem: (PostItem) -> Unit
+    private val onClickItem: (PostItemUiState) -> Unit
 ): RecyclerView.ViewHolder(binding.root) {
 
-    fun bind(item: PostItem) {
-        binding.postItem = item
+    fun bind(item: PostItemUiState) {
+        binding.postItemUiState = item
         binding.cvPostItemSmallContainer.setOnClickListener {
             onClickItem(item)
         }

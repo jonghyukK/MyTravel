@@ -3,10 +3,9 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
-
         <variable
-            name="placeItem"
-            type="org.kjh.mytravel.PlaceItem" />
+            name="placeItemUiState"
+            type="org.kjh.mytravel.uistate.PlaceItemUiState" />
     </data>
 
     <androidx.cardview.widget.CardView
@@ -28,7 +27,7 @@
                 android:layout_height="180dp"
                 android:layout_marginEnd="1.5dp"
                 android:scaleType="centerCrop"
-                app:imgResource="@{placeItem.placeImg}"
+                app:imgResource="@{placeItemUiState.placeImages[0]}"
                 app:layout_constraintEnd_toStartOf="@+id/iv_recentPlaceImg2"
                 app:layout_constraintHorizontal_weight="6"
                 app:layout_constraintStart_toStartOf="parent"
@@ -40,7 +39,7 @@
                 android:layout_height="0dp"
                 android:layout_marginBottom="0.75dp"
                 android:scaleType="centerCrop"
-                app:imgResource="@{placeItem.placeImg}"
+                app:imgResource="@{placeItemUiState.placeImages[0]}"
                 app:layout_constraintBottom_toTopOf="@+id/iv_recentPlaceImg3"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_weight="2"
@@ -53,7 +52,7 @@
                 android:layout_height="0dp"
                 android:layout_marginTop="0.75dp"
                 android:scaleType="centerCrop"
-                app:imgResource="@{placeItem.placeImg}"
+                app:imgResource="@{placeItemUiState.placeImages[0]}"
                 app:layout_constraintBottom_toBottomOf="@+id/iv_recentPlaceImg1"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_weight="2"
@@ -71,7 +70,7 @@
                 android:textSize="16sp"
                 android:textColor="#444444"
                 android:textStyle="bold"
-                android:text="@{placeItem.placeName}" />
+                android:text="@{placeItemUiState.placeName}" />
 
             <TextView
                 android:id="@+id/tv_placeAddress"
@@ -84,7 +83,7 @@
                 android:paddingBottom="15dp"
                 android:textSize="14sp"
                 android:textColor="#999999"
-                android:text="@{placeItem.placeAddress}"/>
+                android:text="@{placeItemUiState.placeAddress}"/>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.cardview.widget.CardView>

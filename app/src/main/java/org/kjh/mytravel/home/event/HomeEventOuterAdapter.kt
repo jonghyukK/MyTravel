@@ -3,12 +3,12 @@ package org.kjh.mytravel.home.event
 import android.os.Parcelable
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import org.kjh.mytravel.EventItem
-import org.kjh.mytravel.HomeEventInnerAdapter
 import org.kjh.mytravel.LinearLayoutItemDecoration
-import org.kjh.mytravel.PlaceItem
 import org.kjh.mytravel.databinding.ItemEventListBinding
+import org.kjh.mytravel.uistate.EventItemUiState
+import org.kjh.mytravel.uistate.PlaceItemUiState
 
 /**
  * MyTravel
@@ -18,10 +18,8 @@ import org.kjh.mytravel.databinding.ItemEventListBinding
  * Description:
  */
 class HomeEventOuterAdapter(
-    private val eventList: List<EventItem>,
-    private val onClickEventItem: (PlaceItem) -> Unit
-): RecyclerView.Adapter<HomeEventOuterAdapter.HomeEventListOuterViewHolder>() {
-
+    private val onClickEventItem: (PlaceItemUiState) -> Unit
+): ListAdapter<EventItemUiState, HomeEventOuterAdapter.HomeEventListOuterViewHolder>(EventItemUiState.DiffCallback) {
     private val scrollState = mutableMapOf<Int, Parcelable?>()
     private val viewPool = RecyclerView.RecycledViewPool()
 
@@ -35,10 +33,8 @@ class HomeEventOuterAdapter(
     )
 
     override fun onBindViewHolder(holder: HomeEventListOuterViewHolder, position: Int) {
-        holder.bind(eventList[position])
+        holder.bind(getItem(position))
     }
-
-    override fun getItemCount() = eventList.size
 
     override fun onViewRecycled(holder: HomeEventListOuterViewHolder) {
         super.onViewRecycled(holder)
@@ -52,11 +48,11 @@ class HomeEventOuterAdapter(
         private val viewPool: RecyclerView.RecycledViewPool
     ) : RecyclerView.ViewHolder(binding.root) {
 
-        fun bind(item: EventItem) {
-            binding.eventItem = item
+        fun bind(item: EventItemUiState) {
+            binding.eventItemUiState = item
 
             binding.rvEventInnerList.apply {
-                adapter = HomeEventInnerAdapter(item.itemList) { item ->
+                adapter = HomeEventInnerAdapter(item.placeItems) { item ->
                     onClickEventItem(item)
                 }
                 setHasFixedSize(true)

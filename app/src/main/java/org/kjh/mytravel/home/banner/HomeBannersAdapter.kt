@@ -2,9 +2,9 @@ package org.kjh.mytravel.home.banner
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import androidx.recyclerview.widget.RecyclerView
-import org.kjh.mytravel.CityItem
+import androidx.recyclerview.widget.ListAdapter
 import org.kjh.mytravel.databinding.ItemHomeBannerBinding
+import org.kjh.mytravel.uistate.BannerItemUiState
 
 /**
  * MyTravel
@@ -14,9 +14,8 @@ import org.kjh.mytravel.databinding.ItemHomeBannerBinding
  * Description:
  */
 
-class HomeBannersAdapter(
-    private val bannerList: List<CityItem>
-) : RecyclerView.Adapter<HomeBannerViewHolder>() {
+class HomeBannersAdapter
+    : ListAdapter<BannerItemUiState, HomeBannerViewHolder>(BannerItemUiState.DiffCallback) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) =
         HomeBannerViewHolder(
@@ -26,13 +25,13 @@ class HomeBannersAdapter(
         )
 
     override fun onBindViewHolder(holder: HomeBannerViewHolder, position: Int) {
-        holder.bind(bannerList[position % bannerList.size])
+        holder.bind(getItem(position % currentList.size))
     }
 
-    override fun getItemCount() = bannerList.size * 2
+    override fun getItemCount() = currentList.size * 2
 
     override fun getItemId(position: Int): Long {
-        val itemId = bannerList + bannerList
-        return itemId[position].cityId
+        val expandedItems = currentList + currentList
+        return expandedItems[position].bannerId
     }
 }

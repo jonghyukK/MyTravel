@@ -1,10 +1,12 @@
 package org.kjh.mytravel.place
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.navigation.ui.setupWithNavController
@@ -18,6 +20,7 @@ val TAB_TITLE = listOf("데이로그", "정보")
 class PlacePagerFragment : Fragment() {
 
     private lateinit var binding: FragmentPlacePagerBinding
+    private val viewModel: PlaceViewModel by viewModels()
     private val args: PlacePagerFragmentArgs by navArgs()
 
     override fun onCreateView(
@@ -25,13 +28,17 @@ class PlacePagerFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         binding = FragmentPlacePagerBinding.inflate(inflater, container, false)
+        binding.lifecycleOwner = viewLifecycleOwner
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        binding.viewModel = viewModel
 
-        binding.tvTitle.text = args.cityName
+        if (viewModel.placeData.value == null) {
+            viewModel.getPlaceData(args.placeName)
+        }
 
         initToolbarWithAppBarLayout()
         initTabLayoutWithPager()
@@ -46,7 +53,7 @@ class PlacePagerFragment : Fragment() {
                 scrollRange = barLayout?.totalScrollRange!!
             }
 
-            binding.ctl.title = if (scrollRange + verticalOffset == 0) args.cityName else " "
+            binding.ctl.title = if (scrollRange + verticalOffset == 0) args.placeName else " "
         })
     }
 

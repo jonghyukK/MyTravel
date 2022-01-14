@@ -3,8 +3,8 @@ package org.kjh.mytravel.home.citycategory
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import org.kjh.mytravel.CityItem
 import org.kjh.mytravel.databinding.ItemCityCategoryBinding
+import org.kjh.mytravel.uistate.CityCategoryItemUiState
 
 /**
  * MyTravel
@@ -14,8 +14,8 @@ import org.kjh.mytravel.databinding.ItemCityCategoryBinding
  * Description:
  */
 class HomeCityCategoriesAdapter(
-    private val categoryList: List<CityItem>,
-    private val onClickCityCategory: (CityItem) -> Unit
+    private val cityCategoryItems   : List<CityCategoryItemUiState>,
+    private val onClickCityCategory : (CityCategoryItemUiState) -> Unit
 ): RecyclerView.Adapter<HomeCityCategoryViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) =
@@ -26,8 +26,8 @@ class HomeCityCategoriesAdapter(
         )
 
     override fun onBindViewHolder(holder: HomeCityCategoryViewHolder, position: Int) {
-        holder.bind(categoryList[position])
+        holder.bind(cityCategoryItems[position])
     }
 
-    override fun getItemCount() = categoryList.size
+    override fun getItemCount() = cityCategoryItems.size
 }

@@ -4,10 +4,12 @@ import android.os.Parcelable
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.core.view.children
+import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.PagerSnapHelper
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.MarginPageTransformer
 import org.kjh.mytravel.databinding.VhPlaceItemBinding
+import org.kjh.mytravel.uistate.PlaceItemUiState
 
 /**
  * MyTravel
@@ -17,9 +19,8 @@ import org.kjh.mytravel.databinding.VhPlaceItemBinding
  * Description:
  */
 class PlaceListAdapter(
-    private val items: List<PlaceItem>,
-    private val onClickItem: (PlaceItem) -> Unit
-): RecyclerView.Adapter<PlaceListAdapter.PlaceItemViewHolder>() {
+    private val onClickItem: (PlaceItemUiState) -> Unit
+): ListAdapter<PlaceItemUiState, PlaceListAdapter.PlaceItemViewHolder>(PlaceItemUiState.DiffCallback) {
     private val viewPool = RecyclerView.RecycledViewPool()
     private val state = mutableMapOf<Int, Parcelable?>()
 
@@ -31,10 +32,8 @@ class PlaceListAdapter(
         )
 
     override fun onBindViewHolder(holder: PlaceItemViewHolder, position: Int) {
-        holder.bind(items[position])
+        holder.bind(getItem(position))
     }
-
-    override fun getItemCount() = items.size
 
     override fun onViewRecycled(holder: PlaceItemViewHolder) {
         super.onViewRecycled(holder)
@@ -47,8 +46,8 @@ class PlaceListAdapter(
         val binding: VhPlaceItemBinding
     ): RecyclerView.ViewHolder(binding.root) {
 
-        fun bind(item: PlaceItem) {
-            binding.placeItem = item
+        fun bind(item: PlaceItemUiState) {
+            binding.placeItemUiState = item
 
             binding.clPlaceItemContainer.setOnClickListener {
                 onClickItem(item)
@@ -56,7 +55,7 @@ class PlaceListAdapter(
 
             binding.rvRecentPlaceList.apply {
                 setRecycledViewPool(viewPool)
-                adapter = RectImageListAdapter(item.prevImgList) {
+                adapter = RectImageListAdapter(item.placeImages) {
                     onClickItem(item)
                 }
                 setHasFixedSize(true)

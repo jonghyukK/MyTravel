@@ -5,11 +5,8 @@
 
     <data>
         <variable
-            name="placeItem"
-            type="org.kjh.mytravel.PlaceItem" />
-        <variable
-            name="ranking"
-            type="Integer" />
+            name="rankingItemUiState"
+            type="org.kjh.mytravel.uistate.RankingItemUiState" />
     </data>
 
     <androidx.cardview.widget.CardView
@@ -29,7 +26,7 @@
                 android:layout_width="250dp"
                 android:layout_height="200dp"
                 android:scaleType="centerCrop"
-                app:imgResource="@{placeItem.placeImg}"
+                app:imgResource="@{rankingItemUiState.placeImg}"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintStart_toStartOf="parent"/>
 
@@ -46,7 +43,7 @@
                 android:id="@+id/tv_rank"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@{ranking.toString()}"
+                android:text="@{String.valueOf(rankingItemUiState.rank)}"
                 android:textColor="@color/white"
                 android:textSize="16sp"
                 app:layout_constraintVertical_bias="0.4"
@@ -74,7 +71,7 @@
                 app:layout_constraintBottom_toBottomOf="@+id/iv_locationIcon"
                 android:textSize="15sp"
                 android:textColor="@color/purple_500"
-                android:text="@{placeItem.cityName}"/>
+                android:text="@{rankingItemUiState.cityName}"/>
 
             <TextView
                 android:id="@+id/tv_placeName"
@@ -89,7 +86,7 @@
                 android:textStyle="bold"
                 android:textSize="13sp"
                 android:textColor="#444444"
-                android:text="@{placeItem.placeName}" />
+                android:text="@{rankingItemUiState.placeName}" />
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.cardview.widget.CardView>
 </layout>

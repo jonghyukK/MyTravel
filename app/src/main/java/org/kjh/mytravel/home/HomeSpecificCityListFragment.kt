@@ -1,16 +1,16 @@
 package org.kjh.mytravel.home
 
 import android.os.Bundle
-import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.Fragment
+import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import org.kjh.mytravel.PlaceItem
 import org.kjh.mytravel.databinding.FragmentHomeSpecificCityListBinding
 import org.kjh.mytravel.databinding.ItemCityListBinding
-import org.kjh.mytravel.tempPlaceItemList
+import org.kjh.mytravel.uistate.PlaceItemUiState
+import org.kjh.mytravel.uistate.tempPlaceItemList
 
 private const val ARG_PARAM1 = "param1"
 
@@ -45,7 +45,7 @@ class HomeSpecificCityListFragment : Fragment() {
         val initItems = tempPlaceItemList.filter { it.cityName == selectedCityName }
 
         binding.rvSpecificCityList.apply {
-            adapter = HomeSpecificCityListAdapter(initItems)
+            adapter = HomeSpecificCityListAdapter()
             setHasFixedSize(true)
         }
     }
@@ -62,9 +62,8 @@ class HomeSpecificCityListFragment : Fragment() {
 }
 
 
-class HomeSpecificCityListAdapter(
-    private val recentList: List<PlaceItem>
-): RecyclerView.Adapter<HomeSpecificCityListAdapter.HomeSpecificCityListViewHolder>() {
+class HomeSpecificCityListAdapter
+    : ListAdapter<PlaceItemUiState, HomeSpecificCityListAdapter.HomeSpecificCityListViewHolder>(PlaceItemUiState.DiffCallback) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): HomeSpecificCityListViewHolder {
         return HomeSpecificCityListViewHolder(
@@ -75,17 +74,15 @@ class HomeSpecificCityListAdapter(
     }
 
     override fun onBindViewHolder(holder: HomeSpecificCityListViewHolder, position: Int) {
-        holder.bind(recentList[position])
+        holder.bind(getItem(position))
     }
-
-    override fun getItemCount() = recentList.size
 
     class HomeSpecificCityListViewHolder(
         val binding: ItemCityListBinding
     ): RecyclerView.ViewHolder(binding.root) {
 
-        fun bind(item: PlaceItem) {
-            binding.placeItem = item
+        fun bind(item: PlaceItemUiState) {
+            binding.placeItemUiState = item
         }
     }
 }

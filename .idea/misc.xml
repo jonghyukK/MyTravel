@@ -23,14 +23,14 @@
         <entry key="app/src/main/res/layout/fragment_place_info.xml" value="0.6148255813953488" />
         <entry key="app/src/main/res/layout/fragment_place_pager.xml" value="0.4084084084084084" />
         <entry key="app/src/main/res/layout/fragment_profile.xml" value="0.1" />
-        <entry key="app/src/main/res/layout/fragment_user.xml" value="0.5993788819875776" />
+        <entry key="app/src/main/res/layout/fragment_user.xml" value="0.48443579766536965" />
         <entry key="app/src/main/res/layout/item_city.xml" value="0.1" />
         <entry key="app/src/main/res/layout/item_city_category.xml" value="0.6182291666666667" />
         <entry key="app/src/main/res/layout/item_city_horizontal.xml" value="0.33" />
         <entry key="app/src/main/res/layout/item_city_list.xml" value="0.7208029197080292" />
         <entry key="app/src/main/res/layout/item_event_inner_list.xml" value="0.33" />
         <entry key="app/src/main/res/layout/item_event_list.xml" value="0.5" />
-        <entry key="app/src/main/res/layout/item_home_banner.xml" value="0.16" />
+        <entry key="app/src/main/res/layout/item_home_banner.xml" value="0.1" />
         <entry key="app/src/main/res/layout/item_list.xml" value="0.5953703703703703" />
         <entry key="app/src/main/res/layout/item_popular_place.xml" value="0.67" />
         <entry key="app/src/main/res/layout/item_recent_visit.xml" value="0.25" />

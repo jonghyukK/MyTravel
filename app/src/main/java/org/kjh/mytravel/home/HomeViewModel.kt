@@ -3,7 +3,12 @@ package org.kjh.mytravel.home
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import org.kjh.mytravel.EventItem
+import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
+import org.kjh.mytravel.uistate.*
+
 
 /**
  * MyTravel
@@ -14,10 +19,23 @@ import org.kjh.mytravel.EventItem
  */
 class HomeViewModel: ViewModel() {
 
-    private val _eventList = MutableLiveData<List<EventItem>>()
-    val eventList : LiveData<List<EventItem>> = _eventList
+    private val _homeUiState = MutableLiveData<HomeUiState>()
+    val homeUiState: LiveData<HomeUiState> = _homeUiState
 
-    fun settingEventList(list: List<EventItem>) {
-        _eventList.value = list
+    init {
+        fetchHomeData()
+    }
+
+    private fun fetchHomeData() {
+        viewModelScope.launch {
+            val bannerItems      = tempBannerItems
+            val rankingItems     = tempRankingItems
+            val eventItems       = tempEventItems
+            val recentPlaceItems = tempPlaceItemList
+
+            _homeUiState.value = HomeUiState(
+                bannerItems, rankingItems, eventItems, recentPlaceItems
+            )
+        }
     }
 }

@@ -1,8 +1,8 @@
 package org.kjh.mytravel.home.ranking
 
 import androidx.recyclerview.widget.RecyclerView
-import org.kjh.mytravel.PlaceItem
 import org.kjh.mytravel.databinding.ItemPopularPlaceBinding
+import org.kjh.mytravel.uistate.RankingItemUiState
 
 /**
  * MyTravel
@@ -13,12 +13,11 @@ import org.kjh.mytravel.databinding.ItemPopularPlaceBinding
  */
 class PopularRankingViewHolder(
     val binding: ItemPopularPlaceBinding,
-    val onClickRanking: (PlaceItem) -> Unit
+    val onClickRanking: (RankingItemUiState) -> Unit
 ): RecyclerView.ViewHolder(binding.root) {
 
-    fun bind(item: PlaceItem, position: Int) {
-        binding.placeItem = item
-        binding.ranking = position + 1
+    fun bind(item: RankingItemUiState) {
+        binding.rankingItemUiState = item
 
         binding.cvRankingContainer.setOnClickListener {
             onClickRanking(item)

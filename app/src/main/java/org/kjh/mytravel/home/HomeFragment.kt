@@ -1,14 +1,11 @@
 package org.kjh.mytravel.home
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.navigation.NavOptions
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.setupWithNavController
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -21,13 +18,30 @@ import org.kjh.mytravel.home.banner.HomeBannersAdapter
 import org.kjh.mytravel.home.citycategory.HomeCityCategoriesAdapter
 import org.kjh.mytravel.home.event.HomeEventOuterAdapter
 import org.kjh.mytravel.home.ranking.PopularRankingListAdapter
+import org.kjh.mytravel.uistate.tempBannerItems
+import org.kjh.mytravel.uistate.tempCityCategoryItems
 
 
 class HomeFragment : Fragment() {
     private lateinit var binding: FragmentHomeBinding
+    private val viewModel: HomeViewModel by viewModels()
+
+    private val homeBannersAdapter by lazy {
+        HomeBannersAdapter().apply {
+            setHasStableIds(true)
+        }
+    }
+
+    private val rankingListAdapter by lazy {
+        PopularRankingListAdapter { item ->
+            val action =
+                NavGraphDirections.actionGlobalPlacePagerFragment(item.placeName)
+            findNavController().navigate(action)
+        }
+    }
 
     private val homeEventListAdapter by lazy {
-        HomeEventOuterAdapter(eventItemList) { item ->
+        HomeEventOuterAdapter { item ->
             val action =
                 NavGraphDirections.actionGlobalPlacePagerFragment(item.placeName)
             findNavController().navigate(action)
@@ -35,7 +49,7 @@ class HomeFragment : Fragment() {
     }
 
     private val recentPlaceAdapter by lazy {
-        PlaceListAdapter(tempPlaceItemList) { item ->
+        PlaceListAdapter { item ->
             val action =
                 NavGraphDirections.actionGlobalPlacePagerFragment(item.placeName)
             findNavController().navigate(action)
@@ -47,6 +61,7 @@ class HomeFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         binding = FragmentHomeBinding.inflate(inflater, container, false)
+        binding.lifecycleOwner = viewLifecycleOwner
         return binding.root
     }
 
@@ -59,21 +74,33 @@ class HomeFragment : Fragment() {
         initPopularRankingList()
         initEventList()
         initRecentPlaceList()
+
+        viewModel.homeUiState.observe(viewLifecycleOwner, { uiState ->
+            homeBannersAdapter.submitList(uiState.bannerItems)
+            rankingListAdapter.submitList(uiState.rankingItems)
+            homeEventListAdapter.submitList(uiState.eventItems)
+            recentPlaceAdapter.submitList(uiState.recentPlaceItems)
+        })
     }
 
     override fun onResume() {
         super.onResume()
+
         if (binding.rvEventList.adapter == null) {
-            binding.rvEventList.adapter = homeEventListAdapter
-            binding.rvRecentPlaceList.adapter = recentPlaceAdapter
+            binding.rvHomeBanners.adapter        = homeBannersAdapter
+            binding.rvPopularRankingList.adapter = rankingListAdapter
+            binding.rvEventList.adapter          = homeEventListAdapter
+            binding.rvRecentPlaceList.adapter    = recentPlaceAdapter
         }
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
 
-        binding.rvEventList.adapter = null
-        binding.rvRecentPlaceList.adapter = null
+        binding.rvHomeBanners.adapter        = null
+        binding.rvPopularRankingList.adapter = null
+        binding.rvEventList.adapter          = null
+        binding.rvRecentPlaceList.adapter    = null
     }
 
     private fun initToolbarWithNavigation() {
@@ -86,9 +113,7 @@ class HomeFragment : Fragment() {
      ***************************************************************/
     private fun initHomeBanners() {
         binding.rvHomeBanners.apply {
-            adapter = HomeBannersAdapter(cityItemList).apply {
-                setHasStableIds(true)
-            }
+            adapter = homeBannersAdapter
             setHasFixedSize(true)
             addItemDecoration(
                 LinearLayoutItemDecorationWithTextIndicator(
@@ -104,11 +129,11 @@ class HomeFragment : Fragment() {
                 override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
                     val firstItemVisible: Int = linearLayoutManager.findFirstVisibleItemPosition()
 
-                    if (firstItemVisible != 1 && (firstItemVisible % cityItemList.size == 1)) {
+                    if (firstItemVisible != 1 && (firstItemVisible % tempBannerItems.size == 1)) {
                         linearLayoutManager.scrollToPosition(1)
                     } else if (firstItemVisible == 0) {
                         linearLayoutManager.scrollToPositionWithOffset(
-                            cityItemList.size,
+                            tempBannerItems.size,
                             -recyclerView.computeHorizontalScrollOffset()
                         )
                     }
@@ -122,7 +147,7 @@ class HomeFragment : Fragment() {
      ***************************************************************/
     private fun initCityCategories() {
         binding.rvCityCategoryList.apply {
-            adapter = HomeCityCategoriesAdapter(cityItemList) { item ->
+            adapter = HomeCityCategoriesAdapter(tempCityCategoryItems) { item ->
                 val action = HomeFragmentDirections.actionHomeFragmentToHomeSpecificCityPagerFragment(item.cityName)
                 findNavController().navigate(action)
             }
@@ -139,11 +164,7 @@ class HomeFragment : Fragment() {
      ***************************************************************/
     private fun initPopularRankingList() {
         binding.rvPopularRankingList.apply {
-            adapter = PopularRankingListAdapter(tempPlaceItemList) { item ->
-                val action =
-                    NavGraphDirections.actionGlobalPlacePagerFragment(item.placeName)
-                findNavController().navigate(action)
-            }
+            adapter = rankingListAdapter
             addItemDecoration(
                 LinearLayoutItemDecoration(
                     this.context, 20, 20, 0, 20)
@@ -161,7 +182,6 @@ class HomeFragment : Fragment() {
     private fun initEventList() {
         binding.rvEventList.apply {
             adapter = homeEventListAdapter
-            setHasFixedSize(true)
         }
     }
 
@@ -171,7 +191,6 @@ class HomeFragment : Fragment() {
     private fun initRecentPlaceList() {
         binding.rvRecentPlaceList.apply {
             adapter = recentPlaceAdapter
-            setHasFixedSize(true)
         }
     }
 }

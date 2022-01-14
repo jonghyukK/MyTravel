@@ -1,10 +1,10 @@
-package org.kjh.mytravel
+package org.kjh.mytravel.home.event
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import org.kjh.mytravel.databinding.ItemEventInnerListBinding
-import org.kjh.mytravel.home.event.CityListHorizontalViewHolder
+import org.kjh.mytravel.uistate.PlaceItemUiState
 
 /**
  * MyTravel
@@ -16,8 +16,8 @@ import org.kjh.mytravel.home.event.CityListHorizontalViewHolder
 
 
 class HomeEventInnerAdapter(
-    private val eventInnerList: List<PlaceItem>,
-    private val onClickItem: (PlaceItem) -> Unit
+    private val eventInnerList: List<PlaceItemUiState>,
+    private val onClickItem: (PlaceItemUiState) -> Unit
 ) : RecyclerView.Adapter<CityListHorizontalViewHolder>() {
 
     override fun onCreateViewHolder(

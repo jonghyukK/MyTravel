@@ -2,9 +2,9 @@ package org.kjh.mytravel.home.ranking
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import androidx.recyclerview.widget.RecyclerView
-import org.kjh.mytravel.PlaceItem
+import androidx.recyclerview.widget.ListAdapter
 import org.kjh.mytravel.databinding.ItemPopularPlaceBinding
+import org.kjh.mytravel.uistate.RankingItemUiState
 
 /**
  * MyTravel
@@ -14,9 +14,8 @@ import org.kjh.mytravel.databinding.ItemPopularPlaceBinding
  * Description:
  */
 class PopularRankingListAdapter(
-    private val itemList: List<PlaceItem>,
-    private val onClickRankingItem: (PlaceItem) -> Unit
-): RecyclerView.Adapter<PopularRankingViewHolder>() {
+    private val onClickRankingItem: (RankingItemUiState) -> Unit
+) : ListAdapter<RankingItemUiState, PopularRankingViewHolder>(RankingItemUiState.DiffCallback) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) =
         PopularRankingViewHolder(
@@ -27,10 +26,8 @@ class PopularRankingListAdapter(
 
 
     override fun onBindViewHolder(holder: PopularRankingViewHolder, position: Int) {
-        holder.bind(itemList[position], position)
+        holder.bind(getItem(position))
     }
-
-    override fun getItemCount() = itemList.size
 }
 
 

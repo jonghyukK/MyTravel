@@ -5,8 +5,8 @@
 
     <data>
         <variable
-            name="cityItem"
-            type="org.kjh.mytravel.CityItem" />
+            name="bannerItemUiState"
+            type="org.kjh.mytravel.uistate.BannerItemUiState" />
     </data>
 
     <androidx.cardview.widget.CardView
@@ -24,6 +24,6 @@
             android:layout_height="match_parent"
             android:scaleType="centerCrop"
             android:adjustViewBounds="true"
-            app:imgResource="@{cityItem.cityImg}" />
+            app:imgResource="@{bannerItemUiState.bannerImg}" />
     </androidx.cardview.widget.CardView>
 </layout>

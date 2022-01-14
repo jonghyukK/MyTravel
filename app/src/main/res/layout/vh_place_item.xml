@@ -5,8 +5,8 @@
 
     <data>
         <variable
-            name="placeItem"
-            type="org.kjh.mytravel.PlaceItem" />
+            name="placeItemUiState"
+            type="org.kjh.mytravel.uistate.PlaceItemUiState" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -20,7 +20,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="6dp"
-            android:text="@{placeItem.placeName}"
+            android:text="@{placeItemUiState.placeName}"
             android:textColor="#444444"
             android:textSize="20sp"
             android:textStyle="bold"
@@ -43,7 +43,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="3dp"
-            android:text="@{placeItem.placeAddress}"
+            android:text="@{placeItemUiState.placeAddress}"
             android:textColor="#444444"
             android:textSize="13sp"
             app:layout_constraintStart_toEndOf="@+id/iv_locationIcon"

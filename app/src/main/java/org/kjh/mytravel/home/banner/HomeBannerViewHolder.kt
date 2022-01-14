@@ -1,8 +1,8 @@
 package org.kjh.mytravel.home.banner
 
 import androidx.recyclerview.widget.RecyclerView
-import org.kjh.mytravel.CityItem
 import org.kjh.mytravel.databinding.ItemHomeBannerBinding
+import org.kjh.mytravel.uistate.BannerItemUiState
 
 /**
  * MyTravel
@@ -14,9 +14,9 @@ import org.kjh.mytravel.databinding.ItemHomeBannerBinding
 
 class HomeBannerViewHolder(
     private val binding: ItemHomeBannerBinding
-): RecyclerView.ViewHolder(binding.root) {
+) : RecyclerView.ViewHolder(binding.root) {
 
-    fun bind(item: CityItem) {
-        binding.cityItem = item
+    fun bind(item: BannerItemUiState) {
+        binding.bannerItemUiState = item
     }
 }

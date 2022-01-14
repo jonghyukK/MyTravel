@@ -1,18 +1,12 @@
 package org.kjh.mytravel
 
 import android.os.Bundle
-import android.os.PersistableBundle
-import android.util.Log
 import android.view.View
-import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.navigation.NavController
-import androidx.navigation.NavGraph.Companion.findStartDestination
-import androidx.navigation.NavOptions
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.AppBarConfiguration
-import androidx.navigation.ui.NavigationUI
 import androidx.navigation.ui.setupWithNavController
 import org.kjh.mytravel.databinding.ActivityMainBinding
 
@@ -23,8 +17,6 @@ class MainActivity : AppCompatActivity() {
     val appBarConfiguration = AppBarConfiguration(
         setOf(R.id.homeFragment, R.id.bookMarkFragment, R.id.profileFragment)
     )
-
-    private val mainViewModel: MainViewModel by viewModels()
 
     lateinit var navController: NavController
 
@@ -65,10 +57,7 @@ class MainActivity : AppCompatActivity() {
 //            }
         }
 
-        navController.addOnDestinationChangedListener { navController, destination, bundle ->
-
-
-
+        navController.addOnDestinationChangedListener { _, destination, _ ->
             binding.bnvBottomNav.visibility =
                 if (destination.id != R.id.homeFragment
                     && destination.id != R.id.bookMarkFragment

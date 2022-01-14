@@ -35,7 +35,7 @@
         android:name="org.kjh.mytravel.place.PlacePagerFragment"
         tools:layout="@layout/fragment_place_pager">
         <argument
-            android:name="cityName"
+            android:name="placeName"
             app:argType="string" />
     </fragment>
 

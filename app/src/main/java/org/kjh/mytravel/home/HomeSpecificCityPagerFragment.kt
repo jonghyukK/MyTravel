@@ -1,17 +1,17 @@
 package org.kjh.mytravel.home
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.navigation.ui.setupWithNavController
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import com.google.android.material.tabs.TabLayoutMediator
-import org.kjh.mytravel.cityItemList
 import org.kjh.mytravel.databinding.FragmentHomeSpecificCityPagerBinding
+import org.kjh.mytravel.uistate.tempCityCategoryItems
 
 
 class HomeSpecificCityPagerFragment : Fragment() {
@@ -24,7 +24,7 @@ class HomeSpecificCityPagerFragment : Fragment() {
         super.onCreate(savedInstanceState)
 
         if (savedInstanceState == null) {
-            initPos = cityItemList.indexOf(cityItemList.find { it.cityName == args.cityName })
+            initPos = tempCityCategoryItems.indexOf(tempCityCategoryItems.find { it.cityName == args.cityName })
         }
     }
 
@@ -45,7 +45,7 @@ class HomeSpecificCityPagerFragment : Fragment() {
         binding.vpCityPager.adapter = cityAdapter
 
         TabLayoutMediator(binding.tlCityTabLayout, binding.vpCityPager) { tab, position ->
-            tab.text = cityItemList[position].cityName
+            tab.text = tempCityCategoryItems[position].cityName
         }.attach()
 
         if (savedInstanceState == null) {
@@ -57,10 +57,10 @@ class HomeSpecificCityPagerFragment : Fragment() {
     private inner class EachCityPagerAdapter(
         frag: HomeSpecificCityPagerFragment
     ): FragmentStateAdapter(frag) {
-        override fun getItemCount() = cityItemList.size
+        override fun getItemCount() = tempCityCategoryItems.size
 
         override fun createFragment(position: Int): Fragment {
-            return HomeSpecificCityListFragment.newInstance(cityItemList[position].cityName)
+            return HomeSpecificCityListFragment.newInstance(tempCityCategoryItems[position].cityName)
         }
     }
 }

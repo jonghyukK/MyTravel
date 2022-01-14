@@ -1,8 +1,8 @@
 package org.kjh.mytravel.home.event
 
 import androidx.recyclerview.widget.RecyclerView
-import org.kjh.mytravel.PlaceItem
 import org.kjh.mytravel.databinding.ItemEventInnerListBinding
+import org.kjh.mytravel.uistate.PlaceItemUiState
 
 /**
  * MyTravel
@@ -13,11 +13,11 @@ import org.kjh.mytravel.databinding.ItemEventInnerListBinding
  */
 class CityListHorizontalViewHolder(
     private val binding: ItemEventInnerListBinding,
-    private val onClickItem: (PlaceItem) -> Unit
+    private val onClickItem: (PlaceItemUiState) -> Unit
 ) : RecyclerView.ViewHolder(binding.root) {
 
-    fun bind(placeItem: PlaceItem) {
-        binding.placeItem = placeItem
+    fun bind(placeItem: PlaceItemUiState) {
+        binding.placeItemUiState = placeItem
         binding.clEventListContainer.setOnClickListener {
             onClickItem(placeItem)
         }

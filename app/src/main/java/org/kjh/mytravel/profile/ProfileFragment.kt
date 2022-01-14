@@ -67,7 +67,7 @@ class ProfileFragment : Fragment() {
     private fun initMyProfile() {
         binding.rvMyPostList.apply {
             layoutManager = GridLayoutManager(requireContext(), 2)
-            adapter = PostSmallListAdapter(tempPostItemList) { item ->
+            adapter = PostSmallListAdapter { item ->
                 val action =
                     NavGraphDirections.actionGlobalPlacePagerFragment(item.placeName)
                 findNavController().navigate(action)
