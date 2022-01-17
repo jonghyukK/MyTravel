@@ -7,7 +7,7 @@
         android:id="@+id/cl_placeDayLogContainer"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".place.PlaceInfoFragment">
+        tools:context=".ui.place.PlaceInfoFragment">
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rv_placeDayLogList"

@@ -6,7 +6,7 @@
     <data>
         <variable
             name="rankingItemUiState"
-            type="org.kjh.mytravel.uistate.RankingItemUiState" />
+            type="org.kjh.mytravel.ui.uistate.RankingItemUiState" />
     </data>
 
     <androidx.cardview.widget.CardView

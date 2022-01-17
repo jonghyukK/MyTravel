@@ -1,5 +1,7 @@
 package org.kjh.mytravel
 
+import org.kjh.mytravel.ui.isValidPattern
+
 /**
  * MyTravel
  * Class: InputValidator
@@ -7,6 +9,7 @@ package org.kjh.mytravel
  *
  * Description:
  */
+
 object InputValidator {
     const val INPUT_TYPE_EMAIl      = "email"
     const val INPUT_TYPE_PW         = "pw"

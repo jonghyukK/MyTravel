@@ -23,7 +23,7 @@
 
     <fragment
         android:id="@+id/userFragment"
-        android:name="org.kjh.mytravel.UserFragment"
+        android:name="org.kjh.mytravel.ui.user.UserFragment"
         tools:layout="@layout/fragment_user">
         <argument
             android:name="userEmail"
@@ -32,7 +32,7 @@
 
     <fragment
         android:id="@+id/placePagerFragment"
-        android:name="org.kjh.mytravel.place.PlacePagerFragment"
+        android:name="org.kjh.mytravel.ui.place.PlacePagerFragment"
         tools:layout="@layout/fragment_place_pager">
         <argument
             android:name="placeName"

@@ -6,7 +6,7 @@
     <data>
         <variable
             name="placeItemUiState"
-            type="org.kjh.mytravel.uistate.PlaceItemUiState" />
+            type="org.kjh.mytravel.ui.uistate.PlaceItemUiState" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout

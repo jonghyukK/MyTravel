@@ -5,10 +5,13 @@
     <data>
         <variable
             name="fragment"
-            type="org.kjh.mytravel.LoginFragment" />
+            type="org.kjh.mytravel.ui.LoginFragment" />
         <variable
             name="viewModel"
-            type="org.kjh.mytravel.LoginViewModel" />
+            type="org.kjh.mytravel.ui.LoginViewModel" />
+        <variable
+            name="parentViewModel"
+            type="org.kjh.mytravel.ui.profile.NotLoginViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -49,7 +52,6 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="30dp"
-            app:errorEnabled="@{viewModel.emailErrorState != null}"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/tv_loginText">
@@ -61,7 +63,7 @@
                 android:inputType="textEmailAddress"
                 android:text="@={viewModel.email}"
                 android:tag="email"
-                app:onFocusLost="@{(view, hasFocus) -> viewModel.bindInputState(`email`, hasFocus)}"
+                app:onFocusLost="@{tilEmail}"
                 android:hint="이메일 주소"/>
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -72,7 +74,6 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
             app:passwordToggleEnabled="true"
-            app:errorEnabled="@{viewModel.pwErrorState != null}"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/til_email">
@@ -84,7 +85,7 @@
                 android:inputType="textPassword"
                 android:text="@={viewModel.pw}"
                 android:tag="pw"
-                app:onFocusLost="@{(view, hasFocus) -> viewModel.bindInputState(`pw`, hasFocus)}"
+                app:onFocusLost="@{tilPw}"
                 android:hint="비밀번호"/>
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -96,8 +97,18 @@
             app:layout_constraintTop_toBottomOf="@+id/til_pw"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            android:enabled="@{viewModel.isValidateLogin()}"
-            android:onClick="@{() -> viewModel.reqLogin()}"
+            android:enabled="@{viewModel.enableLogin}"
+            android:onClick="@{() -> viewModel.makeRequestLogin()}"
             android:text="로그인"/>
+
+        <ProgressBar
+            android:id="@+id/pb_loading"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"/>
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

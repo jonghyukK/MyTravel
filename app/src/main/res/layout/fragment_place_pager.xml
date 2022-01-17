@@ -6,7 +6,7 @@
     <data>
         <variable
             name="viewModel"
-            type="org.kjh.mytravel.place.PlaceViewModel" />
+            type="org.kjh.mytravel.ui.place.PlaceViewModel" />
     </data>
 
     <androidx.coordinatorlayout.widget.CoordinatorLayout
@@ -47,7 +47,6 @@
                         android:id="@+id/tv_title"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@{viewModel.placeData.placeName}"
                         android:textSize="20sp"
                         android:textColor="#333333"
                         android:textStyle="bold"/>
@@ -57,7 +56,6 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="8dp"
-                        android:text="@{viewModel.placeData.placeAddress}"
                         android:textSize="16sp"
                         android:textColor="#999999"/>
                 </LinearLayout>

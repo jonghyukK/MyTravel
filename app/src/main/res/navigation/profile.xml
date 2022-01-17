@@ -7,8 +7,13 @@
 
     <fragment
         android:id="@+id/profileFragment"
-        android:name="org.kjh.mytravel.profile.ProfileFragment"
+        android:name="org.kjh.mytravel.ui.profile.ProfileFragment"
         android:label="MyPage"
         tools:layout="@layout/fragment_profile" />
+    <fragment
+        android:id="@+id/notLoginFragment"
+        android:name="org.kjh.mytravel.ui.profile.NotLoginFragment"
+        android:label="NotLoginFragment"
+        tools:layout="@layout/fragment_not_login"/>
 
 </navigation>

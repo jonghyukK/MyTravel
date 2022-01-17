@@ -209,7 +209,9 @@ class LinearLayoutItemDecorationWithTextIndicator(
         val currentChildPosition =
             (parent.layoutManager as LinearLayoutManager).findFirstVisibleItemPosition()
 
-        val text = "${(currentChildPosition % (itemTotalCount / 2)) + 1}/${itemTotalCount / 2}"
+//        val text = "${(currentChildPosition % (itemTotalCount / 2)) + 1}/${itemTotalCount / 2}"
+
+        val text = "3/4"
 
         val padding20 = 20 * DP
         val padding30 = 30 * DP

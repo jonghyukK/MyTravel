@@ -5,10 +5,10 @@
     <data>
         <variable
             name="fragment"
-            type="org.kjh.mytravel.SignUpFragment" />
+            type="org.kjh.mytravel.ui.SignUpFragment" />
         <variable
             name="viewModel"
-            type="org.kjh.mytravel.SignUpViewModel" />
+            type="org.kjh.mytravel.ui.SignUpViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -49,7 +49,6 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="30dp"
-            app:errorEnabled="@{viewModel.emailErrorState != null}"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/tv_signUpTitle">
@@ -61,7 +60,7 @@
                 android:inputType="textEmailAddress"
                 android:text="@={viewModel.email}"
                 android:tag="email"
-                app:onFocusLost="@{(view, hasFocus) -> viewModel.bindInputState(`email`, hasFocus)}"
+                app:onFocusLost="@{tilEmail}"
                 android:hint="이메일 주소 입력"/>
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -72,7 +71,6 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
             app:passwordToggleEnabled="true"
-            app:errorEnabled="@{viewModel.pwErrorState != null}"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/til_email">
@@ -84,7 +82,7 @@
                 android:inputType="textPassword"
                 android:text="@={viewModel.pw}"
                 android:tag="pw"
-                app:onFocusLost="@{(view, hasFocus) -> viewModel.bindInputState(`pw`, hasFocus)}"
+                app:onFocusLost="@{tilPw}"
                 android:hint="8자리 이상"/>
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -97,7 +95,6 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
-            app:errorEnabled="@{viewModel.nickNameErrorState != null}"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/til_pw">
@@ -109,7 +106,7 @@
                 android:inputType="text"
                 android:text="@={viewModel.nickName}"
                 android:tag="nickName"
-                app:onFocusLost="@{(view, hasFocus) -> viewModel.bindInputState(`nickName`, hasFocus)}"
+                app:onFocusLost="@{tilNickName}"
                 android:hint="닉네임"/>
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -121,8 +118,18 @@
             app:layout_constraintTop_toBottomOf="@+id/til_nickName"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            android:enabled="@{viewModel.isValidateSignUp()}"
-            android:onClick="@{() -> viewModel.reqSignUp()}"
+            android:enabled="@{viewModel.enableSignUp}"
+            android:onClick="@{() -> viewModel.makeRequestSignUp()}"
             android:text="가입하기"/>
+
+        <ProgressBar
+            android:id="@+id/pb_loading"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"/>
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

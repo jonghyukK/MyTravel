@@ -6,7 +6,7 @@
     <data>
         <variable
             name="viewModel"
-            type="org.kjh.mytravel.UserViewModel" />
+            type="org.kjh.mytravel.ui.user.UserViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -51,7 +51,7 @@
                         android:layout_height="100dp"
                         android:scaleType="centerCrop"
                         app:shapeAppearanceOverlay="@style/circle"
-                        app:imgResource="@{viewModel.userPageUiState.userItem.profileImg}"
+                        app:imgResource="@{viewModel.userUiState.userItem.profileImg}"
                         app:layout_constraintTop_toTopOf="parent"
                         app:layout_constraintStart_toStartOf="parent"/>
 
@@ -59,7 +59,7 @@
                         android:id="@+id/tv_postCount"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@{String.valueOf(viewModel.userPageUiState.userItem.postCount)}"
+                        android:text="@{String.valueOf(viewModel.userUiState.userItem.postCount)}"
                         android:textColor="#444444"
                         android:textStyle="bold"
                         android:textSize="15sp"
@@ -73,7 +73,7 @@
                         android:id="@+id/tv_followerCount"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@{String.valueOf(viewModel.userPageUiState.userItem.followerCount)}"
+                        android:text="@{String.valueOf(viewModel.userUiState.userItem.followerCount)}"
                         android:textColor="#444444"
                         android:textStyle="bold"
                         android:textSize="15sp"
@@ -87,7 +87,7 @@
                         android:id="@+id/tv_followingCount"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@{String.valueOf(viewModel.userPageUiState.userItem.followingCount)}"
+                        android:text="@{String.valueOf(viewModel.userUiState.userItem.followingCount)}"
                         android:textColor="#444444"
                         android:textStyle="bold"
                         android:textSize="15sp"
@@ -148,7 +148,7 @@
                         android:textSize="14sp"
                         app:layout_constraintTop_toBottomOf="@+id/siv_profileImg"
                         app:layout_constraintStart_toStartOf="parent"
-                        android:text="@{viewModel.userPageUiState.userItem.introduce}"/>
+                        android:text="@{viewModel.userUiState.userItem.introduce}"/>
 
                     <Button
                         android:id="@+id/btn_follow"
@@ -156,7 +156,7 @@
                         android:layout_height="40dp"
                         android:layout_marginTop="15dp"
                         android:layout_marginBottom="15dp"
-                        android:text="@{viewModel.userPageUiState.following ? `팔로잉` : `팔로우`}"
+                        android:text="@{viewModel.userUiState.isFollowing ? `팔로잉` : `팔로우`}"
                         android:textSize="13sp"
                         app:layout_constraintTop_toBottomOf="@+id/tv_userIntroduce"
                         app:layout_constraintStart_toStartOf="parent"

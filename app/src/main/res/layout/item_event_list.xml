@@ -9,7 +9,7 @@
             type="android.view.View" />
         <variable
             name="eventItemUiState"
-            type="org.kjh.mytravel.uistate.EventItemUiState" />
+            type="org.kjh.mytravel.ui.uistate.EventItemUiState" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
