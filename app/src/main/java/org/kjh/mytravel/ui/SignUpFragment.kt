@@ -14,6 +14,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import org.kjh.mytravel.MyTravelApplication
@@ -29,6 +30,7 @@ import org.kjh.mytravel.ui.profile.NotLoginViewModel
  * Description:
  */
 
+@AndroidEntryPoint
 class SignUpFragment: BottomSheetDialogFragment() {
 
     private lateinit var binding: BsFragmentSignUpBinding

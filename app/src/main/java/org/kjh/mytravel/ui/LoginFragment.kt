@@ -14,6 +14,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import org.kjh.mytravel.MyTravelApplication
@@ -21,6 +22,7 @@ import org.kjh.mytravel.R
 import org.kjh.mytravel.databinding.BsFragmentLoginBinding
 import org.kjh.mytravel.ui.profile.NotLoginViewModel
 
+@AndroidEntryPoint
 class LoginFragment : BottomSheetDialogFragment() {
 
     private lateinit var binding: BsFragmentLoginBinding
@@ -75,8 +77,8 @@ class LoginFragment : BottomSheetDialogFragment() {
                     binding.tilPw.isErrorEnabled    = !state.pwError.isNullOrEmpty()
 
                     if (state.isLoggedIn) {
-                        MyTravelApplication.getInstance().getDataStore().setBoolean(true)
-                        parentViewModel.setLoginOrSignUpState()
+//                        MyTravelApplication.getInstance().getDataStore().setBoolean(true)
+//                        parentViewModel.setLoginOrSignUpState()
                     }
                 }
             }

@@ -1,6 +1,9 @@
 package org.kjh.mytravel
 
 import android.app.Application
+import com.orhanobut.logger.AndroidLogAdapter
+import com.orhanobut.logger.Logger
+import dagger.hilt.android.HiltAndroidApp
 
 /**
  * MyTravel
@@ -9,6 +12,8 @@ import android.app.Application
  *
  * Description:
  */
+
+@HiltAndroidApp
 class MyTravelApplication: Application() {
 
     private lateinit var dataStore: DataStoreManager
@@ -22,6 +27,8 @@ class MyTravelApplication: Application() {
         super.onCreate()
         myTravelApplication = this
         dataStore = DataStoreManager(this)
+
+        Logger.addLogAdapter(AndroidLogAdapter())
     }
 
     fun getDataStore(): DataStoreManager = dataStore

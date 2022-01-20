@@ -1,8 +1,10 @@
 package org.kjh.mytravel.ui
 
 import android.graphics.Color
+import android.net.Uri
 import android.widget.ImageView
 import androidx.databinding.BindingAdapter
+import com.bumptech.glide.Glide
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
 import org.kjh.mytravel.InputValidator.INPUT_TYPE_EMAIl
@@ -10,6 +12,7 @@ import org.kjh.mytravel.InputValidator.INPUT_TYPE_PW
 import org.kjh.mytravel.InputValidator.isValidateEmail
 import org.kjh.mytravel.InputValidator.isValidateNickName
 import org.kjh.mytravel.InputValidator.isValidatePw
+import org.kjh.mytravel.R
 
 /**
  * MyTravel
@@ -49,5 +52,33 @@ object MyBindingAdapter {
                 }
             }
         }
+    }
+
+    @JvmStatic
+    @BindingAdapter("app:imgUri")
+    fun bindImageWithUri(view: ImageView, imgUri: Uri?) {
+        imgUri?.run {
+            Glide.with(view)
+                .load(imgUri)
+//                .thumbnail(0.33f)
+                .centerCrop()
+                .into(view)
+        }
+    }
+
+    @JvmStatic
+    @BindingAdapter("app:imgUrl")
+    fun bindImageWithUrl(view: ImageView, imgUrl: String?) {
+        imgUrl?.run {
+            Glide.with(view)
+                .load(imgUrl)
+                .thumbnail(0.33f)
+                .centerCrop()
+                .into(view)
+        } ?: Glide.with(view)
+            .load(R.drawable.ic_launcher_background)
+            .thumbnail(0.33f)
+            .centerCrop()
+            .into(view)
     }
 }

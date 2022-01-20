@@ -3,6 +3,7 @@ package org.kjh.mytravel
 import android.content.Context
 import android.content.res.Resources
 import android.graphics.*
+import android.util.DisplayMetrics
 import android.util.Log
 import android.util.TypedValue
 import android.view.View
@@ -26,6 +27,34 @@ fun Int.dpToPx(ctx: Context) =
 
 private const val DEFAULT_PADDING_20 = 20
 private const val DEFAULT_PADDING_0  = 0
+
+class UploadGridLayoutItemDecor(): RecyclerView.ItemDecoration() {
+    override fun getItemOffsets(
+        outRect: Rect,
+        view: View,
+        parent: RecyclerView,
+        state: RecyclerView.State
+    ) {
+        super.getItemOffsets(outRect, view, parent, state)
+
+        val viewPosition = parent.getChildAdapterPosition(view)
+        val spanCnt = (parent.layoutManager as GridLayoutManager).spanCount
+
+        val column = viewPosition % 3
+//        if (viewPosition == 0 || viewPosition == 1 || viewPosition == 2)
+//            outRect.top = 10.dpToPx(view.resources.displayMetrics)
+
+        outRect.top = 5
+
+        outRect.left  = column * 5 / 3
+        outRect.right = 5 - (column + 1) * 5 / 3
+
+//        if (viewPosition >= 3)
+//            outRect.top = 5
+    }
+}
+
+fun Int.dpToPx(displayMetrics: DisplayMetrics): Int = (this * displayMetrics.density).toInt()
 
 class GridLayoutItemDecoration(
     ctx     : Context,

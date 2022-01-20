@@ -1,14 +1,18 @@
 package org.kjh.mytravel.ui
 
+import android.util.Log
 import android.util.Patterns
 import androidx.lifecycle.*
-import kotlinx.coroutines.delay
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import org.kjh.mytravel.InputValidator
 import org.kjh.mytravel.InputValidator.isValidateEmail
 import org.kjh.mytravel.InputValidator.isValidateNickName
 import org.kjh.mytravel.InputValidator.isValidatePw
+import org.kjh.mytravel.domain.usecase.MakeSignUpRequestUseCase
+import org.kjh.mytravel.domain.Result
+import javax.inject.Inject
 
 
 /**
@@ -31,7 +35,11 @@ data class SignUpUiState(
 fun String.isValidPattern(): Boolean =
     Patterns.EMAIL_ADDRESS.matcher(this).matches()
 
-class SignUpViewModel: ViewModel() {
+
+@HiltViewModel
+class SignUpViewModel @Inject constructor(
+    private val makeSignUpRequestUseCase: MakeSignUpRequestUseCase
+): ViewModel() {
     private val _uiState: MutableStateFlow<SignUpUiState> = MutableStateFlow(SignUpUiState())
     val uiState: StateFlow<SignUpUiState> = _uiState.asStateFlow()
 
@@ -47,23 +55,18 @@ class SignUpViewModel: ViewModel() {
 
     fun makeRequestSignUp() {
         viewModelScope.launch {
-            _uiState.update { state ->
-                state.copy(
-                    isLoading     = true,
-                    emailError    = null,
-                    pwError       = null,
-                    nickNameError = null
-                )
-            }
-
-            delay(3000)
-
-            _uiState.update { state ->
-                state.copy(
-                    isLoading    = false,
-                    isRegistered = true
-                )
-            }
+            makeSignUpRequestUseCase
+                .execute(email.value.toString(), pw.value.toString(), nickName.value.toString())
+                .collect {
+                    Log.e("test", "$it")
+                    when (it) {
+                        is Result.Success -> {
+                            _uiState.update {
+                                it.copy(isLoading = false, isRegistered = true)
+                            }
+                        }
+                    }
+                }
         }
     }
 }

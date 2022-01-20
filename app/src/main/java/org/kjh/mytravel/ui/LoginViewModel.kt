@@ -1,11 +1,15 @@
 package org.kjh.mytravel.ui
 
 import androidx.lifecycle.*
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import org.kjh.mytravel.InputValidator
 import org.kjh.mytravel.InputValidator.isValidateEmail
 import org.kjh.mytravel.InputValidator.isValidatePw
+import org.kjh.mytravel.domain.usecase.MakeLoginRequestUseCase
+import org.kjh.mytravel.domain.Result
+import javax.inject.Inject
 
 /**
  * MyTravel
@@ -22,7 +26,10 @@ data class LoginUiState(
     val isLoading      : Boolean = false
 )
 
-class LoginViewModel: ViewModel() {
+@HiltViewModel
+class LoginViewModel @Inject constructor(
+    private val makeLoginRequestUseCase: MakeLoginRequestUseCase
+): ViewModel() {
     private val _uiState: MutableStateFlow<LoginUiState> = MutableStateFlow(LoginUiState())
     val uiState: StateFlow<LoginUiState> = _uiState.asStateFlow()
 
@@ -36,20 +43,17 @@ class LoginViewModel: ViewModel() {
 
     fun makeRequestLogin() {
         viewModelScope.launch {
-            _uiState.update { state ->
-                state.copy(
-                    isLoading   = true,
-                    emailError  = null,
-                    pwError     = null
-                )
-            }
-
-            _uiState.update { state ->
-                state.copy(
-                    isLoading  = false,
-                    isLoggedIn = true,
-                )
-            }
+            makeLoginRequestUseCase
+                .execute(email.value.toString(), pw.value.toString())
+                .collect {
+                    when (it) {
+                        is Result.Success -> {
+                            _uiState.update {
+                                it.copy(isLoading = false, isLoggedIn = true)
+                            }
+                        }
+                    }
+                }
         }
     }
 }

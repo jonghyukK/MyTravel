@@ -60,11 +60,11 @@ class ProfileFragment : Fragment() {
         MyTravelApplication.getInstance().getDataStore().isLogin
             .asLiveData().observe(viewLifecycleOwner, { logIn ->
                 Log.e("isLogin", "login State : $logIn")
-                if (!logIn) {
-                    findNavController().navigate(R.id.notLoginFragment)
-                } else {
+//                if (!logIn) {
+//                    findNavController().navigate(R.id.notLoginFragment)
+//                } else {
                     initMyProfile()
-                }
+//                }
             })
     }
 
@@ -85,6 +85,20 @@ class ProfileFragment : Fragment() {
 
     private fun initToolbarWithNavigation() {
         val appConfig = (requireActivity() as MainActivity).appBarConfiguration
-        binding.tbProfileToolbar.setupWithNavController(findNavController(), appConfig)
+
+        binding.tbProfileToolbar.apply {
+            setupWithNavController(findNavController(), appConfig)
+            inflateMenu(R.menu.menu_write)
+            setOnMenuItemClickListener {
+                when (it.itemId) {
+                    R.id.write_post -> {
+                        val action = ProfileFragmentDirections.actionProfileFragmentToSelectPhotoFragment()
+                        findNavController().navigate(action)
+                        true
+                    }
+                    else -> false
+                }
+            }
+        }
     }
 }

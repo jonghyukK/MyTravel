@@ -2,9 +2,16 @@ package org.kjh.mytravel.ui.home
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
+import org.kjh.mytravel.domain.usecase.GetBannersUseCase
+import org.kjh.mytravel.domain.Result
+import org.kjh.mytravel.domain.usecase.GetEventsUseCase
+import org.kjh.mytravel.domain.usecase.GetPlaceListUseCase
+import org.kjh.mytravel.domain.usecase.GetRankingUseCase
 import org.kjh.mytravel.ui.uistate.*
+import javax.inject.Inject
 
 
 /**
@@ -39,7 +46,13 @@ sealed class RecentPlaceUiState {
     data class Error(val exception: Throwable?): RecentPlaceUiState()
 }
 
-class HomeViewModel: ViewModel() {
+@HiltViewModel
+class HomeViewModel @Inject constructor(
+    private val getBannersUseCase: GetBannersUseCase,
+    private val getRankingUseCase: GetRankingUseCase,
+    private val getEventsUseCase: GetEventsUseCase,
+    private val getPlaceListUseCase: GetPlaceListUseCase
+): ViewModel() {
     private val _bannerUiState = MutableStateFlow<BannerUiState>(BannerUiState.Loading)
     val bannerUiState : StateFlow<BannerUiState> = _bannerUiState
 
@@ -55,26 +68,42 @@ class HomeViewModel: ViewModel() {
 
     init {
         viewModelScope.launch {
-            tempBannerItemsFlow.collect { item ->
-                _bannerUiState.value = BannerUiState.Success(item)
+            getBannersUseCase.execute().collect {
+                when (it) {
+                    is Result.Success -> {
+                        _bannerUiState.value = BannerUiState.Success(it.data.bannerList)
+                    }
+                }
             }
         }
 
         viewModelScope.launch {
-            tempRankingItemsFlow.collect { item ->
-                _rankingUiState.value = RankingUiState.Success(item)
+            getRankingUseCase.execute().collect {
+                when (it) {
+                    is Result.Success -> {
+                        _rankingUiState.value = RankingUiState.Success(it.data.rankingList)
+                    }
+                }
             }
         }
 
         viewModelScope.launch {
-            tempEventItemsFlow.collect { item ->
-                _eventUiState.value = EventUiState.Success(item)
+            getEventsUseCase.execute().collect {
+                when (it) {
+                    is Result.Success -> {
+                        _eventUiState.value = EventUiState.Success(it.data.eventList)
+                    }
+                }
             }
         }
 
         viewModelScope.launch {
-            tempPlaceItemsFlow.collect { item ->
-                _recentPlaceUiState.value = RecentPlaceUiState.Success(item)
+            getPlaceListUseCase.execute().collect {
+                when (it) {
+                    is Result.Success -> {
+                        _recentPlaceUiState.value = RecentPlaceUiState.Success(it.data.placeList)
+                    }
+                }
             }
         }
     }
