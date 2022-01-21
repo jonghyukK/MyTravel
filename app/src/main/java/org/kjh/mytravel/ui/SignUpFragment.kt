@@ -17,10 +17,12 @@ import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
+import org.kjh.mytravel.DataStoreManager
 import org.kjh.mytravel.MyTravelApplication
 import org.kjh.mytravel.R
 import org.kjh.mytravel.databinding.BsFragmentSignUpBinding
 import org.kjh.mytravel.ui.profile.NotLoginViewModel
+import javax.inject.Inject
 
 /**
  * MyTravel
@@ -86,7 +88,6 @@ class SignUpFragment: BottomSheetDialogFragment() {
                     binding.tilNickName.isErrorEnabled = !state.nickNameError.isNullOrEmpty()
 
                     if (state.isRegistered) {
-                        MyTravelApplication.getInstance().getDataStore().setBoolean(true)
                         parentViewModel.setLoginOrSignUpState()
                     }
                 }

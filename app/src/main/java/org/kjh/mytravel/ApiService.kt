@@ -2,6 +2,7 @@ package org.kjh.mytravel
 
 import org.kjh.mytravel.data.model.LoginResponse
 import org.kjh.mytravel.data.model.SignUpResponse
+import org.kjh.mytravel.data.model.UserResponse
 import org.kjh.mytravel.domain.Result
 import retrofit2.http.GET
 import retrofit2.http.POST
@@ -20,12 +21,17 @@ interface ApiService {
     suspend fun createUser(
         @Query("email"   ) email    : String,
         @Query("pw"      ) pw       : String,
-        @Query("token") token: String = "test"
+        @Query("nickName") nickName : String
     ): SignUpResponse
 
     @GET("user/login")
     suspend fun login(
         @Query("email") email    : String,
         @Query("pw"   ) pw       : String
-    ): Result<LoginResponse>
+    ): LoginResponse
+
+    @GET("user")
+    suspend fun getUser(
+        @Query("email") email: String
+    ): UserResponse
 }

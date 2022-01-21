@@ -24,14 +24,16 @@ class LoginRepositoryImpl @Inject constructor(
 
     override fun makeRequestLogin(
         email: String,
-        pw: String
+        pw   : String
     ): Flow<Result<LoginResponse>> = flow {
-        val response = LoginResponse(
-            isLoggedIn = true,
-            errorMsg = null
-        )
+        emit(Result.Loading())
 
-        val str = Result.Success(response)
-        emit(responseToLoginResult(str))
+        try {
+            val result = apiService.login(email, pw)
+
+            emit(responseToLoginResult(Result.Success(result)))
+        } catch (e: Exception) {
+            emit(responseToLoginResult(Result.Error(e)))
+        }
     }
 }

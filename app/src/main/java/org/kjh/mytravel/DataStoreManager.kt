@@ -1,14 +1,17 @@
 package org.kjh.mytravel
 
 import android.content.Context
-import androidx.datastore.preferences.core.booleanPreferencesKey
-import androidx.datastore.preferences.core.edit
-import androidx.datastore.preferences.core.emptyPreferences
+import androidx.datastore.core.DataStore
+import androidx.datastore.preferences.core.*
 import androidx.datastore.preferences.preferencesDataStore
+import com.orhanobut.logger.Logger
+import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.map
 import java.io.IOException
+import javax.inject.Inject
+import javax.inject.Singleton
 
 /**
  * MyTravel
@@ -17,29 +20,24 @@ import java.io.IOException
  *
  * Description:
  */
-class DataStoreManager(
-    private val ctx: Context
-    ) {
 
-    private val Context.dataStore by preferencesDataStore(name = "dataStore")
+private val Context.dataStore by preferencesDataStore("settings")
 
-    private val booleanKey = booleanPreferencesKey("loginState")
+@Singleton //You can ignore this annotation as return `datastore` from `preferencesDataStore` is singletone
+class DataStoreManager @Inject constructor(
+    @ApplicationContext appContext: Context
+) {
+    private val settingsDataStore = appContext.dataStore
 
-    val isLogin: Flow<Boolean> = ctx.dataStore.data
-        .catch { exception ->
-            if (exception is IOException) {
-                emit(emptyPreferences())
-            } else {
-                throw exception
-            }
+    private val keyMyEmail = stringPreferencesKey("KEY_MY_EMAIL")
+
+    suspend fun saveMyEmail(email: String) {
+        settingsDataStore.edit { settings ->
+            settings[keyMyEmail] = email
         }
-        .map { preferences ->
-            preferences[booleanKey] ?: false
-        }
+    }
 
-    suspend fun setBoolean(bool: Boolean) {
-        ctx.dataStore.edit { preferences ->
-            preferences[booleanKey] = bool
-        }
+    val getMyEmail: Flow<String> = settingsDataStore.data.map { pref ->
+        pref[keyMyEmail] ?: ""
     }
 }

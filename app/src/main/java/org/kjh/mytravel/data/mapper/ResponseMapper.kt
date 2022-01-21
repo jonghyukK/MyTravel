@@ -80,4 +80,14 @@ object ResponseMapper {
             is Result.Loading -> Result.Loading()
         }
     }
+
+    fun responseToUserResult(
+        response: Result<UserResponse>
+    ): Result<UserResponse> {
+        return when (response) {
+            is Result.Success -> Result.Success(response.data)
+            is Result.Error -> Result.Error(response.throwable)
+            is Result.Loading -> Result.Loading()
+        }
+    }
 }

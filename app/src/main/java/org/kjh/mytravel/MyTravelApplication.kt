@@ -1,6 +1,10 @@
 package org.kjh.mytravel
 
 import android.app.Application
+import android.content.Context
+import androidx.datastore.core.DataStore
+import androidx.datastore.preferences.core.Preferences
+import androidx.datastore.preferences.preferencesDataStore
 import com.orhanobut.logger.AndroidLogAdapter
 import com.orhanobut.logger.Logger
 import dagger.hilt.android.HiltAndroidApp
@@ -16,20 +20,9 @@ import dagger.hilt.android.HiltAndroidApp
 @HiltAndroidApp
 class MyTravelApplication: Application() {
 
-    private lateinit var dataStore: DataStoreManager
-
-    companion object {
-        private lateinit var myTravelApplication: MyTravelApplication
-        fun getInstance(): MyTravelApplication = myTravelApplication
-    }
-
     override fun onCreate() {
         super.onCreate()
-        myTravelApplication = this
-        dataStore = DataStoreManager(this)
 
         Logger.addLogAdapter(AndroidLogAdapter())
     }
-
-    fun getDataStore(): DataStoreManager = dataStore
 }

@@ -8,6 +8,8 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.core.view.isVisible
+import androidx.datastore.core.DataStore
+import androidx.datastore.dataStore
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
@@ -17,10 +19,12 @@ import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
+import org.kjh.mytravel.DataStoreManager
 import org.kjh.mytravel.MyTravelApplication
 import org.kjh.mytravel.R
 import org.kjh.mytravel.databinding.BsFragmentLoginBinding
 import org.kjh.mytravel.ui.profile.NotLoginViewModel
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class LoginFragment : BottomSheetDialogFragment() {
@@ -73,12 +77,13 @@ class LoginFragment : BottomSheetDialogFragment() {
                     binding.pbLoading.isVisible = state.isLoading
                     binding.tilEmail.error      = state.emailError
                     binding.tilPw.error         = state.pwError
+                    binding.tvLoginError.text   = state.loginError
+                    binding.tvLoginError.isVisible = state.loginError != null
                     binding.tilEmail.isErrorEnabled = !state.emailError.isNullOrEmpty()
                     binding.tilPw.isErrorEnabled    = !state.pwError.isNullOrEmpty()
 
                     if (state.isLoggedIn) {
-//                        MyTravelApplication.getInstance().getDataStore().setBoolean(true)
-//                        parentViewModel.setLoginOrSignUpState()
+                        parentViewModel.setLoginOrSignUpState()
                     }
                 }
             }

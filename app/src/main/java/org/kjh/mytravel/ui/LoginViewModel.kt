@@ -4,6 +4,7 @@ import androidx.lifecycle.*
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
+import org.kjh.mytravel.DataStoreManager
 import org.kjh.mytravel.InputValidator
 import org.kjh.mytravel.InputValidator.isValidateEmail
 import org.kjh.mytravel.InputValidator.isValidatePw
@@ -22,13 +23,15 @@ import javax.inject.Inject
 data class LoginUiState(
     val emailError     : String? = null,
     val pwError        : String? = null,
+    val loginError     : String? = null,
     val isLoggedIn     : Boolean = false,
     val isLoading      : Boolean = false
 )
 
 @HiltViewModel
 class LoginViewModel @Inject constructor(
-    private val makeLoginRequestUseCase: MakeLoginRequestUseCase
+    private val makeLoginRequestUseCase: MakeLoginRequestUseCase,
+    private val dataStoreManager: DataStoreManager
 ): ViewModel() {
     private val _uiState: MutableStateFlow<LoginUiState> = MutableStateFlow(LoginUiState())
     val uiState: StateFlow<LoginUiState> = _uiState.asStateFlow()
@@ -45,13 +48,31 @@ class LoginViewModel @Inject constructor(
         viewModelScope.launch {
             makeLoginRequestUseCase
                 .execute(email.value.toString(), pw.value.toString())
-                .collect {
-                    when (it) {
-                        is Result.Success -> {
+                .collect { result ->
+                    when (result) {
+                        is Result.Loading -> {
                             _uiState.update {
-                                it.copy(isLoading = false, isLoggedIn = true)
+                                it.copy(
+                                    isLoading = true,
+                                    loginError = null,
+                                    emailError = null,
+                                    pwError    = null
+                                )
                             }
                         }
+                        is Result.Success -> {
+                            if (result.data.isLoggedIn)
+                                dataStoreManager.saveMyEmail(email.value.toString())
+
+                            _uiState.update {
+                                it.copy(
+                                    isLoading  = false,
+                                    isLoggedIn = result.data.isLoggedIn,
+                                    loginError = result.data.errorMsg
+                                )
+                            }
+                        }
+                        is Result.Error -> {}
                     }
                 }
         }

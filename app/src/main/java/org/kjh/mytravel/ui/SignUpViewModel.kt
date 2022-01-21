@@ -1,17 +1,17 @@
 package org.kjh.mytravel.ui
 
-import android.util.Log
 import android.util.Patterns
 import androidx.lifecycle.*
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
+import org.kjh.mytravel.DataStoreManager
 import org.kjh.mytravel.InputValidator
 import org.kjh.mytravel.InputValidator.isValidateEmail
 import org.kjh.mytravel.InputValidator.isValidateNickName
 import org.kjh.mytravel.InputValidator.isValidatePw
-import org.kjh.mytravel.domain.usecase.MakeSignUpRequestUseCase
 import org.kjh.mytravel.domain.Result
+import org.kjh.mytravel.domain.usecase.MakeSignUpRequestUseCase
 import javax.inject.Inject
 
 
@@ -38,7 +38,8 @@ fun String.isValidPattern(): Boolean =
 
 @HiltViewModel
 class SignUpViewModel @Inject constructor(
-    private val makeSignUpRequestUseCase: MakeSignUpRequestUseCase
+    private val makeSignUpRequestUseCase: MakeSignUpRequestUseCase,
+    private val dataStoreManager: DataStoreManager
 ): ViewModel() {
     private val _uiState: MutableStateFlow<SignUpUiState> = MutableStateFlow(SignUpUiState())
     val uiState: StateFlow<SignUpUiState> = _uiState.asStateFlow()
@@ -57,14 +58,30 @@ class SignUpViewModel @Inject constructor(
         viewModelScope.launch {
             makeSignUpRequestUseCase
                 .execute(email.value.toString(), pw.value.toString(), nickName.value.toString())
-                .collect {
-                    Log.e("test", "$it")
-                    when (it) {
-                        is Result.Success -> {
+                .collect { result ->
+                    when (result) {
+                        is Result.Loading -> {
                             _uiState.update {
-                                it.copy(isLoading = false, isRegistered = true)
+                                it.copy(
+                                    isLoading  = true,
+                                    emailError = null,
+                                )
                             }
                         }
+                        is Result.Success -> {
+                            if (result.data.isRegistered) {
+                                dataStoreManager.saveMyEmail(email.value.toString())
+                            }
+
+                            _uiState.update {
+                                it.copy(
+                                    isLoading    = false,
+                                    isRegistered = result.data.isRegistered,
+                                    emailError   = result.data.errorMsg
+                                )
+                            }
+                        }
+                        is Result.Error -> { }
                     }
                 }
         }

@@ -1,5 +1,7 @@
 package org.kjh.mytravel.data.model
 
+import com.google.gson.annotations.SerializedName
+
 /**
  * MyTravel
  * Class: LoginResponse
@@ -8,6 +10,9 @@ package org.kjh.mytravel.data.model
  * Description:
  */
 data class LoginResponse(
+
+    @SerializedName("result")
     val isLoggedIn: Boolean,
-    val errorMsg: String? = null
+
+    val errorMsg  : String? = null
 )

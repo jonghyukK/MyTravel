@@ -7,6 +7,7 @@ import androidx.databinding.BindingAdapter
 import com.bumptech.glide.Glide
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
+import org.kjh.mytravel.InputValidator
 import org.kjh.mytravel.InputValidator.INPUT_TYPE_EMAIl
 import org.kjh.mytravel.InputValidator.INPUT_TYPE_PW
 import org.kjh.mytravel.InputValidator.isValidateEmail
@@ -49,6 +50,11 @@ object MyBindingAdapter {
                     INPUT_TYPE_EMAIl -> isValidateEmail(inputText).errorMsg
                     INPUT_TYPE_PW    -> isValidatePw(inputText).errorMsg
                     else -> isValidateNickName(inputText).errorMsg
+                }
+                v.isErrorEnabled = when (this.tag) {
+                    INPUT_TYPE_EMAIl -> isValidateEmail(inputText) != InputValidator.EMAIL.VALIDATE
+                    INPUT_TYPE_PW    -> isValidatePw(inputText) != InputValidator.PW.VALIDATE
+                    else -> isValidateNickName(inputText) != InputValidator.NICKNAME.VALIDATE
                 }
             }
         }

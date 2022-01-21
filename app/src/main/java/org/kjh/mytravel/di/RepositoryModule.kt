@@ -78,4 +78,12 @@ object RepositoryModule {
     ): PostRepository {
         return PostRepositoryImpl(apiService, ResponseMapper::responseToUploadResult)
     }
+
+    @Singleton
+    @Provides
+    fun provideUserRepository(
+        apiService: ApiService
+    ): UserRepository {
+        return UserRepositoryImpl(apiService, ResponseMapper::responseToUserResult)
+    }
 }

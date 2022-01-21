@@ -1,6 +1,5 @@
 package org.kjh.mytravel.data.impl
 
-import android.util.Log
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import org.kjh.mytravel.ApiService
@@ -31,15 +30,12 @@ class SignUpRepositoryImpl @Inject constructor(
     ): Flow<Result<SignUpResponse>> = flow {
         emit(Result.Loading())
 
-        val result = apiService.createUser(email, pw, "this is token")
+        try {
+            val result = apiService.createUser(email, pw, nick)
 
-        Log.e("signup", "$result")
-        val response = SignUpResponse(
-            isRegistered = true,
-            errorMsg = null
-        )
-
-        val str = Result.Success(response)
-        emit(responseToSignUpResult(str))
+            emit(responseToSignUpResult(Result.Success(result)))
+        } catch (e: Exception) {
+            emit(responseToSignUpResult(Result.Error(e)))
+        }
     }
 }
