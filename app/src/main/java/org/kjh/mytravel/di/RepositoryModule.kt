@@ -3,6 +3,7 @@ package org.kjh.mytravel.di
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
+import dagger.hilt.android.scopes.ViewModelScoped
 import dagger.hilt.components.SingletonComponent
 import org.kjh.mytravel.ApiService
 import org.kjh.mytravel.data.impl.*
@@ -68,5 +69,13 @@ object RepositoryModule {
         apiService: ApiService
     ): PlaceRepository {
         return PlaceRepositoryImpl(apiService, ResponseMapper::responseToPlaceResult)
+    }
+
+    @Singleton
+    @Provides
+    fun providePostRepository(
+        apiService: ApiService
+    ): PostRepository {
+        return PostRepositoryImpl(apiService, ResponseMapper::responseToUploadResult)
     }
 }

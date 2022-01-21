@@ -30,7 +30,7 @@
         <entry key="app/src/main/res/layout/fragment_select_bucket_bottom_sheet.xml" value="0.43425925925925923" />
         <entry key="app/src/main/res/layout/fragment_select_photo.xml" value="0.1" />
         <entry key="app/src/main/res/layout/fragment_user.xml" value="0.48443579766536965" />
-        <entry key="app/src/main/res/layout/fragment_write_post.xml" value="0.6947483588621444" />
+        <entry key="app/src/main/res/layout/fragment_write_post.xml" value="0.1" />
         <entry key="app/src/main/res/layout/item_city.xml" value="0.1" />
         <entry key="app/src/main/res/layout/item_city_category.xml" value="0.6182291666666667" />
         <entry key="app/src/main/res/layout/item_city_horizontal.xml" value="0.33" />
@@ -53,7 +53,7 @@
         <entry key="app/src/main/res/layout/vh_preview_slide_outer.xml" value="0.6156202143950995" />
         <entry key="app/src/main/res/layout/vh_ranking.xml" value="0.6375" />
         <entry key="app/src/main/res/layout/vh_rect_image.xml" value="0.48973143759873616" />
-        <entry key="app/src/main/res/layout/vh_rect_image_big.xml" value="0.7546296296296297" />
+        <entry key="app/src/main/res/layout/vh_rect_image_big.xml" value="0.25" />
         <entry key="app/src/main/res/layout/vh_rect_image_small.xml" value="0.25" />
         <entry key="app/src/main/res/layout/vh_rect_image_with_close_btn.xml" value="0.67" />
         <entry key="app/src/main/res/menu/menu_bottom_nav.xml" value="0.1" />

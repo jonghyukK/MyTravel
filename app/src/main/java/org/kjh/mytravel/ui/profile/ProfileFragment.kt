@@ -15,6 +15,7 @@ import androidx.navigation.NavOptions
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.setupWithNavController
 import androidx.recyclerview.widget.GridLayoutManager
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import org.kjh.mytravel.*
@@ -25,6 +26,7 @@ import org.kjh.mytravel.ui.PostSmallListAdapter
 import org.kjh.mytravel.ui.SignUpFragment
 
 
+@AndroidEntryPoint
 class ProfileFragment : Fragment() {
 
     private lateinit var binding: FragmentProfileBinding
@@ -60,11 +62,11 @@ class ProfileFragment : Fragment() {
         MyTravelApplication.getInstance().getDataStore().isLogin
             .asLiveData().observe(viewLifecycleOwner, { logIn ->
                 Log.e("isLogin", "login State : $logIn")
-//                if (!logIn) {
-//                    findNavController().navigate(R.id.notLoginFragment)
-//                } else {
+                if (!logIn) {
+                    findNavController().navigate(R.id.notLoginFragment)
+                } else {
                     initMyProfile()
-//                }
+                }
             })
     }
 

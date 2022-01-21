@@ -12,25 +12,28 @@
         tools:layout="@layout/fragment_profile" >
         <action
             android:id="@+id/action_profileFragment_to_selectPhotoFragment"
-            app:destination="@id/selectPhotoFragment" />
+            app:destination="@id/nav_nested_upload" />
     </fragment>
     <fragment
         android:id="@+id/notLoginFragment"
         android:name="org.kjh.mytravel.ui.profile.NotLoginFragment"
         android:label="NotLoginFragment"
         tools:layout="@layout/fragment_not_login"/>
-    <fragment
-        android:id="@+id/writePostFragment"
-        android:name="org.kjh.mytravel.ui.upload.WritePostFragment"
-        android:label="fragment_write_post"
-        tools:layout="@layout/fragment_write_post" />
-    <fragment
-        android:id="@+id/selectPhotoFragment"
-        android:name="org.kjh.mytravel.ui.upload.SelectPhotoFragment"
-        tools:layout="@layout/fragment_select_photo" >
-        <action
-            android:id="@+id/action_selectPhotoFragment_to_writePostFragment"
-            app:destination="@id/writePostFragment" />
-    </fragment>
+    <navigation android:id="@+id/nav_nested_upload"
+        app:startDestination="@id/selectPhotoFragment">
+        <fragment
+            android:id="@+id/selectPhotoFragment"
+            android:name="org.kjh.mytravel.ui.upload.SelectPhotoFragment"
+            tools:layout="@layout/fragment_select_photo">
+            <action
+                android:id="@+id/action_selectPhotoFragment_to_writePostFragment"
+                app:destination="@id/writePostFragment" />
+        </fragment>
+        <fragment
+            android:id="@+id/writePostFragment"
+            android:name="org.kjh.mytravel.ui.upload.WritePostFragment"
+            android:label="fragment_write_post"
+            tools:layout="@layout/fragment_write_post" />
+    </navigation>
 
 </navigation>

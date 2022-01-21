@@ -3,25 +3,29 @@ package org.kjh.mytravel.ui.upload
 import android.app.Application
 import android.content.ContentResolver
 import android.content.ContentUris
+import android.content.Context
 import android.database.ContentObserver
 import android.net.Uri
 import android.os.Handler
 import android.provider.MediaStore
 import androidx.lifecycle.AndroidViewModel
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import androidx.recyclerview.selection.Selection
-import androidx.recyclerview.selection.SelectionTracker
 import com.orhanobut.logger.Logger
+import dagger.hilt.android.internal.Contexts.getApplication
 import dagger.hilt.android.lifecycle.HiltViewModel
+import dagger.hilt.android.qualifiers.ActivityContext
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import org.kjh.mytravel.data.model.PostUploadModel
+import org.kjh.mytravel.domain.Result
+import org.kjh.mytravel.domain.usecase.UploadUseCase
 import javax.inject.Inject
 
 /**
@@ -40,8 +44,10 @@ data class SelectPhotoUiState(
 
 @HiltViewModel
 class SelectPhotoViewModel @Inject constructor(
-    application: Application
-): AndroidViewModel(application) {
+    private val application: Application,
+    private val makeUploadUseCase: UploadUseCase
+): ViewModel() {
+    val content = MutableLiveData<String>()
 
     private var contentObserver: ContentObserver? = null
     private var _wholeMediaItemsWithBucket = mapOf<String, List<MediaStoreImage>>()
@@ -61,6 +67,28 @@ class SelectPhotoViewModel @Inject constructor(
         }
     }
 
+    fun upload() {
+        viewModelScope.launch {
+            makeUploadUseCase
+                .execute(
+                    PostUploadModel(
+                        email = "saz300@naver.com",
+                        content = content.value.toString(),
+                        cityName = "서울",
+                        placeName = "잠실타워",
+                        placeAddress = "서울시 성동구 잠실동 339-12"
+                    )
+                )
+                .collect {
+                    when (it) {
+                        is Result.Success -> {
+                            Logger.d("$it")
+                        }
+                    }
+                }
+        }
+    }
+
     private fun getImagesFromMediaStore() {
         viewModelScope.launch {
             val mediaStoreImages = queryImages()
@@ -74,7 +102,7 @@ class SelectPhotoViewModel @Inject constructor(
             }
 
             if (contentObserver == null) {
-                contentObserver = getApplication<Application>().contentResolver.registerObserver(
+                contentObserver = application.contentResolver.registerObserver(
                     MediaStore.Images.Media.EXTERNAL_CONTENT_URI
                 ){
                     getImagesFromMediaStore()
@@ -96,7 +124,7 @@ class SelectPhotoViewModel @Inject constructor(
 
             val sortOrder = "${MediaStore.Images.Media.DATE_ADDED} DESC"
 
-            getApplication<Application>().contentResolver.query(
+            application.contentResolver.query(
                 MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
                 projection,
                 null,
@@ -135,7 +163,7 @@ class SelectPhotoViewModel @Inject constructor(
 
     override fun onCleared() {
         contentObserver?.let {
-            getApplication<Application>().contentResolver.unregisterContentObserver(it)
+            application.contentResolver.unregisterContentObserver(it)
         }
     }
 }
