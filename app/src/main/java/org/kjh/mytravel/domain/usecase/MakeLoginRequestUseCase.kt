@@ -1,5 +1,9 @@
 package org.kjh.mytravel.domain.usecase
 
+import kotlinx.coroutines.flow.map
+import org.kjh.mytravel.data.impl.LoginInfoPreferences
+import org.kjh.mytravel.domain.Result
+import org.kjh.mytravel.domain.repository.LoginPreferencesRepository
 import org.kjh.mytravel.domain.repository.LoginRepository
 import javax.inject.Inject
 
@@ -11,8 +15,17 @@ import javax.inject.Inject
  * Description:
  */
 class MakeLoginRequestUseCase @Inject constructor(
-    private val loginRepository: LoginRepository
+    private val loginRepository    : LoginRepository,
+    private val loginPrefRepository: LoginPreferencesRepository
 ) {
-    fun execute(email: String, pw: String) =
+    suspend operator fun invoke(email: String, pw: String) =
         loginRepository.makeRequestLogin(email, pw)
+            .map {
+                if (it is Result.Success && it.data.isLoggedIn) {
+                    loginPrefRepository.updateLoginInfoPreferences(
+                        LoginInfoPreferences(email, true)
+                    )
+                }
+                it
+            }
 }

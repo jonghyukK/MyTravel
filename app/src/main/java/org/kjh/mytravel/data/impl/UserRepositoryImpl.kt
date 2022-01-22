@@ -1,7 +1,10 @@
 package org.kjh.mytravel.data.impl
 
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.emptyFlow
 import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.sync.Mutex
+import kotlinx.coroutines.sync.withLock
 import org.kjh.mytravel.ApiService
 import org.kjh.mytravel.data.model.UserResponse
 import org.kjh.mytravel.domain.Result
@@ -22,7 +25,6 @@ class UserRepositoryImpl @Inject constructor(
     val apiService: ApiService,
     val responseToUserResult: (Result<UserResponse>) -> Result<UserResponse>
 ): UserRepository {
-
     override fun getUserInfo(email: String)
     : Flow<Result<UserResponse>> = flow {
         emit(Result.Loading())

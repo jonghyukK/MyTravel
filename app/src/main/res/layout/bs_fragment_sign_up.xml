@@ -5,10 +5,10 @@
     <data>
         <variable
             name="fragment"
-            type="org.kjh.mytravel.ui.SignUpFragment" />
+            type="org.kjh.mytravel.ui.profile.SignUpFragment" />
         <variable
             name="viewModel"
-            type="org.kjh.mytravel.ui.SignUpViewModel" />
+            type="org.kjh.mytravel.ui.profile.SignUpViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout

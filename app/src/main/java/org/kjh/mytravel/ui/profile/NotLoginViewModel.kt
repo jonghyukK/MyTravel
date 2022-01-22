@@ -16,11 +16,11 @@ import kotlinx.coroutines.launch
  * Description:
  */
 
-class NotLoginViewModel: ViewModel() {
+data class LoginOrSignUpUiState(
+    val isLoginOrSignUpSuccess: Boolean = false
+)
 
-    data class LoginOrSignUpUiState(
-        val isLoginOrSignUpSuccess: Boolean = false
-    )
+class NotLoginViewModel: ViewModel() {
 
     private val _uiState: MutableStateFlow<LoginOrSignUpUiState> = MutableStateFlow(LoginOrSignUpUiState())
     val uiState: StateFlow<LoginOrSignUpUiState> = _uiState.asStateFlow()

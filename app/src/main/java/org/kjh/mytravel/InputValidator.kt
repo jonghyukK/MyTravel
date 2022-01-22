@@ -1,6 +1,6 @@
 package org.kjh.mytravel
 
-import org.kjh.mytravel.ui.isValidPattern
+import org.kjh.mytravel.ui.profile.isValidPattern
 
 /**
  * MyTravel

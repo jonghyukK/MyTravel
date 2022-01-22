@@ -1,9 +1,10 @@
 package org.kjh.mytravel.di
 
+import androidx.datastore.core.DataStore
+import androidx.datastore.preferences.core.Preferences
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
-import dagger.hilt.android.scopes.ViewModelScoped
 import dagger.hilt.components.SingletonComponent
 import org.kjh.mytravel.ApiService
 import org.kjh.mytravel.data.impl.*
@@ -85,5 +86,13 @@ object RepositoryModule {
         apiService: ApiService
     ): UserRepository {
         return UserRepositoryImpl(apiService, ResponseMapper::responseToUserResult)
+    }
+
+    @Singleton
+    @Provides
+    fun provideLoginPreferencesRepository(
+        dataStore: DataStore<Preferences>
+    ): LoginPreferencesRepository {
+        return LoginPreferencesRepositoryImpl(dataStore)
     }
 }

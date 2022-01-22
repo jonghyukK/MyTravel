@@ -1,11 +1,8 @@
 package org.kjh.mytravel.ui.profile
 
 import android.os.Bundle
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import androidx.activity.addCallback
-import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
@@ -17,12 +14,11 @@ import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import org.kjh.mytravel.R
 import org.kjh.mytravel.databinding.FragmentNotLoginBinding
-import org.kjh.mytravel.ui.LoginFragment
-import org.kjh.mytravel.ui.SignUpFragment
+import org.kjh.mytravel.ui.base.BaseFragment
 
-class NotLoginFragment : Fragment() {
+class NotLoginFragment
+    : BaseFragment<FragmentNotLoginBinding>(R.layout.fragment_not_login) {
 
-    private lateinit var binding: FragmentNotLoginBinding
     private val viewModel: NotLoginViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -40,15 +36,6 @@ class NotLoginFragment : Fragment() {
                     ).build()
             findNavController().navigate(R.id.home, null, navOptions)
         }
-    }
-
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
-        binding = FragmentNotLoginBinding.inflate(inflater, container, false)
-        binding.lifecycleOwner = viewLifecycleOwner
-        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

@@ -16,6 +16,6 @@ data class PostUploadModel(
 )
 
 data class PostUploadResponse(
-    val result: String,
+    val result  : Boolean,
     val errorMsg: String? = null
 )

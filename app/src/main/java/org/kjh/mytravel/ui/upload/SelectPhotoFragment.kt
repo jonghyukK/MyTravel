@@ -2,11 +2,8 @@ package org.kjh.mytravel.ui.upload
 
 import android.net.Uri
 import android.os.Bundle
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import androidx.core.view.isEmpty
-import androidx.fragment.app.Fragment
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
@@ -20,13 +17,13 @@ import kotlinx.coroutines.launch
 import org.kjh.mytravel.R
 import org.kjh.mytravel.UploadGridLayoutItemDecor
 import org.kjh.mytravel.databinding.FragmentSelectPhotoBinding
+import org.kjh.mytravel.ui.base.BaseFragment
 
 @AndroidEntryPoint
-class SelectPhotoFragment : Fragment() {
+class SelectPhotoFragment : BaseFragment<FragmentSelectPhotoBinding>(R.layout.fragment_select_photo) {
 
-    private lateinit var binding: FragmentSelectPhotoBinding
     private lateinit var tracker: SelectionTracker<Uri>
-    private val viewModel: SelectPhotoViewModel by navGraphViewModels(R.id.nav_nested_upload) { defaultViewModelProviderFactory }
+    private val viewModel: SelectPhotoViewModel by navGraphViewModels(R.id.nav_nested_upload){ defaultViewModelProviderFactory }
 
     private val selectPhotoListAdapter by lazy {
         SelectPhotoListAdapter()
@@ -36,20 +33,6 @@ class SelectPhotoFragment : Fragment() {
         SelectedPhotoListAdapter {
             tracker.deselect(it.contentUri)
         }
-    }
-
-    override fun onSaveInstanceState(outState: Bundle) {
-        super.onSaveInstanceState(outState)
-        tracker.onSaveInstanceState(outState)
-    }
-
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
-        binding = FragmentSelectPhotoBinding.inflate(inflater, container, false)
-        binding.lifecycleOwner = viewLifecycleOwner
-        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -63,24 +46,21 @@ class SelectPhotoFragment : Fragment() {
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.uiState.collect { uiState ->
-                    selectPhotoListAdapter.submitList(uiState.mediaItemsInBucket)
-                    selectedPhotoListAdapter.submitList(uiState.selectedItems)
+                    selectPhotoListAdapter.submitList(uiState.mediaStoreImages)
 
-                    if (uiState.selectedItems.isNotEmpty() && tracker.selection.size() == 0) {
-                        val list = uiState.selectedItems.map {
-                            it.contentUri
-                        }
-
-                        tracker.setItemsSelected(list, true)
+                    with(uiState.selectedItems) {
+                        selectedPhotoListAdapter.submitList(this)
+                        restoreSelectionTracker(this)
+                        nextMenuIsVisible(this)
                     }
-
-                    if (uiState.selectedItems.isNotEmpty() && binding.tbSelectPhotoToolbar.menu.isEmpty()) {
-                        binding.tbSelectPhotoToolbar.inflateMenu(R.menu.menu_next)
-                    } else if (uiState.selectedItems.isEmpty())
-                        binding.tbSelectPhotoToolbar.menu.clear()
                 }
             }
         }
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        tracker.onSaveInstanceState(outState)
     }
 
     private fun initToolbarWithNavigation() {
@@ -131,6 +111,23 @@ class SelectPhotoFragment : Fragment() {
                     selectedList.add(it)
                 }
         }
-        viewModel.add(selectedList)
+
+        viewModel.addSelectedImages(selectedList)
+    }
+
+    private fun restoreSelectionTracker(selectedItems: List<MediaStoreImage>) {
+        if (selectedItems.isNotEmpty() && tracker.selection.size() == 0) {
+            val list = selectedItems.map {
+                it.contentUri
+            }
+            tracker.setItemsSelected(list, true)
+        }
+    }
+
+    private fun nextMenuIsVisible(selectedItems: List<MediaStoreImage>){
+        if (selectedItems.isNotEmpty() && binding.tbSelectPhotoToolbar.menu.isEmpty()) {
+            binding.tbSelectPhotoToolbar.inflateMenu(R.menu.menu_next)
+        } else if (selectedItems.isEmpty())
+            binding.tbSelectPhotoToolbar.menu.clear()
     }
 }

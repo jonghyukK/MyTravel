@@ -1,11 +1,10 @@
-package org.kjh.mytravel.ui
+package org.kjh.mytravel.ui.profile
 
 import android.util.Patterns
 import androidx.lifecycle.*
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
-import org.kjh.mytravel.DataStoreManager
 import org.kjh.mytravel.InputValidator
 import org.kjh.mytravel.InputValidator.isValidateEmail
 import org.kjh.mytravel.InputValidator.isValidateNickName
@@ -23,6 +22,8 @@ import javax.inject.Inject
  * Description:
  */
 
+fun String.isValidPattern(): Boolean =
+    Patterns.EMAIL_ADDRESS.matcher(this).matches()
 
 data class SignUpUiState(
     val emailError      : String? = null,
@@ -32,14 +33,9 @@ data class SignUpUiState(
     val isLoading       : Boolean = false,
 )
 
-fun String.isValidPattern(): Boolean =
-    Patterns.EMAIL_ADDRESS.matcher(this).matches()
-
-
 @HiltViewModel
 class SignUpViewModel @Inject constructor(
     private val makeSignUpRequestUseCase: MakeSignUpRequestUseCase,
-    private val dataStoreManager: DataStoreManager
 ): ViewModel() {
     private val _uiState: MutableStateFlow<SignUpUiState> = MutableStateFlow(SignUpUiState())
     val uiState: StateFlow<SignUpUiState> = _uiState.asStateFlow()
@@ -56,34 +52,22 @@ class SignUpViewModel @Inject constructor(
 
     fun makeRequestSignUp() {
         viewModelScope.launch {
-            makeSignUpRequestUseCase
-                .execute(email.value.toString(), pw.value.toString(), nickName.value.toString())
-                .collect { result ->
-                    when (result) {
-                        is Result.Loading -> {
-                            _uiState.update {
-                                it.copy(
-                                    isLoading  = true,
-                                    emailError = null,
-                                )
-                            }
-                        }
-                        is Result.Success -> {
-                            if (result.data.isRegistered) {
-                                dataStoreManager.saveMyEmail(email.value.toString())
-                            }
-
-                            _uiState.update {
-                                it.copy(
-                                    isLoading    = false,
-                                    isRegistered = result.data.isRegistered,
-                                    emailError   = result.data.errorMsg
-                                )
-                            }
-                        }
-                        is Result.Error -> { }
-                    }
+            makeSignUpRequestUseCase(
+                email = email.value.toString(),
+                pw    = pw.value.toString(),
+                nick  = nickName.value.toString()
+            ).collect { result ->
+                when (result) {
+                    is Result.Loading -> _uiState.value =
+                        SignUpUiState(isLoading = true)
+                    is Result.Success -> _uiState.value =
+                        SignUpUiState(
+                            isRegistered = result.data.isRegistered,
+                            emailError   = result.data.errorMsg
+                        )
+                    is Result.Error -> { }
                 }
+            }
         }
     }
 }

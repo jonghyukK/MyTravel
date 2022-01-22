@@ -11,7 +11,8 @@ import javax.inject.Inject
  * Description:
  */
 class GetUserInfoUseCase @Inject constructor(
-    private val userRepository: UserRepository
+    private val userRepository     : UserRepository,
+    private val getLoginInfoUseCase: GetLoginInfoUseCase
 ){
-    fun execute(email: String) = userRepository.getUserInfo(email)
+    suspend operator fun invoke() = userRepository.getUserInfo(getLoginInfoUseCase())
 }

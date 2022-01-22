@@ -5,10 +5,10 @@
     <data>
         <variable
             name="fragment"
-            type="org.kjh.mytravel.ui.LoginFragment" />
+            type="org.kjh.mytravel.ui.profile.LoginFragment" />
         <variable
             name="viewModel"
-            type="org.kjh.mytravel.ui.LoginViewModel" />
+            type="org.kjh.mytravel.ui.profile.LoginViewModel" />
         <variable
             name="parentViewModel"
             type="org.kjh.mytravel.ui.profile.NotLoginViewModel" />

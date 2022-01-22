@@ -18,6 +18,7 @@ data class User(
     val followingCount : Int = 0,
     val followCount    : Int = 0,
     val introduce   : String? = null,
+    val posts : List<Post> = listOf()
 )
 
 data class UserResponse(

@@ -1,6 +1,7 @@
 package org.kjh.mytravel.domain.repository
 
 import kotlinx.coroutines.flow.Flow
+import okhttp3.MultipartBody
 import org.kjh.mytravel.data.model.PostUploadModel
 import org.kjh.mytravel.data.model.PostUploadResponse
 import org.kjh.mytravel.domain.Result
@@ -13,5 +14,14 @@ import org.kjh.mytravel.domain.Result
  * Description:
  */
 interface PostRepository {
-    fun upload(postUploadModel: PostUploadModel): Flow<Result<PostUploadResponse>>
+
+    fun makeRequestPostUpload(
+        file        : List<MultipartBody.Part>,
+        email       : String,
+        content     : String? = null,
+        cityName    : String,
+        placeName   : String,
+        placeAddress: String
+    ): Flow<Result<PostUploadResponse>>
+
 }

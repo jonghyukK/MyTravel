@@ -1,11 +1,9 @@
-package org.kjh.mytravel.ui
+package org.kjh.mytravel.ui.profile
 
 import android.graphics.Color
 import android.os.Bundle
-import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
@@ -13,16 +11,12 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import com.google.android.material.bottomsheet.BottomSheetBehavior
-import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
-import org.kjh.mytravel.DataStoreManager
-import org.kjh.mytravel.MyTravelApplication
 import org.kjh.mytravel.R
 import org.kjh.mytravel.databinding.BsFragmentSignUpBinding
-import org.kjh.mytravel.ui.profile.NotLoginViewModel
-import javax.inject.Inject
+import org.kjh.mytravel.ui.base.BaseBottomSheetDialogFragment
 
 /**
  * MyTravel
@@ -33,9 +27,9 @@ import javax.inject.Inject
  */
 
 @AndroidEntryPoint
-class SignUpFragment: BottomSheetDialogFragment() {
+class SignUpFragment
+    : BaseBottomSheetDialogFragment<BsFragmentSignUpBinding>(R.layout.bs_fragment_sign_up) {
 
-    private lateinit var binding: BsFragmentSignUpBinding
     private val viewModel: SignUpViewModel by viewModels()
     private val parentViewModel: NotLoginViewModel by viewModels({ requireParentFragment() })
 
@@ -59,16 +53,6 @@ class SignUpFragment: BottomSheetDialogFragment() {
             bottomSheetBehavior!!.peekHeight = view!!.measuredHeight
             parent.setBackgroundColor(Color.TRANSPARENT)
         }
-    }
-
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
-        binding = BsFragmentSignUpBinding.inflate(inflater, container, false)
-        binding.lifecycleOwner = viewLifecycleOwner
-        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -98,8 +82,8 @@ class SignUpFragment: BottomSheetDialogFragment() {
     override fun onDestroyView() {
         super.onDestroyView()
 
-        binding.tieEmail.onFocusChangeListener  = null
-        binding.tiePw.onFocusChangeListener     = null
+        binding.tieEmail.onFocusChangeListener    = null
+        binding.tiePw.onFocusChangeListener       = null
         binding.tieNickName.onFocusChangeListener = null
     }
 }

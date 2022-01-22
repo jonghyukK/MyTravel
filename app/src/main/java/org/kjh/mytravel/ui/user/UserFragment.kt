@@ -50,7 +50,7 @@ class UserFragment : Fragment() {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.userUiState.collect { uiState ->
                     binding.tbUserToolbar.title = uiState.userItem?.userEmail
-                    postSmallListAdapter.submitList(uiState.userItem?.postItems)
+//                    postSmallListAdapter.submitList(uiState.userItem?.postItems)
                 }
             }
         }

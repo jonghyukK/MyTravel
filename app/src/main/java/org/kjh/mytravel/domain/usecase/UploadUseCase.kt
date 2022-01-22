@@ -1,6 +1,6 @@
 package org.kjh.mytravel.domain.usecase
 
-import org.kjh.mytravel.data.model.PostUploadModel
+import okhttp3.MultipartBody
 import org.kjh.mytravel.domain.repository.PostRepository
 import javax.inject.Inject
 
@@ -12,8 +12,21 @@ import javax.inject.Inject
  * Description:
  */
 class UploadUseCase @Inject constructor(
-    private val postRepository: PostRepository
+    private val postRepository: PostRepository,
+    private val getLoginInfoUseCase: GetLoginInfoUseCase
 ) {
-    fun execute(postUploadModel: PostUploadModel) =
-        postRepository.upload(postUploadModel)
+    suspend operator fun invoke(
+        file: List<MultipartBody.Part>,
+        content: String?,
+        cityName: String,
+        placeName: String,
+        placeAddress: String
+    ) = postRepository.makeRequestPostUpload(
+        file = file,
+        email = getLoginInfoUseCase(),
+        content = content,
+        cityName = cityName,
+        placeName = placeName,
+        placeAddress = placeAddress
+    )
 }

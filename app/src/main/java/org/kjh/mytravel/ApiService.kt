@@ -1,12 +1,12 @@
 package org.kjh.mytravel
 
+import okhttp3.MultipartBody
 import org.kjh.mytravel.data.model.LoginResponse
+import org.kjh.mytravel.data.model.PostUploadResponse
 import org.kjh.mytravel.data.model.SignUpResponse
 import org.kjh.mytravel.data.model.UserResponse
 import org.kjh.mytravel.domain.Result
-import retrofit2.http.GET
-import retrofit2.http.POST
-import retrofit2.http.Query
+import retrofit2.http.*
 
 /**
  * MyTravel
@@ -34,4 +34,15 @@ interface ApiService {
     suspend fun getUser(
         @Query("email") email: String
     ): UserResponse
+
+    @Multipart
+    @POST("user/upload")
+    suspend fun makeRequestPostUpload(
+        @Part file: List<MultipartBody.Part>,
+        @Query("email"          ) email         : String,
+        @Query("content"        ) content       : String? = null,
+        @Query("cityName"       ) cityName      : String,
+        @Query("placeName"      ) placeName     : String,
+        @Query("placeAddress"   ) placeAddress  : String,
+    ): PostUploadResponse
 }

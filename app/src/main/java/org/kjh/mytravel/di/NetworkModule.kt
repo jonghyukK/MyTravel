@@ -19,7 +19,7 @@ import javax.inject.Singleton
  * Description:
  */
 
-const val BASE_URL = "http://192.168.219.108:8080/"
+private const val BASE_URL = "http://192.168.219.102:8080/"
 
 @Module
 @InstallIn(SingletonComponent::class)

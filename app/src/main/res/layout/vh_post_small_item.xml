@@ -4,8 +4,8 @@
 
     <data>
         <variable
-            name="postItemUiState"
-            type="org.kjh.mytravel.ui.uistate.PostItemUiState" />
+            name="postItem"
+            type="org.kjh.mytravel.data.model.Post" />
     </data>
 
     <androidx.cardview.widget.CardView
@@ -25,19 +25,18 @@
                 android:layout_width="0dp"
                 android:layout_height="0dp"
                 android:scaleType="centerCrop"
-                app:imgResource="@{postItemUiState.postImages[0]}"
+                app:imgUrl="@{postItem.imageUrl[0]}"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                android:src="@drawable/temp_img_chungcheongdo"/>
+                app:layout_constraintStart_toStartOf="parent" />
 
             <TextView
                 android:id="@+id/tv_placeName"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textColor="@color/white"
-                android:text="@{postItemUiState.placeName}"
+                android:text="@{postItem.placeName}"
                 android:textStyle="bold"
                 android:textSize="15sp"
                 android:layout_marginStart="8dp"
@@ -49,7 +48,7 @@
                 android:id="@+id/tv_placeAddress"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@{postItemUiState.placeAddress}"
+                android:text="@{postItem.placeAddress}"
                 android:textColor="@color/white"
                 android:textSize="13sp"
                 android:layout_marginStart="8dp"

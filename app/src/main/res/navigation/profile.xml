@@ -34,6 +34,11 @@
             android:name="org.kjh.mytravel.ui.upload.WritePostFragment"
             android:label="fragment_write_post"
             tools:layout="@layout/fragment_write_post" />
+        <action
+            android:id="@+id/action_global_profileFragment"
+            app:destination="@id/profileFragment"
+            app:popUpTo="@+id/profileFragment"
+            app:popUpToInclusive="false"/>
     </navigation>
 
 </navigation>
