@@ -18,15 +18,19 @@ class UploadUseCase @Inject constructor(
     suspend operator fun invoke(
         file: List<MultipartBody.Part>,
         content: String?,
-        cityName: String,
         placeName: String,
-        placeAddress: String
+        placeAddress: String,
+        placeRoadAddress: String,
+        x: String,
+        y: String
     ) = postRepository.makeRequestPostUpload(
         file = file,
         email = getLoginInfoUseCase(),
         content = content,
-        cityName = cityName,
         placeName = placeName,
-        placeAddress = placeAddress
+        placeAddress = placeAddress,
+        placeRoadAddress = placeRoadAddress,
+        x = x,
+        y = y
     )
 }

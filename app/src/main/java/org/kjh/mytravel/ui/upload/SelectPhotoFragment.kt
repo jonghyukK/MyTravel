@@ -4,6 +4,7 @@ import android.net.Uri
 import android.os.Bundle
 import android.view.View
 import androidx.core.view.isEmpty
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
@@ -20,13 +21,16 @@ import org.kjh.mytravel.databinding.FragmentSelectPhotoBinding
 import org.kjh.mytravel.ui.base.BaseFragment
 
 @AndroidEntryPoint
-class SelectPhotoFragment : BaseFragment<FragmentSelectPhotoBinding>(R.layout.fragment_select_photo) {
+class SelectPhotoFragment
+    : BaseFragment<FragmentSelectPhotoBinding>(R.layout.fragment_select_photo) {
 
     private lateinit var tracker: SelectionTracker<Uri>
-    private val viewModel: SelectPhotoViewModel by navGraphViewModels(R.id.nav_nested_upload){ defaultViewModelProviderFactory }
 
-    private val selectPhotoListAdapter by lazy {
-        SelectPhotoListAdapter()
+    private val uploadViewModel: UploadViewModel by navGraphViewModels(R.id.nav_nested_upload){ defaultViewModelProviderFactory }
+    private val viewModel: SelectPhotoViewModel by viewModels()
+
+    private val mediaStoreImagesAdapter by lazy {
+        MediaStoreImageListAdapter()
     }
 
     private val selectedPhotoListAdapter by lazy {
@@ -43,12 +47,14 @@ class SelectPhotoFragment : BaseFragment<FragmentSelectPhotoBinding>(R.layout.fr
         initLocalPhotoRecyclerView(savedInstanceState)
         initSelectedImagesRecyclerView()
 
+        viewModel.mediaStoreImages.observe(viewLifecycleOwner, { mediaStoreImages ->
+            mediaStoreImagesAdapter.submitList(mediaStoreImages)
+        })
+
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                viewModel.uiState.collect { uiState ->
-                    selectPhotoListAdapter.submitList(uiState.mediaStoreImages)
-
-                    with(uiState.selectedItems) {
+                uploadViewModel.uiState.collect { dataState ->
+                    with (dataState.selectedItems) {
                         selectedPhotoListAdapter.submitList(this)
                         restoreSelectionTracker(this)
                         nextMenuIsVisible(this)
@@ -60,7 +66,9 @@ class SelectPhotoFragment : BaseFragment<FragmentSelectPhotoBinding>(R.layout.fr
 
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
-        tracker.onSaveInstanceState(outState)
+
+        if (::tracker.isInitialized)
+            tracker.onSaveInstanceState(outState)
     }
 
     private fun initToolbarWithNavigation() {
@@ -88,14 +96,14 @@ class SelectPhotoFragment : BaseFragment<FragmentSelectPhotoBinding>(R.layout.fr
 
     private fun initLocalPhotoRecyclerView(savedInstanceState: Bundle?) {
         binding.rvLocalImages.apply {
-            adapter = selectPhotoListAdapter
+            adapter = mediaStoreImagesAdapter
             addItemDecoration(UploadGridLayoutItemDecor())
         }
 
         tracker = MediaStoreSelectionTracker(binding.rvLocalImages) { onSelectionChanged() }
             .getTracker()
 
-        selectPhotoListAdapter.tracker = tracker
+        mediaStoreImagesAdapter.tracker = tracker
 
         if (savedInstanceState != null) {
             tracker.onRestoreInstanceState(savedInstanceState)
@@ -106,13 +114,13 @@ class SelectPhotoFragment : BaseFragment<FragmentSelectPhotoBinding>(R.layout.fr
         val selectedList = mutableListOf<MediaStoreImage>()
 
         for (i in tracker.selection) {
-            selectPhotoListAdapter.currentList.find { it.contentUri == i }
+            mediaStoreImagesAdapter.currentList.find { it.contentUri == i }
                 ?.let {
                     selectedList.add(it)
                 }
         }
 
-        viewModel.addSelectedImages(selectedList)
+        uploadViewModel.updateSelectedImages(selectedList)
     }
 
     private fun restoreSelectionTracker(selectedItems: List<MediaStoreImage>) {

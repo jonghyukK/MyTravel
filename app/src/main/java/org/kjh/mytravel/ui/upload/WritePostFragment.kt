@@ -22,7 +22,7 @@ import org.kjh.mytravel.ui.base.BaseFragment
 class WritePostFragment
     : BaseFragment<FragmentWritePostBinding>(R.layout.fragment_write_post) {
 
-    private val parentViewModel : SelectPhotoViewModel by navGraphViewModels(R.id.nav_nested_upload) { defaultViewModelProviderFactory }
+    private val uploadViewModel: UploadViewModel by navGraphViewModels(R.id.nav_nested_upload){ defaultViewModelProviderFactory }
 
     private val writePostImagesAdapter by lazy {
         WritePostImagesAdapter()
@@ -30,23 +30,28 @@ class WritePostFragment
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        binding.viewModel = parentViewModel
+        binding.uploadViewModel = uploadViewModel
 
         initToolbarWithNavigation()
         initImageRecyclerView()
 
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                parentViewModel.uiState.collect {
-                    binding.pbLoading.isVisible = it.isUploadLoading
+                uploadViewModel.uiState.collect {
+                    binding.pbLoading.isVisible = it.isLoading
                     writePostImagesAdapter.submitList(it.selectedItems)
 
-                    if (it.isUploadSuccess) {
+                    if (it.uploadSuccess) {
                         val action = WritePostFragmentDirections.actionGlobalProfileFragment()
                         findNavController().navigate(action)
                     }
                 }
             }
+        }
+
+        binding.tvAddLocation.setOnClickListener {
+            val action = WritePostFragmentDirections.actionWritePostFragmentToMapFragment()
+            findNavController().navigate(action)
         }
     }
 
@@ -65,7 +70,7 @@ class WritePostFragment
             setOnMenuItemClickListener {
                 when (it.itemId) {
                     R.id.upload -> {
-                        parentViewModel.uploadPost()
+                        uploadViewModel.makeUploadPost()
                         true
                     }
                     else -> false

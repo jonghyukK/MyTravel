@@ -99,4 +99,7 @@ dependencies {
 
     implementation 'androidx.recyclerview:recyclerview-selection:1.2.0-alpha01'
 
+    // Naver Map
+    implementation 'com.naver.maps:map-sdk:3.13.0'
+
 }

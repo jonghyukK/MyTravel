@@ -19,9 +19,11 @@ interface PostRepository {
         file        : List<MultipartBody.Part>,
         email       : String,
         content     : String? = null,
-        cityName    : String,
         placeName   : String,
-        placeAddress: String
+        placeAddress: String,
+        placeRoadAddress: String,
+        x : String,
+        y : String
     ): Flow<Result<PostUploadResponse>>
 
 }

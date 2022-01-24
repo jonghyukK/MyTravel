@@ -33,9 +33,11 @@ class PostRepositoryImpl @Inject constructor(
         file: List<MultipartBody.Part>,
         email: String,
         content: String?,
-        cityName: String,
         placeName: String,
-        placeAddress: String
+        placeAddress: String,
+        placeRoadAddress: String,
+        x : String,
+        y : String
     ): Flow<Result<PostUploadResponse>> = flow {
         emit(Result.Loading())
 
@@ -44,9 +46,11 @@ class PostRepositoryImpl @Inject constructor(
                 file         = file,
                 email        = email,
                 content      = content,
-                cityName     = cityName,
                 placeName    = placeName,
-                placeAddress = placeAddress
+                placeAddress = placeAddress,
+                placeRoadAddress = placeRoadAddress,
+                x = x,
+                y = y
             )
 
             emit(responseToUploadResult(Result.Success(result)))

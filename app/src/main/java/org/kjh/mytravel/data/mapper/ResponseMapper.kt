@@ -90,4 +90,14 @@ object ResponseMapper {
             is Result.Loading -> Result.Loading()
         }
     }
+
+    fun responseToSearchResult(
+        response: Result<KakaoSearchResponse>
+    ): Result<KakaoSearchResponse> {
+        return when (response) {
+            is Result.Success -> Result.Success(response.data)
+            is Result.Error -> Result.Error(response.throwable)
+            is Result.Loading -> Result.Loading()
+        }
+    }
 }

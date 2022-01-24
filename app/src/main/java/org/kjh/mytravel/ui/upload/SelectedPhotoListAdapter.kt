@@ -5,6 +5,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import org.kjh.mytravel.databinding.VhRectImageWithCloseBtnBinding
+import org.kjh.mytravel.dpToPx
 
 /**
  * MyTravel

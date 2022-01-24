@@ -7,6 +7,7 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import org.kjh.mytravel.ApiService
+import org.kjh.mytravel.KakaoApiService
 import org.kjh.mytravel.data.impl.*
 import org.kjh.mytravel.data.mapper.ResponseMapper
 import org.kjh.mytravel.domain.repository.*
@@ -94,5 +95,13 @@ object RepositoryModule {
         dataStore: DataStore<Preferences>
     ): LoginPreferencesRepository {
         return LoginPreferencesRepositoryImpl(dataStore)
+    }
+
+    @Singleton
+    @Provides
+    fun provideMapRepository(
+        kakaoApiService: KakaoApiService
+    ): MapRepository {
+        return MapRepositoryImpl(kakaoApiService, ResponseMapper::responseToSearchResult)
     }
 }

@@ -20,7 +20,7 @@ class MediaStoreSelectionTracker(
         SelectionTracker.Builder(
             "select_photo",
             recyclerView,
-            RecyclerViewIdKeyProvider(recyclerView.adapter as SelectPhotoListAdapter),
+            RecyclerViewIdKeyProvider(recyclerView.adapter as MediaStoreImageListAdapter),
             SelectPhotoDetailsLookup(recyclerView),
             StorageStrategy.createParcelableStorage(Uri::class.java)
         ).withSelectionPredicate(SelectionPredicates.createSelectAnything())
@@ -36,7 +36,7 @@ class MediaStoreSelectionTracker(
         }
 
     class RecyclerViewIdKeyProvider(
-        private val adapter: SelectPhotoListAdapter
+        private val adapter: MediaStoreImageListAdapter
     ) : ItemKeyProvider<Uri>(SCOPE_CACHED) {
 
         override fun getKey(position: Int): Uri =
@@ -53,7 +53,7 @@ class MediaStoreSelectionTracker(
         override fun getItemDetails(e: MotionEvent): ItemDetails<Uri>? {
             val view = recyclerView.findChildViewUnder(e.x, e.y)
             if (view != null) {
-                return (recyclerView.getChildViewHolder(view) as SelectPhotoListAdapter.SelectPhotoViewHolder)
+                return (recyclerView.getChildViewHolder(view) as MediaStoreImageListAdapter.SelectPhotoViewHolder)
                     .getItemDetails()
             }
             return null

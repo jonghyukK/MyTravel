@@ -7,6 +7,7 @@ import dagger.hilt.components.SingletonComponent
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import org.kjh.mytravel.ApiService
+import org.kjh.mytravel.KakaoApiService
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import javax.inject.Singleton
@@ -19,7 +20,8 @@ import javax.inject.Singleton
  * Description:
  */
 
-private const val BASE_URL = "http://192.168.219.102:8080/"
+private const val BASE_API_URL = "http://192.168.219.102:8080/"
+private const val BASE_KAKAO_API_URL = "https://dapi.kakao.com/"
 
 @Module
 @InstallIn(SingletonComponent::class)
@@ -37,7 +39,7 @@ object NetworkModule {
             .build()
 
         return Retrofit.Builder()
-            .baseUrl(BASE_URL)
+            .baseUrl(BASE_API_URL)
             .client(client)
             .addConverterFactory(GsonConverterFactory.create())
     }
@@ -48,5 +50,14 @@ object NetworkModule {
         return retrofit
             .build()
             .create(ApiService::class.java)
+    }
+
+    @Singleton
+    @Provides
+    fun provideKakaoApiService(retrofit: Retrofit.Builder): KakaoApiService {
+        return retrofit
+            .baseUrl(BASE_KAKAO_API_URL)
+            .build()
+            .create(KakaoApiService::class.java)
     }
 }

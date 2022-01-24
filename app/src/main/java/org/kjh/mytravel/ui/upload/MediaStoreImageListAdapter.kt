@@ -6,11 +6,9 @@ import android.view.MotionEvent
 import android.view.ViewGroup
 import androidx.core.view.isVisible
 import androidx.recyclerview.selection.ItemDetailsLookup
-import androidx.recyclerview.selection.Selection
 import androidx.recyclerview.selection.SelectionTracker
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.orhanobut.logger.Logger
 import org.kjh.mytravel.databinding.VhRectImageSmallBinding
 
 /**
@@ -21,8 +19,8 @@ import org.kjh.mytravel.databinding.VhRectImageSmallBinding
  * Description:
  */
 
-class SelectPhotoListAdapter :
-    ListAdapter<MediaStoreImage, SelectPhotoListAdapter.SelectPhotoViewHolder>(MediaStoreImage.DiffCallback){
+class MediaStoreImageListAdapter :
+    ListAdapter<MediaStoreImage, MediaStoreImageListAdapter.SelectPhotoViewHolder>(MediaStoreImage.DiffCallback){
 
     init {
         setHasStableIds(true)

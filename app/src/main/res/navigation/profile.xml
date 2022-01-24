@@ -8,7 +8,6 @@
     <fragment
         android:id="@+id/profileFragment"
         android:name="org.kjh.mytravel.ui.profile.ProfileFragment"
-        android:label="MyPage"
         tools:layout="@layout/fragment_profile" >
         <action
             android:id="@+id/action_profileFragment_to_selectPhotoFragment"
@@ -17,13 +16,14 @@
     <fragment
         android:id="@+id/notLoginFragment"
         android:name="org.kjh.mytravel.ui.profile.NotLoginFragment"
-        android:label="NotLoginFragment"
         tools:layout="@layout/fragment_not_login"/>
+
     <navigation android:id="@+id/nav_nested_upload"
         app:startDestination="@id/selectPhotoFragment">
         <fragment
             android:id="@+id/selectPhotoFragment"
             android:name="org.kjh.mytravel.ui.upload.SelectPhotoFragment"
+            android:label="사진 선택"
             tools:layout="@layout/fragment_select_photo">
             <action
                 android:id="@+id/action_selectPhotoFragment_to_writePostFragment"
@@ -32,13 +32,30 @@
         <fragment
             android:id="@+id/writePostFragment"
             android:name="org.kjh.mytravel.ui.upload.WritePostFragment"
-            android:label="fragment_write_post"
-            tools:layout="@layout/fragment_write_post" />
+            tools:layout="@layout/fragment_write_post" >
+            <action
+                android:id="@+id/action_writePostFragment_to_mapFragment"
+                app:destination="@id/mapFragment" />
+        </fragment>
         <action
             android:id="@+id/action_global_profileFragment"
             app:destination="@id/profileFragment"
             app:popUpTo="@+id/profileFragment"
             app:popUpToInclusive="false"/>
+        <fragment
+            android:id="@+id/mapFragment"
+            android:name="org.kjh.mytravel.ui.upload.MapFragment"
+            android:label="위치 검색"
+            tools:layout="@layout/fragment_map" >
+            <action
+                android:id="@+id/action_mapFragment_to_mapSearchFragment"
+                app:destination="@id/mapSearchFragment" />
+        </fragment>
+        <fragment
+            android:id="@+id/mapSearchFragment"
+            android:name="org.kjh.mytravel.ui.upload.MapSearchFragment"
+            tools:layout="@layout/bs_fragment_map_search" />
     </navigation>
+
 
 </navigation>

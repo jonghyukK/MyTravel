@@ -41,8 +41,10 @@ interface ApiService {
         @Part file: List<MultipartBody.Part>,
         @Query("email"          ) email         : String,
         @Query("content"        ) content       : String? = null,
-        @Query("cityName"       ) cityName      : String,
         @Query("placeName"      ) placeName     : String,
         @Query("placeAddress"   ) placeAddress  : String,
+        @Query("placeRoadAddress") placeRoadAddress: String,
+        @Query("x") x: String,
+        @Query("y") y: String
     ): PostUploadResponse
 }
