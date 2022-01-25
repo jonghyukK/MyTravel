@@ -12,6 +12,12 @@
         <action
             android:id="@+id/action_profileFragment_to_selectPhotoFragment"
             app:destination="@id/nav_nested_upload" />
+        <action
+            android:id="@+id/action_profileFragment_to_settingFragment"
+            app:destination="@id/settingFragment" />
+        <action
+            android:id="@+id/action_profileFragment_to_profileEditFragment"
+            app:destination="@id/profileEditFragment" />
     </fragment>
     <fragment
         android:id="@+id/notLoginFragment"
@@ -56,6 +62,22 @@
             android:name="org.kjh.mytravel.ui.upload.MapSearchFragment"
             tools:layout="@layout/bs_fragment_map_search" />
     </navigation>
+    <fragment
+        android:id="@+id/settingFragment"
+        android:name="org.kjh.mytravel.ui.profile.SettingFragment"
+        android:label="설정"
+        tools:layout="@layout/fragment_setting" />
+    <fragment
+        android:id="@+id/profileEditFragment"
+        android:name="org.kjh.mytravel.ui.profile.ProfileEditFragment"
+        android:label="프로필 편집"
+        tools:layout="@layout/fragment_profile_edit" >
+        <action
+            android:id="@+id/action_profileEditFragment_to_profileFragment"
+            app:destination="@id/profileFragment"
+            app:popUpTo="@+id/profileFragment"
+            app:popUpToInclusive="false"/>
+    </fragment>
 
 
 </navigation>

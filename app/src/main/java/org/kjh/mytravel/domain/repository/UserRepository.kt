@@ -1,6 +1,7 @@
 package org.kjh.mytravel.domain.repository
 
 import kotlinx.coroutines.flow.Flow
+import okhttp3.MultipartBody
 import org.kjh.mytravel.data.model.UserResponse
 import org.kjh.mytravel.domain.Result
 
@@ -16,5 +17,12 @@ interface UserRepository {
 
     fun getUserInfo(
         email: String
+    ): Flow<Result<UserResponse>>
+
+    fun updateUserInfo(
+        file     : String?,
+        email    : String,
+        nickName : String?,
+        introduce: String?
     ): Flow<Result<UserResponse>>
 }

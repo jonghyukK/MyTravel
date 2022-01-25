@@ -56,6 +56,13 @@ class LoginPreferencesRepositoryImpl @Inject constructor(
         }
     }
 
+    override suspend fun makeRequestLogOut() {
+        dataStore.edit { preferences ->
+            preferences[PreferencesKeys.IS_LOGGED_IN] = false
+            preferences[PreferencesKeys.MY_EMAIL] = "empty"
+        }
+    }
+
     override suspend fun fetchInitialPreferences() =
         mapLoginInfoPreferences(dataStore.data.first().toPreferences())
 

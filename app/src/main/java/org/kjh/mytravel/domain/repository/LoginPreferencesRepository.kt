@@ -17,4 +17,6 @@ interface LoginPreferencesRepository {
     suspend fun fetchInitialPreferences(): LoginInfoPreferences
 
     suspend fun updateLoginInfoPreferences(loginInfoPref: LoginInfoPreferences)
+
+    suspend fun makeRequestLogOut()
 }

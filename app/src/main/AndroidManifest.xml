@@ -18,6 +18,8 @@
         <meta-data
             android:name="com.naver.maps.map.CLIENT_ID"
             android:value="8aye4tijdd" />
+        <activity android:name="com.canhub.cropper.CropImageActivity"
+            android:theme="@style/Base.Theme.AppCompat"/>
         <activity
             android:name=".ui.MainActivity"
             android:exported="true">

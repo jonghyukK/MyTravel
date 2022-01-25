@@ -14,5 +14,11 @@ class GetUserInfoUseCase @Inject constructor(
     private val userRepository     : UserRepository,
     private val getLoginInfoUseCase: GetLoginInfoUseCase
 ){
+    suspend fun updateUserProfile(
+        filePath : String?,
+        nickName : String?,
+        introduce: String?
+    ) = userRepository.updateUserInfo(filePath, getLoginInfoUseCase(), nickName, introduce)
+
     suspend operator fun invoke() = userRepository.getUserInfo(getLoginInfoUseCase())
 }

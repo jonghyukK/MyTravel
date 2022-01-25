@@ -47,4 +47,13 @@ interface ApiService {
         @Query("x") x: String,
         @Query("y") y: String
     ): PostUploadResponse
+
+    @Multipart
+    @PUT("user")
+    suspend fun makeUpdateUser(
+        @Part file: MultipartBody.Part? = null,
+        @Query("email"      ) email     : String,
+        @Query("nickName"   ) nickName  : String?,
+        @Query("introduce"  ) introduce : String?
+    ): UserResponse
 }

@@ -59,6 +59,9 @@ class ProfileFragment
         super.onViewCreated(view, savedInstanceState)
         binding.viewModel = viewModel
 
+        initToolbarWithNavigation()
+        initMyPostRecyclerView()
+
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.uiState.collect { uiState ->
@@ -71,8 +74,10 @@ class ProfileFragment
             }
         }
 
-        initToolbarWithNavigation()
-        initMyPostRecyclerView()
+        binding.btnEditProfile.setOnClickListener {
+            val action = ProfileFragmentDirections.actionProfileFragmentToProfileEditFragment()
+            findNavController().navigate(action)
+        }
     }
 
     private fun initToolbarWithNavigation() {
@@ -80,11 +85,16 @@ class ProfileFragment
 
         binding.tbProfileToolbar.apply {
             setupWithNavController(findNavController(), appConfig)
-            inflateMenu(R.menu.menu_write)
+            inflateMenu(R.menu.menu_profile)
             setOnMenuItemClickListener {
                 when (it.itemId) {
                     R.id.write_post -> {
                         val action = ProfileFragmentDirections.actionProfileFragmentToSelectPhotoFragment()
+                        findNavController().navigate(action)
+                        true
+                    }
+                    R.id.settings -> {
+                        val action = ProfileFragmentDirections.actionProfileFragmentToSettingFragment()
                         findNavController().navigate(action)
                         true
                     }

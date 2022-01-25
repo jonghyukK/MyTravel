@@ -76,13 +76,13 @@ class UploadViewModel @Inject constructor(
 
             if (uiState.value.selectedItems.isNotEmpty() && placeInfo != null) {
                 makeUploadUseCase(
-                    file = fileBody,
-                    content = content,
-                    placeName = placeInfo.placeName,
-                    placeAddress = placeInfo.addressName,
-                    placeRoadAddress = placeInfo.roadAddressName,
-                    x = placeInfo.x,
-                    y = placeInfo.y
+                    x                = placeInfo.x,
+                    y                = placeInfo.y,
+                    file             = fileBody,
+                    content          = content,
+                    placeName        = placeInfo.placeName,
+                    placeAddress     = placeInfo.addressName,
+                    placeRoadAddress = placeInfo.roadAddressName
                 ).collect { result ->
                     when (result) {
                         is Result.Loading -> _uiState.update { it.copy(isLoading = true) }
