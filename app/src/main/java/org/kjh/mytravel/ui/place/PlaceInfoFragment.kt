@@ -1,62 +1,84 @@
 package org.kjh.mytravel.ui.place
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
+import androidx.fragment.app.viewModels
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
+import com.naver.maps.geometry.LatLng
+import com.naver.maps.map.*
+import com.naver.maps.map.overlay.Marker
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.launch
+import org.kjh.mytravel.R
 import org.kjh.mytravel.databinding.FragmentPlaceInfoBinding
+import org.kjh.mytravel.ui.base.BaseFragment
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
 
-/**
- * A simple [Fragment] subclass.
- * Use the [PlaceInfoFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
-class PlaceInfoFragment : Fragment() {
-    private lateinit var binding: FragmentPlaceInfoBinding
+class PlaceInfoFragment
+    : BaseFragment<FragmentPlaceInfoBinding>(R.layout.fragment_place_info), OnMapReadyCallback {
 
-    private var param1: String? = null
-    private var param2: String? = null
+    private val viewModel: PlaceViewModel by viewModels({ requireParentFragment() })
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
+    private lateinit var naverMap: NaverMap
+    private lateinit var marker: Marker
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        binding.viewModel = viewModel
+
+        initMapFragment()
+    }
+
+    private fun initMapFragment() {
+        val mapFragment = childFragmentManager.findFragmentById(R.id.map_placeInfo) as MapFragment
+        mapFragment.getMapAsync(this)
+    }
+
+    override fun onMapReady(p0: NaverMap) {
+        naverMap = p0
+
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.uiState.collect { uiState ->
+
+                    if (uiState.x.isNotBlank() && uiState.y.isNotBlank() && !::marker.isInitialized) {
+                        setMarketAtPlace(uiState)
+                    }
+                }
+            }
         }
     }
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        binding = FragmentPlaceInfoBinding.inflate(inflater, container, false)
-        return binding.root
+    private fun setMarketAtPlace(uiState: PlaceUiState) {
+        val cameraUpdate =
+            CameraUpdate.scrollTo(LatLng(uiState.y.toDouble(), uiState.x.toDouble()))
+                .animate(CameraAnimation.Easing)
+        naverMap.moveCamera(cameraUpdate)
+
+        marker = Marker().apply {
+            position = LatLng(uiState.y.toDouble(), uiState.x.toDouble())
+            captionText = uiState.placeName
+        }
+
+        marker.map = naverMap
     }
 
+    override fun onResume() {
+        super.onResume()
+        if (::marker.isInitialized && marker.map == null) {
+            marker.map = naverMap
+        }
+    }
+
+    override fun onPause() {
+        super.onPause()
+        marker.map = null
+    }
 
     companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment PlaceInfoFragment.
-         */
-        // TODO: Rename and change types and number of parameters
         @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            PlaceInfoFragment().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
-                }
-            }
+        fun newInstance() = PlaceInfoFragment()
     }
 }

@@ -1,14 +1,22 @@
 package org.kjh.mytravel.ui.place
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
+import com.orhanobut.logger.Logger
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedFactory
+import dagger.assisted.AssistedInject
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import org.kjh.mytravel.ui.uistate.PlaceItemUiState
-import org.kjh.mytravel.ui.uistate.tempPlaceItemsFlow
+import org.kjh.mytravel.data.model.Post
+import org.kjh.mytravel.domain.Result
+import org.kjh.mytravel.domain.usecase.GetPlaceListUseCase
+import javax.inject.Inject
 
 /**
  * MyTravel
@@ -18,36 +26,63 @@ import org.kjh.mytravel.ui.uistate.tempPlaceItemsFlow
  * Description:
  */
 
-sealed class PlaceUiState {
-    object Loading: PlaceUiState()
-    data class Success(val placeItems: PlaceItemUiState): PlaceUiState()
-    data class Error(val exception: Throwable?): PlaceUiState()
-}
-class PlaceViewModel(
-    private val initPlaceName: String
+data class PlaceUiState(
+    val placeName: String = "",
+    val placeAddress: String = "",
+    val placeRoadAddress: String = "",
+    val cityName: String = "",
+    val x: String = "",
+    val y: String = "",
+    val posts : List<Post> = listOf()
+)
+
+class PlaceViewModel @AssistedInject constructor(
+    private val getPlaceListUseCase: GetPlaceListUseCase,
+    @Assisted private val initPlaceName: String
 ): ViewModel() {
 
-    private val _placeUiState = MutableStateFlow<PlaceUiState>(PlaceUiState.Loading)
-    val placeUiState : StateFlow<PlaceUiState> = _placeUiState
+    @AssistedFactory
+    interface PlaceNameAssistedFactory {
+        fun create(placeName: String): PlaceViewModel
+    }
 
-    init {
-        viewModelScope.launch {
-            tempPlaceItemsFlow.collect { item ->
-                val matchedItem = item.find { it.placeName == initPlaceName }
-
-                if (matchedItem != null) {
-                    _placeUiState.value = PlaceUiState.Success(matchedItem)
-                } else {
-                    _placeUiState.value = PlaceUiState.Error(Exception())
-                }
-
+    companion object {
+        fun provideFactory(
+            assistedFactory: PlaceNameAssistedFactory,
+            placeName: String
+        ): ViewModelProvider.Factory = object: ViewModelProvider.Factory {
+            override fun <T : ViewModel> create(modelClass: Class<T>): T {
+                return assistedFactory.create(placeName) as T
             }
         }
     }
 
-    override fun onCleared() {
-        super.onCleared()
+    private val _uiState = MutableStateFlow(PlaceUiState())
+    val uiState : StateFlow<PlaceUiState> = _uiState
 
-        Log.e("test", "onCleared()")
+
+    init {
+        viewModelScope.launch {
+            getPlaceListUseCase.execute(initPlaceName)
+                .collect { result ->
+                    when (result) {
+                        is Result.Loading -> {}
+                        is Result.Success -> _uiState.update {
+                            it.copy(
+                                placeName = result.data.data.placeName,
+                                placeAddress = result.data.data.placeAddress,
+                                placeRoadAddress = result.data.data.placeRoadAddress,
+                                cityName = result.data.data.cityName,
+                                x = result.data.data.x,
+                                y = result.data.data.y,
+                                posts = result.data.data.posts
+                            )
+                        }
+                        is Result.Error -> {
+                            Logger.e(result.throwable.localizedMessage)
+                        }
+                    }
+                }
+        }
     }
 }

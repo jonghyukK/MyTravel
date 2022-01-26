@@ -2,6 +2,7 @@ package org.kjh.mytravel.domain.repository
 
 import kotlinx.coroutines.flow.Flow
 import org.kjh.mytravel.data.model.PlaceModel
+import org.kjh.mytravel.data.model.PlaceResponse
 import org.kjh.mytravel.domain.Result
 
 /**
@@ -12,6 +13,5 @@ import org.kjh.mytravel.domain.Result
  * Description:
  */
 interface PlaceRepository {
-
-    fun getRecentPlaceItems(): Flow<Result<PlaceModel>>
+    fun getPlaceDetail(placeName: String): Flow<Result<PlaceResponse>>
 }

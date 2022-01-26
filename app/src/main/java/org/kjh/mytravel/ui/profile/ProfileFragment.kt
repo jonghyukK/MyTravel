@@ -17,6 +17,7 @@ import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import org.kjh.mytravel.GridLayoutItemDecoration
 import org.kjh.mytravel.NavGraphDirections
+import org.kjh.mytravel.ProfilePostsGridItemDecoration
 import org.kjh.mytravel.R
 import org.kjh.mytravel.databinding.FragmentProfileBinding
 import org.kjh.mytravel.ui.MainActivity
@@ -75,7 +76,11 @@ class ProfileFragment
         }
 
         binding.btnEditProfile.setOnClickListener {
-            val action = ProfileFragmentDirections.actionProfileFragmentToProfileEditFragment()
+            val action = ProfileFragmentDirections.actionProfileFragmentToProfileEditFragment(
+                viewModel.uiState.value.profileImg,
+                viewModel.uiState.value.nickName,
+                viewModel.uiState.value.introduce
+            )
             findNavController().navigate(action)
         }
     }
@@ -108,7 +113,7 @@ class ProfileFragment
         binding.rvMyPostList.apply {
             layoutManager = GridLayoutManager(requireContext(), 2)
             adapter = myPostListAdapter
-            addItemDecoration(GridLayoutItemDecoration(requireContext()))
+            addItemDecoration(ProfilePostsGridItemDecoration(requireContext()))
         }
     }
 }

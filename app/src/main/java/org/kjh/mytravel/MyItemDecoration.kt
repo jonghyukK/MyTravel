@@ -56,6 +56,32 @@ class UploadGridLayoutItemDecor(): RecyclerView.ItemDecoration() {
 
 fun Int.dpToPx(displayMetrics: DisplayMetrics): Int = (this * displayMetrics.density).toInt()
 
+class ProfilePostsGridItemDecoration(val ctx: Context): RecyclerView.ItemDecoration() {
+    override fun getItemOffsets(
+        outRect: Rect,
+        view: View,
+        parent: RecyclerView,
+        state: RecyclerView.State
+    ) {
+        super.getItemOffsets(outRect, view, parent, state)
+
+        val viewPosition = parent.getChildAdapterPosition(view)
+        val spanCnt = (parent.layoutManager as GridLayoutManager).spanCount
+
+        val isEdgeLeft  = viewPosition % spanCnt == 0
+        val isEdgeRight = (viewPosition % spanCnt) == (spanCnt - 1)
+
+        when {
+            isEdgeLeft -> {
+                outRect.right = 1.dpToPx(ctx)
+            }
+            isEdgeRight -> {
+                outRect.left = 1.dpToPx(ctx)
+            }
+        }
+    }
+}
+
 class GridLayoutItemDecoration(
     ctx     : Context,
     left    : Int = DEFAULT_PADDING_20,

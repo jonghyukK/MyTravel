@@ -19,6 +19,7 @@ data class Post(
     val placeName: String,
     val placeAddress: String,
     val profileImg: String? = null,
+    val createdDate: String,
     val imageUrl: List<String> = listOf()
 ) {
     companion object {

@@ -1,10 +1,7 @@
 package org.kjh.mytravel
 
 import okhttp3.MultipartBody
-import org.kjh.mytravel.data.model.LoginResponse
-import org.kjh.mytravel.data.model.PostUploadResponse
-import org.kjh.mytravel.data.model.SignUpResponse
-import org.kjh.mytravel.data.model.UserResponse
+import org.kjh.mytravel.data.model.*
 import org.kjh.mytravel.domain.Result
 import retrofit2.http.*
 
@@ -56,4 +53,9 @@ interface ApiService {
         @Query("nickName"   ) nickName  : String?,
         @Query("introduce"  ) introduce : String?
     ): UserResponse
+
+    @GET("post")
+    suspend fun getPostsByPlaceName(
+        @Query("placeName") placeName: String
+    ): PlaceResponse
 }

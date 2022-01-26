@@ -12,6 +12,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.NavOptions
 import androidx.navigation.fragment.findNavController
+import androidx.navigation.fragment.navArgs
 import androidx.navigation.ui.setupWithNavController
 import com.canhub.cropper.CropImageContract
 import com.canhub.cropper.CropImageView
@@ -30,6 +31,7 @@ const val NGINX_PATH = "http://192.168.219.102/images/"
 class ProfileEditFragment: BaseFragment<FragmentProfileEditBinding>(R.layout.fragment_profile_edit) {
 
     private val viewModel: ProfileEditViewModel by viewModels()
+    private val args: ProfileEditFragmentArgs by navArgs()
 
     private val cropImage = registerForActivityResult(CropImageContract()) { result ->
         if (result.isSuccessful) {
@@ -39,6 +41,14 @@ class ProfileEditFragment: BaseFragment<FragmentProfileEditBinding>(R.layout.fra
             uriFilePath?.let {
                 viewModel.updateProfileImg(uriFilePath)
             }
+        }
+    }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        if (savedInstanceState == null) {
+            viewModel.initProfileInfo(args.profileImg, args.nickName, args.introduce)
         }
     }
 

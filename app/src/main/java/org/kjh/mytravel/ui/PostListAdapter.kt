@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.PagerSnapHelper
 import androidx.recyclerview.widget.RecyclerView
+import org.kjh.mytravel.data.model.Post
 import org.kjh.mytravel.databinding.VhPostItemBinding
 import org.kjh.mytravel.ui.uistate.PostItemUiState
 
@@ -19,8 +20,8 @@ import org.kjh.mytravel.ui.uistate.PostItemUiState
  */
 
 class PostListAdapter(
-    private val onClick: (PostItemUiState) -> Unit,
-): ListAdapter<PostItemUiState, PostListAdapter.PostItemViewHolder>(PostItemUiState.DiffCallback) {
+    private val onClick: (Post) -> Unit,
+): ListAdapter<Post, PostListAdapter.PostItemViewHolder>(Post.DiffCallback) {
     private val viewPool = RecyclerView.RecycledViewPool()
     private val snapState = mutableMapOf<Int, Parcelable?>()
 
@@ -45,11 +46,11 @@ class PostListAdapter(
 
     inner class PostItemViewHolder(
         val binding: VhPostItemBinding,
-        val onClick: (PostItemUiState) -> Unit
+        val onClick: (Post) -> Unit
     ): RecyclerView.ViewHolder(binding.root) {
 
-        fun bind(item: PostItemUiState) {
-            binding.postItemUiState = item
+        fun bind(item: Post) {
+            binding.post = item
 
             binding.group.referencedIds.forEach { id ->
                 binding.root.findViewById<View>(id).setOnClickListener {
@@ -59,7 +60,7 @@ class PostListAdapter(
 
             binding.vpPostItemPager.apply {
                 setRecycledViewPool(viewPool)
-                adapter = RectImageListAdapter(item.postImages) {}
+                adapter = RectImageListAdapter(item.imageUrl) {}
                 setHasFixedSize(true)
 
                 val pagerSnapHelper = PagerSnapHelper()

@@ -13,6 +13,5 @@ import javax.inject.Inject
 class GetPlaceListUseCase @Inject constructor(
     private val placeRepository: PlaceRepository
 ) {
-
-    fun execute() = placeRepository.getRecentPlaceItems()
+    fun execute(placeName: String) = placeRepository.getPlaceDetail(placeName)
 }

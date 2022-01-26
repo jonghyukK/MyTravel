@@ -1,7 +1,5 @@
 package org.kjh.mytravel.data.model
 
-import org.kjh.mytravel.ui.uistate.PlaceItemUiState
-
 /**
  * MyTravel
  * Class: PlaceModel
@@ -10,5 +8,17 @@ import org.kjh.mytravel.ui.uistate.PlaceItemUiState
  * Description:
  */
 data class PlaceModel(
-    val placeList: List<PlaceItemUiState>
+    val placeName: String,
+    val placeAddress: String,
+    val placeRoadAddress: String,
+    val cityName: String,
+    val x: String,
+    val y: String,
+    val posts : List<Post>
+)
+
+data class PlaceResponse(
+    val result: Boolean,
+    val data: PlaceModel,
+    val errorMsg: String? = null
 )

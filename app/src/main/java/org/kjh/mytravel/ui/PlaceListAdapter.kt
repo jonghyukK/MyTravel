@@ -53,9 +53,9 @@ class PlaceListAdapter(
 
             binding.rvRecentPlaceList.apply {
                 setRecycledViewPool(viewPool)
-                adapter = RectImageListAdapter(item.placeImages) {
-                    onClickItem(item)
-                }
+//                adapter = RectImageListAdapter(item.placeImages) {
+//                    onClickItem(item)
+//                }
                 setHasFixedSize(true)
 
                 val pagerSnapHelper = PagerSnapHelper()

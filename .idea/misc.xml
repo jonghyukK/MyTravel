@@ -29,8 +29,8 @@
         <entry key="app/src/main/res/layout/fragment_not_login.xml" value="0.15185185185185185" />
         <entry key="app/src/main/res/layout/fragment_place_day_log.xml" value="0.36046511627906974" />
         <entry key="app/src/main/res/layout/fragment_place_detail.xml" value="0.4995366079703429" />
-        <entry key="app/src/main/res/layout/fragment_place_info.xml" value="0.6148255813953488" />
-        <entry key="app/src/main/res/layout/fragment_place_pager.xml" value="0.4084084084084084" />
+        <entry key="app/src/main/res/layout/fragment_place_info.xml" value="0.5231481481481481" />
+        <entry key="app/src/main/res/layout/fragment_place_pager.xml" value="0.1" />
         <entry key="app/src/main/res/layout/fragment_profile.xml" value="0.6682291666666667" />
         <entry key="app/src/main/res/layout/fragment_profile_edit.xml" value="0.1" />
         <entry key="app/src/main/res/layout/fragment_select_bucket_bottom_sheet.xml" value="0.43425925925925923" />
@@ -54,11 +54,12 @@
         <entry key="app/src/main/res/layout/vh_place_item.xml" value="0.75" />
         <entry key="app/src/main/res/layout/vh_place_outer.xml" value="0.6375" />
         <entry key="app/src/main/res/layout/vh_post_in_place_outer.xml" value="0.8804448563484708" />
-        <entry key="app/src/main/res/layout/vh_post_item.xml" value="0.67" />
-        <entry key="app/src/main/res/layout/vh_post_small_item.xml" value="0.2405168820341809" />
+        <entry key="app/src/main/res/layout/vh_post_item.xml" value="0.5185185185185185" />
+        <entry key="app/src/main/res/layout/vh_post_small_item.xml" value="0.548936170212766" />
         <entry key="app/src/main/res/layout/vh_post_timeline.xml" value="0.6113416320885201" />
         <entry key="app/src/main/res/layout/vh_preview_slide_inner.xml" value="0.2875912408759124" />
         <entry key="app/src/main/res/layout/vh_preview_slide_outer.xml" value="0.6156202143950995" />
+        <entry key="app/src/main/res/layout/vh_profile_post_item.xml" value="0.6536458333333334" />
         <entry key="app/src/main/res/layout/vh_ranking.xml" value="0.6375" />
         <entry key="app/src/main/res/layout/vh_rect_image.xml" value="0.48973143759873616" />
         <entry key="app/src/main/res/layout/vh_rect_image_big.xml" value="0.25" />

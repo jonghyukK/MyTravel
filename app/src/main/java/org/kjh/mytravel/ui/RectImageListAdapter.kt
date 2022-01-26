@@ -13,7 +13,7 @@ import org.kjh.mytravel.databinding.VhRectImageBinding
  * Description:
  */
 class RectImageListAdapter(
-    private val images: List<Int>,
+    private val images: List<String>,
     private val onClickImg: () -> Unit,
 ): RecyclerView.Adapter<RectImageListAdapter.RectImageViewHolder>() {
 
@@ -36,8 +36,8 @@ class RectImageListAdapter(
         val onClickImg: () -> Unit
     ): RecyclerView.ViewHolder(binding.root) {
 
-        fun bind(imgResource: Int) {
-            binding.imgResource = imgResource
+        fun bind(imgResource: String) {
+            binding.postImage = imgResource
 
             binding.clRectImgContainer.setOnClickListener {
                 onClickImg()

@@ -25,7 +25,7 @@
                 android:id="@+id/ctl"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:layout_scrollFlags="scroll|exitUntilCollapsed">
+                app:layout_scrollFlags="scroll|exitUntilCollapsed|snap">
 
                 <androidx.appcompat.widget.Toolbar
                     android:id="@+id/tb_placePagerToolbar"
@@ -47,6 +47,7 @@
                         android:id="@+id/tv_title"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:text="@{viewModel.uiState.placeName}"
                         android:textSize="20sp"
                         android:textColor="#333333"
                         android:textStyle="bold"/>
@@ -56,6 +57,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="8dp"
+                        android:text="@{viewModel.uiState.cityName}"
                         android:textSize="16sp"
                         android:textColor="#999999"/>
                 </LinearLayout>

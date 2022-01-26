@@ -62,8 +62,8 @@ object ResponseMapper {
     }
 
     fun responseToPlaceResult(
-        response: Result<PlaceModel>
-    ): Result<PlaceModel> {
+        response: Result<PlaceResponse>
+    ): Result<PlaceResponse> {
         return when (response) {
             is Result.Success -> Result.Success(response.data)
             is Result.Error -> Result.Error(response.throwable)

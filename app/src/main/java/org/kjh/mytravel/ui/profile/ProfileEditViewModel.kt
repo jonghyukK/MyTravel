@@ -30,8 +30,6 @@ import javax.inject.Inject
 
 data class ProfileEditUiState(
     val profileImg: String? = null,
-    val nickName  : String? = null,
-    val introduce : String? = null,
     val isLoading : Boolean = false,
     val isSuccess : Boolean = false,
 )
@@ -43,39 +41,16 @@ class ProfileEditViewModel @Inject constructor(
     private val _uiState = MutableStateFlow(ProfileEditUiState())
     val uiState: StateFlow<ProfileEditUiState> = _uiState
 
-    val nickName  = MutableLiveData<String>()
-    val introduce = MutableLiveData<String?>()
+    val inputNickName  = MutableLiveData<String>()
+    val inputIntroduce = MutableLiveData<String?>()
 
-    init {
-        initMyProfile()
-    }
-
-    private fun initMyProfile() {
+    fun initProfileInfo(profileImg: String?, nickName: String, introduce: String?) {
         viewModelScope.launch {
-            getUserInfoUseCase()
-                .collect { result ->
-                    when (result) {
-                        is Result.Loading -> _uiState.value =
-                            ProfileEditUiState(isLoading = true)
-                        is Result.Success -> {
-                            _uiState.update {
-                                it.copy(
-                                    isLoading  = false,
-                                    profileImg = result.data.userData.profileImg,
-                                    nickName   = result.data.userData.nickName,
-                                    introduce  = result.data.userData.introduce
-                                )
-                            }
-
-                            nickName.value  = result.data.userData.nickName
-                            introduce.value = result.data.userData.introduce
-                        }
-                        is Result.Error -> _uiState.update {
-                            it.copy(isLoading = false)
-                        }
-                    }
-                }
+            _uiState.value = ProfileEditUiState(profileImg)
         }
+
+        inputNickName.value = nickName
+        inputIntroduce.value = introduce
     }
 
     fun updateProfileImg(uri: String) {
@@ -89,8 +64,8 @@ class ProfileEditViewModel @Inject constructor(
     }
 
     fun makeUpdateUserInfo(filePath: String?) {
-        val nickName  = nickName.value.toString()
-        val introduce = introduce.value.toString()
+        val nickName  = inputNickName.value.toString()
+        val introduce = inputIntroduce.value.toString()
 
         viewModelScope.launch {
             getUserInfoUseCase.updateUserProfile(
@@ -102,7 +77,7 @@ class ProfileEditViewModel @Inject constructor(
                     when (result) {
                         is Result.Loading -> _uiState.update {
                             it.copy(
-                                isLoading = false
+                                isLoading = true
                             )
                         }
                         is Result.Success -> _uiState.update {

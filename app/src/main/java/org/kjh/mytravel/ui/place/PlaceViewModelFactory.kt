@@ -2,6 +2,9 @@ package org.kjh.mytravel.ui.place
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import org.kjh.mytravel.domain.repository.PlaceRepository
+import org.kjh.mytravel.domain.usecase.GetPlaceListUseCase
+import javax.inject.Inject
 
 /**
  * MyTravel
@@ -10,9 +13,9 @@ import androidx.lifecycle.ViewModelProvider
  *
  * Description:
  */
-class PlaceViewModelFactory(
-    private val initPlaceName: String
-): ViewModelProvider.NewInstanceFactory() {
-    override fun <T : ViewModel> create(modelClass: Class<T>): T =
-        PlaceViewModel(initPlaceName) as T
-}
+//class PlaceViewModelFactory(
+//    private val initPlaceName: String
+//): ViewModelProvider.NewInstanceFactory() {
+//    override fun <T : ViewModel> create(modelClass: Class<T>): T =
+//        PlaceViewModel(initPlaceName) as T
+//}

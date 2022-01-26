@@ -4,8 +4,8 @@
 
     <data>
         <variable
-            name="imgResource"
-            type="Integer" />
+            name="postImage"
+            type="String" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -31,7 +31,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:scaleType="centerCrop"
-                app:imgResource="@{imgResource}"
+                app:imgUrl="@{postImage}"
                 app:layout_constraintDimensionRatio="1:1"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"

@@ -98,13 +98,13 @@ class HomeViewModel @Inject constructor(
         }
 
         viewModelScope.launch {
-            getPlaceListUseCase.execute().collect {
-                when (it) {
-                    is Result.Success -> {
-                        _recentPlaceUiState.value = RecentPlaceUiState.Success(it.data.placeList)
-                    }
-                }
-            }
+//            getPlaceListUseCase.execute().collect {
+//                when (it) {
+//                    is Result.Success -> {
+////                        _recentPlaceUiState.value = RecentPlaceUiState.Success(it.data.placeList)
+//                    }
+//                }
+//            }
         }
     }
 }

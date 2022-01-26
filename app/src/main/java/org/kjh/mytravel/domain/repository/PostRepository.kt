@@ -2,7 +2,6 @@ package org.kjh.mytravel.domain.repository
 
 import kotlinx.coroutines.flow.Flow
 import okhttp3.MultipartBody
-import org.kjh.mytravel.data.model.PostUploadModel
 import org.kjh.mytravel.data.model.PostUploadResponse
 import org.kjh.mytravel.domain.Result
 
@@ -25,5 +24,4 @@ interface PostRepository {
         x : String,
         y : String
     ): Flow<Result<PostUploadResponse>>
-
 }

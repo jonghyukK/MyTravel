@@ -14,28 +14,21 @@ import androidx.navigation.fragment.findNavController
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import org.kjh.mytravel.NavGraphDirections
+import org.kjh.mytravel.R
 import org.kjh.mytravel.ui.PostListAdapter
 import org.kjh.mytravel.databinding.FragmentPlaceDayLogBinding
+import org.kjh.mytravel.ui.base.BaseFragment
 
 
-class PlaceDayLogFragment : Fragment() {
-    private lateinit var binding: FragmentPlaceDayLogBinding
+class PlaceDayLogFragment : BaseFragment<FragmentPlaceDayLogBinding>(R.layout.fragment_place_day_log) {
+
     private val viewModel: PlaceViewModel by viewModels({ requireParentFragment() })
 
     private val postListAdapter by lazy {
         PostListAdapter { item ->
-            val action = NavGraphDirections.actionGlobalUserFragment(item.writer)
+            val action = NavGraphDirections.actionGlobalUserFragment(item.nickName)
             findNavController().navigate(action)
         }
-    }
-
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
-        binding = FragmentPlaceDayLogBinding.inflate(inflater, container, false)
-        binding.lifecycleOwner = viewLifecycleOwner
-        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -43,11 +36,8 @@ class PlaceDayLogFragment : Fragment() {
 
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                viewModel.placeUiState.collect { uiState ->
-                    when (uiState) {
-                        is PlaceUiState.Success -> postListAdapter.submitList(uiState.placeItems.postItems)
-                        is PlaceUiState.Error -> Toast.makeText(requireContext(), "Place Error", Toast.LENGTH_SHORT).show()
-                    }
+                viewModel.uiState.collect { uiState ->
+                    postListAdapter.submitList(uiState.posts)
                 }
             }
         }
@@ -69,8 +59,8 @@ class PlaceDayLogFragment : Fragment() {
     }
 
     override fun onDestroyView() {
-        super.onDestroyView()
         binding.rvPlaceDayLogList.adapter = null
+        super.onDestroyView()
     }
 
     companion object {

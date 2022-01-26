@@ -6,9 +6,11 @@ import android.widget.EditText
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.databinding.BindingAdapter
+import androidx.fragment.app.FragmentContainerView
 import com.bumptech.glide.Glide
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
+import com.naver.maps.map.MapFragment
 import org.kjh.mytravel.InputValidator
 import org.kjh.mytravel.InputValidator.INPUT_TYPE_EMAIl
 import org.kjh.mytravel.InputValidator.INPUT_TYPE_PW
