@@ -13,18 +13,30 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.navigation.ui.setupWithNavController
 import androidx.recyclerview.widget.GridLayoutManager
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import org.kjh.mytravel.GridLayoutItemDecoration
 import org.kjh.mytravel.NavGraphDirections
+import org.kjh.mytravel.ProfilePostsGridItemDecoration
+import org.kjh.mytravel.R
 import org.kjh.mytravel.databinding.FragmentUserBinding
 import org.kjh.mytravel.ui.PostSmallListAdapter
+import org.kjh.mytravel.ui.base.BaseFragment
+import javax.inject.Inject
 
-class UserFragment : Fragment() {
+@AndroidEntryPoint
+class UserFragment
+    : BaseFragment<FragmentUserBinding>(R.layout.fragment_user) {
 
-    private lateinit var binding: FragmentUserBinding
     private val args: UserFragmentArgs by navArgs()
-    private val viewModel: UserViewModel by viewModels { UserViewModelFactory(args.userEmail) }
+
+    @Inject
+    lateinit var userViewModelFactory: UserViewModel.UserNameAssistedFactory
+
+    private val viewModel: UserViewModel by viewModels {
+        UserViewModel.provideFactory(userViewModelFactory, args.userEmail)
+    }
 
     private val postSmallListAdapter by lazy {
         PostSmallListAdapter { item ->
@@ -33,33 +45,39 @@ class UserFragment : Fragment() {
         }
     }
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
-        binding = FragmentUserBinding.inflate(inflater, container, false)
-        binding.lifecycleOwner = viewLifecycleOwner
-        return binding.root
-    }
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding.viewModel = viewModel
 
+        initToolbarWithNavigation()
+        initUserPostsRecyclerView()
+        initClickEvents()
+
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                viewModel.userUiState.collect { uiState ->
-                    binding.tbUserToolbar.title = uiState.userItem?.userEmail
-//                    postSmallListAdapter.submitList(uiState.userItem?.postItems)
+                viewModel.uiState.collect { uiState ->
+                    uiState.userItem?.let {
+                        postSmallListAdapter.submitList(uiState.userItem.posts)
+                    }
                 }
             }
         }
-        binding.tbUserToolbar.setupWithNavController(findNavController())
+    }
 
-        binding.rvUserPostList.apply {
-            layoutManager = GridLayoutManager(requireContext(), 2)
-            adapter = postSmallListAdapter
-            addItemDecoration(GridLayoutItemDecoration(requireContext()))
+    private fun initClickEvents() {
+        binding.btnFollow.setOnClickListener {
+            viewModel.makeRequestFollow(targetEmail = args.userEmail)
         }
+    }
+
+    private fun initUserPostsRecyclerView() {
+        binding.rvUserPostList.apply {
+            adapter = postSmallListAdapter
+            addItemDecoration(ProfilePostsGridItemDecoration(requireContext()))
+        }
+    }
+
+    private fun initToolbarWithNavigation() {
+        binding.tbUserToolbar.setupWithNavController(findNavController())
     }
 }

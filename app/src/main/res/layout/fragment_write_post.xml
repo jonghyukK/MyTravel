@@ -51,7 +51,7 @@
            app:layout_constraintTop_toBottomOf="@+id/rv_selectedImages"
            app:layout_constraintStart_toEndOf="@+id/iv_locationIcon"
            app:layout_constraintEnd_toEndOf="parent"
-           android:text="@{uploadViewModel.uiState.placeItem.addressName ?? `위치 추가`}" />
+           android:text="@{uploadViewModel.uiState.placeItem.placeAddress ?? `위치 추가`}" />
 
         <ImageView
             android:id="@+id/iv_locationIcon"

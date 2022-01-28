@@ -5,7 +5,7 @@
     <data>
         <variable
             name="item"
-            type="org.kjh.mytravel.ui.upload.MediaStoreImage" />
+            type="com.example.domain.entity.MediaStoreImage" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout

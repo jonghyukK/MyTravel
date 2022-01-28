@@ -1,14 +1,16 @@
 package org.kjh.mytravel.ui.profile
 
 import androidx.lifecycle.*
+import com.example.domain.entity.ApiResult
+import com.example.domain.entity.LoginInfoPreferences
+import com.example.domain.usecase.MakeLoginRequestUseCase
+import com.example.domain.usecase.SaveLogInPreferenceUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import org.kjh.mytravel.InputValidator
 import org.kjh.mytravel.InputValidator.isValidateEmail
 import org.kjh.mytravel.InputValidator.isValidatePw
-import org.kjh.mytravel.domain.Result
-import org.kjh.mytravel.domain.usecase.MakeLoginRequestUseCase
 import javax.inject.Inject
 
 /**
@@ -29,7 +31,8 @@ data class LoginUiState(
 
 @HiltViewModel
 class LoginViewModel @Inject constructor(
-    private val makeLoginRequestUseCase   : MakeLoginRequestUseCase,
+    private val makeLoginRequestUseCase : MakeLoginRequestUseCase,
+    private val saveLogInPreferenceUseCase: SaveLogInPreferenceUseCase
 ): ViewModel() {
     private val _uiState: MutableStateFlow<LoginUiState> = MutableStateFlow(LoginUiState())
     val uiState: StateFlow<LoginUiState> = _uiState.asStateFlow()
@@ -48,17 +51,33 @@ class LoginViewModel @Inject constructor(
                 email = email.value.toString(),
                 pw    = pw.value.toString()
             ).collect { result ->
+
                 when (result) {
-                    is Result.Loading -> _uiState.value =
+
+                    is ApiResult.Loading -> _uiState.value =
                         LoginUiState(isLoading = true)
-                    is Result.Success -> _uiState.value =
-                        LoginUiState(
-                            isLoggedIn = result.data.isLoggedIn,
+
+                    is ApiResult.Success -> {
+                        if (result.data.result) {
+                            saveLoginPreference()
+                        }
+
+                        _uiState.value = LoginUiState(
+                            isLoggedIn = result.data.result,
                             loginError = result.data.errorMsg
                         )
-                    is Result.Error -> { }
+                    }
+                    is ApiResult.Error -> {}
                 }
             }
+        }
+    }
+
+    private fun saveLoginPreference() {
+        viewModelScope.launch {
+            saveLogInPreferenceUseCase(
+                LoginInfoPreferences(email.value.toString(), true)
+            )
         }
     }
 }

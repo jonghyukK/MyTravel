@@ -4,7 +4,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import org.kjh.mytravel.data.model.KakaoSearchPlaceModel
+import com.example.domain.entity.MapSearch
 import org.kjh.mytravel.databinding.VhBsSearchPlaceBinding
 
 /**
@@ -15,9 +15,9 @@ import org.kjh.mytravel.databinding.VhBsSearchPlaceBinding
  * Description:
  */
 class MapSearchPlaceListAdapter(
-    private val onClickPlace: (KakaoSearchPlaceModel) -> Unit
-) : ListAdapter<KakaoSearchPlaceModel, MapSearchPlaceListAdapter.MapSearchPlaceViewHolder>(
-    KakaoSearchPlaceModel.DiffCallback) {
+    private val onClickPlace: (MapSearch) -> Unit
+) : ListAdapter<MapSearch, MapSearchPlaceListAdapter.MapSearchPlaceViewHolder>(
+    MapSearch.DiffCallback) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) =
         MapSearchPlaceViewHolder(
@@ -32,11 +32,11 @@ class MapSearchPlaceListAdapter(
 
     class MapSearchPlaceViewHolder(
         val binding: VhBsSearchPlaceBinding,
-        val onClickPlace: (KakaoSearchPlaceModel) -> Unit
+        val onClickPlace: (MapSearch) -> Unit
     ): RecyclerView.ViewHolder(binding.root) {
 
-        fun bind(item: KakaoSearchPlaceModel) {
-            binding.kakaoPlaceModel = item
+        fun bind(item: MapSearch) {
+            binding.mapSearch = item
 
             itemView.setOnClickListener {
                 onClickPlace(item)

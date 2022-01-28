@@ -1,13 +1,13 @@
 package org.kjh.mytravel.ui.profile
 
 import androidx.lifecycle.*
+import com.example.domain.entity.ApiResult
+import com.example.domain.entity.User
+import com.example.domain.usecase.GetLoginPreferenceUseCase
+import com.example.domain.usecase.GetUserUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
-import org.kjh.mytravel.data.model.Post
-import org.kjh.mytravel.domain.Result
-import org.kjh.mytravel.domain.repository.LoginPreferencesRepository
-import org.kjh.mytravel.domain.usecase.GetUserInfoUseCase
 import javax.inject.Inject
 
 /**
@@ -19,30 +19,22 @@ import javax.inject.Inject
  */
 
 data class ProfileUiState(
-    val userId         : Int = 0,
-    val email          : String = "",
-    val nickName       : String = "",
-    val profileImg     : String? = null,
-    val postCount      : Int = 0,
-    val followingCount : Int = 0,
-    val followCount    : Int = 0,
-    val introduce      : String? = null,
-    val posts          : List<Post> = listOf(),
-    val isLoading      : Boolean = false,
-    val isLoggedIn     : Boolean = true,
+    val userItem  : User? = null,
+    val isLoading : Boolean = false,
+    val isLoggedIn: Boolean = true,
 )
 
 @HiltViewModel
 class ProfileViewModel @Inject constructor(
-    private val getUserInfoUseCase: GetUserInfoUseCase,
-    private val loginPrefRepository: LoginPreferencesRepository,
+    private val getUserUseCase: GetUserUseCase,
+    private val getLoginPreferenceUseCase: GetLoginPreferenceUseCase
 ): ViewModel() {
     private val _uiState : MutableStateFlow<ProfileUiState> = MutableStateFlow(ProfileUiState())
     val uiState: StateFlow<ProfileUiState> = _uiState
 
     init {
         viewModelScope.launch {
-            val isLoggedIn = loginPrefRepository.fetchInitialPreferences().isLoggedIn
+            val isLoggedIn = getLoginPreferenceUseCase().isLoggedIn
 
             if (isLoggedIn) {
                 getMyProfileData()
@@ -54,28 +46,23 @@ class ProfileViewModel @Inject constructor(
 
     private fun getMyProfileData() {
         viewModelScope.launch {
-            getUserInfoUseCase()
+            getUserUseCase(getLoginPreferenceUseCase().email)
                 .collect { result ->
                     when (result) {
-                        is Result.Loading -> _uiState.value = ProfileUiState(isLoading = true)
-                        is Result.Success -> {
-                            with (result.data.userData) {
-                                _uiState.update {
-                                    it.copy(
-                                        userId         = userId,
-                                        email          = email,
-                                        nickName       = nickName,
-                                        profileImg     = profileImg,
-                                        postCount      = postCount,
-                                        followingCount = followingCount,
-                                        followCount    = followCount,
-                                        introduce      = introduce,
-                                        posts          = posts
-                                    )
-                                }
-                            }
+                        is ApiResult.Loading -> _uiState.update {
+                            it.copy(isLoading = true)
                         }
-                        is Result.Error -> {}
+                        is ApiResult.Success -> _uiState.update {
+                            it.copy(
+                                isLoading = false,
+                                userItem  = result.data
+                            )
+                        }
+                        is ApiResult.Error -> _uiState.update {
+                            it.copy(
+                                isLoading = false
+                            )
+                        }
                     }
                 }
         }

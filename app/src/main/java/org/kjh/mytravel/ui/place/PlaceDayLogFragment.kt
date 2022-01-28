@@ -20,13 +20,14 @@ import org.kjh.mytravel.databinding.FragmentPlaceDayLogBinding
 import org.kjh.mytravel.ui.base.BaseFragment
 
 
-class PlaceDayLogFragment : BaseFragment<FragmentPlaceDayLogBinding>(R.layout.fragment_place_day_log) {
+class PlaceDayLogFragment
+    : BaseFragment<FragmentPlaceDayLogBinding>(R.layout.fragment_place_day_log) {
 
     private val viewModel: PlaceViewModel by viewModels({ requireParentFragment() })
 
     private val postListAdapter by lazy {
         PostListAdapter { item ->
-            val action = NavGraphDirections.actionGlobalUserFragment(item.nickName)
+            val action = NavGraphDirections.actionGlobalUserFragment(item.email)
             findNavController().navigate(action)
         }
     }
@@ -34,15 +35,17 @@ class PlaceDayLogFragment : BaseFragment<FragmentPlaceDayLogBinding>(R.layout.fr
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        initPostListByPlace()
+
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.uiState.collect { uiState ->
-                    postListAdapter.submitList(uiState.posts)
+                    uiState.placeItem?.let {
+                        postListAdapter.submitList(uiState.placeItem?.posts)
+                    }
                 }
             }
         }
-
-        initPostListByPlace()
     }
 
     private fun initPostListByPlace() {

@@ -1,5 +1,7 @@
 package org.kjh.mytravel.ui.profile
 
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -16,20 +18,12 @@ import kotlinx.coroutines.launch
  * Description:
  */
 
-data class LoginOrSignUpUiState(
-    val isLoginOrSignUpSuccess: Boolean = false
-)
-
 class NotLoginViewModel: ViewModel() {
 
-    private val _uiState: MutableStateFlow<LoginOrSignUpUiState> = MutableStateFlow(LoginOrSignUpUiState())
-    val uiState: StateFlow<LoginOrSignUpUiState> = _uiState.asStateFlow()
+    private val _isSuccessLoginOrSignUp = MutableLiveData<Boolean>()
+    val isSuccessLoginOrSignUp: LiveData<Boolean> = _isSuccessLoginOrSignUp
 
     fun setLoginOrSignUpState() {
-        viewModelScope.launch {
-            _uiState.update {
-                it.copy(isLoginOrSignUpSuccess = true)
-            }
-        }
+        _isSuccessLoginOrSignUp.value = true
     }
 }

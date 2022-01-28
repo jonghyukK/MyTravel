@@ -57,6 +57,7 @@ class ProfileEditFragment: BaseFragment<FragmentProfileEditBinding>(R.layout.fra
         binding.viewModel = viewModel
 
         initToolbarWithNavigation()
+        initClickEvents()
 
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
@@ -70,7 +71,9 @@ class ProfileEditFragment: BaseFragment<FragmentProfileEditBinding>(R.layout.fra
                 }
             }
         }
+    }
 
+    private fun initClickEvents() {
         binding.tvProfileEdit.setOnClickListener {
             cropImage.launch(
                 options {
@@ -84,7 +87,7 @@ class ProfileEditFragment: BaseFragment<FragmentProfileEditBinding>(R.layout.fra
             var filePath = viewModel.uiState.value.profileImg
 
             if (filePath != null && filePath.startsWith(NGINX_PATH)) {
-               filePath = filePath.replace(NGINX_PATH, "${requireContext().cacheDir.absolutePath}/")
+                filePath = filePath.replace(NGINX_PATH, "${requireContext().cacheDir.absolutePath}/")
             }
 
             viewModel.makeUpdateUserInfo(filePath)

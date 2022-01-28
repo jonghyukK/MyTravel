@@ -18,6 +18,7 @@
             android:id="@+id/tb_userToolbar"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
+            app:title="@{viewModel.uiState.userItem.nickName}"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_scrollFlags="scroll"/>
 
@@ -51,7 +52,7 @@
                         android:layout_height="100dp"
                         android:scaleType="centerCrop"
                         app:shapeAppearanceOverlay="@style/circle"
-                        app:imgResource="@{viewModel.userUiState.userItem.profileImg}"
+                        app:imgUrl="@{viewModel.uiState.userItem.profileImg}"
                         app:layout_constraintTop_toTopOf="parent"
                         app:layout_constraintStart_toStartOf="parent"/>
 
@@ -59,7 +60,7 @@
                         android:id="@+id/tv_postCount"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@{String.valueOf(viewModel.userUiState.userItem.postCount)}"
+                        android:text="@{String.valueOf(viewModel.uiState.userItem.postCount)}"
                         android:textColor="#444444"
                         android:textStyle="bold"
                         android:textSize="15sp"
@@ -73,7 +74,7 @@
                         android:id="@+id/tv_followerCount"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@{String.valueOf(viewModel.userUiState.userItem.followerCount)}"
+                        android:text="@{String.valueOf(viewModel.uiState.userItem.followCount)}"
                         android:textColor="#444444"
                         android:textStyle="bold"
                         android:textSize="15sp"
@@ -87,7 +88,7 @@
                         android:id="@+id/tv_followingCount"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@{String.valueOf(viewModel.userUiState.userItem.followingCount)}"
+                        android:text="@{String.valueOf(viewModel.uiState.userItem.followingCount)}"
                         android:textColor="#444444"
                         android:textStyle="bold"
                         android:textSize="15sp"
@@ -148,7 +149,7 @@
                         android:textSize="14sp"
                         app:layout_constraintTop_toBottomOf="@+id/siv_profileImg"
                         app:layout_constraintStart_toStartOf="parent"
-                        android:text="@{viewModel.userUiState.userItem.introduce}"/>
+                        android:text="@{viewModel.uiState.userItem.introduce}"/>
 
                     <Button
                         android:id="@+id/btn_follow"
@@ -156,8 +157,8 @@
                         android:layout_height="40dp"
                         android:layout_marginTop="15dp"
                         android:layout_marginBottom="15dp"
-                        android:text="@{viewModel.userUiState.isFollowing ? `팔로잉` : `팔로우`}"
                         android:textSize="13sp"
+                        android:text="@{viewModel.uiState.userItem.following ? `팔로잉` : `팔로우`}"
                         app:layout_constraintTop_toBottomOf="@+id/tv_userIntroduce"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
@@ -170,6 +171,8 @@
                 android:id="@+id/rv_userPostList"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+                app:spanCount="2"
                 app:layout_behavior="@string/appbar_scrolling_view_behavior" />
         </androidx.coordinatorlayout.widget.CoordinatorLayout>
     </androidx.constraintlayout.widget.ConstraintLayout>

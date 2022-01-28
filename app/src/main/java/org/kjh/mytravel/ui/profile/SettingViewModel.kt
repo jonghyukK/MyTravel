@@ -2,9 +2,9 @@ package org.kjh.mytravel.ui.profile
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.domain.repository.LoginPreferencesRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
-import org.kjh.mytravel.domain.repository.LoginPreferencesRepository
 import javax.inject.Inject
 
 /**

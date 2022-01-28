@@ -41,22 +41,26 @@ class NotLoginFragment
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        initClickEvents()
+
+        viewModel.isSuccessLoginOrSignUp.observe(viewLifecycleOwner, {
+            if (it) {
+                navigateHomeWhenSuccessLoginOrSignUp()
+            }
+        })
+    }
+
+    private fun navigateHomeWhenSuccessLoginOrSignUp() {
         val navController = findNavController()
         val startDestination = navController.graph.startDestinationId
         val navOptions = NavOptions.Builder()
             .setPopUpTo(startDestination, true)
             .build()
 
-        viewLifecycleOwner.lifecycleScope.launch {
-            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                viewModel.uiState.collect { state ->
-                    if (state.isLoginOrSignUpSuccess) {
-                        navController.navigate(startDestination, null, navOptions)
-                    }
-                }
-            }
-        }
+        navController.navigate(startDestination, null, navOptions)
+    }
 
+    private fun initClickEvents() {
         binding.btnSignUp.setOnClickListener {
             SignUpFragment().show(childFragmentManager, SignUpFragment.TAG)
         }

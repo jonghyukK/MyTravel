@@ -4,10 +4,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import org.kjh.mytravel.data.model.Post
-import org.kjh.mytravel.databinding.VhPostSmallItemBinding
 import org.kjh.mytravel.databinding.VhProfilePostItemBinding
-import org.kjh.mytravel.ui.uistate.PostItemUiState
 
 /**
  * MyTravel
@@ -17,8 +14,8 @@ import org.kjh.mytravel.ui.uistate.PostItemUiState
  * Description:
  */
 class PostSmallListAdapter(
-    private val onClickItem: (Post) -> Unit
-): ListAdapter<Post, PostItemSmallViewHolder>(Post.DiffCallback) {
+    private val onClickItem: (com.example.domain.entity.Post) -> Unit
+): ListAdapter<com.example.domain.entity.Post, PostItemSmallViewHolder>(com.example.domain.entity.Post.DiffCallback) {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) =
         PostItemSmallViewHolder(
             VhProfilePostItemBinding.inflate(
@@ -33,10 +30,10 @@ class PostSmallListAdapter(
 
 class PostItemSmallViewHolder(
     val binding: VhProfilePostItemBinding,
-    private val onClickItem: (Post) -> Unit
+    private val onClickItem: (com.example.domain.entity.Post) -> Unit
 ): RecyclerView.ViewHolder(binding.root) {
 
-    fun bind(item: Post) {
+    fun bind(item: com.example.domain.entity.Post) {
         binding.postItem = item
 
         itemView.setOnClickListener {
@@ -44,3 +41,4 @@ class PostItemSmallViewHolder(
         }
     }
 }
+

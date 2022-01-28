@@ -5,7 +5,7 @@
     <data>
         <variable
             name="postItem"
-            type="org.kjh.mytravel.data.model.Post" />
+            type="com.example.domain.entity.Post" />
     </data>
 
     <androidx.cardview.widget.CardView

@@ -15,7 +15,6 @@ import androidx.recyclerview.widget.GridLayoutManager
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
-import org.kjh.mytravel.GridLayoutItemDecoration
 import org.kjh.mytravel.NavGraphDirections
 import org.kjh.mytravel.ProfilePostsGridItemDecoration
 import org.kjh.mytravel.R
@@ -62,26 +61,33 @@ class ProfileFragment
 
         initToolbarWithNavigation()
         initMyPostRecyclerView()
+        initClickEvents()
 
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.uiState.collect { uiState ->
                     if (uiState.isLoggedIn) {
-                        myPostListAdapter.submitList(uiState.posts)
-                    }
-                    else
+                        uiState.userItem?.let {
+                            myPostListAdapter.submitList(it.posts)
+                        }
+                    } else {
                         findNavController().navigate(R.id.notLoginFragment)
+                    }
                 }
             }
         }
+    }
 
+    private fun initClickEvents() {
         binding.btnEditProfile.setOnClickListener {
-            val action = ProfileFragmentDirections.actionProfileFragmentToProfileEditFragment(
-                viewModel.uiState.value.profileImg,
-                viewModel.uiState.value.nickName,
-                viewModel.uiState.value.introduce
-            )
-            findNavController().navigate(action)
+            viewModel.uiState.value.userItem?.let {
+                val action = ProfileFragmentDirections.actionProfileFragmentToProfileEditFragment(
+                    it.profileImg,
+                    it.nickName,
+                    it.introduce
+                )
+                findNavController().navigate(action)
+            }
         }
     }
 
@@ -111,7 +117,6 @@ class ProfileFragment
 
     private fun initMyPostRecyclerView() {
         binding.rvMyPostList.apply {
-            layoutManager = GridLayoutManager(requireContext(), 2)
             adapter = myPostListAdapter
             addItemDecoration(ProfilePostsGridItemDecoration(requireContext()))
         }

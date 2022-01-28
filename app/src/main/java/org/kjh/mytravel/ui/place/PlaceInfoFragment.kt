@@ -6,6 +6,7 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import com.example.domain.entity.Place
 import com.naver.maps.geometry.LatLng
 import com.naver.maps.map.*
 import com.naver.maps.map.overlay.Marker
@@ -43,23 +44,27 @@ class PlaceInfoFragment
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.uiState.collect { uiState ->
 
-                    if (uiState.x.isNotBlank() && uiState.y.isNotBlank() && !::marker.isInitialized) {
-                        setMarketAtPlace(uiState)
+                    uiState.placeItem?.let {
+                        if (uiState.placeItem.x.isNotBlank()
+                            && uiState.placeItem.y.isNotBlank()
+                            && !::marker.isInitialized) {
+                            setMarketAtPlace(uiState.placeItem)
+                        }
                     }
                 }
             }
         }
     }
 
-    private fun setMarketAtPlace(uiState: PlaceUiState) {
+    private fun setMarketAtPlace(placeItem: Place) {
         val cameraUpdate =
-            CameraUpdate.scrollTo(LatLng(uiState.y.toDouble(), uiState.x.toDouble()))
+            CameraUpdate.scrollTo(LatLng(placeItem.y.toDouble(), placeItem.x.toDouble()))
                 .animate(CameraAnimation.Easing)
         naverMap.moveCamera(cameraUpdate)
 
         marker = Marker().apply {
-            position = LatLng(uiState.y.toDouble(), uiState.x.toDouble())
-            captionText = uiState.placeName
+            position = LatLng(placeItem.y.toDouble(), placeItem.x.toDouble())
+            captionText = placeItem.placeName
         }
 
         marker.map = naverMap

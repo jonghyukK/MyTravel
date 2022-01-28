@@ -29,22 +29,29 @@ class SettingFragment : BaseFragment<FragmentSettingBinding>(R.layout.fragment_s
         super.onViewCreated(view, savedInstanceState)
 
         initToolbarWithNavigation()
+        initClickEvents()
 
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.loginInfoPreferencesFlow.collect {
                     if (!it.isLoggedIn) {
-                        val startDestination = findNavController().graph.startDestinationId
-                        val navOptions = NavOptions.Builder()
-                            .setPopUpTo(startDestination, true)
-                            .build()
-
-                        findNavController().navigate(startDestination, null, navOptions)
+                        navigateHomeWhenSuccessLogOut()
                     }
                 }
             }
         }
+    }
 
+    private fun navigateHomeWhenSuccessLogOut() {
+        val startDestination = findNavController().graph.startDestinationId
+        val navOptions = NavOptions.Builder()
+            .setPopUpTo(startDestination, true)
+            .build()
+
+        findNavController().navigate(startDestination, null, navOptions)
+    }
+
+    private fun initClickEvents() {
         binding.tvLogout.setOnClickListener {
             viewModel.logout()
         }

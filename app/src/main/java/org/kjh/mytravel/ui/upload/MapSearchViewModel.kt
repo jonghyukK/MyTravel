@@ -2,17 +2,16 @@ package org.kjh.mytravel.ui.upload
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.liveData
 import androidx.lifecycle.viewModelScope
+import com.example.domain.entity.ApiResult
+import com.example.domain.entity.MapSearch
+import com.example.domain.usecase.SearchMapUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import org.kjh.mytravel.data.model.KakaoSearchPlaceModel
-import org.kjh.mytravel.domain.Result
-import org.kjh.mytravel.domain.repository.MapRepository
 import javax.inject.Inject
 
 /**
@@ -25,12 +24,12 @@ import javax.inject.Inject
 
 data class MapSearchUiState(
     val isLoading: Boolean = false,
-    val placeList: List<KakaoSearchPlaceModel> = listOf()
+    val placeList: List<MapSearch> = listOf()
 )
 
 @HiltViewModel
 class MapSearchViewModel @Inject constructor(
-    private val mapRepository: MapRepository
+    private val searchMapUseCase: SearchMapUseCase
 ): ViewModel() {
     private val _uiState = MutableStateFlow(MapSearchUiState())
     val uiState : StateFlow<MapSearchUiState> = _uiState
@@ -39,22 +38,21 @@ class MapSearchViewModel @Inject constructor(
 
     fun makeSearchPlace() {
         viewModelScope.launch {
-            mapRepository.searchPlace(searchQuery.value.toString())
+            searchMapUseCase(searchQuery.value.toString())
                 .collect { result ->
-
                     when (result) {
-                        is Result.Loading -> _uiState.value =
+                        is ApiResult.Loading -> _uiState.value =
                             MapSearchUiState(isLoading = true)
 
-                        is Result.Success -> {
+                        is ApiResult.Success -> {
                             _uiState.update {
                                 it.copy(
                                     isLoading = false,
-                                    placeList = result.data.placeList
+                                    placeList = result.data
                                 )
                             }
                         }
-                        is Result.Error -> {}
+                        is ApiResult.Error -> {}
                     }
                 }
         }

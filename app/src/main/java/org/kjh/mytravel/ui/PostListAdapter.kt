@@ -7,9 +7,8 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.PagerSnapHelper
 import androidx.recyclerview.widget.RecyclerView
-import org.kjh.mytravel.data.model.Post
+import com.example.domain.entity.Post
 import org.kjh.mytravel.databinding.VhPostItemBinding
-import org.kjh.mytravel.ui.uistate.PostItemUiState
 
 /**
  * MyTravel

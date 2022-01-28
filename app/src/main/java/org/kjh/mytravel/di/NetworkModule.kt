@@ -1,13 +1,13 @@
 package org.kjh.mytravel.di
 
+import com.example.data.api.ApiService
+import com.example.data.api.KakaoApiService
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
-import org.kjh.mytravel.ApiService
-import org.kjh.mytravel.KakaoApiService
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import javax.inject.Singleton

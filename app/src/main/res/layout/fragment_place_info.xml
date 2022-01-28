@@ -35,7 +35,7 @@
             android:textSize="14sp"
             android:textStyle="bold"
             android:textColor="#333333"
-            android:text="@{viewModel.uiState.placeAddress}"/>
+            android:text="@{viewModel.uiState.placeItem.placeAddress}"/>
 
         <androidx.fragment.app.FragmentContainerView
             android:id="@+id/map_placeInfo"

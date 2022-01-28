@@ -4,7 +4,6 @@ import androidx.recyclerview.widget.DiffUtil
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import org.kjh.mytravel.R
-import org.kjh.mytravel.ui.home.BannerUiState
 
 /**
  * MyTravel

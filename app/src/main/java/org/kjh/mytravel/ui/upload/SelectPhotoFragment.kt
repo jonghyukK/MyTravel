@@ -12,6 +12,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.navGraphViewModels
 import androidx.navigation.ui.setupWithNavController
 import androidx.recyclerview.selection.SelectionTracker
+import com.example.domain.entity.MediaStoreImage
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
@@ -47,9 +48,9 @@ class SelectPhotoFragment
         initLocalPhotoRecyclerView(savedInstanceState)
         initSelectedImagesRecyclerView()
 
-        viewModel.mediaStoreImages.observe(viewLifecycleOwner, { mediaStoreImages ->
+        viewModel.mediaStoreImages.observe(viewLifecycleOwner) { mediaStoreImages ->
             mediaStoreImagesAdapter.submitList(mediaStoreImages)
-        })
+        }
 
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {

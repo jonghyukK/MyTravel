@@ -3,19 +3,18 @@ package org.kjh.mytravel.ui.upload
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.domain.entity.ApiResult
+import com.example.domain.entity.MapSearch
+import com.example.domain.entity.MediaStoreImage
+import com.example.domain.entity.Place
+import com.example.domain.usecase.GetLoginPreferenceUseCase
+import com.example.domain.usecase.UploadPostUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import okhttp3.MediaType.Companion.toMediaTypeOrNull
-import okhttp3.MultipartBody
-import okhttp3.RequestBody.Companion.asRequestBody
-import org.kjh.mytravel.data.model.KakaoSearchPlaceModel
-import org.kjh.mytravel.domain.Result
-import org.kjh.mytravel.domain.usecase.UploadUseCase
-import java.io.File
 import javax.inject.Inject
 
 /**
@@ -28,7 +27,7 @@ import javax.inject.Inject
 
 data class UploadUiState(
     val selectedItems: List<MediaStoreImage> = listOf(),
-    val placeItem    : KakaoSearchPlaceModel? = null,
+    val placeItem    : MapSearch? = null,
     val content      : String? = "",
     val isLoading    : Boolean = false,
     val uploadSuccess: Boolean = false
@@ -36,7 +35,8 @@ data class UploadUiState(
 
 @HiltViewModel
 class UploadViewModel @Inject constructor(
-    private val makeUploadUseCase: UploadUseCase
+    private val uploadPostUseCase: UploadPostUseCase,
+    private val getLoginPreferenceUseCase: GetLoginPreferenceUseCase
 ): ViewModel() {
     private val _uiState = MutableStateFlow(UploadUiState())
     val uiState : StateFlow<UploadUiState> = _uiState
@@ -51,7 +51,7 @@ class UploadViewModel @Inject constructor(
         }
     }
 
-    fun updatePlaceItem(item: KakaoSearchPlaceModel) {
+    fun updatePlaceItem(item: MapSearch) {
         viewModelScope.launch {
             _uiState.update {
                 it.copy(placeItem = item)
@@ -61,39 +61,33 @@ class UploadViewModel @Inject constructor(
 
     fun makeUploadPost() {
         viewModelScope.launch {
-            // File
-            val fileBody = uiState.value.selectedItems.map {
-                val file = File(it.realPath)
-                val requestFile = file.asRequestBody("multipart/form-data".toMediaTypeOrNull())
-                MultipartBody.Part.createFormData("file", file.name, requestFile)
+            val imgPathList = uiState.value.selectedItems.map {
+                it.realPath
             }
-
-            // Place
             val placeInfo = uiState.value.placeItem
-
-            // Content
             val content = content.value.toString()
 
             if (uiState.value.selectedItems.isNotEmpty() && placeInfo != null) {
-                makeUploadUseCase(
+                uploadPostUseCase(
+                    email            = getLoginPreferenceUseCase().email,
                     x                = placeInfo.x,
                     y                = placeInfo.y,
-                    file             = fileBody,
+                    file             = imgPathList,
                     content          = content,
                     placeName        = placeInfo.placeName,
-                    placeAddress     = placeInfo.addressName,
-                    placeRoadAddress = placeInfo.roadAddressName
+                    placeAddress     = placeInfo.placeAddress,
+                    placeRoadAddress = placeInfo.placeRoadAddress
                 ).collect { result ->
                     when (result) {
-                        is Result.Loading -> _uiState.update { it.copy(isLoading = true) }
-                        is Result.Success -> _uiState.update {
+                        is ApiResult.Loading -> _uiState.update { it.copy(isLoading = true) }
+                        is ApiResult.Success -> _uiState.update {
                             it.copy(
                                 isLoading = false,
-                                uploadSuccess = true
+                                uploadSuccess = result.data.result
                             )
                         }
 
-                        is Result.Error -> _uiState.update { it.copy(isLoading = false) }
+                        is ApiResult.Error -> _uiState.update { it.copy(isLoading = false) }
                     }
                 }
             }

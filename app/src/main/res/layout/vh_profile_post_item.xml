@@ -5,7 +5,7 @@
     <data>
         <variable
             name="postItem"
-            type="org.kjh.mytravel.data.model.Post" />
+            type="com.example.domain.entity.Post" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -46,6 +46,17 @@
             android:layout_marginStart="8dp"
             android:textSize="12sp"
             android:textColor="#444444" />
+
+        <TextView
+            android:id="@+id/tv_subCityName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="5dp"
+            app:layout_constraintTop_toTopOf="@id/tv_cityName"
+            app:layout_constraintStart_toEndOf="@+id/tv_cityName"
+            android:text="@{`| ` + postItem.subCityName}"
+            android:textSize="12sp"
+            android:textColor="#666666"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

@@ -34,21 +34,29 @@ class WritePostFragment
 
         initToolbarWithNavigation()
         initImageRecyclerView()
+        initClickEvents()
 
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 uploadViewModel.uiState.collect {
                     binding.pbLoading.isVisible = it.isLoading
-                    writePostImagesAdapter.submitList(it.selectedItems)
 
-                    if (it.uploadSuccess) {
-                        val action = WritePostFragmentDirections.actionGlobalProfileFragment()
-                        findNavController().navigate(action)
-                    }
+                    if (it.selectedItems.isNotEmpty())
+                        writePostImagesAdapter.submitList(it.selectedItems)
+
+                    if (it.uploadSuccess)
+                        navigateProfileWhenSuccessUpload()
                 }
             }
         }
+    }
 
+    private fun navigateProfileWhenSuccessUpload() {
+        val action = WritePostFragmentDirections.actionGlobalProfileFragment()
+        findNavController().navigate(action)
+    }
+
+    private fun initClickEvents() {
         binding.tvAddLocation.setOnClickListener {
             val action = WritePostFragmentDirections.actionWritePostFragmentToMapFragment()
             findNavController().navigate(action)

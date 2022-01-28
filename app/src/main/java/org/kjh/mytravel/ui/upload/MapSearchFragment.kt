@@ -2,7 +2,6 @@ package org.kjh.mytravel.ui.upload
 
 import android.graphics.Color
 import android.os.Bundle
-import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
@@ -12,17 +11,12 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
-import androidx.recyclerview.widget.ListAdapter
-import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import org.kjh.mytravel.R
-import org.kjh.mytravel.data.model.KakaoSearchPlaceModel
 import org.kjh.mytravel.databinding.BsFragmentMapSearchBinding
-import org.kjh.mytravel.databinding.FragmentMapBinding
-import org.kjh.mytravel.databinding.VhBsSearchPlaceBinding
 import org.kjh.mytravel.ui.base.BaseBottomSheetDialogFragment
 
 

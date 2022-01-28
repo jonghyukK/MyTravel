@@ -6,7 +6,7 @@
     <data>
         <variable
             name="post"
-            type="org.kjh.mytravel.data.model.Post" />
+            type="com.example.domain.entity.Post" />
     </data>
 
 

@@ -9,6 +9,7 @@ import androidx.recyclerview.selection.ItemDetailsLookup
 import androidx.recyclerview.selection.SelectionTracker
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import com.example.domain.entity.MediaStoreImage
 import org.kjh.mytravel.databinding.VhRectImageSmallBinding
 
 /**
