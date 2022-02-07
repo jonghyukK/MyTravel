@@ -5,6 +5,7 @@ import com.example.domain.entity.ApiResult
 import com.example.domain.entity.LoginInfoPreferences
 import com.example.domain.usecase.MakeLoginRequestUseCase
 import com.example.domain.usecase.SaveLogInPreferenceUseCase
+import com.orhanobut.logger.Logger
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
@@ -22,8 +23,6 @@ import javax.inject.Inject
  */
 
 data class LoginUiState(
-    val emailError     : String? = null,
-    val pwError        : String? = null,
     val loginError     : String? = null,
     val isLoggedIn     : Boolean = false,
     val isLoading      : Boolean = false
@@ -31,8 +30,7 @@ data class LoginUiState(
 
 @HiltViewModel
 class LoginViewModel @Inject constructor(
-    private val makeLoginRequestUseCase : MakeLoginRequestUseCase,
-    private val saveLogInPreferenceUseCase: SaveLogInPreferenceUseCase
+    private val makeLoginRequestUseCase : MakeLoginRequestUseCase
 ): ViewModel() {
     private val _uiState: MutableStateFlow<LoginUiState> = MutableStateFlow(LoginUiState())
     val uiState: StateFlow<LoginUiState> = _uiState.asStateFlow()
@@ -53,31 +51,26 @@ class LoginViewModel @Inject constructor(
             ).collect { result ->
 
                 when (result) {
-
                     is ApiResult.Loading -> _uiState.value =
                         LoginUiState(isLoading = true)
 
                     is ApiResult.Success -> {
-                        if (result.data.result) {
-                            saveLoginPreference()
-                        }
-
                         _uiState.value = LoginUiState(
+                            isLoading  = false,
                             isLoggedIn = result.data.result,
                             loginError = result.data.errorMsg
                         )
                     }
-                    is ApiResult.Error -> {}
+                    is ApiResult.Error ->
+                        _uiState.update {
+                            it.copy(
+                                isLoading  = false,
+                                isLoggedIn = false,
+                                loginError = result.throwable.localizedMessage
+                            )
+                        }
                 }
             }
-        }
-    }
-
-    private fun saveLoginPreference() {
-        viewModelScope.launch {
-            saveLogInPreferenceUseCase(
-                LoginInfoPreferences(email.value.toString(), true)
-            )
         }
     }
 }

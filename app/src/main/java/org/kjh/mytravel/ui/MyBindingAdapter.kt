@@ -4,7 +4,9 @@ import android.graphics.Color
 import android.net.Uri
 import android.widget.EditText
 import android.widget.ImageView
+import android.widget.ProgressBar
 import android.widget.TextView
+import androidx.core.view.isVisible
 import androidx.databinding.BindingAdapter
 import androidx.fragment.app.FragmentContainerView
 import com.bumptech.glide.Glide
@@ -65,6 +67,13 @@ object MyBindingAdapter {
     }
 
     @JvmStatic
+    @BindingAdapter("app:textWithVisible")
+    fun bindErrorTextWithVisible(v: TextView, value: String?) {
+        v.text = value
+        v.isVisible = value != null
+    }
+
+    @JvmStatic
     @BindingAdapter("app:imgUri")
     fun bindImageWithUri(view: ImageView, imgUri: Uri?) {
         imgUri?.run {
@@ -90,5 +99,11 @@ object MyBindingAdapter {
             .thumbnail(0.33f)
             .centerCrop()
             .into(view)
+    }
+
+    @JvmStatic
+    @BindingAdapter("app:isVisible")
+    fun bindVisible(view: ProgressBar, isVisible: Boolean) {
+        view.isVisible = isVisible
     }
 }

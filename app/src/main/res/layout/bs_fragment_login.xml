@@ -9,9 +9,6 @@
         <variable
             name="viewModel"
             type="org.kjh.mytravel.ui.profile.LoginViewModel" />
-        <variable
-            name="parentViewModel"
-            type="org.kjh.mytravel.ui.profile.NotLoginViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -44,7 +41,7 @@
             android:layout_marginTop="10dp"
             android:textSize="20sp"
             android:textColor="@color/black"
-            android:text="로그인"/>
+            android:text="@string/login"/>
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/til_email"
@@ -64,7 +61,7 @@
                 android:text="@={viewModel.email}"
                 android:tag="email"
                 app:onFocusLost="@{tilEmail}"
-                android:hint="이메일 주소"/>
+                android:hint="@string/email_address"/>
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
@@ -86,7 +83,7 @@
                 android:text="@={viewModel.pw}"
                 android:tag="pw"
                 app:onFocusLost="@{tilPw}"
-                android:hint="비밀번호"/>
+                android:hint="@string/password"/>
         </com.google.android.material.textfield.TextInputLayout>
 
         <TextView
@@ -97,8 +94,8 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintBottom_toTopOf="@+id/btn_login"
+            app:textWithVisible="@{viewModel.uiState.loginError}"
             android:layout_marginTop="15dp"
-            android:visibility="gone"
             android:textSize="13sp"
             android:textColor="#ff0000"/>
 
@@ -112,13 +109,13 @@
             app:layout_constraintEnd_toEndOf="parent"
             android:enabled="@{viewModel.enableLogin}"
             android:onClick="@{() -> viewModel.makeRequestLogin()}"
-            android:text="로그인"/>
+            android:text="@string/login"/>
 
         <ProgressBar
             android:id="@+id/pb_loading"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:visibility="gone"
+            app:isVisible="@{viewModel.uiState.loading}"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"

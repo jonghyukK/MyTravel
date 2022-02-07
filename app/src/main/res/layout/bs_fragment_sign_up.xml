@@ -41,7 +41,7 @@
             android:layout_marginTop="10dp"
             android:textSize="20sp"
             android:textColor="@color/black"
-            android:text="회원가입"/>
+            android:text="@string/sign_up"/>
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/til_email"
@@ -61,7 +61,7 @@
                 android:text="@={viewModel.email}"
                 android:tag="email"
                 app:onFocusLost="@{tilEmail}"
-                android:hint="이메일 주소 입력"/>
+                android:hint="@string/input_email_address"/>
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
@@ -83,7 +83,7 @@
                 android:text="@={viewModel.pw}"
                 android:tag="pw"
                 app:onFocusLost="@{tilPw}"
-                android:hint="8자리 이상"/>
+                android:hint="@string/more_than_8"/>
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
@@ -107,8 +107,20 @@
                 android:text="@={viewModel.nickName}"
                 android:tag="nickName"
                 app:onFocusLost="@{tilNickName}"
-                android:hint="닉네임"/>
+                android:hint="@string/nickName"/>
         </com.google.android.material.textfield.TextInputLayout>
+
+        <TextView
+            android:id="@+id/tv_networkError"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:textSize="13sp"
+            android:textColor="#ff0000"
+            app:textWithVisible="@{viewModel.uiState.networkError}"
+            app:layout_constraintTop_toBottomOf="@+id/til_nickName"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"/>
 
         <Button
             android:id="@+id/btn_signUp"
@@ -120,13 +132,13 @@
             app:layout_constraintEnd_toEndOf="parent"
             android:enabled="@{viewModel.enableSignUp}"
             android:onClick="@{() -> viewModel.makeRequestSignUp()}"
-            android:text="가입하기"/>
+            android:text="@string/do_sign_up"/>
 
         <ProgressBar
             android:id="@+id/pb_loading"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:visibility="gone"
+            app:isVisible="@{viewModel.uiState.loading}"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"

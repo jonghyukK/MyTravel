@@ -23,7 +23,6 @@ class LoginFragment
     : BaseBottomSheetDialogFragment<BsFragmentLoginBinding>(R.layout.bs_fragment_login) {
 
     private val viewModel: LoginViewModel by viewModels()
-    private val parentViewModel: NotLoginViewModel by viewModels({ requireParentFragment() })
 
     companion object {
         const val TAG = "LoginFragment"
@@ -51,21 +50,13 @@ class LoginFragment
         super.onViewCreated(view, savedInstanceState)
         binding.fragment        = this
         binding.viewModel       = viewModel
-        binding.parentViewModel = parentViewModel
 
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.uiState.collect { state ->
-                    binding.pbLoading.isVisible = state.isLoading
-                    binding.tilEmail.error      = state.emailError
-                    binding.tilPw.error         = state.pwError
-                    binding.tvLoginError.text   = state.loginError
-                    binding.tvLoginError.isVisible  = state.loginError != null
-                    binding.tilEmail.isErrorEnabled = !state.emailError.isNullOrEmpty()
-                    binding.tilPw.isErrorEnabled    = !state.pwError.isNullOrEmpty()
-
                     if (state.isLoggedIn) {
-                        parentViewModel.setLoginOrSignUpState()
+                        (parentFragment as NotLoginFragment)
+                            .navigateHomeWhenSuccessLoginOrSignUp()
                     }
                 }
             }

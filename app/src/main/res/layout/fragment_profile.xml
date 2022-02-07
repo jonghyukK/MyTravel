@@ -19,9 +19,11 @@
 
         <androidx.appcompat.widget.Toolbar
             android:id="@+id/tb_profileToolbar"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="?attr/actionBarSize"
             app:title="@{viewModel.uiState.userItem.nickName}"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"/>
 
         <androidx.coordinatorlayout.widget.CoordinatorLayout
@@ -112,7 +114,7 @@
                         app:layout_constraintBottom_toBottomOf="@+id/siv_profileImg"
                         app:layout_constraintHorizontal_weight="1"
                         android:gravity="center"
-                        android:text="게시물"/>
+                        android:text="@string/post"/>
 
                     <TextView
                         android:id="@+id/tv_follower"
@@ -126,7 +128,7 @@
                         app:layout_constraintBottom_toBottomOf="@+id/siv_profileImg"
                         app:layout_constraintHorizontal_weight="1"
                         android:gravity="center"
-                        android:text="팔로워"/>
+                        android:text="@string/follower"/>
 
                     <TextView
                         android:id="@+id/tv_following"
@@ -140,7 +142,7 @@
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintHorizontal_weight="1"
                         android:gravity="center"
-                        android:text="팔로잉"/>
+                        android:text="@string/following"/>
 
                     <TextView
                         android:id="@+id/tv_userIntroduce"
@@ -159,8 +161,9 @@
                         android:layout_height="40dp"
                         android:layout_marginTop="15dp"
                         android:layout_marginBottom="15dp"
-                        android:text="프로필 편집"
+                        android:text="@string/edit_profile"
                         android:textSize="13sp"
+                        android:onClick="@{fragment::onClickProfileEdit}"
                         app:layout_constraintTop_toBottomOf="@+id/tv_userIntroduce"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
@@ -178,5 +181,14 @@
                 app:layout_behavior="@string/appbar_scrolling_view_behavior" />
         </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
+        <ProgressBar
+            android:id="@+id/pb_loading"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:isVisible="@{viewModel.uiState.loading}"
+            app:layout_constraintTop_toBottomOf="@+id/tb_profileToolbar"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"/>
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

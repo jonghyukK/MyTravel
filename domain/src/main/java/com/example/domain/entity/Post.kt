@@ -1,6 +1,8 @@
 package com.example.domain.entity
 
 import androidx.recyclerview.widget.DiffUtil
+import androidx.room.Entity
+import androidx.room.PrimaryKey
 
 /**
  * MyTravel

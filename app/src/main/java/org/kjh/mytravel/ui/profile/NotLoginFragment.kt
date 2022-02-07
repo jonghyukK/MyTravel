@@ -19,8 +19,6 @@ import org.kjh.mytravel.ui.base.BaseFragment
 class NotLoginFragment
     : BaseFragment<FragmentNotLoginBinding>(R.layout.fragment_not_login) {
 
-    private val viewModel: NotLoginViewModel by viewModels()
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -40,17 +38,10 @@ class NotLoginFragment
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        initClickEvents()
-
-        viewModel.isSuccessLoginOrSignUp.observe(viewLifecycleOwner, {
-            if (it) {
-                navigateHomeWhenSuccessLoginOrSignUp()
-            }
-        })
+        binding.fragment = this
     }
 
-    private fun navigateHomeWhenSuccessLoginOrSignUp() {
+    fun navigateHomeWhenSuccessLoginOrSignUp() {
         val navController = findNavController()
         val startDestination = navController.graph.startDestinationId
         val navOptions = NavOptions.Builder()
@@ -60,13 +51,11 @@ class NotLoginFragment
         navController.navigate(startDestination, null, navOptions)
     }
 
-    private fun initClickEvents() {
-        binding.btnSignUp.setOnClickListener {
-            SignUpFragment().show(childFragmentManager, SignUpFragment.TAG)
-        }
+    fun onClickSignUp(v: View) {
+        SignUpFragment().show(childFragmentManager, SignUpFragment.TAG)
+    }
 
-        binding.btnLogin.setOnClickListener {
-            LoginFragment().show(childFragmentManager, LoginFragment.TAG)
-        }
+    fun onClickLogin(v: View) {
+        LoginFragment().show(childFragmentManager, LoginFragment.TAG)
     }
 }

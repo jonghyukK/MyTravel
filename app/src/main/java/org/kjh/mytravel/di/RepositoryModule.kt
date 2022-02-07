@@ -3,12 +3,14 @@ package org.kjh.mytravel.di
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import com.example.data.datasource.*
+import com.example.data.db.UserDao
 import com.example.data.repository.*
 import com.example.domain.repository.*
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
+import kotlinx.coroutines.CoroutineScope
 import javax.inject.Singleton
 
 /**
@@ -43,8 +45,9 @@ object RepositoryModule {
     @Provides
     fun provideUserRepository(
         dataSource: UserRemoteDataSource,
+        localDataSource: UserLocalDataSource
     ): UserRepository {
-        return UserRepositoryImpl(dataSource)
+        return UserRepositoryImpl(dataSource, localDataSource)
     }
 
     @Singleton

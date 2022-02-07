@@ -108,4 +108,10 @@ dependencies {
     // Image Cropper
     implementation 'com.github.CanHub:Android-Image-Cropper:3.3.5'
 
+    // Rome
+    def room_version = "2.4.1"
+    implementation "androidx.room:room-ktx:$room_version"
+    implementation "androidx.room:room-runtime:$room_version"
+    kapt "androidx.room:room-compiler:$room_version"
+
 }

@@ -19,7 +19,6 @@ import kotlinx.coroutines.launch
  */
 
 class NotLoginViewModel: ViewModel() {
-
     private val _isSuccessLoginOrSignUp = MutableLiveData<Boolean>()
     val isSuccessLoginOrSignUp: LiveData<Boolean> = _isSuccessLoginOrSignUp
 

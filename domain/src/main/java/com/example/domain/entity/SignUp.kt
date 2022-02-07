@@ -11,5 +11,6 @@ package com.example.domain.entity
 
 data class SignUp(
     val result  : Boolean,
+    val data    : User?,
     val errorMsg: String? = null,
 )

@@ -3,6 +3,7 @@ package org.kjh.mytravel.di
 import com.example.data.api.ApiService
 import com.example.data.api.KakaoApiService
 import com.example.data.datasource.*
+import com.example.data.db.UserDao
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -43,6 +44,14 @@ object DataSourceModule {
         apiService: ApiService
     ): UserRemoteDataSource {
         return UserRemoteDataSourceImpl(apiService)
+    }
+
+    @Singleton
+    @Provides
+    fun provideUserLocalDataSource(
+        userDao: UserDao
+    ): UserLocalDataSource {
+        return UserLocalDataSourceImpl(userDao)
     }
 
     @Singleton

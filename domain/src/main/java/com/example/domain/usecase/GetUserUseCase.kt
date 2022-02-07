@@ -1,9 +1,6 @@
 package com.example.domain.usecase
 
-import com.example.domain.entity.ApiResult
-import com.example.domain.entity.User
 import com.example.domain.repository.UserRepository
-import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
 /**
@@ -16,6 +13,10 @@ import javax.inject.Inject
 class GetUserUseCase @Inject constructor(
     private val userRepository: UserRepository
 ){
+    suspend fun getMyProfile(
+        myEmail: String
+    ) = userRepository.getMyProfile(myEmail)
+
     suspend operator fun invoke(
         myEmail    : String,
         targetEmail: String? = null

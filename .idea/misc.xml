@@ -11,8 +11,8 @@
         <entry key="app/src/main/res/drawable/selector_photo_activate.xml" value="0.47685185185185186" />
         <entry key="app/src/main/res/drawable/style_img_circle.xml" value="0.6246153846153846" />
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.1" />
-        <entry key="app/src/main/res/layout/bs_fragment_login.xml" value="0.25" />
-        <entry key="app/src/main/res/layout/bs_fragment_sign_up.xml" value="0.1" />
+        <entry key="app/src/main/res/layout/bs_fragment_login.xml" value="0.1" />
+        <entry key="app/src/main/res/layout/bs_fragment_sign_up.xml" value="0.28055555555555556" />
         <entry key="app/src/main/res/layout/fragment_book_mark.xml" value="0.2916666666666667" />
         <entry key="app/src/main/res/layout/fragment_book_mark_detail.xml" value="0.6010416666666667" />
         <entry key="app/src/main/res/layout/fragment_city_detail.xml" value="0.2916666666666667" />

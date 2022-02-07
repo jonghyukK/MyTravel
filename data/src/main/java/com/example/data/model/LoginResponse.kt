@@ -1,5 +1,6 @@
 package com.example.data.model
 
+import com.example.domain.entity.User
 import com.google.gson.annotations.SerializedName
 
 /**
@@ -12,5 +13,6 @@ import com.google.gson.annotations.SerializedName
 data class LoginResponse(
     @SerializedName("result")
     val isLoggedIn: Boolean,
+    val data      : User? = null,
     val errorMsg  : String? = null
 )

@@ -4,9 +4,9 @@ import android.util.Patterns
 import androidx.lifecycle.*
 import com.example.domain.entity.ApiResult
 import com.example.domain.entity.LoginInfoPreferences
+import com.example.domain.entity.SignUp
 import com.example.domain.usecase.MakeSignUpRequestUseCase
 import com.example.domain.usecase.SaveLogInPreferenceUseCase
-import com.orhanobut.logger.Logger
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
@@ -30,16 +30,14 @@ fun String.isValidPattern(): Boolean =
 
 data class SignUpUiState(
     val emailError      : String? = null,
-    val pwError         : String? = null,
-    val nickNameError   : String? = null,
+    val networkError    : String? = null,
     val isRegistered    : Boolean = false,
     val isLoading       : Boolean = false,
 )
 
 @HiltViewModel
 class SignUpViewModel @Inject constructor(
-    private val makeSignUpRequestUseCase: MakeSignUpRequestUseCase,
-    private val saveLogInPreferenceUseCase: SaveLogInPreferenceUseCase
+    private val makeSignUpRequestUseCase: MakeSignUpRequestUseCase
 ): ViewModel() {
     private val _uiState: MutableStateFlow<SignUpUiState> = MutableStateFlow(SignUpUiState())
     val uiState: StateFlow<SignUpUiState> = _uiState.asStateFlow()
@@ -63,31 +61,20 @@ class SignUpViewModel @Inject constructor(
             ).collect { result ->
 
                 when (result) {
-
                     is ApiResult.Loading -> _uiState.value = SignUpUiState(isLoading = true)
-                    is ApiResult.Success -> {
-                        if (result.data.result) {
-                            saveLoginPreference()
-                        }
 
+                    is ApiResult.Success -> {
                         _uiState.value =
                             SignUpUiState(
+                                isLoading = false,
                                 isRegistered = result.data.result,
                                 emailError   = result.data.errorMsg
                             )
                     }
-                    is ApiResult.Error -> { }
+                    is ApiResult.Error -> _uiState.value = SignUpUiState(
+                        networkError = result.throwable.localizedMessage)
                 }
             }
-        }
-    }
-
-
-    private fun saveLoginPreference() {
-        viewModelScope.launch {
-            saveLogInPreferenceUseCase(
-                LoginInfoPreferences(email.value.toString(), true)
-            )
         }
     }
 }

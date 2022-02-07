@@ -6,6 +6,7 @@ import com.example.data.model.SignUpResponse
 import com.example.data.model.UserResponse
 import com.example.domain.entity.UpdateProfile
 import com.example.domain.entity.UploadPostResponse
+import kotlinx.coroutines.flow.Flow
 import okhttp3.MultipartBody
 import retrofit2.http.*
 
@@ -63,4 +64,10 @@ interface ApiService {
     suspend fun getPostsByPlaceName(
         @Query("placeName") placeName: String
     ): PlaceResponse
+
+    @PUT("user/follow")
+    suspend fun requestFollowOrUnFollow(
+        @Query("myEmail") myEmail: String,
+        @Query("targetEmail") targetEmail: String
+    ): UserResponse
 }

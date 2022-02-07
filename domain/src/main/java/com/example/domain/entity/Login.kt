@@ -9,5 +9,6 @@ package com.example.domain.entity
  */
 data class Login(
     val result  : Boolean,
+    val data    : User?,
     val errorMsg: String? = null,
 )

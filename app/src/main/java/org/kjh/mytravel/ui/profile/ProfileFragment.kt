@@ -7,13 +7,19 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import androidx.navigation.NavDirections
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavOptions
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.setupWithNavController
 import androidx.recyclerview.widget.GridLayoutManager
+import com.example.domain.entity.ApiResult
+import com.orhanobut.logger.Logger
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.launch
 import org.kjh.mytravel.NavGraphDirections
 import org.kjh.mytravel.ProfilePostsGridItemDecoration
@@ -32,9 +38,8 @@ class ProfileFragment
 
     private val myPostListAdapter by lazy {
         PostSmallListAdapter { item ->
-            val action =
-                NavGraphDirections.actionGlobalPlacePagerFragment(item.placeName)
-            findNavController().navigate(action)
+            navigateWithAction(
+                NavGraphDirections.actionGlobalPlacePagerFragment(item.placeName))
         }
     }
 
@@ -58,36 +63,37 @@ class ProfileFragment
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding.viewModel = viewModel
+        binding.fragment = this
 
         initToolbarWithNavigation()
         initMyPostRecyclerView()
-        initClickEvents()
 
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.uiState.collect { uiState ->
+
                     if (uiState.isLoggedIn) {
                         uiState.userItem?.let {
                             myPostListAdapter.submitList(it.posts)
                         }
                     } else {
-                        findNavController().navigate(R.id.notLoginFragment)
+                        navigateWithAction(
+                            ProfileFragmentDirections.actionProfileFragmentToNotLoginFragment())
                     }
                 }
             }
         }
     }
 
-    private fun initClickEvents() {
-        binding.btnEditProfile.setOnClickListener {
-            viewModel.uiState.value.userItem?.let {
-                val action = ProfileFragmentDirections.actionProfileFragmentToProfileEditFragment(
+    fun onClickProfileEdit(v :View) {
+        viewModel.uiState.value.userItem?.let {
+            navigateWithAction(
+                ProfileFragmentDirections.actionProfileFragmentToProfileEditFragment(
                     it.profileImg,
                     it.nickName,
                     it.introduce
                 )
-                findNavController().navigate(action)
-            }
+            )
         }
     }
 
@@ -100,13 +106,13 @@ class ProfileFragment
             setOnMenuItemClickListener {
                 when (it.itemId) {
                     R.id.write_post -> {
-                        val action = ProfileFragmentDirections.actionProfileFragmentToSelectPhotoFragment()
-                        findNavController().navigate(action)
+                        navigateWithAction(
+                            ProfileFragmentDirections.actionProfileFragmentToSelectPhotoFragment())
                         true
                     }
                     R.id.settings -> {
-                        val action = ProfileFragmentDirections.actionProfileFragmentToSettingFragment()
-                        findNavController().navigate(action)
+                        navigateWithAction(
+                            ProfileFragmentDirections.actionProfileFragmentToSettingFragment())
                         true
                     }
                     else -> false
@@ -120,5 +126,9 @@ class ProfileFragment
             adapter = myPostListAdapter
             addItemDecoration(ProfilePostsGridItemDecoration(requireContext()))
         }
+    }
+
+    private fun navigateWithAction(action: NavDirections) {
+        findNavController().navigate(action)
     }
 }

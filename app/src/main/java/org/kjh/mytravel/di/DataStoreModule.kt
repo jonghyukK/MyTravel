@@ -9,6 +9,8 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import javax.inject.Singleton
 
 /**
@@ -34,4 +36,8 @@ object DataStoreModule {
     ): DataStore<Preferences> {
         return context.dataStore
     }
+
+    @Singleton
+    @Provides
+    fun provideScope(): CoroutineScope = CoroutineScope(Dispatchers.IO)
 }

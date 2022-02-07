@@ -3,6 +3,8 @@ package com.example.domain.repository
 import com.example.domain.entity.ApiResult
 import com.example.domain.entity.UpdateProfile
 import com.example.domain.entity.User
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.Flow
 
 /**
@@ -13,6 +15,11 @@ import kotlinx.coroutines.flow.Flow
  * Description:
  */
 interface UserRepository {
+
+    suspend fun getMyProfile(
+        myEmail: String
+    ): Flow<ApiResult<User>>
+
     suspend fun getUser(
         myEmail    : String,
         targetEmail: String? = null
@@ -24,4 +31,13 @@ interface UserRepository {
         nickName    : String,
         introduce   : String?
     ): Flow<ApiResult<UpdateProfile>>
+
+    suspend fun requestFollowOrUnFollow(
+        myEmail    : String,
+        targetEmail: String
+    ): Flow<ApiResult<User>>
+
+    suspend fun deleteUser(email: String)
+
+    suspend fun insertOrUpdateMyProfile(user: User)
 }

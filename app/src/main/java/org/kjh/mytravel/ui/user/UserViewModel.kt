@@ -5,8 +5,11 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import com.example.domain.entity.ApiResult
 import com.example.domain.entity.User
+import com.example.domain.repository.UserRepository
 import com.example.domain.usecase.GetLoginPreferenceUseCase
 import com.example.domain.usecase.GetUserUseCase
+import com.example.domain.usecase.MakeRequestFollowOrNotUseCase
+import com.orhanobut.logger.Logger
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
@@ -31,7 +34,9 @@ data class UserUiState(
 
 class UserViewModel @AssistedInject constructor(
     private val getUserUseCase: GetUserUseCase,
+    private val makeRequestFollowOrNotUseCase: MakeRequestFollowOrNotUseCase,
     private val getLoginPreferenceUseCase: GetLoginPreferenceUseCase,
+    private val userRepository: UserRepository,
     @Assisted private val initUserEmail: String
 ): ViewModel() {
 
@@ -59,13 +64,12 @@ class UserViewModel @AssistedInject constructor(
                 myEmail     = getLoginPreferenceUseCase().email,
                 targetEmail = initUserEmail
             ).collect { result ->
-
                     when (result) {
                         is ApiResult.Loading -> _uiState.value = UserUiState(isLoading = true)
                         is ApiResult.Success -> {
                             _uiState.update {
                                 it.copy(
-                                   isLoading = false,
+                                    isLoading = false,
                                     userItem = result.data
                                 )
                             }
@@ -77,23 +81,33 @@ class UserViewModel @AssistedInject constructor(
     }
 
     fun makeRequestFollow(targetEmail: String) {
-//        viewModelScope.launch {
-//            getUserInfoUseCase.makeRequestFollow(targetEmail = targetEmail)
-//                .collect { result ->
-//                    when (result) {
-//                        is Result2.Success -> {
-//                            _uiState.update {
-//                                it.copy(
-//                                    isFollowing = result.data.userData.isFollowing,
-//                                    followCount = result.data.userData.followCount
-//                                )
-//                            }
-//                        }
-//                        is Result2.Error -> {
-//                            Logger.e(result.throwable.localizedMessage)
-//                        }
-//                    }
-//                }
-//        }
+        viewModelScope.launch {
+            makeRequestFollowOrNotUseCase(
+                myEmail     = getLoginPreferenceUseCase().email,
+                targetEmail = targetEmail
+            ).collect { result ->
+                    when (result) {
+                        is ApiResult.Loading ->
+                            _uiState.update {
+                                it.copy(isLoading = true)
+                            }
+
+                        is ApiResult.Success -> {
+                            _uiState.update {
+                                it.copy(
+                                    isLoading = false,
+                                    userItem = it.userItem?.copy(
+                                        followCount = result.data.followCount,
+                                        isFollowing = result.data.isFollowing
+                                    )
+                                )
+                            }
+                        }
+                        is ApiResult.Error -> {
+                            Logger.e(result.throwable.localizedMessage)
+                        }
+                    }
+                }
+        }
     }
 }
