@@ -67,7 +67,7 @@ class SignUpViewModel @Inject constructor(
                         _uiState.value =
                             SignUpUiState(
                                 isLoading = false,
-                                isRegistered = result.data.result,
+                                isRegistered = result.data.isRegistered,
                                 emailError   = result.data.errorMsg
                             )
                     }

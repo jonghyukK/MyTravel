@@ -57,7 +57,7 @@ class LoginViewModel @Inject constructor(
                     is ApiResult.Success -> {
                         _uiState.value = LoginUiState(
                             isLoading  = false,
-                            isLoggedIn = result.data.result,
+                            isLoggedIn = result.data.isLoggedIn,
                             loginError = result.data.errorMsg
                         )
                     }

@@ -8,7 +8,6 @@ package com.example.domain.entity
  * Description:
  */
 data class Login(
-    val result  : Boolean,
-    val data    : User?,
-    val errorMsg: String? = null,
+    val isLoggedIn: Boolean,
+    val errorMsg  : String? = null,
 )

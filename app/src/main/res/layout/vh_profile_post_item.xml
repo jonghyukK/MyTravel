@@ -58,5 +58,18 @@
             android:textSize="12sp"
             android:textColor="#666666"/>
 
+        <ImageView
+            android:id="@+id/iv_bookmark"
+            android:layout_width="35dp"
+            android:layout_height="35dp"
+            android:background="@drawable/bg_round_alpha_black"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:padding="3dp"
+            app:tint="@color/white"
+            android:layout_marginTop="10dp"
+            android:layout_marginEnd="10dp"
+            android:src="@{postItem.isBookmarked ? @drawable/ic_rank : @drawable/ic_bookmark}" />
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

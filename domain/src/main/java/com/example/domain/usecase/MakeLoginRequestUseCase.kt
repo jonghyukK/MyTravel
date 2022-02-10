@@ -15,14 +15,12 @@ import javax.inject.Inject
  */
 class MakeLoginRequestUseCase @Inject constructor(
     private val loginRepository             : LoginRepository,
-    private val saveLogInPreferenceUseCase  : SaveLogInPreferenceUseCase,
-    private val insertOrUpdateMyProfileUseCase: InsertOrUpdateMyProfileUseCase
+    private val saveLogInPreferenceUseCase  : SaveLogInPreferenceUseCase
 ){
     suspend operator fun invoke(email: String, pw: String) =
         loginRepository.makeRequestLogin(email, pw)
             .map {
-                if (it is ApiResult.Success && it.data.result) {
-                    insertOrUpdateMyProfileUseCase(it.data.data!!)
+                if (it is ApiResult.Success && it.data.isLoggedIn) {
                     saveLogInPreferenceUseCase(LoginInfoPreferences(email, true))
                 }
                 it

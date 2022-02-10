@@ -12,30 +12,30 @@ import com.example.domain.entity.*
  */
 object ResponseMapper {
 
+    // SignUpResponse -> SignUp
     fun responseToSignUpEntity(
         response: ApiResult<SignUpResponse>
     ): ApiResult<SignUp> {
         return when (response) {
             is ApiResult.Success -> {
                 ApiResult.Success(SignUp(
-                    result   = response.data.isRegistered,
-                    data     = response.data.data,
-                    errorMsg = response.data.errorMsg))
+                    isRegistered = response.data.isRegistered,
+                    errorMsg     = response.data.errorMsg))
             }
             is ApiResult.Error   -> ApiResult.Error(response.throwable)
             is ApiResult.Loading -> ApiResult.Loading()
         }
     }
 
+    // LoginResponse -> Login
     fun responseToLoginEntity(
         response: ApiResult<LoginResponse>
     ): ApiResult<Login> {
         return when (response) {
             is ApiResult.Success -> {
                 ApiResult.Success(Login(
-                    result   = response.data.isLoggedIn,
-                    data     = response.data.data,
-                    errorMsg = response.data.errorMsg
+                    isLoggedIn = response.data.isLoggedIn,
+                    errorMsg   = response.data.errorMsg
                 ))
             }
             is ApiResult.Error   -> ApiResult.Error(response.throwable)
@@ -43,47 +43,11 @@ object ResponseMapper {
         }
     }
 
-    fun localResponseToUser(
-        response: ApiResult<User>
-    ): ApiResult<User> {
-        return when (response) {
-            is ApiResult.Success -> ApiResult.Success(
-                User(
-                    response.data.userId,
-                    response.data.email,
-                    response.data.nickName,
-                    response.data.profileImg,
-                    response.data.postCount,
-                    response.data.followingCount,
-                    response.data.followCount,
-                    response.data.introduce,
-                    response.data.isFollowing,
-                    response.data.posts
-                )
-            )
-            is ApiResult.Error   -> ApiResult.Error(response.throwable)
-            is ApiResult.Loading -> ApiResult.Loading()
-        }
-    }
-
     fun responseToUser(
         response: ApiResult<UserResponse>
-    ): ApiResult<User> {
+    ): ApiResult<UserResponse> {
         return when (response) {
-            is ApiResult.Success -> ApiResult.Success(
-                User(
-                    response.data.data.userId,
-                    response.data.data.email,
-                    response.data.data.nickName,
-                    response.data.data.profileImg,
-                    response.data.data.postCount,
-                    response.data.data.followingCount,
-                    response.data.data.followCount,
-                    response.data.data.introduce,
-                    response.data.data.isFollowing,
-                    response.data.data.posts
-                )
-            )
+            is ApiResult.Success -> ApiResult.Success(response.data)
             is ApiResult.Error   -> ApiResult.Error(response.throwable)
             is ApiResult.Loading -> ApiResult.Loading()
         }
@@ -135,6 +99,16 @@ object ResponseMapper {
     ): ApiResult<Place> {
         return when (response) {
             is ApiResult.Success -> ApiResult.Success(response.data.data)
+            is ApiResult.Error   -> ApiResult.Error(response.throwable)
+            is ApiResult.Loading -> ApiResult.Loading()
+        }
+    }
+
+    fun responseToBookMark(
+        response: ApiResult<BookmarkResponse>
+    ): ApiResult<BookmarkResponse> {
+        return when (response) {
+            is ApiResult.Success -> ApiResult.Success(response.data)
             is ApiResult.Error   -> ApiResult.Error(response.throwable)
             is ApiResult.Loading -> ApiResult.Loading()
         }

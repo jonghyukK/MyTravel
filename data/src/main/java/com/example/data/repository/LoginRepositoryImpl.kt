@@ -1,7 +1,6 @@
 package com.example.data.repository
 
 import com.example.data.datasource.LoginDataSource
-import com.example.data.datasource.UserLocalDataSource
 import com.example.data.mapper.ResponseMapper
 import com.example.domain.entity.ApiResult
 import com.example.domain.entity.Login
@@ -29,7 +28,6 @@ class LoginRepositoryImpl @Inject constructor(
         emit(ApiResult.Loading())
 
         val response = dataSource.makeLoginRequest(email, pw)
-
         emit(ResponseMapper.responseToLoginEntity(ApiResult.Success(response)))
     }.catch {
         emit(ResponseMapper.responseToLoginEntity(ApiResult.Error(it)))

@@ -3,6 +3,7 @@ package org.kjh.mytravel.ui.upload
 import android.os.Bundle
 import android.view.View
 import androidx.core.view.isVisible
+import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
@@ -17,12 +18,14 @@ import kotlinx.coroutines.launch
 import org.kjh.mytravel.R
 import org.kjh.mytravel.databinding.FragmentWritePostBinding
 import org.kjh.mytravel.ui.base.BaseFragment
+import org.kjh.mytravel.ui.profile.ProfileViewModel
 
 @AndroidEntryPoint
 class WritePostFragment
     : BaseFragment<FragmentWritePostBinding>(R.layout.fragment_write_post) {
 
     private val uploadViewModel: UploadViewModel by navGraphViewModels(R.id.nav_nested_upload){ defaultViewModelProviderFactory }
+    private val profileViewModel: ProfileViewModel by activityViewModels()
 
     private val writePostImagesAdapter by lazy {
         WritePostImagesAdapter()
@@ -39,13 +42,13 @@ class WritePostFragment
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 uploadViewModel.uiState.collect {
-                    binding.pbLoading.isVisible = it.isLoading
-
                     if (it.selectedItems.isNotEmpty())
                         writePostImagesAdapter.submitList(it.selectedItems)
 
-                    if (it.uploadSuccess)
+                    if (it.uploadSuccess && it.userItem != null) {
+                        profileViewModel.updateProfileData(it.userItem)
                         navigateProfileWhenSuccessUpload()
+                    }
                 }
             }
         }

@@ -1,6 +1,5 @@
 package com.example.data.model
 
-import com.example.domain.entity.User
 import com.google.gson.annotations.SerializedName
 
 /**
@@ -13,6 +12,5 @@ import com.google.gson.annotations.SerializedName
 data class SignUpResponse(
     @SerializedName("result")
     val isRegistered: Boolean,
-    val data        : User? = null,
     val errorMsg    : String? = null
 )

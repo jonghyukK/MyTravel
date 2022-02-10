@@ -50,7 +50,7 @@
             android:id="@+id/action_global_profileFragment"
             app:destination="@id/profileFragment"
             app:popUpTo="@+id/profileFragment"
-            app:popUpToInclusive="false"/>
+            app:popUpToInclusive="true"/>
         <fragment
             android:id="@+id/mapFragment"
             android:name="org.kjh.mytravel.ui.upload.MapFragment"
@@ -88,11 +88,6 @@
             app:argType="string"
             app:nullable="true"/>
 
-        <action
-            android:id="@+id/action_profileEditFragment_to_profileFragment"
-            app:destination="@id/profileFragment"
-            app:popUpTo="@+id/profileFragment"
-            app:popUpToInclusive="false"/>
     </fragment>
 
 

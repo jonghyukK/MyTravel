@@ -1,6 +1,4 @@
-package com.example.data.model
-
-import com.example.domain.entity.User
+package com.example.domain.entity
 
 /**
  * MyTravel

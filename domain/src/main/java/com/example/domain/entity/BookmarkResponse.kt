@@ -2,13 +2,12 @@ package com.example.domain.entity
 
 /**
  * MyTravel
- * Class: UploadPostResponse
- * Created by jonghyukkang on 2022/01/28.
+ * Class: BookmarkResponse
+ * Created by jonghyukkang on 2022/02/09.
  *
  * Description:
  */
-data class UploadPostResponse(
+data class BookmarkResponse(
     val result: Boolean,
-    val data  : User?,
     val errorMsg: String? = null
 )

@@ -1,15 +1,9 @@
 package com.example.data.datasource
 
 import com.example.data.api.ApiService
-import com.example.data.db.UserDao
-import com.example.data.mapper.ResponseMapper
-import com.example.data.model.UserResponse
-import com.example.domain.entity.ApiResult
+import com.example.domain.entity.BookmarkResponse
 import com.example.domain.entity.UpdateProfile
-import com.example.domain.entity.User
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.channels.awaitClose
+import com.example.domain.entity.UserResponse
 import kotlinx.coroutines.flow.*
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
@@ -40,6 +34,12 @@ interface UserRemoteDataSource {
         myEmail: String,
         targetEmail: String
     ): UserResponse
+
+    suspend fun updateBookmark(
+        email: String,
+        postId: Int,
+        placeName: String
+    ): BookmarkResponse
 }
 
 class UserRemoteDataSourceImpl @Inject constructor(
@@ -80,4 +80,11 @@ class UserRemoteDataSourceImpl @Inject constructor(
         myEmail    : String,
         targetEmail: String
     ) = apiService.requestFollowOrUnFollow(myEmail, targetEmail)
+
+    override suspend fun updateBookmark(
+        email: String,
+        postId: Int,
+        placeName: String
+    ) = apiService.updateBookmark(email, postId, placeName)
+
 }

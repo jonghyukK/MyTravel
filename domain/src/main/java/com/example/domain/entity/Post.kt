@@ -1,8 +1,6 @@
 package com.example.domain.entity
 
 import androidx.recyclerview.widget.DiffUtil
-import androidx.room.Entity
-import androidx.room.PrimaryKey
 
 /**
  * MyTravel
@@ -11,18 +9,19 @@ import androidx.room.PrimaryKey
  *
  * Description:
  */
-class Post(
-    val postId: Int,
-    val email: String,
-    val nickName: String,
-    val content: String? = null,
-    val cityName: String,
-    val subCityName: String,
-    val placeName: String,
+data class Post(
+    val postId      : Int,
+    val email       : String,
+    val nickName    : String,
+    val content     : String? = null,
+    val cityName    : String,
+    val subCityName : String,
+    val placeName   : String,
     val placeAddress: String,
-    val profileImg: String? = null,
-    val createdDate: String,
-    val imageUrl: List<String> = listOf()
+    val profileImg  : String? = null,
+    val createdDate : String,
+    val isBookmarked: Boolean = false,
+    val imageUrl    : List<String> = listOf()
 ) {
     companion object {
         val DiffCallback = object: DiffUtil.ItemCallback<Post>() {

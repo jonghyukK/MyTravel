@@ -3,10 +3,7 @@ package org.kjh.mytravel.ui.upload
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.domain.entity.ApiResult
-import com.example.domain.entity.MapSearch
-import com.example.domain.entity.MediaStoreImage
-import com.example.domain.entity.Place
+import com.example.domain.entity.*
 import com.example.domain.usecase.GetLoginPreferenceUseCase
 import com.example.domain.usecase.UploadPostUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -30,7 +27,8 @@ data class UploadUiState(
     val placeItem    : MapSearch? = null,
     val content      : String? = "",
     val isLoading    : Boolean = false,
-    val uploadSuccess: Boolean = false
+    val uploadSuccess: Boolean = false,
+    val userItem     : User? = null
 )
 
 @HiltViewModel
@@ -83,7 +81,8 @@ class UploadViewModel @Inject constructor(
                         is ApiResult.Success -> _uiState.update {
                             it.copy(
                                 isLoading = false,
-                                uploadSuccess = result.data.result
+                                uploadSuccess = result.data.result,
+                                userItem = result.data.data
                             )
                         }
 

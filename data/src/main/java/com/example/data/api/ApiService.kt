@@ -3,10 +3,10 @@ package com.example.data.api
 import com.example.data.model.LoginResponse
 import com.example.data.model.PlaceResponse
 import com.example.data.model.SignUpResponse
-import com.example.data.model.UserResponse
+import com.example.domain.entity.BookmarkResponse
 import com.example.domain.entity.UpdateProfile
 import com.example.domain.entity.UploadPostResponse
-import kotlinx.coroutines.flow.Flow
+import com.example.domain.entity.UserResponse
 import okhttp3.MultipartBody
 import retrofit2.http.*
 
@@ -48,7 +48,7 @@ interface ApiService {
     ): UpdateProfile
 
     @Multipart
-    @POST("user/upload")
+    @POST("post/upload")
     suspend fun makeRequestPostUpload(
         @Part file: List<MultipartBody.Part>,
         @Query("email"          ) email         : String,
@@ -70,4 +70,11 @@ interface ApiService {
         @Query("myEmail") myEmail: String,
         @Query("targetEmail") targetEmail: String
     ): UserResponse
+
+    @PUT("bookmark")
+    suspend fun updateBookmark(
+        @Query("email") email: String,
+        @Query("postId") postId: Int,
+        @Query("placeName") placeName: String
+    ): BookmarkResponse
 }

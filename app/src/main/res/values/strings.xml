@@ -6,6 +6,7 @@
     <string name="post">게시물</string>
     <string name="follower">팔로워</string>
     <string name="following">팔로잉</string>
+    <string name="follow">팔로우</string>
     <string name="edit_profile">프로필 편집</string>
     <string name="login">로그인</string>
     <string name="sign_up">회원가입</string>
@@ -15,5 +16,10 @@
     <string name="more_than_8">8자리 이상</string>
     <string name="nickName">닉네임</string>
     <string name="do_sign_up">가입하기</string>
+    <string name="edit">편집</string>
+    <string name="introduce">자기소개</string>
+    <string name="save">저장</string>
+    <string name="add_location">위치 추가</string>
+    <string name="input_content_your_experience">해당 장소에서의 경험을 적어주세요.</string>
     <string name="desc_share_travel_to_friend_after_login_or_signup">로그인/회원가입 후 \n멋진 나의 여행지를 친구들에게 공유해 주세요!</string>
 </resources>

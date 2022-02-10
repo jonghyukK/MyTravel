@@ -3,7 +3,7 @@ package org.kjh.mytravel.ui.profile
 import android.os.Bundle
 import android.view.View
 import androidx.activity.addCallback
-import androidx.fragment.app.viewModels
+import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
@@ -12,14 +12,15 @@ import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavOptions
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.setupWithNavController
-import androidx.recyclerview.widget.GridLayoutManager
-import com.example.domain.entity.ApiResult
+import com.example.domain.entity.Post
 import com.orhanobut.logger.Logger
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.launch
 import org.kjh.mytravel.NavGraphDirections
 import org.kjh.mytravel.ProfilePostsGridItemDecoration
@@ -29,18 +30,21 @@ import org.kjh.mytravel.ui.MainActivity
 import org.kjh.mytravel.ui.PostSmallListAdapter
 import org.kjh.mytravel.ui.base.BaseFragment
 
-
 @AndroidEntryPoint
 class ProfileFragment
     :BaseFragment<FragmentProfileBinding>(R.layout.fragment_profile) {
 
-    private val viewModel: ProfileViewModel by viewModels()
+    private val viewModel: ProfileViewModel by activityViewModels()
 
     private val myPostListAdapter by lazy {
-        PostSmallListAdapter { item ->
-            navigateWithAction(
-                NavGraphDirections.actionGlobalPlacePagerFragment(item.placeName))
+        PostSmallListAdapter({ item -> onClickPostItem(item)}) { item ->
+            viewModel.updateBookmark(item)
         }
+    }
+
+    private fun onClickPostItem(item: Post) {
+        navigateWithAction(
+            NavGraphDirections.actionGlobalPlacePagerFragment(item.placeName))
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -65,11 +69,14 @@ class ProfileFragment
         binding.viewModel = viewModel
         binding.fragment = this
 
+
+
         initToolbarWithNavigation()
         initMyPostRecyclerView()
 
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+
                 viewModel.uiState.collect { uiState ->
 
                     if (uiState.isLoggedIn) {

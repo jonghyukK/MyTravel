@@ -34,7 +34,6 @@ class PostRepositoryImpl @Inject constructor(
         emit(ApiResult.Loading())
 
         val response = postRemoteDataSource.uploadPost(file, email, content, placeName, placeAddress, placeRoadAddress, x, y)
-
         emit(ResponseMapper.responseToUploadPost(ApiResult.Success(response)))
     }.catch {
         emit(ResponseMapper.responseToUploadPost(ApiResult.Error(it)))

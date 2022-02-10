@@ -1,9 +1,5 @@
 package com.example.domain.entity
 
-import androidx.room.Entity
-import androidx.room.Ignore
-import androidx.room.PrimaryKey
-
 /**
  * MyTravel
  * Class: User
@@ -12,17 +8,15 @@ import androidx.room.PrimaryKey
  * Description:
  */
 
-@Entity
 data class User(
-    @PrimaryKey
-    val userId: Int = 0,
-    val email : String = "",
-    val nickName: String = "",
-    val profileImg: String? = null,
-    val postCount : Int = 0,
+    val userId      : Int = 0,
+    val email       : String = "",
+    val nickName    : String = "",
+    val profileImg  : String? = null,
+    val postCount   : Int = 0,
     val followingCount : Int = 0,
-    val followCount: Int = 0,
-    val introduce : String? = null,
-    val isFollowing: Boolean? = null,
-    val posts: List<Post> = listOf()
+    val followCount    : Int = 0,
+    val introduce      : String? = null,
+    val isFollowing    : Boolean? = null,
+    val posts          : List<Post> = listOf()
 )

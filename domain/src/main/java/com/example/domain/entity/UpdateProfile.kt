@@ -8,6 +8,7 @@ package com.example.domain.entity
  * Description:
  */
 data class UpdateProfile(
-    val result: Boolean,
+    val result  : Boolean,
+    val data    : User?,
     val errorMsg: String? = null
 )

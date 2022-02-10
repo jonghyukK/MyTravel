@@ -13,81 +13,80 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:fitsSystemWindows="true">
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/cl_writePostContainer"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        tools:context=".ui.upload.WritePostFragment">
 
-        <androidx.appcompat.widget.Toolbar
-            android:id="@+id/tb_writePostToolbar"
-            android:layout_width="0dp"
-            android:layout_height="?attr/actionBarSize"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"/>
-
-
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/rv_selectedImages"
-            android:layout_width="0dp"
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/cl_writePostContainer"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-            android:orientation="horizontal"
-            android:paddingStart="8dp"
-            android:paddingEnd="8dp"
-            android:clipToPadding="false"
-            app:layout_constraintTop_toBottomOf="@+id/tb_writePostToolbar"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"/>
+            tools:context=".ui.upload.WritePostFragment">
 
-       <TextView
-           android:id="@+id/tv_addLocation"
-           android:layout_width="0dp"
-           android:layout_height="50dp"
-           android:layout_marginTop="20dp"
-           android:layout_marginEnd="20dp"
-           android:gravity="center_vertical"
-           app:layout_constraintTop_toBottomOf="@+id/rv_selectedImages"
-           app:layout_constraintStart_toEndOf="@+id/iv_locationIcon"
-           app:layout_constraintEnd_toEndOf="parent"
-           android:text="@{uploadViewModel.uiState.placeItem.placeAddress ?? `위치 추가`}" />
+            <EditText
+                android:id="@+id/et_content"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="20dp"
+                android:layout_marginEnd="20dp"
+                android:hint="@string/input_content_your_experience"
+                android:text="@={uploadViewModel.content}"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tv_addLocation" />
 
-        <ImageView
-            android:id="@+id/iv_locationIcon"
-            android:layout_width="26dp"
-            android:layout_height="26dp"
-            android:src="@drawable/ic_location"
-            app:tint="#7732ff"
-            app:layout_constraintTop_toTopOf="@+id/tv_addLocation"
-            app:layout_constraintBottom_toBottomOf="@+id/tv_addLocation"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toStartOf="@id/tv_addLocation"
-            android:layout_marginStart="20dp"/>
+            <ImageView
+                android:id="@+id/iv_locationIcon"
+                android:layout_width="26dp"
+                android:layout_height="26dp"
+                android:layout_marginStart="20dp"
+                android:src="@drawable/ic_location"
+                app:layout_constraintBottom_toBottomOf="@+id/tv_addLocation"
+                app:layout_constraintEnd_toStartOf="@id/tv_addLocation"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/tv_addLocation"
+                app:tint="#7732ff" />
 
-        <EditText
-            android:id="@+id/et_content"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
-            android:layout_marginStart="20dp"
-            android:layout_marginEnd="20dp"
-            android:text="@={uploadViewModel.content}"
-            android:hint="해당 장소에서의 경험을 적어주세요."
-            app:layout_constraintTop_toBottomOf="@+id/tv_addLocation"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"/>
+            <TextView
+                android:id="@+id/tv_addLocation"
+                android:layout_width="0dp"
+                android:layout_height="50dp"
+                android:layout_marginTop="20dp"
+                android:layout_marginEnd="20dp"
+                android:gravity="center_vertical"
+                android:text="@{uploadViewModel.uiState.placeItem.placeAddress ?? @string/add_location}"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/iv_locationIcon"
+                app:layout_constraintTop_toBottomOf="@+id/rv_selectedImages" />
 
-        <ProgressBar
-            android:id="@+id/pb_loading"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:visibility="gone"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"/>
+            <androidx.appcompat.widget.Toolbar
+                android:id="@+id/tb_writePostToolbar"
+                android:layout_width="0dp"
+                android:layout_height="?attr/actionBarSize"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rv_selectedImages"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:clipToPadding="false"
+                android:orientation="horizontal"
+                android:paddingStart="8dp"
+                android:paddingEnd="8dp"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tb_writePostToolbar" />
+
+            <ProgressBar
+                android:id="@+id/pb_loading"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:isVisible="@{uploadViewModel.uiState.loading}"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>
 </layout>

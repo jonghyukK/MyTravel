@@ -1,9 +1,9 @@
 package com.example.domain.repository
 
 import com.example.domain.entity.ApiResult
+import com.example.domain.entity.BookmarkResponse
 import com.example.domain.entity.UpdateProfile
-import com.example.domain.entity.User
-import kotlinx.coroutines.CoroutineScope
+import com.example.domain.entity.UserResponse
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.Flow
 
@@ -18,12 +18,12 @@ interface UserRepository {
 
     suspend fun getMyProfile(
         myEmail: String
-    ): Flow<ApiResult<User>>
+    ): Flow<ApiResult<UserResponse>>
 
     suspend fun getUser(
         myEmail    : String,
         targetEmail: String? = null
-    ): Flow<ApiResult<User>>
+    ): Flow<ApiResult<UserResponse>>
 
     suspend fun updateUserProfile(
         profileUrl  : String?,
@@ -35,9 +35,11 @@ interface UserRepository {
     suspend fun requestFollowOrUnFollow(
         myEmail    : String,
         targetEmail: String
-    ): Flow<ApiResult<User>>
+    ): Flow<ApiResult<UserResponse>>
 
-    suspend fun deleteUser(email: String)
-
-    suspend fun insertOrUpdateMyProfile(user: User)
+    suspend fun updateBookmark(
+        email: String,
+        postId: Int,
+        placeName: String
+    ): Flow<ApiResult<BookmarkResponse>>
 }

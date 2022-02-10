@@ -2,6 +2,7 @@ package com.example.domain.usecase
 
 import com.example.domain.repository.UserRepository
 import javax.inject.Inject
+import javax.inject.Singleton
 
 /**
  * MyTravel
@@ -10,6 +11,7 @@ import javax.inject.Inject
  *
  * Description:
  */
+
 class GetUserUseCase @Inject constructor(
     private val userRepository: UserRepository
 ){

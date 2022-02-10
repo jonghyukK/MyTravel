@@ -4,6 +4,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.domain.entity.ApiResult
+import com.example.domain.entity.User
 import com.example.domain.usecase.GetLoginPreferenceUseCase
 import com.example.domain.usecase.UpdateProfileUseCase
 import com.orhanobut.logger.Logger
@@ -25,6 +26,7 @@ import javax.inject.Inject
 
 data class ProfileEditUiState(
     val profileImg: String? = null,
+    val userItem  : User?   = null,
     val isLoading : Boolean = false,
     val isSuccess : Boolean = false,
 )
@@ -78,7 +80,8 @@ class ProfileEditViewModel @Inject constructor(
                     is ApiResult.Success -> _uiState.update {
                         it.copy(
                             isLoading = false,
-                            isSuccess = result.data.result
+                            isSuccess = result.data.result,
+                            userItem  = result.data.data
                         )
                     }
                     is ApiResult.Error -> {

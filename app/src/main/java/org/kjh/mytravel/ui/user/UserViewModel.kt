@@ -4,11 +4,12 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import com.example.domain.entity.ApiResult
+import com.example.domain.entity.Post
 import com.example.domain.entity.User
-import com.example.domain.repository.UserRepository
 import com.example.domain.usecase.GetLoginPreferenceUseCase
 import com.example.domain.usecase.GetUserUseCase
 import com.example.domain.usecase.MakeRequestFollowOrNotUseCase
+import com.example.domain.usecase.UpdateBookMarkUseCase
 import com.orhanobut.logger.Logger
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
@@ -30,13 +31,14 @@ import kotlinx.coroutines.launch
 data class UserUiState(
     val userItem  : User? = null,
     val isLoading : Boolean = false,
+    val successFollowOrNot : Boolean = false
 )
 
 class UserViewModel @AssistedInject constructor(
     private val getUserUseCase: GetUserUseCase,
     private val makeRequestFollowOrNotUseCase: MakeRequestFollowOrNotUseCase,
+    private val updateBookMarkUseCase: UpdateBookMarkUseCase,
     private val getLoginPreferenceUseCase: GetLoginPreferenceUseCase,
-    private val userRepository: UserRepository,
     @Assisted private val initUserEmail: String
 ): ViewModel() {
 
@@ -70,7 +72,7 @@ class UserViewModel @AssistedInject constructor(
                             _uiState.update {
                                 it.copy(
                                     isLoading = false,
-                                    userItem = result.data
+                                    userItem = result.data.data
                                 )
                             }
                         }
@@ -89,7 +91,7 @@ class UserViewModel @AssistedInject constructor(
                     when (result) {
                         is ApiResult.Loading ->
                             _uiState.update {
-                                it.copy(isLoading = true)
+                                it.copy(isLoading = true, successFollowOrNot = false)
                             }
 
                         is ApiResult.Success -> {
@@ -97,9 +99,10 @@ class UserViewModel @AssistedInject constructor(
                                 it.copy(
                                     isLoading = false,
                                     userItem = it.userItem?.copy(
-                                        followCount = result.data.followCount,
-                                        isFollowing = result.data.isFollowing
-                                    )
+                                        followCount = result.data.data.followCount,
+                                        isFollowing = result.data.data.isFollowing
+                                    ),
+                                    successFollowOrNot = result.data.result
                                 )
                             }
                         }
@@ -108,6 +111,36 @@ class UserViewModel @AssistedInject constructor(
                         }
                     }
                 }
+        }
+    }
+
+    fun updateBookmark(postItem: Post) {
+        viewModelScope.launch {
+            updateBookMarkUseCase(
+                postId = postItem.postId,
+                placeName = postItem.placeName
+            ).collect { result ->
+                when (result) {
+                    is ApiResult.Success -> {
+                        if (result.data.result) {
+
+                            val convertPosts = _uiState.value.userItem!!.posts.map {
+                                if (it.placeName == postItem.placeName) {
+                                    it.copy(isBookmarked = !postItem.isBookmarked)
+                                } else it
+                            }
+
+                            _uiState.update {
+                                it.copy(
+                                    userItem = it.userItem!!.copy(
+                                        posts = convertPosts
+                                    )
+                                )
+                            }
+                        }
+                    }
+                }
+            }
         }
     }
 }

@@ -4,6 +4,8 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import com.example.domain.entity.Post
+import com.orhanobut.logger.Logger
 import org.kjh.mytravel.databinding.VhProfilePostItemBinding
 
 /**
@@ -14,13 +16,14 @@ import org.kjh.mytravel.databinding.VhProfilePostItemBinding
  * Description:
  */
 class PostSmallListAdapter(
-    private val onClickItem: (com.example.domain.entity.Post) -> Unit
-): ListAdapter<com.example.domain.entity.Post, PostItemSmallViewHolder>(com.example.domain.entity.Post.DiffCallback) {
+    private val onClickItem: (Post) -> Unit,
+    private val onClickBookmark: (Post) -> Unit
+): ListAdapter<Post, PostItemSmallViewHolder>(Post.DiffCallback) {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) =
         PostItemSmallViewHolder(
             VhProfilePostItemBinding.inflate(
                 LayoutInflater.from(parent.context), parent, false
-            ), onClickItem
+            ), onClickItem, onClickBookmark
         )
 
     override fun onBindViewHolder(holder: PostItemSmallViewHolder, position: Int) {
@@ -30,14 +33,19 @@ class PostSmallListAdapter(
 
 class PostItemSmallViewHolder(
     val binding: VhProfilePostItemBinding,
-    private val onClickItem: (com.example.domain.entity.Post) -> Unit
+    private val onClickItem: (Post) -> Unit,
+    private val onClickBookmark: (Post) -> Unit
 ): RecyclerView.ViewHolder(binding.root) {
 
-    fun bind(item: com.example.domain.entity.Post) {
+    fun bind(item: Post) {
         binding.postItem = item
 
         itemView.setOnClickListener {
             onClickItem(item)
+        }
+
+        binding.ivBookmark.setOnClickListener {
+            onClickBookmark(item)
         }
     }
 }
