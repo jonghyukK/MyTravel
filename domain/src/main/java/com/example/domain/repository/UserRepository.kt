@@ -39,7 +39,6 @@ interface UserRepository {
 
     suspend fun updateBookmark(
         email: String,
-        postId: Int,
-        placeName: String
+        postId: Int
     ): Flow<ApiResult<BookmarkResponse>>
 }

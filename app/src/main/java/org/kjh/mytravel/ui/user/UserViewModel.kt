@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import com.example.domain.entity.ApiResult
+import com.example.domain.entity.Bookmark
 import com.example.domain.entity.Post
 import com.example.domain.entity.User
 import com.example.domain.usecase.GetLoginPreferenceUseCase
@@ -14,6 +15,7 @@ import com.orhanobut.logger.Logger
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.collect
@@ -37,7 +39,6 @@ data class UserUiState(
 class UserViewModel @AssistedInject constructor(
     private val getUserUseCase: GetUserUseCase,
     private val makeRequestFollowOrNotUseCase: MakeRequestFollowOrNotUseCase,
-    private val updateBookMarkUseCase: UpdateBookMarkUseCase,
     private val getLoginPreferenceUseCase: GetLoginPreferenceUseCase,
     @Assisted private val initUserEmail: String
 ): ViewModel() {
@@ -114,32 +115,22 @@ class UserViewModel @AssistedInject constructor(
         }
     }
 
-    fun updateBookmark(postItem: Post) {
-        viewModelScope.launch {
-            updateBookMarkUseCase(
-                postId = postItem.postId,
-                placeName = postItem.placeName
-            ).collect { result ->
-                when (result) {
-                    is ApiResult.Success -> {
-                        if (result.data.result) {
+    fun sentRequestUpdateMyFollowCount() {
+        _uiState.update { currentUiState ->
+            currentUiState.copy(successFollowOrNot = false)
+        }
+    }
 
-                            val convertPosts = _uiState.value.userItem!!.posts.map {
-                                if (it.placeName == postItem.placeName) {
-                                    it.copy(isBookmarked = !postItem.isBookmarked)
-                                } else it
-                            }
-
-                            _uiState.update {
-                                it.copy(
-                                    userItem = it.userItem!!.copy(
-                                        posts = convertPosts
-                                    )
-                                )
-                            }
+    fun updateUserPostBookmarkState(bookmarks: List<Post>) {
+        _uiState.value.userItem?.let {
+            _uiState.update { currentUiState ->
+                currentUiState.copy(
+                    userItem = currentUiState.userItem!!.copy(
+                        posts = currentUiState.userItem.posts.map { currentPost ->
+                            currentPost.copy(isBookmarked = bookmarks.find { it.placeName == currentPost.placeName } != null)
                         }
-                    }
-                }
+                    )
+                )
             }
         }
     }

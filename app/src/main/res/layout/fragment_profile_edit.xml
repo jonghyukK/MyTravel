@@ -9,7 +9,7 @@
             type="org.kjh.mytravel.ui.profile.ProfileEditViewModel" />
         <variable
             name="fragment"
-            type="org.kjh.mytravel.ui.profile.ProfileEditFragment" />
+            type="org.kjh.mytravel.ui.profile.edit.ProfileEditFragment" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout

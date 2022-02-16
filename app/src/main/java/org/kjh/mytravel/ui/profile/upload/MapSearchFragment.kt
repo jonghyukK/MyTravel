@@ -1,4 +1,4 @@
-package org.kjh.mytravel.ui.upload
+package org.kjh.mytravel.ui.profile.upload
 
 import android.graphics.Color
 import android.os.Bundle

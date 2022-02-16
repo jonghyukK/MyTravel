@@ -5,7 +5,9 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import com.example.domain.entity.ApiResult
 import com.example.domain.entity.Place
+import com.example.domain.entity.Post
 import com.example.domain.usecase.GetPlaceUseCase
+import com.example.domain.usecase.UpdateBookMarkUseCase
 import com.orhanobut.logger.Logger
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
@@ -25,7 +27,8 @@ import kotlinx.coroutines.launch
  */
 
 data class PlaceUiState(
-    val placeItem: Place? = null
+    val placeItem: Place? = null,
+    val isUpdatedBookmark : Boolean = false,
 )
 
 class PlaceViewModel @AssistedInject constructor(

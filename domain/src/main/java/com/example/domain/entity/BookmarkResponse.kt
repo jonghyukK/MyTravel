@@ -9,5 +9,6 @@ package com.example.domain.entity
  */
 data class BookmarkResponse(
     val result: Boolean,
+    val bookMarks: List<Post> = listOf(),
     val errorMsg: String? = null
 )

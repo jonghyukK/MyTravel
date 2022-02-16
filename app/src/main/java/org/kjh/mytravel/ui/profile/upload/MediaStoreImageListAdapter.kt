@@ -1,4 +1,4 @@
-package org.kjh.mytravel.ui.upload
+package org.kjh.mytravel.ui.profile.upload
 
 import android.net.Uri
 import android.view.LayoutInflater

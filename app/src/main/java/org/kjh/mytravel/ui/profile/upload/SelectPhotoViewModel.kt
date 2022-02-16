@@ -1,4 +1,4 @@
-package org.kjh.mytravel.ui.upload
+package org.kjh.mytravel.ui.profile.upload
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.liveData

@@ -48,7 +48,7 @@ interface ApiService {
     ): UpdateProfile
 
     @Multipart
-    @POST("post/upload")
+    @POST("user/upload")
     suspend fun makeRequestPostUpload(
         @Part file: List<MultipartBody.Part>,
         @Query("email"          ) email         : String,
@@ -62,6 +62,7 @@ interface ApiService {
 
     @GET("post")
     suspend fun getPostsByPlaceName(
+        @Query("myEmail") myEmail: String,
         @Query("placeName") placeName: String
     ): PlaceResponse
 
@@ -71,10 +72,9 @@ interface ApiService {
         @Query("targetEmail") targetEmail: String
     ): UserResponse
 
-    @PUT("bookmark")
+    @PUT("user/bookmark")
     suspend fun updateBookmark(
         @Query("email") email: String,
-        @Query("postId") postId: Int,
-        @Query("placeName") placeName: String
+        @Query("postId") postId: Int
     ): BookmarkResponse
 }

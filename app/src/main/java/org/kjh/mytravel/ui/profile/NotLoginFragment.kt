@@ -3,18 +3,14 @@ package org.kjh.mytravel.ui.profile
 import android.os.Bundle
 import android.view.View
 import androidx.activity.addCallback
-import androidx.fragment.app.viewModels
-import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.lifecycleScope
-import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavOptions
 import androidx.navigation.fragment.findNavController
-import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.launch
 import org.kjh.mytravel.R
 import org.kjh.mytravel.databinding.FragmentNotLoginBinding
 import org.kjh.mytravel.ui.base.BaseFragment
+import org.kjh.mytravel.ui.profile.login.LoginFragment
+import org.kjh.mytravel.ui.profile.signup.SignUpFragment
 
 class NotLoginFragment
     : BaseFragment<FragmentNotLoginBinding>(R.layout.fragment_not_login) {

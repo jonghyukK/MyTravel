@@ -2,7 +2,6 @@ package org.kjh.mytravel.ui.user
 
 import android.os.Bundle
 import android.view.View
-import android.widget.Toast
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
@@ -39,9 +38,8 @@ class UserFragment
     private val profileViewModel: ProfileViewModel by activityViewModels()
 
     private val postSmallListAdapter by lazy {
-        PostSmallListAdapter({ item -> onClickPostItem(item)}) { item ->
-            viewModel.updateBookmark(item)
-            profileViewModel.updateBookmarkStateWithPosts(item)
+        PostSmallListAdapter(0, { item -> onClickPostItem(item)}) { item ->
+            profileViewModel.updateMyBookmark(item)
         }
     }
 
@@ -60,6 +58,16 @@ class UserFragment
 
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                profileViewModel.uiState.collect { uiState ->
+                    uiState.userItem?.let { currentUser ->
+                        viewModel.updateUserPostBookmarkState(currentUser.bookMarks)
+                    }
+                }
+            }
+        }
+
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.uiState.collect { uiState ->
                     uiState.userItem?.let {
                         postSmallListAdapter.submitList(uiState.userItem.posts)
@@ -67,7 +75,7 @@ class UserFragment
 
                     if (uiState.successFollowOrNot) {
                         profileViewModel.uiState.value.userItem?.let {
-                            profileViewModel.updateProfileData(
+                            profileViewModel.updateMyProfile(
                                 it.copy(
                                     followingCount = if (uiState.userItem?.isFollowing!!) {
                                         it.followingCount + 1
@@ -77,6 +85,8 @@ class UserFragment
                                 )
                             )
                         }
+
+                        viewModel.sentRequestUpdateMyFollowCount()
                     }
                 }
             }

@@ -13,13 +13,7 @@ import androidx.navigation.NavOptions
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.setupWithNavController
 import com.example.domain.entity.Post
-import com.orhanobut.logger.Logger
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.channels.awaitClose
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import org.kjh.mytravel.NavGraphDirections
@@ -37,8 +31,8 @@ class ProfileFragment
     private val viewModel: ProfileViewModel by activityViewModels()
 
     private val myPostListAdapter by lazy {
-        PostSmallListAdapter({ item -> onClickPostItem(item)}) { item ->
-            viewModel.updateBookmark(item)
+        PostSmallListAdapter(0, { item -> onClickPostItem(item)}) { item ->
+            viewModel.updateMyBookmark(item)
         }
     }
 
@@ -69,16 +63,12 @@ class ProfileFragment
         binding.viewModel = viewModel
         binding.fragment = this
 
-
-
         initToolbarWithNavigation()
         initMyPostRecyclerView()
 
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
-
                 viewModel.uiState.collect { uiState ->
-
                     if (uiState.isLoggedIn) {
                         uiState.userItem?.let {
                             myPostListAdapter.submitList(it.posts)

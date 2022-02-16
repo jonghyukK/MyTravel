@@ -6,7 +6,7 @@
     <data>
         <variable
             name="uploadViewModel"
-            type="org.kjh.mytravel.ui.upload.UploadViewModel" />
+            type="org.kjh.mytravel.ui.profile.upload.UploadViewModel" />
     </data>
 
     <ScrollView
@@ -18,7 +18,7 @@
             android:id="@+id/cl_writePostContainer"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            tools:context=".ui.upload.WritePostFragment">
+            tools:context=".ui.profile.upload.WritePostFragment">
 
             <EditText
                 android:id="@+id/et_content"

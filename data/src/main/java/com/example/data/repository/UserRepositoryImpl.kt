@@ -1,5 +1,6 @@
 package com.example.data.repository
 
+import android.util.Log
 import com.example.data.datasource.UserRemoteDataSource
 import com.example.data.mapper.ResponseMapper
 import com.example.domain.entity.*
@@ -77,12 +78,11 @@ class UserRepositoryImpl @Inject constructor(
 
     override suspend fun updateBookmark(
         email: String,
-        postId: Int,
-        placeName: String
+        postId: Int
     ): Flow<ApiResult<BookmarkResponse>> = flow {
         emit(ApiResult.Loading())
 
-        val response = userRemoteDataSource.updateBookmark(email, postId, placeName)
+        val response = userRemoteDataSource.updateBookmark(email, postId)
         emit(ResponseMapper.responseToBookMark(ApiResult.Success(response)))
     }.catch {
         emit(ResponseMapper.responseToBookMark(ApiResult.Error(it)))

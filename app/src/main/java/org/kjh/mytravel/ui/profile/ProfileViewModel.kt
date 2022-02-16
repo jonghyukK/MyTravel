@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.data.repository.LoginPreferencesRepositoryImpl
 import com.example.domain.entity.ApiResult
+import com.example.domain.entity.Bookmark
 import com.example.domain.entity.Post
 import com.example.domain.entity.User
 import com.example.domain.repository.LoginPreferencesRepository
@@ -32,7 +33,7 @@ import javax.inject.Inject
 data class ProfileUiState(
     val userItem  : User? = null,
     val isLoading : Boolean = false,
-    val isLoggedIn: Boolean = true,
+    val isLoggedIn: Boolean = true
 )
 
 @HiltViewModel
@@ -82,45 +83,38 @@ class ProfileViewModel @Inject constructor(
         }
     }
 
-    fun updateProfileData(userItem: User) {
+    fun updateMyProfile(userItem: User) {
         _uiState.update {
-            it.copy(userItem = userItem)
+            it.copy(
+                userItem = userItem
+            )
         }
     }
 
-    fun updateBookmark(postItem: Post) {
+    fun updateMyBookmark(postItem: Post) {
         viewModelScope.launch {
             updateBookMarkUseCase(
-                postId = postItem.postId,
-                placeName = postItem.placeName
+                postId = postItem.postId
             ).collect { result ->
                 when (result) {
                     is ApiResult.Success -> {
                         if (result.data.result) {
-                            val post = _uiState.value.userItem!!.posts.find { it.placeName == postItem.placeName }
-                            updateBookmarkStateWithPosts(post)
+                            val updatedPosts = _uiState.value.userItem!!.posts.map { currentPost ->
+                                currentPost.copy(
+                                    isBookmarked = result.data.bookMarks.find { it.placeName == currentPost.placeName } != null
+                                )
+                            }
+
+                            _uiState.update {
+                                it.copy(
+                                    userItem = it.userItem!!.copy(
+                                        posts = updatedPosts,
+                                        bookMarks = result.data.bookMarks
+                                    )
+                                )
+                            }
                         }
                     }
-                }
-            }
-        }
-    }
-
-    fun updateBookmarkStateWithPosts(postItem: Post?) {
-        postItem?.let {
-            viewModelScope.launch {
-                val convertPosts = _uiState.value.userItem!!.posts.map {
-                    if (it.placeName == postItem.placeName) {
-                        it.copy(isBookmarked = !postItem.isBookmarked)
-                    } else it
-                }
-
-                _uiState.update {
-                    it.copy(
-                        userItem = it.userItem!!.copy(
-                            posts = convertPosts
-                        )
-                    )
                 }
             }
         }

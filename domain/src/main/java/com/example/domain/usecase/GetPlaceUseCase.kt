@@ -11,7 +11,11 @@ import javax.inject.Inject
  * Description:
  */
 class GetPlaceUseCase @Inject constructor(
-    private val placeRepository: PlaceRepository
+    private val placeRepository: PlaceRepository,
+    private val loginPreferenceUseCase: GetLoginPreferenceUseCase
 ) {
-    suspend operator fun invoke(placeName: String) = placeRepository.getPlace(placeName)
+    suspend operator fun invoke(placeName: String) =
+        placeRepository.getPlace(
+            loginPreferenceUseCase().email,
+            placeName)
 }

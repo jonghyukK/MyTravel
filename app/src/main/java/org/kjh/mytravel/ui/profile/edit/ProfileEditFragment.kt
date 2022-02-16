@@ -1,4 +1,4 @@
-package org.kjh.mytravel.ui.profile
+package org.kjh.mytravel.ui.profile.edit
 
 import android.os.Bundle
 import android.view.View
@@ -19,6 +19,9 @@ import kotlinx.coroutines.launch
 import org.kjh.mytravel.R
 import org.kjh.mytravel.databinding.FragmentProfileEditBinding
 import org.kjh.mytravel.ui.base.BaseFragment
+import org.kjh.mytravel.ui.profile.ProfileEditFragmentArgs
+import org.kjh.mytravel.ui.profile.ProfileEditViewModel
+import org.kjh.mytravel.ui.profile.ProfileViewModel
 
 const val NGINX_PATH = "http://192.168.219.102/images/"
 
@@ -60,7 +63,7 @@ class ProfileEditFragment
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.uiState.collect { uiState ->
                     if (uiState.isSuccess && uiState.userItem != null) {
-                        profileViewModel.updateProfileData(uiState.userItem)
+                        profileViewModel.updateMyProfile(uiState.userItem)
                         findNavController().popBackStack()
                     }
                 }

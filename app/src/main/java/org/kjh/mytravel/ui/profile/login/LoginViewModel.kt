@@ -1,11 +1,8 @@
-package org.kjh.mytravel.ui.profile
+package org.kjh.mytravel.ui.profile.login
 
 import androidx.lifecycle.*
 import com.example.domain.entity.ApiResult
-import com.example.domain.entity.LoginInfoPreferences
 import com.example.domain.usecase.MakeLoginRequestUseCase
-import com.example.domain.usecase.SaveLogInPreferenceUseCase
-import com.orhanobut.logger.Logger
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch

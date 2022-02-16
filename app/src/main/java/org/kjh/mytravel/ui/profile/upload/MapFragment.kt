@@ -1,10 +1,9 @@
-package org.kjh.mytravel.ui.upload
+package org.kjh.mytravel.ui.profile.upload
 
 import android.os.Bundle
 import android.view.View
 import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
-import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.navGraphViewModels
 import androidx.navigation.ui.setupWithNavController

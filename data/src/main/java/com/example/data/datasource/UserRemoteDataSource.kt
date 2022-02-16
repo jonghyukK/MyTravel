@@ -37,8 +37,7 @@ interface UserRemoteDataSource {
 
     suspend fun updateBookmark(
         email: String,
-        postId: Int,
-        placeName: String
+        postId: Int
     ): BookmarkResponse
 }
 
@@ -83,8 +82,7 @@ class UserRemoteDataSourceImpl @Inject constructor(
 
     override suspend fun updateBookmark(
         email: String,
-        postId: Int,
-        placeName: String
-    ) = apiService.updateBookmark(email, postId, placeName)
+        postId: Int
+    ) = apiService.updateBookmark(email, postId)
 
 }

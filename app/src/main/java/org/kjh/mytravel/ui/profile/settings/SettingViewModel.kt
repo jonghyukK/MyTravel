@@ -1,4 +1,4 @@
-package org.kjh.mytravel.ui.profile
+package org.kjh.mytravel.ui.profile.settings
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope

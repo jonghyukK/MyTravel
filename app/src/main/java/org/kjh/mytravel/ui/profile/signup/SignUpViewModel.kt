@@ -1,12 +1,9 @@
-package org.kjh.mytravel.ui.profile
+package org.kjh.mytravel.ui.profile.signup
 
 import android.util.Patterns
 import androidx.lifecycle.*
 import com.example.domain.entity.ApiResult
-import com.example.domain.entity.LoginInfoPreferences
-import com.example.domain.entity.SignUp
 import com.example.domain.usecase.MakeSignUpRequestUseCase
-import com.example.domain.usecase.SaveLogInPreferenceUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch

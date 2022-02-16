@@ -5,10 +5,10 @@
     <data>
         <variable
             name="fragment"
-            type="org.kjh.mytravel.ui.profile.LoginFragment" />
+            type="org.kjh.mytravel.ui.profile.login.LoginFragment" />
         <variable
             name="viewModel"
-            type="org.kjh.mytravel.ui.profile.LoginViewModel" />
+            type="org.kjh.mytravel.ui.profile.login.LoginViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout

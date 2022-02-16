@@ -12,5 +12,5 @@ import kotlinx.coroutines.flow.Flow
  * Description:
  */
 interface PlaceRepository {
-    suspend fun getPlace(placeName: String): Flow<ApiResult<Place>>
+    suspend fun getPlace(myEmail: String, placeName: String): Flow<ApiResult<Place>>
 }

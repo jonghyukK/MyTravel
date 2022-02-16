@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+        <variable
+            name="postItem"
+            type="com.example.domain.entity.Post" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="250dp">
+
+        <ImageView
+            android:id="@+id/iv_postImg"
+            android:layout_width="0dp"
+            android:layout_height="190dp"
+            android:scaleType="centerCrop"
+            app:imgUrl="@{postItem.imageUrl[0]}"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <TextView
+            android:id="@+id/tv_placeName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:text="@{postItem.placeName}"
+            android:textStyle="bold"
+            app:layout_constraintTop_toBottomOf="@+id/iv_postImg"
+            app:layout_constraintStart_toStartOf="parent"
+            android:textSize="15sp"
+            android:textColor="@color/black"/>
+
+        <TextView
+            android:id="@+id/tv_cityName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@{postItem.cityName}"
+            app:layout_constraintTop_toBottomOf="@+id/tv_placeName"
+            app:layout_constraintStart_toStartOf="parent"
+            android:layout_marginTop="4dp"
+            android:layout_marginStart="8dp"
+            android:textSize="12sp"
+            android:textColor="#444444" />
+
+        <TextView
+            android:id="@+id/tv_subCityName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="5dp"
+            app:layout_constraintTop_toTopOf="@id/tv_cityName"
+            app:layout_constraintStart_toEndOf="@+id/tv_cityName"
+            android:text="@{`| ` + postItem.subCityName}"
+            android:textSize="12sp"
+            android:textColor="#666666"/>
+
+        <ImageView
+            android:id="@+id/iv_bookmark"
+            android:layout_width="35dp"
+            android:layout_height="35dp"
+            android:background="@drawable/bg_round_alpha_black"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:padding="3dp"
+            app:tint="@color/white"
+            android:layout_marginTop="10dp"
+            android:layout_marginEnd="10dp"
+            android:src="@{postItem.isBookmarked ? @drawable/ic_rank : @drawable/ic_bookmark}" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

@@ -12,14 +12,14 @@ import javax.inject.Inject
  * Description:
  */
 interface PlaceRemoteDataSource {
-    suspend fun getPlace(placeName: String): PlaceResponse
+    suspend fun getPlace(myEmail: String, placeName: String): PlaceResponse
 }
 
 class PlaceRemoteDataSourceImpl @Inject constructor(
     private val apiService: ApiService
 ): PlaceRemoteDataSource {
 
-    override suspend fun getPlace(placeName: String) =
-        apiService.getPostsByPlaceName(placeName)
+    override suspend fun getPlace(myEmail: String, placeName: String) =
+        apiService.getPostsByPlaceName(myEmail, placeName)
 
 }

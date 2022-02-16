@@ -1,8 +1,7 @@
-package org.kjh.mytravel.ui.upload
+package org.kjh.mytravel.ui.profile.upload
 
 import android.os.Bundle
 import android.view.View
-import androidx.core.view.isVisible
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
@@ -46,7 +45,7 @@ class WritePostFragment
                         writePostImagesAdapter.submitList(it.selectedItems)
 
                     if (it.uploadSuccess && it.userItem != null) {
-                        profileViewModel.updateProfileData(it.userItem)
+                        profileViewModel.updateMyProfile(it.userItem)
                         navigateProfileWhenSuccessUpload()
                     }
                 }

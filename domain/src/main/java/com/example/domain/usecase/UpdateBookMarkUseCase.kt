@@ -14,6 +14,6 @@ class UpdateBookMarkUseCase @Inject constructor(
     private val userRepository: UserRepository,
     private val loginPreferenceUseCase: GetLoginPreferenceUseCase
 ){
-    suspend operator fun invoke(postId: Int, placeName: String) =
-        userRepository.updateBookmark(loginPreferenceUseCase().email, postId, placeName)
+    suspend operator fun invoke(postId: Int) =
+        userRepository.updateBookmark(loginPreferenceUseCase().email, postId)
 }

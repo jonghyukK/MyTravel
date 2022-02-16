@@ -15,5 +15,6 @@ data class Place(
     val subCityName: String,
     val x: String,
     val y: String,
-    val posts : List<Post>
+    val isBookmarked: Boolean = false,
+    val posts : List<Post> = listOf()
 )

@@ -1,10 +1,7 @@
-package org.kjh.mytravel.ui.profile
+package org.kjh.mytravel.ui.profile.settings
 
 import android.os.Bundle
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
-import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope

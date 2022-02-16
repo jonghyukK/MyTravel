@@ -1,11 +1,10 @@
-package org.kjh.mytravel.ui.profile
+package org.kjh.mytravel.ui.profile.login
 
 import android.graphics.Color
 import android.os.Bundle
 import android.view.View
 import android.view.ViewGroup
 import androidx.coordinatorlayout.widget.CoordinatorLayout
-import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
@@ -15,25 +14,18 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import org.kjh.mytravel.R
-import org.kjh.mytravel.databinding.BsFragmentSignUpBinding
+import org.kjh.mytravel.databinding.BsFragmentLoginBinding
 import org.kjh.mytravel.ui.base.BaseBottomSheetDialogFragment
-
-/**
- * MyTravel
- * Class: SignUpFragment
- * Created by mac on 2022/01/13.
- *
- * Description:
- */
+import org.kjh.mytravel.ui.profile.NotLoginFragment
 
 @AndroidEntryPoint
-class SignUpFragment
-    : BaseBottomSheetDialogFragment<BsFragmentSignUpBinding>(R.layout.bs_fragment_sign_up) {
+class LoginFragment
+    : BaseBottomSheetDialogFragment<BsFragmentLoginBinding>(R.layout.bs_fragment_login) {
 
-    private val viewModel: SignUpViewModel by viewModels()
+    private val viewModel: LoginViewModel by viewModels()
 
     companion object {
-        const val TAG = "SignUpFragment"
+        const val TAG = "LoginFragment"
     }
 
     override fun onStart() {
@@ -56,16 +48,13 @@ class SignUpFragment
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        binding.fragment = this
-        binding.viewModel = viewModel
+        binding.fragment        = this
+        binding.viewModel       = viewModel
 
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.uiState.collect { state ->
-                    binding.tilEmail.error          = state.emailError
-                    binding.tilEmail.isErrorEnabled = !state.emailError.isNullOrEmpty()
-
-                    if (state.isRegistered) {
+                    if (state.isLoggedIn) {
                         (parentFragment as NotLoginFragment)
                             .navigateHomeWhenSuccessLoginOrSignUp()
                     }
@@ -77,8 +66,7 @@ class SignUpFragment
     override fun onDestroyView() {
         super.onDestroyView()
 
-        binding.tieEmail.onFocusChangeListener    = null
-        binding.tiePw.onFocusChangeListener       = null
-        binding.tieNickName.onFocusChangeListener = null
+        binding.tieEmail.onFocusChangeListener = null
+        binding.tiePw.onFocusChangeListener    = null
     }
 }
