@@ -3,10 +3,7 @@ package com.example.data.api
 import com.example.data.model.LoginResponse
 import com.example.data.model.PlaceResponse
 import com.example.data.model.SignUpResponse
-import com.example.domain.entity.BookmarkResponse
-import com.example.domain.entity.UpdateProfile
-import com.example.domain.entity.UploadPostResponse
-import com.example.domain.entity.UserResponse
+import com.example.domain.entity.*
 import okhttp3.MultipartBody
 import retrofit2.http.*
 
@@ -60,12 +57,6 @@ interface ApiService {
         @Query("y") y: String
     ): UploadPostResponse
 
-    @GET("post")
-    suspend fun getPostsByPlaceName(
-        @Query("myEmail") myEmail: String,
-        @Query("placeName") placeName: String
-    ): PlaceResponse
-
     @PUT("user/follow")
     suspend fun requestFollowOrUnFollow(
         @Query("myEmail") myEmail: String,
@@ -77,4 +68,19 @@ interface ApiService {
         @Query("email") email: String,
         @Query("postId") postId: Int
     ): BookmarkResponse
+
+    @GET("place")
+    suspend fun getPlaceByPlaceName(
+        @Query("placeName") placeName: String
+    ): PlaceResponse
+
+    @GET("place/ranking")
+    suspend fun getPlaceRanking(): PlaceRankingResponse
+
+    @GET("post/recent")
+    suspend fun getRecentPosts(
+        @Query("myEmail") myEmail: String,
+        @Query("page") page: Int,
+        @Query("size") size: Int
+    ): RecentPostsResponse
 }

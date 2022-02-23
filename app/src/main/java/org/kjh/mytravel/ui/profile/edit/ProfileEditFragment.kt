@@ -19,7 +19,6 @@ import kotlinx.coroutines.launch
 import org.kjh.mytravel.R
 import org.kjh.mytravel.databinding.FragmentProfileEditBinding
 import org.kjh.mytravel.ui.base.BaseFragment
-import org.kjh.mytravel.ui.profile.ProfileEditFragmentArgs
 import org.kjh.mytravel.ui.profile.ProfileEditViewModel
 import org.kjh.mytravel.ui.profile.ProfileViewModel
 

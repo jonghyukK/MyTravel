@@ -2,6 +2,8 @@ package com.example.domain.repository
 
 import com.example.domain.entity.ApiResult
 import com.example.domain.entity.Place
+import com.example.domain.entity.PlaceRanking
+import com.example.domain.entity.PlaceRankingResponse
 import kotlinx.coroutines.flow.Flow
 
 /**
@@ -12,5 +14,7 @@ import kotlinx.coroutines.flow.Flow
  * Description:
  */
 interface PlaceRepository {
-    suspend fun getPlace(myEmail: String, placeName: String): Flow<ApiResult<Place>>
+    suspend fun getPlace(placeName: String): Flow<ApiResult<Place>>
+
+    suspend fun getPlaceRanking(): Flow<ApiResult<PlaceRankingResponse>>
 }

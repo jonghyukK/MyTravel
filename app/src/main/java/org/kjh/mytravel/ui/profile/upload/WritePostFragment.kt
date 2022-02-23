@@ -17,6 +17,7 @@ import kotlinx.coroutines.launch
 import org.kjh.mytravel.R
 import org.kjh.mytravel.databinding.FragmentWritePostBinding
 import org.kjh.mytravel.ui.base.BaseFragment
+import org.kjh.mytravel.ui.home.HomeViewModel
 import org.kjh.mytravel.ui.profile.ProfileViewModel
 
 @AndroidEntryPoint
@@ -25,6 +26,7 @@ class WritePostFragment
 
     private val uploadViewModel: UploadViewModel by navGraphViewModels(R.id.nav_nested_upload){ defaultViewModelProviderFactory }
     private val profileViewModel: ProfileViewModel by activityViewModels()
+    private val homeViewModel: HomeViewModel by activityViewModels()
 
     private val writePostImagesAdapter by lazy {
         WritePostImagesAdapter()
@@ -46,6 +48,7 @@ class WritePostFragment
 
                     if (it.uploadSuccess && it.userItem != null) {
                         profileViewModel.updateMyProfile(it.userItem)
+                        homeViewModel.updateRecentPosts()
                         navigateProfileWhenSuccessUpload()
                     }
                 }

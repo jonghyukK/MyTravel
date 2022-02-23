@@ -11,11 +11,8 @@ import javax.inject.Inject
  * Description:
  */
 class GetPlaceUseCase @Inject constructor(
-    private val placeRepository: PlaceRepository,
-    private val loginPreferenceUseCase: GetLoginPreferenceUseCase
+    private val placeRepository: PlaceRepository
 ) {
     suspend operator fun invoke(placeName: String) =
-        placeRepository.getPlace(
-            loginPreferenceUseCase().email,
-            placeName)
+        placeRepository.getPlace(placeName)
 }

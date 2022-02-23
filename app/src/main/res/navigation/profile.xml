@@ -72,7 +72,7 @@
         tools:layout="@layout/fragment_setting" />
     <fragment
         android:id="@+id/profileEditFragment"
-        android:name="org.kjh.mytravel.ui.profile.ProfileEditFragment"
+        android:name="org.kjh.mytravel.ui.profile.edit.ProfileEditFragment"
         android:label="프로필 편집"
         tools:layout="@layout/fragment_profile_edit" >
 

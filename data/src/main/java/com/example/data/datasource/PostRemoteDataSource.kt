@@ -1,6 +1,7 @@
 package com.example.data.datasource
 
 import com.example.data.api.ApiService
+import com.example.domain.entity.RecentPostsResponse
 import com.example.domain.entity.UploadPostResponse
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
@@ -26,6 +27,12 @@ interface PostRemoteDataSource {
         x : String,
         y : String
     ): UploadPostResponse
+
+    suspend fun getRecentPosts(
+        myEmail: String,
+        page: Int,
+        size: Int
+    ): RecentPostsResponse
 }
 
 class PostRemoteDataSourceImpl @Inject constructor(
@@ -60,4 +67,10 @@ class PostRemoteDataSourceImpl @Inject constructor(
             y = y
         )
     }
+
+    override suspend fun getRecentPosts(
+        myEmail: String,
+        page: Int,
+        size: Int
+    ) = apiService.getRecentPosts(myEmail, page, size)
 }

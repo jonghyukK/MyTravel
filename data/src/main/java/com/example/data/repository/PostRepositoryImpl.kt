@@ -1,8 +1,14 @@
 package com.example.data.repository
 
+import androidx.paging.Pager
+import androidx.paging.PagingConfig
+import androidx.paging.PagingData
 import com.example.data.datasource.PostRemoteDataSource
+import com.example.data.datasource.RecentPostsPagingSource
 import com.example.data.mapper.ResponseMapper
 import com.example.domain.entity.ApiResult
+import com.example.domain.entity.Post
+import com.example.domain.entity.RecentPostsResponse
 import com.example.domain.entity.UploadPostResponse
 import com.example.domain.repository.PostRepository
 import kotlinx.coroutines.flow.Flow
@@ -37,5 +43,17 @@ class PostRepositoryImpl @Inject constructor(
         emit(ResponseMapper.responseToUploadPost(ApiResult.Success(response)))
     }.catch {
         emit(ResponseMapper.responseToUploadPost(ApiResult.Error(it)))
+    }
+
+    override fun getRecentPostsPagingData(myEmail: String)
+    : Flow<PagingData<Post>> {
+        return Pager(
+            config = PagingConfig(
+                pageSize = 5,
+                initialLoadSize = 5,
+                enablePlaceholders = false
+            ),
+            pagingSourceFactory = { RecentPostsPagingSource(postRemoteDataSource, myEmail)}
+        ).flow
     }
 }

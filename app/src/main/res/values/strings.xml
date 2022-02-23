@@ -21,6 +21,7 @@
     <string name="save">저장</string>
     <string name="add_location">위치 추가</string>
     <string name="input_content_your_experience">해당 장소에서의 경험을 적어주세요.</string>
+    <string name="title_place_ranking_best_7">이번 주 가장 핫한 장소 BEST 7</string>
     <string name="desc_share_travel_to_friend_after_login_or_signup">로그인/회원가입 후 \n멋진 나의 여행지를 친구들에게 공유해 주세요!</string>
     <string name="desc_nothing_bookmark">북마크된 장소가 없습니다.</string>
     <string name="desc_do_bookmark_you_wish">관심있는 장소를 북마크하면 이 곳에서 모아볼 수 있습니다.</string>

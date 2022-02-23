@@ -8,13 +8,14 @@ package com.example.domain.entity
  * Description:
  */
 data class Place(
+    val placeId: String,
+    val cityName: String,
+    val subCityName: String,
     val placeName: String,
     val placeAddress: String,
     val placeRoadAddress: String,
-    val cityName: String,
-    val subCityName: String,
     val x: String,
     val y: String,
-    val isBookmarked: Boolean = false,
+    val placeImg: String,
     val posts : List<Post> = listOf()
 )

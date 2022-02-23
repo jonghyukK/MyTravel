@@ -113,4 +113,24 @@ object ResponseMapper {
             is ApiResult.Loading -> ApiResult.Loading()
         }
     }
+
+    fun responseToRecentPosts(
+        response: ApiResult<RecentPostsResponse>
+    ): ApiResult<RecentPostsResponse> {
+        return when (response) {
+            is ApiResult.Success -> ApiResult.Success(response.data)
+            is ApiResult.Error   -> ApiResult.Error(response.throwable)
+            is ApiResult.Loading -> ApiResult.Loading()
+        }
+    }
+
+    fun responseToPlaceRanking(
+        response: ApiResult<PlaceRankingResponse>
+    ): ApiResult<PlaceRankingResponse> {
+        return when (response) {
+            is ApiResult.Success -> ApiResult.Success(response.data)
+            is ApiResult.Error   -> ApiResult.Error(response.throwable)
+            is ApiResult.Loading -> ApiResult.Loading()
+        }
+    }
 }

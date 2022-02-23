@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="360dp"
+        android:background="#f7f7f7">
+
+        <TextView
+            android:id="@+id/tv_placeRankingTitle"
+            style="@style/style_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/title_place_ranking_best_7"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toTopOf="@+id/rv_PlaceRankingListConcat"/>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rv_PlaceRankingListConcat"
+            android:layout_width="0dp"
+            android:layout_height="284dp"
+            app:layout_constraintTop_toBottomOf="@+id/tv_placeRankingTitle"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            android:orientation="horizontal"
+            tools:listitem="@layout/vh_place_ranking_item"/>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>
