@@ -1,12 +1,11 @@
-package org.kjh.mytravel.ui.profile
+package org.kjh.mytravel.ui.profile.edit
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.domain.entity.ApiResult
-import com.example.domain.entity.User
-import com.example.domain.usecase.GetLoginPreferenceUseCase
-import com.example.domain.usecase.UpdateProfileUseCase
+import com.example.domain2.entity.ApiResult
+import com.example.domain2.usecase.GetLoginPreferenceUseCase
+import com.example.domain2.usecase.UpdateProfileUseCase
 import com.orhanobut.logger.Logger
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -14,6 +13,8 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import org.kjh.mytravel.model.User
+import org.kjh.mytravel.model.mapToPresenter
 import javax.inject.Inject
 
 /**
@@ -80,8 +81,8 @@ class ProfileEditViewModel @Inject constructor(
                     is ApiResult.Success -> _uiState.update {
                         it.copy(
                             isLoading = false,
-                            isSuccess = result.data.result,
-                            userItem  = result.data.data
+                            isSuccess = true,
+                            userItem  = result.data.mapToPresenter()
                         )
                     }
                     is ApiResult.Error -> {

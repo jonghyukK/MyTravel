@@ -4,8 +4,8 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.example.domain.entity.MapSearch
 import org.kjh.mytravel.databinding.VhBsSearchPlaceBinding
+import org.kjh.mytravel.model.MapQueryItem
 
 /**
  * MyTravel
@@ -15,9 +15,8 @@ import org.kjh.mytravel.databinding.VhBsSearchPlaceBinding
  * Description:
  */
 class MapSearchPlaceListAdapter(
-    private val onClickPlace: (MapSearch) -> Unit
-) : ListAdapter<MapSearch, MapSearchPlaceListAdapter.MapSearchPlaceViewHolder>(
-    MapSearch.DiffCallback) {
+    private val onClickPlace: (MapQueryItem) -> Unit
+) : ListAdapter<MapQueryItem, MapSearchPlaceListAdapter.MapSearchPlaceViewHolder>(MapQueryItem.DiffCallback) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) =
         MapSearchPlaceViewHolder(
@@ -32,11 +31,11 @@ class MapSearchPlaceListAdapter(
 
     class MapSearchPlaceViewHolder(
         val binding: VhBsSearchPlaceBinding,
-        val onClickPlace: (MapSearch) -> Unit
+        val onClickPlace: (MapQueryItem) -> Unit
     ): RecyclerView.ViewHolder(binding.root) {
 
-        fun bind(item: MapSearch) {
-            binding.mapSearch = item
+        fun bind(item: MapQueryItem) {
+            binding.mapQueryItem = item
 
             itemView.setOnClickListener {
                 onClickPlace(item)

@@ -1,6 +1,6 @@
 package com.example.data.api
 
-import com.example.data.model.MapSearchResponse
+import com.example.data.model.api.MapQueryApiModel
 import retrofit2.http.GET
 import retrofit2.http.Header
 import retrofit2.http.Query
@@ -18,5 +18,5 @@ interface KakaoApiService {
     suspend fun getPlaceInfo(
         @Header("Authorization") key  : String,
         @Query("query"         ) query: String
-    ): MapSearchResponse
+    ): MapQueryApiModel
 }

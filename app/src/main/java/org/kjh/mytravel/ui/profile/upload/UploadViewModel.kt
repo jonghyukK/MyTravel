@@ -3,15 +3,19 @@ package org.kjh.mytravel.ui.profile.upload
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.domain.entity.*
-import com.example.domain.usecase.GetLoginPreferenceUseCase
-import com.example.domain.usecase.UploadPostUseCase
+import com.example.domain2.entity.ApiResult
+import com.example.domain2.usecase.GetLoginPreferenceUseCase
+import com.example.domain2.usecase.UploadPostUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import org.kjh.mytravel.model.MapQueryItem
+import org.kjh.mytravel.model.MediaStoreImage
+import org.kjh.mytravel.model.User
+import org.kjh.mytravel.model.mapToPresenter
 import javax.inject.Inject
 
 /**
@@ -24,7 +28,7 @@ import javax.inject.Inject
 
 data class UploadUiState(
     val selectedItems: List<MediaStoreImage> = listOf(),
-    val placeItem    : MapSearch? = null,
+    val placeItem    : MapQueryItem? = null,
     val content      : String? = "",
     val isLoading    : Boolean = false,
     val uploadSuccess: Boolean = false,
@@ -49,7 +53,7 @@ class UploadViewModel @Inject constructor(
         }
     }
 
-    fun updatePlaceItem(item: MapSearch) {
+    fun updatePlaceItem(item: MapQueryItem) {
         viewModelScope.launch {
             _uiState.update {
                 it.copy(placeItem = item)
@@ -81,8 +85,8 @@ class UploadViewModel @Inject constructor(
                         is ApiResult.Success -> _uiState.update {
                             it.copy(
                                 isLoading = false,
-                                uploadSuccess = result.data.result,
-                                userItem = result.data.data
+                                uploadSuccess = true,
+                                userItem = result.data.mapToPresenter()
                             )
                         }
 

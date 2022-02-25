@@ -2,8 +2,8 @@ package org.kjh.mytravel.ui.profile.signup
 
 import android.util.Patterns
 import androidx.lifecycle.*
-import com.example.domain.entity.ApiResult
-import com.example.domain.usecase.MakeSignUpRequestUseCase
+import com.example.domain2.entity.ApiResult
+import com.example.domain2.usecase.MakeSignUpRequestUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
@@ -11,6 +11,7 @@ import org.kjh.mytravel.InputValidator
 import org.kjh.mytravel.InputValidator.isValidateEmail
 import org.kjh.mytravel.InputValidator.isValidateNickName
 import org.kjh.mytravel.InputValidator.isValidatePw
+import org.kjh.mytravel.model.mapToPresenter
 import javax.inject.Inject
 
 
@@ -61,11 +62,13 @@ class SignUpViewModel @Inject constructor(
                     is ApiResult.Loading -> _uiState.value = SignUpUiState(isLoading = true)
 
                     is ApiResult.Success -> {
+                        val signUpData = result.data.mapToPresenter()
+
                         _uiState.value =
                             SignUpUiState(
                                 isLoading = false,
-                                isRegistered = result.data.isRegistered,
-                                emailError   = result.data.errorMsg
+                                isRegistered = signUpData.isRegistered,
+                                emailError   = signUpData.errorMsg
                             )
                     }
                     is ApiResult.Error -> _uiState.value = SignUpUiState(

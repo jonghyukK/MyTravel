@@ -6,8 +6,8 @@ import android.view.ViewGroup
 import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.PagerSnapHelper
 import androidx.recyclerview.widget.RecyclerView
-import com.example.domain.entity.Post
 import org.kjh.mytravel.databinding.VhPlaceRecentItemBinding
+import org.kjh.mytravel.model.Post
 import org.kjh.mytravel.ui.RectImageListAdapter
 
 /**
@@ -19,7 +19,8 @@ import org.kjh.mytravel.ui.RectImageListAdapter
  */
 class RecentPlaceListAdapter(
     private val onClickPost: (Post) -> Unit
-): PagingDataAdapter<Post, RecentPlaceListAdapter.PlaceItemViewHolder>(Post.DiffCallback) {
+): PagingDataAdapter<Post, RecentPlaceListAdapter.PlaceItemViewHolder>(
+    Post.DiffCallback) {
     private val state = mutableMapOf<Int, Parcelable?>()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) =

@@ -2,8 +2,8 @@ package com.example.data.repository
 
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.*
-import com.example.domain.entity.LoginInfoPreferences
-import com.example.domain.repository.LoginPreferencesRepository
+import com.example.domain2.entity.LoginInfoPreferences
+import com.example.domain2.repository.LoginPreferencesRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.first

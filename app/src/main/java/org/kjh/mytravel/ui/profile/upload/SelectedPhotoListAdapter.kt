@@ -4,8 +4,8 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.example.domain.entity.MediaStoreImage
 import org.kjh.mytravel.databinding.VhRectImageWithCloseBtnBinding
+import org.kjh.mytravel.model.MediaStoreImage
 
 /**
  * MyTravel

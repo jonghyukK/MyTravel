@@ -1,10 +1,10 @@
 package com.example.data.repository
 
-import com.example.data.datasource.SignUpDataSource
+import com.example.data.datasource.SignUpRemoteDataSource
 import com.example.data.mapper.ResponseMapper
-import com.example.domain.entity.ApiResult
-import com.example.domain.entity.SignUp
-import com.example.domain.repository.SignUpRepository
+import com.example.domain2.entity.ApiResult
+import com.example.domain2.entity.SignUpEntity
+import com.example.domain2.repository.SignUpRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.flow
@@ -18,14 +18,14 @@ import javax.inject.Inject
  * Description:
  */
 class SignUpRepositoryImpl @Inject constructor(
-    private val dataSource: SignUpDataSource
+    private val dataSource: SignUpRemoteDataSource
 ): SignUpRepository {
 
     override suspend fun makeRequestSignUp(
         email: String,
         pw   : String,
         nick : String
-    ): Flow<ApiResult<SignUp>> = flow {
+    ): Flow<ApiResult<SignUpEntity>> = flow {
         emit(ApiResult.Loading())
 
         val response = dataSource.makeSignUpRequest(email, pw, nick)

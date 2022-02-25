@@ -1,18 +1,14 @@
 package com.example.data.repository
 
-import android.util.Log
 import com.example.data.datasource.UserRemoteDataSource
 import com.example.data.mapper.ResponseMapper
-import com.example.domain.entity.*
-import com.example.domain.repository.LoginPreferencesRepository
-import com.example.domain.repository.UserRepository
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.channels.Channel
-import kotlinx.coroutines.channels.awaitClose
-import kotlinx.coroutines.flow.*
-import kotlinx.coroutines.withContext
+import com.example.domain2.entity.ApiResult
+import com.example.domain2.entity.BookmarkEntity
+import com.example.domain2.entity.UserEntity
+import com.example.domain2.repository.UserRepository
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.flow
 import javax.inject.Inject
 
 /**
@@ -29,25 +25,25 @@ class UserRepositoryImpl @Inject constructor(
 
     override suspend fun getMyProfile(
         myEmail: String
-    ): Flow<ApiResult<UserResponse>> = flow {
+    ): Flow<ApiResult<UserEntity>> = flow {
         emit(ApiResult.Loading())
 
         val response = userRemoteDataSource.getMyProfile(myEmail)
-        emit(ResponseMapper.responseToUser(ApiResult.Success(response)))
+        emit(ResponseMapper.responseToUserEntity(ApiResult.Success(response)))
     }.catch {
-        emit(ResponseMapper.responseToUser(ApiResult.Error(it)))
+        emit(ResponseMapper.responseToUserEntity(ApiResult.Error(it)))
     }
 
     override suspend fun getUser(
         myEmail     : String,
         targetEmail : String?
-    ): Flow<ApiResult<UserResponse>> = flow {
+    ): Flow<ApiResult<UserEntity>> = flow {
         emit(ApiResult.Loading())
 
         val response = userRemoteDataSource.getUser(myEmail, targetEmail)
-        emit(ResponseMapper.responseToUser(ApiResult.Success(response)))
+        emit(ResponseMapper.responseToUserEntity(ApiResult.Success(response)))
     }.catch {
-        emit(ResponseMapper.responseToUser(ApiResult.Error(it)))
+        emit(ResponseMapper.responseToUserEntity(ApiResult.Error(it)))
     }
 
     override suspend fun updateUserProfile(
@@ -55,31 +51,32 @@ class UserRepositoryImpl @Inject constructor(
         email       : String,
         nickName    : String,
         introduce   : String?
-    ): Flow<ApiResult<UpdateProfile>> = flow {
+    ): Flow<ApiResult<UserEntity>> = flow {
         emit(ApiResult.Loading())
         
         val response = userRemoteDataSource.makeRequestProfileUpdate(profileUrl, email, nickName, introduce)
-        emit(ResponseMapper.responseToUpdateProfile(ApiResult.Success(response)))
+
+        emit(ResponseMapper.responseToUserEntity(ApiResult.Success(response)))
     }.catch {
-        emit(ResponseMapper.responseToUpdateProfile(ApiResult.Error(it)))
+        emit(ResponseMapper.responseToUserEntity(ApiResult.Error(it)))
     }
 
     override suspend fun requestFollowOrUnFollow(
         myEmail: String,
         targetEmail: String
-    ): Flow<ApiResult<UserResponse>> = flow {
+    ): Flow<ApiResult<UserEntity>> = flow {
         emit(ApiResult.Loading())
 
         val response = userRemoteDataSource.requestFollowOrUnFollow(myEmail, targetEmail)
-        emit(ResponseMapper.responseToUser(ApiResult.Success(response)))
+        emit(ResponseMapper.responseToUserEntity(ApiResult.Success(response)))
     }.catch {
-        emit(ResponseMapper.responseToUser(ApiResult.Error(it)))
+        emit(ResponseMapper.responseToUserEntity(ApiResult.Error(it)))
     }
 
     override suspend fun updateBookmark(
         email: String,
         postId: Int
-    ): Flow<ApiResult<BookmarkResponse>> = flow {
+    ): Flow<ApiResult<List<BookmarkEntity>>> = flow {
         emit(ApiResult.Loading())
 
         val response = userRemoteDataSource.updateBookmark(email, postId)

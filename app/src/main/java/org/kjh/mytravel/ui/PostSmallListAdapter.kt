@@ -4,10 +4,9 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.example.domain.entity.Post
-import com.orhanobut.logger.Logger
 import org.kjh.mytravel.databinding.VhBookmarkPostItemBinding
 import org.kjh.mytravel.databinding.VhProfilePostItemBinding
+import org.kjh.mytravel.model.Post
 
 /**
  * MyTravel
@@ -17,34 +16,19 @@ import org.kjh.mytravel.databinding.VhProfilePostItemBinding
  * Description:
  */
 class PostSmallListAdapter(
-    private val holderType: Int = 0,
     private val onClickItem: (Post) -> Unit,
     private val onClickBookmark: (Post) -> Unit
-): ListAdapter<Post, RecyclerView.ViewHolder>(Post.DiffCallback) {
+): ListAdapter<Post, PostItemSmallViewHolder>(Post.DiffCallback) {
 
-    override fun getItemViewType(position: Int): Int {
-        return holderType
-    }
-
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) = when (viewType) {
-        0 -> PostItemSmallViewHolder(
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) =
+       PostItemSmallViewHolder(
             VhProfilePostItemBinding.inflate(
                 LayoutInflater.from(parent.context), parent, false
             ), onClickItem, onClickBookmark
-        )
-        else -> BookmarkItemSmallViewHolder(
-            VhBookmarkPostItemBinding.inflate(
-                LayoutInflater.from(parent.context), parent, false
-            ), onClickItem, onClickBookmark
-        )
-    }
+       )
 
-
-    override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
-        when (holder.itemViewType){
-            0 -> (holder as PostItemSmallViewHolder).bind(getItem(position))
-            1 -> (holder as BookmarkItemSmallViewHolder).bind(getItem(position))
-        }
+    override fun onBindViewHolder(holder: PostItemSmallViewHolder, position: Int) {
+        holder.bind(getItem(position))
     }
 }
 
@@ -67,23 +51,5 @@ class PostItemSmallViewHolder(
     }
 }
 
-class BookmarkItemSmallViewHolder(
-    val binding: VhBookmarkPostItemBinding,
-    private val onClickItem: (Post) -> Unit,
-    private val onClickBookmark: (Post) -> Unit
-): RecyclerView.ViewHolder(binding.root) {
-
-    fun bind(item: Post) {
-        binding.postItem = item
-
-        itemView.setOnClickListener {
-            onClickItem(item)
-        }
-
-        binding.ivBookmark.setOnClickListener {
-            onClickBookmark(item)
-        }
-    }
-}
 
 

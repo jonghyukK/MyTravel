@@ -7,8 +7,8 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.PagerSnapHelper
 import androidx.recyclerview.widget.RecyclerView
-import com.example.domain.entity.Post
 import org.kjh.mytravel.databinding.VhPlaceDayLogItemBinding
+import org.kjh.mytravel.model.Post
 import org.kjh.mytravel.ui.RectImageListAdapter
 
 /**

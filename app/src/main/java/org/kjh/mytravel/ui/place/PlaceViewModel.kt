@@ -3,11 +3,8 @@ package org.kjh.mytravel.ui.place
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
-import com.example.domain.entity.ApiResult
-import com.example.domain.entity.Place
-import com.example.domain.entity.Post
-import com.example.domain.usecase.GetPlaceUseCase
-import com.example.domain.usecase.UpdateBookMarkUseCase
+import com.example.domain2.entity.ApiResult
+import com.example.domain2.usecase.GetPlaceUseCase
 import com.orhanobut.logger.Logger
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
@@ -17,6 +14,8 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import org.kjh.mytravel.model.Place
+import org.kjh.mytravel.model.mapToPresenter
 
 /**
  * MyTravel
@@ -63,7 +62,7 @@ class PlaceViewModel @AssistedInject constructor(
                         is ApiResult.Loading -> {}
                         is ApiResult.Success -> _uiState.update {
                             it.copy(
-                                placeItem = result.data
+                                placeItem = result.data.mapToPresenter()
                             )
                         }
                         is ApiResult.Error -> {

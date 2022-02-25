@@ -6,7 +6,7 @@
     <data>
         <variable
             name="placeRanking"
-            type="com.example.domain.entity.PlaceRanking" />
+            type="org.kjh.mytravel.model.PlaceWithRanking" />
     </data>
 
     <androidx.cardview.widget.CardView

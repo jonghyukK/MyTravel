@@ -1,10 +1,8 @@
 package com.example.data.datasource
 
 import com.example.data.api.ApiService
-import com.example.domain.entity.BookmarkResponse
-import com.example.domain.entity.UpdateProfile
-import com.example.domain.entity.UserResponse
-import kotlinx.coroutines.flow.*
+import com.example.data.model.api.BookmarksApiModel
+import com.example.data.model.api.UserApiModel
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
 import okhttp3.RequestBody.Companion.asRequestBody
@@ -19,26 +17,26 @@ import javax.inject.Inject
  * Description:
  */
 interface UserRemoteDataSource {
-    suspend fun getMyProfile(myEmail: String): UserResponse
+    suspend fun getMyProfile(myEmail: String): UserApiModel
 
-    suspend fun getUser(myEmail: String, targetEmail: String? = null): UserResponse
+    suspend fun getUser(myEmail: String, targetEmail: String? = null): UserApiModel
 
     suspend fun makeRequestProfileUpdate(
         profileUrl: String?,
         email: String,
         nickName: String,
         introduce: String?
-    ): UpdateProfile
+    ): UserApiModel
 
     suspend fun requestFollowOrUnFollow(
         myEmail: String,
         targetEmail: String
-    ): UserResponse
+    ): UserApiModel
 
     suspend fun updateBookmark(
         email: String,
         postId: Int
-    ): BookmarkResponse
+    ): BookmarksApiModel
 }
 
 class UserRemoteDataSourceImpl @Inject constructor(
@@ -55,7 +53,7 @@ class UserRemoteDataSourceImpl @Inject constructor(
         email: String,
         nickName: String,
         introduce: String?
-    ): UpdateProfile {
+    ): UserApiModel {
         var filePath = profileUrl
 
         if (profileUrl != null && profileUrl.startsWith("/data")) {

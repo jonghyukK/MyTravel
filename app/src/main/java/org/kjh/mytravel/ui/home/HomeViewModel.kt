@@ -5,16 +5,17 @@ import androidx.lifecycle.viewModelScope
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
 import androidx.paging.map
-import com.example.domain.entity.ApiResult
-import com.example.domain.entity.PlaceRanking
-import com.example.domain.entity.Post
-import com.example.domain.usecase.GetLoginPreferenceUseCase
-import com.example.domain.usecase.GetPlaceRankingUseCase
-import com.example.domain.usecase.GetRecentPostsUseCase
+import com.example.domain2.entity.ApiResult
+import com.example.domain2.usecase.GetLoginPreferenceUseCase
+import com.example.domain2.usecase.GetPlaceRankingUseCase
+import com.example.domain2.usecase.GetRecentPostsUseCase
 import com.orhanobut.logger.Logger
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
+import org.kjh.mytravel.model.PlaceWithRanking
+import org.kjh.mytravel.model.Post
+import org.kjh.mytravel.model.mapToPresenter
 import javax.inject.Inject
 
 /**
@@ -26,7 +27,7 @@ import javax.inject.Inject
  */
 
 data class PlaceRankingUiState(
-    val placeRankingItems: List<PlaceRanking> = listOf()
+    val placeRankingItems: List<PlaceWithRanking> = listOf()
 )
 
 data class RecentPostsUiState(
@@ -49,6 +50,9 @@ class HomeViewModel @Inject constructor(
     init {
         viewModelScope.launch {
             getRecentPostsUseCase(loginPreferenceUseCase().email)
+                .map { pagingData ->
+                    pagingData.map { it.mapToPresenter() }
+                }
                 .cachedIn(viewModelScope)
                 .collectLatest { result ->
                     _recentPostsUiState.update {
@@ -62,9 +66,9 @@ class HomeViewModel @Inject constructor(
                 .collect { result ->
                     when (result) {
                         is ApiResult.Success -> {
-                            _placeRankingUiState.update {
-                                it.copy(
-                                    placeRankingItems = result.data.data
+                            _placeRankingUiState.update { currentUiState ->
+                                currentUiState.copy(
+                                    placeRankingItems = result.data.map { it.mapToPresenter() }
                                 )
                             }
                         }
@@ -76,6 +80,9 @@ class HomeViewModel @Inject constructor(
     fun updateRecentPosts() {
         viewModelScope.launch {
             getRecentPostsUseCase(loginPreferenceUseCase().email)
+                .map { pagingData ->
+                    pagingData.map { it.mapToPresenter() }
+                }
                 .cachedIn(viewModelScope)
                 .collectLatest { result ->
                     if (_recentPostsUiState.value.recentPlaceItems != result) {

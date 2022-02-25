@@ -1,14 +1,15 @@
 package org.kjh.mytravel.ui.profile.login
 
 import androidx.lifecycle.*
-import com.example.domain.entity.ApiResult
-import com.example.domain.usecase.MakeLoginRequestUseCase
+import com.example.domain2.entity.ApiResult
+import com.example.domain2.usecase.MakeLoginRequestUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import org.kjh.mytravel.InputValidator
 import org.kjh.mytravel.InputValidator.isValidateEmail
 import org.kjh.mytravel.InputValidator.isValidatePw
+import org.kjh.mytravel.model.mapToPresenter
 import javax.inject.Inject
 
 /**
@@ -46,16 +47,17 @@ class LoginViewModel @Inject constructor(
                 email = email.value.toString(),
                 pw    = pw.value.toString()
             ).collect { result ->
-
                 when (result) {
                     is ApiResult.Loading -> _uiState.value =
                         LoginUiState(isLoading = true)
 
                     is ApiResult.Success -> {
+                        val loginData = result.data.mapToPresenter()
+
                         _uiState.value = LoginUiState(
                             isLoading  = false,
-                            isLoggedIn = result.data.isLoggedIn,
-                            loginError = result.data.errorMsg
+                            isLoggedIn = loginData.isLoggedIn,
+                            loginError = loginData.errorMsg
                         )
                     }
                     is ApiResult.Error ->

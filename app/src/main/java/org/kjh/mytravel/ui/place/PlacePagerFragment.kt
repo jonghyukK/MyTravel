@@ -39,6 +39,8 @@ class PlacePagerFragment : BaseFragment<FragmentPlacePagerBinding>(R.layout.frag
         super.onViewCreated(view, savedInstanceState)
         binding.viewModel = viewModel
 
+//        postponeEnterTransition()
+
         initToolbarWithAppBarLayout()
         initTabLayoutWithPager()
 
@@ -48,6 +50,7 @@ class PlacePagerFragment : BaseFragment<FragmentPlacePagerBinding>(R.layout.frag
                     uiState.userItem?.let { user ->
                         val hasBookmark = user.bookMarks.find { it.placeName == args.placeName } != null
                        updateBookmarkIcon(hasBookmark)
+//                        startPostponedEnterTransition()
                     }
                 }
             }
@@ -76,7 +79,7 @@ class PlacePagerFragment : BaseFragment<FragmentPlacePagerBinding>(R.layout.frag
                     R.id.bookmark -> {
                         viewModel?.let {
                             it.uiState.value.placeItem?.let { placeItem ->
-                                profileViewModel.updateMyBookmark(placeItem.posts[0])
+                                profileViewModel.updateMyBookmark(placeItem.posts[0].postId)
                             }
                         }
                         true

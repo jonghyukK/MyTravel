@@ -1,8 +1,9 @@
 package com.example.data.datasource
 
 import com.example.data.api.ApiService
-import com.example.data.model.PlaceResponse
-import com.example.domain.entity.PlaceRankingResponse
+import com.example.data.model.api.PlaceApiModel
+import com.example.data.model.api.PlaceRankingApiModel
+import com.example.data.model.api.PlacesApiModel
 import javax.inject.Inject
 
 /**
@@ -13,9 +14,9 @@ import javax.inject.Inject
  * Description:
  */
 interface PlaceRemoteDataSource {
-    suspend fun getPlace(placeName: String): PlaceResponse
+    suspend fun getPlace(placeName: String): PlaceApiModel
 
-    suspend fun getPlaceRanking(): PlaceRankingResponse
+    suspend fun getPlaceRanking(): PlaceRankingApiModel
 }
 
 class PlaceRemoteDataSourceImpl @Inject constructor(

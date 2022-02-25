@@ -4,7 +4,7 @@ import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import com.example.data.datasource.*
 import com.example.data.repository.*
-import com.example.domain.repository.*
+import com.example.domain2.repository.*
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -26,7 +26,7 @@ object RepositoryModule {
     @Singleton
     @Provides
     fun provideSignUpRepository(
-        dataSource: SignUpDataSource
+        dataSource: SignUpRemoteDataSource
     ): SignUpRepository {
         return SignUpRepositoryImpl(dataSource)
     }
@@ -34,7 +34,7 @@ object RepositoryModule {
     @Singleton
     @Provides
     fun provideLoginRepository(
-        dataSource: LoginDataSource
+        dataSource: LoginRemoteDataSource
     ): LoginRepository {
         return LoginRepositoryImpl(dataSource)
     }

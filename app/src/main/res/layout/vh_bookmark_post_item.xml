@@ -4,8 +4,8 @@
 
     <data>
         <variable
-            name="postItem"
-            type="com.example.domain.entity.Post" />
+            name="bookmarkItem"
+            type="org.kjh.mytravel.model.Bookmark" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -17,7 +17,7 @@
             android:layout_width="0dp"
             android:layout_height="190dp"
             android:scaleType="centerCrop"
-            app:imgUrl="@{postItem.imageUrl[0]}"
+            app:imgUrl="@{bookmarkItem.imageUrl[0]}"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent" />
@@ -28,7 +28,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
-            android:text="@{postItem.placeName}"
+            android:text="@{bookmarkItem.placeName}"
             android:textStyle="bold"
             app:layout_constraintTop_toBottomOf="@+id/iv_postImg"
             app:layout_constraintStart_toStartOf="parent"
@@ -39,7 +39,7 @@
             android:id="@+id/tv_cityName"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@{postItem.cityName}"
+            android:text="@{bookmarkItem.cityName}"
             app:layout_constraintTop_toBottomOf="@+id/tv_placeName"
             app:layout_constraintStart_toStartOf="parent"
             android:layout_marginTop="4dp"
@@ -54,7 +54,7 @@
             android:layout_marginStart="5dp"
             app:layout_constraintTop_toTopOf="@id/tv_cityName"
             app:layout_constraintStart_toEndOf="@+id/tv_cityName"
-            android:text="@{`| ` + postItem.subCityName}"
+            android:text="@{`| ` + bookmarkItem.subCityName}"
             android:textSize="12sp"
             android:textColor="#666666"/>
 
@@ -69,7 +69,7 @@
             app:tint="@color/white"
             android:layout_marginTop="10dp"
             android:layout_marginEnd="10dp"
-            android:src="@{postItem.isBookmarked ? @drawable/ic_rank : @drawable/ic_bookmark}" />
+            android:src="@{bookmarkItem.isBookmarked ? @drawable/ic_rank : @drawable/ic_bookmark}" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

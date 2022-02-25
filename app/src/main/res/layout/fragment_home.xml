@@ -16,141 +16,16 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent" />
 
-        <androidx.coordinatorlayout.widget.CoordinatorLayout
-            android:id="@+id/cl_homeCoordinatorLayout"
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rv_homeRecyclerView"
             android:layout_width="0dp"
             android:layout_height="0dp"
             app:layout_constraintTop_toBottomOf="@+id/tb_homeToolbar"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
-            tools:context=".ui.home.HomeFragment">
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
 
-            <com.google.android.material.appbar.AppBarLayout
-                android:id="@+id/abl_homeAppBar"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@color/white"
-                android:fitsSystemWindows="true">
-
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/rv_homeBanners"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:clipToPadding="false"
-                    app:layout_scrollFlags="scroll|enterAlwaysCollapsed"
-                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-                    android:orientation="horizontal"
-                    tools:listitem="@layout/item_home_banner" />
-
-                <TextView
-                    android:id="@+id/tv_titleCityCategories"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="지역별 여행지"
-                    style="@style/style_title"
-                    app:layout_scrollFlags="scroll|enterAlwaysCollapsed"/>
-
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/rv_cityCategoryList"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-                    android:orientation="horizontal"
-                    tools:listitem="@layout/item_city_category"/>
-
-            </com.google.android.material.appbar.AppBarLayout>
-
-            <androidx.core.widget.NestedScrollView
-                android:id="@+id/nsv_1"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                app:layout_behavior="@string/appbar_scrolling_view_behavior">
-
-                <androidx.constraintlayout.widget.ConstraintLayout
-                    android:id="@+id/cl_home1"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent">
-
-                    <androidx.constraintlayout.widget.ConstraintLayout
-                        android:id="@+id/cl_popularRankingContainer"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:background="#f7f7f7"
-                        app:layout_constraintTop_toTopOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toStartOf="parent">
-
-                        <TextView
-                            android:id="@+id/tv_popularRanking"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            app:layout_constraintTop_toTopOf="parent"
-                            app:layout_constraintStart_toStartOf="parent"
-                            style="@style/style_title"
-                            android:text="이번 주 가장 핫한 장소 BEST 7"/>
-
-                        <androidx.recyclerview.widget.RecyclerView
-                            android:id="@+id/rv_popularRankingList"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            app:layout_constraintTop_toBottomOf="@+id/tv_popularRanking"
-                            android:nestedScrollingEnabled="false"
-                            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-                            android:orientation="horizontal"
-                            tools:listitem="@layout/item_popular_place"/>
-                    </androidx.constraintlayout.widget.ConstraintLayout>
-
-                    <androidx.recyclerview.widget.RecyclerView
-                        android:id="@+id/rv_eventList"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:nestedScrollingEnabled="false"
-                        app:layout_constraintTop_toBottomOf="@+id/cl_popularRankingContainer"
-                        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-                        android:orientation="vertical"
-                        tools:listitem="@layout/item_event_list"/>
-
-                    <View
-                        android:id="@+id/divider"
-                        android:layout_width="match_parent"
-                        android:layout_height="15dp"
-                        android:background="#f7f7f7"
-                        app:layout_constraintTop_toBottomOf="@+id/rv_eventList"/>
-
-                    <androidx.constraintlayout.widget.ConstraintLayout
-                        android:id="@+id/cl_recentPlaceContainer"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        app:layout_constraintTop_toBottomOf="@+id/divider"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent">
-
-                        <TextView
-                            android:id="@+id/tv_recentPlace"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:background="@color/white"
-                            app:layout_constraintTop_toTopOf="parent"
-                            app:layout_constraintStart_toStartOf="parent"
-                            style="@style/style_title"
-                            android:text="트레블러들이 최근 방문한 여행지들"/>
-
-                        <androidx.recyclerview.widget.RecyclerView
-                            android:id="@+id/rv_recentPlaceList"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:nestedScrollingEnabled="false"
-                            app:layout_constraintTop_toBottomOf="@+id/tv_recentPlace"
-                            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-                            android:orientation="vertical" />
-
-                    </androidx.constraintlayout.widget.ConstraintLayout>
-
-                </androidx.constraintlayout.widget.ConstraintLayout>
-            </androidx.core.widget.NestedScrollView>
-
-        </androidx.coordinatorlayout.widget.CoordinatorLayout>
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 </layout>

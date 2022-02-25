@@ -25,7 +25,7 @@ object DataSourceModule {
     @Provides
     fun provideSignUpDataSource(
         apiService: ApiService
-    ): SignUpDataSource {
+    ): SignUpRemoteDataSource {
         return SignUpDataSourceImpl(apiService)
     }
 
@@ -33,7 +33,7 @@ object DataSourceModule {
     @Provides
     fun provideLoginDataSource(
         apiService: ApiService
-    ): LoginDataSource {
+    ): LoginRemoteDataSource {
         return LoginDataSourceImpl(apiService)
     }
 

@@ -12,13 +12,13 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.navGraphViewModels
 import androidx.navigation.ui.setupWithNavController
 import androidx.recyclerview.selection.SelectionTracker
-import com.example.domain.entity.MediaStoreImage
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import org.kjh.mytravel.R
 import org.kjh.mytravel.UploadGridLayoutItemDecor
 import org.kjh.mytravel.databinding.FragmentSelectPhotoBinding
+import org.kjh.mytravel.model.MediaStoreImage
 import org.kjh.mytravel.ui.base.BaseFragment
 
 @AndroidEntryPoint

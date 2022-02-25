@@ -1,9 +1,7 @@
 package com.example.data.api
 
-import com.example.data.model.LoginResponse
-import com.example.data.model.PlaceResponse
-import com.example.data.model.SignUpResponse
-import com.example.domain.entity.*
+import com.example.data.model.api.*
+import com.example.domain2.entity.*
 import okhttp3.MultipartBody
 import retrofit2.http.*
 
@@ -21,19 +19,19 @@ interface ApiService {
         @Query("email"   ) email    : String,
         @Query("pw"      ) pw       : String,
         @Query("nickName") nickName : String
-    ): SignUpResponse
+    ): SignUpApiModel
 
     @GET("user/login")
     suspend fun login(
         @Query("email") email    : String,
         @Query("pw"   ) pw       : String
-    ): LoginResponse
+    ): LoginApiModel
 
     @GET("user")
     suspend fun getUser(
         @Query("myEmail"    ) myEmail    : String,
         @Query("targetEmail") targetEmail: String? = null
-    ): UserResponse
+    ): UserApiModel
 
     @Multipart
     @PUT("user/update")
@@ -42,7 +40,7 @@ interface ApiService {
         @Query("email"      ) email     : String,
         @Query("nickName"   ) nickName  : String,
         @Query("introduce"  ) introduce : String?
-    ): UpdateProfile
+    ): UserApiModel
 
     @Multipart
     @POST("user/upload")
@@ -55,32 +53,33 @@ interface ApiService {
         @Query("placeRoadAddress") placeRoadAddress: String,
         @Query("x") x: String,
         @Query("y") y: String
-    ): UploadPostResponse
+    ): UserApiModel
 
     @PUT("user/follow")
     suspend fun requestFollowOrUnFollow(
         @Query("myEmail") myEmail: String,
         @Query("targetEmail") targetEmail: String
-    ): UserResponse
-
-    @PUT("user/bookmark")
-    suspend fun updateBookmark(
-        @Query("email") email: String,
-        @Query("postId") postId: Int
-    ): BookmarkResponse
-
-    @GET("place")
-    suspend fun getPlaceByPlaceName(
-        @Query("placeName") placeName: String
-    ): PlaceResponse
-
-    @GET("place/ranking")
-    suspend fun getPlaceRanking(): PlaceRankingResponse
+    ): UserApiModel
 
     @GET("post/recent")
     suspend fun getRecentPosts(
         @Query("myEmail") myEmail: String,
         @Query("page") page: Int,
         @Query("size") size: Int
-    ): RecentPostsResponse
+    ): PostsApiModel
+
+    @GET("place")
+    suspend fun getPlaceByPlaceName(
+        @Query("placeName") placeName: String
+    ): PlaceApiModel
+
+    @GET("place/ranking")
+    suspend fun getPlaceRanking(): PlaceRankingApiModel
+
+
+    @PUT("user/bookmark")
+    suspend fun updateBookmark(
+        @Query("email") email: String,
+        @Query("postId") postId: Int
+    ): BookmarksApiModel
 }

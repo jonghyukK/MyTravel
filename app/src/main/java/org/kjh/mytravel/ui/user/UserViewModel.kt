@@ -3,24 +3,23 @@ package org.kjh.mytravel.ui.user
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
-import com.example.domain.entity.ApiResult
-import com.example.domain.entity.Bookmark
-import com.example.domain.entity.Post
-import com.example.domain.entity.User
-import com.example.domain.usecase.GetLoginPreferenceUseCase
-import com.example.domain.usecase.GetUserUseCase
-import com.example.domain.usecase.MakeRequestFollowOrNotUseCase
-import com.example.domain.usecase.UpdateBookMarkUseCase
+import com.example.domain2.entity.ApiResult
+import com.example.domain2.usecase.GetLoginPreferenceUseCase
+import com.example.domain2.usecase.GetUserUseCase
+import com.example.domain2.usecase.MakeRequestFollowOrNotUseCase
 import com.orhanobut.logger.Logger
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import org.kjh.mytravel.model.Bookmark
+import org.kjh.mytravel.model.Post
+import org.kjh.mytravel.model.User
+import org.kjh.mytravel.model.mapToPresenter
 
 /**
  * MyTravel
@@ -73,7 +72,7 @@ class UserViewModel @AssistedInject constructor(
                             _uiState.update {
                                 it.copy(
                                     isLoading = false,
-                                    userItem = result.data.data
+                                    userItem = result.data.mapToPresenter()
                                 )
                             }
                         }
@@ -96,14 +95,15 @@ class UserViewModel @AssistedInject constructor(
                             }
 
                         is ApiResult.Success -> {
+                            val userData = result.data.mapToPresenter()
                             _uiState.update {
                                 it.copy(
                                     isLoading = false,
                                     userItem = it.userItem?.copy(
-                                        followCount = result.data.data.followCount,
-                                        isFollowing = result.data.data.isFollowing
+                                        followCount = userData.followCount,
+                                        isFollowing = userData.isFollowing
                                     ),
-                                    successFollowOrNot = result.data.result
+                                    successFollowOrNot = true
                                 )
                             }
                         }
@@ -121,7 +121,7 @@ class UserViewModel @AssistedInject constructor(
         }
     }
 
-    fun updateUserPostBookmarkState(bookmarks: List<Post>) {
+    fun updateUserPostBookmarkState(bookmarks: List<Bookmark>) {
         _uiState.value.userItem?.let {
             _uiState.update { currentUiState ->
                 currentUiState.copy(

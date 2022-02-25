@@ -7,7 +7,6 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.navGraphViewModels
 import androidx.navigation.ui.setupWithNavController
-import com.example.domain.entity.MapSearch
 import com.naver.maps.geometry.LatLng
 import com.naver.maps.map.*
 import com.naver.maps.map.MapFragment
@@ -15,6 +14,7 @@ import com.naver.maps.map.overlay.Marker
 import dagger.hilt.android.AndroidEntryPoint
 import org.kjh.mytravel.R
 import org.kjh.mytravel.databinding.FragmentMapBinding
+import org.kjh.mytravel.model.MapQueryItem
 import org.kjh.mytravel.ui.base.BaseFragment
 
 
@@ -44,7 +44,7 @@ class MapFragment
         })
     }
 
-    private fun setMarketAtPlace(placeItem: MapSearch) {
+    private fun setMarketAtPlace(placeItem: MapQueryItem) {
         if (::naverMap.isInitialized) {
             val cameraUpdate =
                 CameraUpdate.scrollTo(LatLng(placeItem.y.toDouble(), placeItem.x.toDouble()))

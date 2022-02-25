@@ -4,9 +4,8 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
-import com.example.domain.entity.Place
-import com.example.domain.entity.PlaceRanking
 import org.kjh.mytravel.databinding.VhPlaceRankingItemBinding
+import org.kjh.mytravel.model.PlaceWithRanking
 
 /**
  * MyTravel
@@ -16,8 +15,8 @@ import org.kjh.mytravel.databinding.VhPlaceRankingItemBinding
  * Description:
  */
 class PlaceRankingListAdapter(
-    private val onClickPlaceItem: (PlaceRanking) -> Unit
-) : ListAdapter<PlaceRanking, PlaceRankingViewHolder>(PlaceRankingDiffUtil) {
+    private val onClickPlaceItem: (PlaceWithRanking) -> Unit
+) : ListAdapter<PlaceWithRanking, PlaceRankingViewHolder>(PlaceRankingDiffUtil) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) =
         PlaceRankingViewHolder(
@@ -31,15 +30,15 @@ class PlaceRankingListAdapter(
     }
 }
 
-object PlaceRankingDiffUtil: DiffUtil.ItemCallback<PlaceRanking>() {
+object PlaceRankingDiffUtil: DiffUtil.ItemCallback<PlaceWithRanking>() {
     override fun areItemsTheSame(
-        oldItem: PlaceRanking,
-        newItem: PlaceRanking
+        oldItem: PlaceWithRanking,
+        newItem: PlaceWithRanking
     ) = oldItem.place.placeId == newItem.place.placeId
 
     override fun areContentsTheSame(
-        oldItem: PlaceRanking,
-        newItem: PlaceRanking
+        oldItem: PlaceWithRanking,
+        newItem: PlaceWithRanking
     ) = oldItem == newItem
 }
 

@@ -3,8 +3,8 @@ package com.example.data.datasource
 import android.util.Log
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
-import com.example.data.api.ApiService
-import com.example.domain.entity.Post
+import com.example.data.model.mapToDomain
+import com.example.domain2.entity.PostEntity
 
 /**
  * MyTravel
@@ -16,9 +16,9 @@ import com.example.domain.entity.Post
 class RecentPostsPagingSource(
     private val postRemoteDataSource: PostRemoteDataSource,
     private val myEmail: String
-): PagingSource<Int, Post>() {
+): PagingSource<Int, PostEntity>() {
 
-    override suspend fun load(params: LoadParams<Int>): LoadResult<Int, Post> {
+    override suspend fun load(params: LoadParams<Int>): LoadResult<Int, PostEntity> {
         try {
             val nextPageNumber = params.key ?: 0
             val response = postRemoteDataSource.getRecentPosts(myEmail, nextPageNumber, params.loadSize)
@@ -38,7 +38,7 @@ class RecentPostsPagingSource(
             """.trimIndent())
 
             return LoadResult.Page(
-                data = response.data,
+                data = postItems.map { it.mapToDomain() },
                 prevKey = if (nextPageNumber == 0) null else nextPageNumber - 1,
                 nextKey = nextKey
             )
@@ -47,7 +47,7 @@ class RecentPostsPagingSource(
         }
     }
 
-    override fun getRefreshKey(state: PagingState<Int, Post>): Int? {
+    override fun getRefreshKey(state: PagingState<Int, PostEntity>): Int? {
         return state.anchorPosition?.let { anchorPosition ->
             state.closestPageToPosition(anchorPosition)?.prevKey?.plus(1)
                 ?: state.closestPageToPosition(anchorPosition)?.nextKey?.minus(1)

@@ -10,14 +10,5 @@
         android:id="@+id/bookMarkFragment"
         android:name="org.kjh.mytravel.ui.bookmark.BookMarkFragment"
         android:label="BookMarkFragment"
-        tools:layout="@layout/fragment_book_mark">
-        <action
-            android:id="@+id/action_bookMarkFragment_to_bookMarkDetailFragment"
-            app:destination="@id/bookMarkDetailFragment" />
-    </fragment>
-    <fragment
-        android:id="@+id/bookMarkDetailFragment"
-        android:name="org.kjh.mytravel.ui.bookmark.BookMarkDetailFragment"
-        android:label="fragment_book_mark_detail"
-        tools:layout="@layout/fragment_book_mark_detail" />
+        tools:layout="@layout/fragment_book_mark"/>
 </navigation>

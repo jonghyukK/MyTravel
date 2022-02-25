@@ -1,8 +1,8 @@
 package com.example.data.datasource
 
 import com.example.data.api.ApiService
-import com.example.domain.entity.RecentPostsResponse
-import com.example.domain.entity.UploadPostResponse
+import com.example.data.model.api.PostsApiModel
+import com.example.data.model.api.UserApiModel
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
 import okhttp3.RequestBody.Companion.asRequestBody
@@ -26,13 +26,13 @@ interface PostRemoteDataSource {
         placeRoadAddress: String,
         x : String,
         y : String
-    ): UploadPostResponse
+    ): UserApiModel
 
     suspend fun getRecentPosts(
         myEmail: String,
         page: Int,
         size: Int
-    ): RecentPostsResponse
+    ): PostsApiModel
 }
 
 class PostRemoteDataSourceImpl @Inject constructor(
@@ -48,7 +48,7 @@ class PostRemoteDataSourceImpl @Inject constructor(
         placeRoadAddress: String,
         x: String,
         y: String
-    ): UploadPostResponse {
+    ): UserApiModel {
 
         val fileBody = file.map {
             val tempFile = File(it)

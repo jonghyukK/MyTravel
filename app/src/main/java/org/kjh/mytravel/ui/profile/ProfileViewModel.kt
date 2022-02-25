@@ -2,24 +2,22 @@ package org.kjh.mytravel.ui.profile
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.data.repository.LoginPreferencesRepositoryImpl
-import com.example.domain.entity.ApiResult
-import com.example.domain.entity.Bookmark
-import com.example.domain.entity.Post
-import com.example.domain.entity.User
-import com.example.domain.repository.LoginPreferencesRepository
-import com.example.domain.repository.UserRepository
-import com.example.domain.usecase.GetLoginPreferenceUseCase
-import com.example.domain.usecase.GetUserUseCase
-import com.example.domain.usecase.UpdateBookMarkUseCase
+import com.example.domain2.entity.ApiResult
+import com.example.domain2.repository.LoginPreferencesRepository
+import com.example.domain2.usecase.GetLoginPreferenceUseCase
+import com.example.domain2.usecase.GetUserUseCase
+import com.example.domain2.usecase.UpdateBookMarkUseCase
 import com.orhanobut.logger.Logger
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import org.kjh.mytravel.model.Bookmark
+import org.kjh.mytravel.model.Post
+import org.kjh.mytravel.model.User
+import org.kjh.mytravel.model.mapToPresenter
 import javax.inject.Inject
 
 /**
@@ -69,7 +67,7 @@ class ProfileViewModel @Inject constructor(
                             _uiState.update {
                                 it.copy(
                                     isLoading = false,
-                                    userItem  = result.data.data
+                                    userItem  = result.data.mapToPresenter()
                                 )
                             }
                         }
@@ -91,25 +89,29 @@ class ProfileViewModel @Inject constructor(
         }
     }
 
-    fun updateMyBookmark(postItem: Post) {
+    fun updateMyBookmark(postId: Int) {
         viewModelScope.launch {
             updateBookMarkUseCase(
-                postId = postItem.postId
+                postId = postId
             ).collect { result ->
                 when (result) {
                     is ApiResult.Success -> {
-                        if (result.data.result) {
-                            val updatedPosts = _uiState.value.userItem!!.posts.map { currentPost ->
+                        val newBookmarks = result.data.map { it.mapToPresenter() }
+
+                        _uiState.value.userItem?.let { user ->
+                            val updatedPosts = user.posts.map { currentPost ->
                                 currentPost.copy(
-                                    isBookmarked = result.data.bookMarks.find { it.placeName == currentPost.placeName } != null
+                                    isBookmarked = newBookmarks.find { it.placeName == currentPost.placeName } != null
                                 )
                             }
 
+                            Logger.d("${updatedPosts}")
+
                             _uiState.update {
                                 it.copy(
-                                    userItem = it.userItem!!.copy(
+                                    userItem = user.copy(
                                         posts = updatedPosts,
-                                        bookMarks = result.data.bookMarks
+                                        bookMarks = newBookmarks
                                     )
                                 )
                             }

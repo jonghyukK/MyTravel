@@ -6,11 +6,10 @@ import androidx.paging.PagingData
 import com.example.data.datasource.PostRemoteDataSource
 import com.example.data.datasource.RecentPostsPagingSource
 import com.example.data.mapper.ResponseMapper
-import com.example.domain.entity.ApiResult
-import com.example.domain.entity.Post
-import com.example.domain.entity.RecentPostsResponse
-import com.example.domain.entity.UploadPostResponse
-import com.example.domain.repository.PostRepository
+import com.example.domain2.entity.ApiResult
+import com.example.domain2.entity.PostEntity
+import com.example.domain2.entity.UserEntity
+import com.example.domain2.repository.PostRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.flow
@@ -36,17 +35,17 @@ class PostRepositoryImpl @Inject constructor(
         placeRoadAddress: String,
         x: String,
         y: String
-    ): Flow<ApiResult<UploadPostResponse>> = flow {
+    ): Flow<ApiResult<UserEntity>> = flow {
         emit(ApiResult.Loading())
 
         val response = postRemoteDataSource.uploadPost(file, email, content, placeName, placeAddress, placeRoadAddress, x, y)
-        emit(ResponseMapper.responseToUploadPost(ApiResult.Success(response)))
+        emit(ResponseMapper.responseToUserEntity(ApiResult.Success(response)))
     }.catch {
-        emit(ResponseMapper.responseToUploadPost(ApiResult.Error(it)))
+        emit(ResponseMapper.responseToUserEntity(ApiResult.Error(it)))
     }
 
     override fun getRecentPostsPagingData(myEmail: String)
-    : Flow<PagingData<Post>> {
+    : Flow<PagingData<PostEntity>> {
         return Pager(
             config = PagingConfig(
                 pageSize = 5,

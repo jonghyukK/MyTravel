@@ -3,8 +3,8 @@ package org.kjh.mytravel.ui.profile.upload
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.example.domain.entity.MapSearch
 import dagger.hilt.android.lifecycle.HiltViewModel
+import org.kjh.mytravel.model.MapQueryItem
 import javax.inject.Inject
 
 /**
@@ -17,10 +17,10 @@ import javax.inject.Inject
 
 @HiltViewModel
 class MapViewModel @Inject constructor(): ViewModel() {
-    private val _tempSelectedPlaceItem = MutableLiveData<MapSearch>()
-    val tempSelectedPlaceItem : LiveData<MapSearch> = _tempSelectedPlaceItem
+    private val _tempSelectedPlaceItem = MutableLiveData<MapQueryItem>()
+    val tempSelectedPlaceItem : LiveData<MapQueryItem> = _tempSelectedPlaceItem
 
-    fun setTempPlaceItem(item: MapSearch) {
+    fun setTempPlaceItem(item: MapQueryItem) {
         _tempSelectedPlaceItem.value = item
     }
 }

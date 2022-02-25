@@ -1,10 +1,10 @@
 package com.example.data.repository
 
-import com.example.data.datasource.LoginDataSource
+import com.example.data.datasource.LoginRemoteDataSource
 import com.example.data.mapper.ResponseMapper
-import com.example.domain.entity.ApiResult
-import com.example.domain.entity.Login
-import com.example.domain.repository.LoginRepository
+import com.example.domain2.entity.ApiResult
+import com.example.domain2.entity.LoginEntity
+import com.example.domain2.repository.LoginRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.flow
@@ -18,13 +18,13 @@ import javax.inject.Inject
  * Description:
  */
 class LoginRepositoryImpl @Inject constructor(
-    private val dataSource: LoginDataSource
+    private val dataSource: LoginRemoteDataSource
 ): LoginRepository {
 
     override suspend fun makeRequestLogin(
         email: String,
         pw   : String
-    ): Flow<ApiResult<Login>> = flow {
+    ): Flow<ApiResult<LoginEntity>> = flow {
         emit(ApiResult.Loading())
 
         val response = dataSource.makeLoginRequest(email, pw)

@@ -1,10 +1,7 @@
 package org.kjh.mytravel.ui.bookmark
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import androidx.activity.addCallback
 import androidx.core.view.isVisible
 import androidx.fragment.app.activityViewModels
@@ -15,16 +12,14 @@ import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavOptions
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.setupWithNavController
-import com.example.domain.entity.Post
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import org.kjh.mytravel.NavGraphDirections
-import org.kjh.mytravel.ui.MainViewModel
 import org.kjh.mytravel.R
 import org.kjh.mytravel.databinding.FragmentBookMarkBinding
+import org.kjh.mytravel.model.Bookmark
 import org.kjh.mytravel.ui.MainActivity
-import org.kjh.mytravel.ui.PostSmallListAdapter
 import org.kjh.mytravel.ui.base.BaseFragment
 import org.kjh.mytravel.ui.profile.ProfileViewModel
 
@@ -34,12 +29,12 @@ class BookMarkFragment : BaseFragment<FragmentBookMarkBinding>(R.layout.fragment
     private val profileViewModel: ProfileViewModel by activityViewModels()
 
     private val bookMarkListAdapter by lazy {
-        PostSmallListAdapter(1, { item -> onClickPostItem(item)}) { item ->
-            profileViewModel.updateMyBookmark(item)
+        BookmarkListAdapter({ item -> onClickPostItem(item)}) { item ->
+            profileViewModel.updateMyBookmark(item.postId)
         }
     }
 
-    private fun onClickPostItem(item: Post) {
+    private fun onClickPostItem(item: Bookmark) {
         val action = NavGraphDirections.actionGlobalPlacePagerFragment(item.placeName)
         findNavController().navigate(action)
     }

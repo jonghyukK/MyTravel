@@ -12,7 +12,6 @@ import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavOptions
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.setupWithNavController
-import com.example.domain.entity.Post
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
@@ -20,6 +19,7 @@ import org.kjh.mytravel.NavGraphDirections
 import org.kjh.mytravel.ProfilePostsGridItemDecoration
 import org.kjh.mytravel.R
 import org.kjh.mytravel.databinding.FragmentProfileBinding
+import org.kjh.mytravel.model.Post
 import org.kjh.mytravel.ui.MainActivity
 import org.kjh.mytravel.ui.PostSmallListAdapter
 import org.kjh.mytravel.ui.base.BaseFragment
@@ -31,8 +31,8 @@ class ProfileFragment
     private val viewModel: ProfileViewModel by activityViewModels()
 
     private val myPostListAdapter by lazy {
-        PostSmallListAdapter(0, { item -> onClickPostItem(item)}) { item ->
-            viewModel.updateMyBookmark(item)
+        PostSmallListAdapter({ item -> onClickPostItem(item)}) { item ->
+            viewModel.updateMyBookmark(item.postId)
         }
     }
 

@@ -2,9 +2,8 @@ package org.kjh.mytravel.ui.profile.settings
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.domain.repository.LoginPreferencesRepository
-import com.example.domain.usecase.GetLoginPreferenceUseCase
-import com.example.domain.usecase.MakeLogOutRequestUseCase
+import com.example.domain2.repository.LoginPreferencesRepository
+import com.example.domain2.usecase.MakeLogOutRequestUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
