@@ -14,7 +14,7 @@
         android:name=".MyTravelApplication"
         android:usesCleartextTraffic="true"
         android:requestLegacyExternalStorage="true"
-        android:theme="@style/Theme.MaterialComponents.Light.NoActionBar">
+        android:theme="@style/Theme.MyTravel">
         <meta-data
             android:name="com.naver.maps.map.CLIENT_ID"
             android:value="8aye4tijdd" />
@@ -22,7 +22,8 @@
             android:theme="@style/Base.Theme.AppCompat"/>
         <activity
             android:name=".ui.MainActivity"
-            android:exported="true">
+            android:exported="true"
+            android:theme="@style/Theme.MyTravel.Transparent">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

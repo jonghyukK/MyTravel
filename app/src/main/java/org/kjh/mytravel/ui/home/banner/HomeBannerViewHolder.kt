@@ -1,7 +1,8 @@
 package org.kjh.mytravel.ui.home.banner
 
 import androidx.recyclerview.widget.RecyclerView
-import org.kjh.mytravel.databinding.ItemHomeBannerBinding
+import org.kjh.mytravel.databinding.VhHomeBannerItemBinding
+import org.kjh.mytravel.model.Banner
 import org.kjh.mytravel.ui.uistate.BannerItemUiState
 
 /**
@@ -13,10 +14,10 @@ import org.kjh.mytravel.ui.uistate.BannerItemUiState
  */
 
 class HomeBannerViewHolder(
-    private val binding: ItemHomeBannerBinding
+    private val binding: VhHomeBannerItemBinding
 ) : RecyclerView.ViewHolder(binding.root) {
 
-    fun bind(item: BannerItemUiState) {
-        binding.bannerItemUiState = item
+    fun bind(item: Banner) {
+        binding.bannerItem = item
     }
 }

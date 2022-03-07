@@ -91,4 +91,9 @@ object UseCaseModule {
     fun provideUploadPostUseCase(
         postRepository: PostRepository
     ): UploadPostUseCase = UploadPostUseCase(postRepository)
+
+    @Provides
+    fun provideGetHomeBannersUseCase(
+        placeRepository: PlaceRepository
+    ): GetHomeBannersUseCase = GetHomeBannersUseCase(placeRepository)
 }

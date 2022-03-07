@@ -3,6 +3,7 @@ package com.example.data.repository
 import com.example.data.datasource.PlaceRemoteDataSource
 import com.example.data.mapper.ResponseMapper
 import com.example.domain2.entity.ApiResult
+import com.example.domain2.entity.BannerEntity
 import com.example.domain2.entity.PlaceEntity
 import com.example.domain2.entity.PlaceWithRankEntity
 import com.example.domain2.repository.PlaceRepository
@@ -41,5 +42,15 @@ class PlaceRepositoryImpl @Inject constructor(
         emit(ResponseMapper.responseToPlaceRankingList(ApiResult.Success(response)))
     }.catch {
         emit(ResponseMapper.responseToPlaceRankingList(ApiResult.Error(it)))
+    }
+
+    override suspend fun getPlaceBanners()
+    : Flow<ApiResult<List<BannerEntity>>> = flow {
+        emit(ApiResult.Loading())
+
+        val response = placeRemoteDataSource.getPlaceBanners()
+        emit(ResponseMapper.responseToBannerEntityList(ApiResult.Success(response)))
+    }.catch {
+        emit(ResponseMapper.responseToBannerEntityList(ApiResult.Error(it)))
     }
 }

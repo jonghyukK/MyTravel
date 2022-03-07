@@ -83,6 +83,19 @@ object ResponseMapper {
         }
     }
 
+    // BannersApiModel -> List<BannerEntity>
+    fun responseToBannerEntityList(
+        response: ApiResult<BannersApiModel>
+    ): ApiResult<List<BannerEntity>> {
+        return when (response) {
+            is ApiResult.Success -> ApiResult.Success(
+                response.data.data.map { it.mapToDomain() }
+            )
+            is ApiResult.Error   -> ApiResult.Error(response.throwable)
+            is ApiResult.Loading -> ApiResult.Loading()
+        }
+    }
+
     // BookmarksApiModel -> List<BookmarkEntity>
     fun responseToBookMark(
         response: ApiResult<BookmarksApiModel>

@@ -6,6 +6,7 @@ import androidx.paging.PagingData
 import androidx.paging.cachedIn
 import androidx.paging.map
 import com.example.domain2.entity.ApiResult
+import com.example.domain2.usecase.GetHomeBannersUseCase
 import com.example.domain2.usecase.GetLoginPreferenceUseCase
 import com.example.domain2.usecase.GetPlaceRankingUseCase
 import com.example.domain2.usecase.GetRecentPostsUseCase
@@ -13,6 +14,7 @@ import com.orhanobut.logger.Logger
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
+import org.kjh.mytravel.model.Banner
 import org.kjh.mytravel.model.PlaceWithRanking
 import org.kjh.mytravel.model.Post
 import org.kjh.mytravel.model.mapToPresenter
@@ -34,12 +36,20 @@ data class RecentPostsUiState(
     val recentPlaceItems: PagingData<Post>? = null
 )
 
+data class HomeBannersUiState(
+    val homeBannerItems: List<Banner> = listOf()
+)
+
 @HiltViewModel
 class HomeViewModel @Inject constructor(
+    val getHomeBannersUseCase: GetHomeBannersUseCase,
     val getRecentPostsUseCase: GetRecentPostsUseCase,
     val getPlaceRankingUseCase: GetPlaceRankingUseCase,
     val loginPreferenceUseCase: GetLoginPreferenceUseCase
 ): ViewModel() {
+
+    private val _homeBannersUiState = MutableStateFlow(HomeBannersUiState())
+    val homeBannersUiString: StateFlow<HomeBannersUiState> = _homeBannersUiState
 
     private val _recentPostsUiState = MutableStateFlow(RecentPostsUiState())
     val recentPostsUiState: StateFlow<RecentPostsUiState> = _recentPostsUiState
@@ -48,6 +58,22 @@ class HomeViewModel @Inject constructor(
     val placeRankingUiState: StateFlow<PlaceRankingUiState> = _placeRankingUiState
 
     init {
+        viewModelScope.launch {
+            getHomeBannersUseCase()
+                .collect { result ->
+                    when (result) {
+                        is ApiResult.Success ->
+                            _homeBannersUiState.update { currentUiState ->
+                                currentUiState.copy(
+                                    homeBannerItems = result.data.map {
+                                        it.mapToPresenter()
+                                    }
+                                )
+                            }
+                    }
+                }
+        }
+
         viewModelScope.launch {
             getRecentPostsUseCase(loginPreferenceUseCase().email)
                 .map { pagingData ->

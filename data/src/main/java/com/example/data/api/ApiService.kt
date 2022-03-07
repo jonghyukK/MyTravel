@@ -82,4 +82,8 @@ interface ApiService {
         @Query("email") email: String,
         @Query("postId") postId: Int
     ): BookmarksApiModel
+
+
+    @GET("banners")
+    suspend fun getHomeBanners(): BannersApiModel
 }

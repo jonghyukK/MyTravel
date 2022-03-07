@@ -8,7 +8,7 @@
     <action
         android:id="@+id/action_global_placePagerFragment"
         app:destination="@id/placePagerFragment"
-        app:enterAnim="@anim/slide_in_left"
+        app:enterAnim="@anim/fade_in"
         app:exitAnim="@anim/fade_out"
         app:popEnterAnim="@anim/fade_in"
         app:popExitAnim="@anim/fade_out"/>
@@ -33,6 +33,7 @@
     <fragment
         android:id="@+id/placePagerFragment"
         android:name="org.kjh.mytravel.ui.place.PlacePagerFragment"
+        android:label=""
         tools:layout="@layout/fragment_place_pager">
         <argument
             android:name="placeName"
