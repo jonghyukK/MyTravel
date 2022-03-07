@@ -11,6 +11,7 @@ import android.view.animation.AccelerateDecelerateInterpolator
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import androidx.recyclerview.widget.RecyclerView.NO_POSITION
 import kotlin.math.max
 
 /**
@@ -264,19 +265,19 @@ class LinearLayoutItemDecorationWithTextIndicator(
         val currentChildPosition =
             (parent.layoutManager as LinearLayoutManager).findFirstVisibleItemPosition()
 
-//        val text = "${(currentChildPosition % (itemTotalCount / 2)) + 1}/${itemTotalCount / 2}"
+        if (currentChildPosition != NO_POSITION) {
+            val text = "${(currentChildPosition % (itemTotalCount / 2)) + 1}/${itemTotalCount / 2}"
 
-        val text = "3/4"
+            val padding20 = 20 * DP
+            val padding30 = 30 * DP
 
-        val padding20 = 20 * DP
-        val padding30 = 30 * DP
+            val startX = parent.width - padding30 - textPaint.measureText(text)
+            val startY = parent.height - padding20
 
-        val startX = parent.width - padding30 - textPaint.measureText(text)
-        val startY = parent.height - padding20
-
-        val background = getTextBackgroundSize(startX, startY, text, textPaint)
-        c.drawRoundRect(background, 50F, 50F, rectPaint)
-        c.drawText(text, startX, startY, textPaint)
+            val background = getTextBackgroundSize(startX, startY, text, textPaint)
+            c.drawRoundRect(background, 50F, 50F, rectPaint)
+            c.drawText(text, startX, startY, textPaint)
+        }
     }
 
     private fun getTextBackgroundSize(x: Float, y: Float, text: String, paint: Paint): RectF {
