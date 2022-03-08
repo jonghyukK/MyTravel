@@ -7,9 +7,6 @@
         <variable
             name="view"
             type="android.view.View" />
-        <variable
-            name="eventItemUiState"
-            type="org.kjh.mytravel.ui.uistate.EventItemUiState" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -23,7 +20,6 @@
             android:layout_height="wrap_content"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            android:text="@{eventItemUiState.eventTitle}"
             style="@style/style_title"/>
 
         <androidx.recyclerview.widget.RecyclerView

@@ -20,6 +20,8 @@ interface PlaceRemoteDataSource {
     suspend fun getPlaceRanking(): PlaceRankingApiModel
 
     suspend fun getPlaceBanners(): BannersApiModel
+
+    suspend fun getPlacesBySubCityName(subCityName: String): PlacesApiModel
 }
 
 class PlaceRemoteDataSourceImpl @Inject constructor(
@@ -34,4 +36,7 @@ class PlaceRemoteDataSourceImpl @Inject constructor(
 
     override suspend fun getPlaceBanners() =
         apiService.getHomeBanners()
+
+    override suspend fun getPlacesBySubCityName(subCityName: String) =
+        apiService.getPlacesBySubCityName(subCityName)
 }

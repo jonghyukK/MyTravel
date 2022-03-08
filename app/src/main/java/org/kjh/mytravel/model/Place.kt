@@ -1,5 +1,6 @@
 package org.kjh.mytravel.model
 
+import androidx.recyclerview.widget.DiffUtil
 import com.example.domain2.entity.PlaceEntity
 
 /**
@@ -20,7 +21,23 @@ data class Place(
     val y       : String,
     val placeImg: String,
     val posts   : List<Post> = listOf()
-)
+) {
+    companion object {
+        val DiffCallback = object : DiffUtil.ItemCallback<Place>() {
+            override fun areItemsTheSame(
+                oldItem: Place,
+                newItem: Place
+            ): Boolean =
+                oldItem.placeId == newItem.placeId
+
+            override fun areContentsTheSame(
+                oldItem: Place,
+                newItem: Place
+            ): Boolean =
+                oldItem == newItem
+        }
+    }
+}
 
 fun PlaceEntity.mapToPresenter() =
     Place(placeId,

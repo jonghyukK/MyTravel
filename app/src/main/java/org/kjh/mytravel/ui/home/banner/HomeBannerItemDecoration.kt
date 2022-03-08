@@ -56,8 +56,6 @@ class HomeBannerItemDecoration : RecyclerView.ItemDecoration() {
             val startX = parent.width - padding30 - textPaint.measureText(text)
             val startY = (result / 2) * DP + textPaint.measureText(text)
 
-            Logger.e("${startY}")
-
             c.drawText(text, startX, 200f, textPaint)
         }
     }

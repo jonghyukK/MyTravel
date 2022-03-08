@@ -96,4 +96,9 @@ object UseCaseModule {
     fun provideGetHomeBannersUseCase(
         placeRepository: PlaceRepository
     ): GetHomeBannersUseCase = GetHomeBannersUseCase(placeRepository)
+
+    @Provides
+    fun provideGetPlacesBySubCityNameUseCase(
+        placeRepository: PlaceRepository
+    ): GetPlacesBySubCityNameUseCase = GetPlacesBySubCityNameUseCase(placeRepository)
 }

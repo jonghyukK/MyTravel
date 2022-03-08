@@ -37,7 +37,10 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(R.layout.fragment_home) {
 
     // Home "Banner" Adapter.
     private val homeBannerAdapter by lazy {
-        HomeBannersAdapter().apply {
+        HomeBannersAdapter { item ->
+            navigateWithAction(
+                HomeFragmentDirections.actionHomeFragmentToPlaceListByCityNameFragment(item.bannerTopic))
+        }.apply {
             setHasStableIds(true)
         }
     }

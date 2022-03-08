@@ -86,4 +86,9 @@ interface ApiService {
 
     @GET("banners")
     suspend fun getHomeBanners(): BannersApiModel
+
+    @GET("place/subCityName")
+    suspend fun getPlacesBySubCityName(
+        @Query("subCityName") subCityName: String
+    ): PlacesApiModel
 }

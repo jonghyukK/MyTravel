@@ -53,4 +53,14 @@ class PlaceRepositoryImpl @Inject constructor(
     }.catch {
         emit(ResponseMapper.responseToBannerEntityList(ApiResult.Error(it)))
     }
+
+    override suspend fun getPlacesBySubCityName(subCityName: String)
+    : Flow<ApiResult<List<PlaceEntity>>> = flow {
+        emit(ApiResult.Loading())
+
+        val response = placeRemoteDataSource.getPlacesBySubCityName(subCityName)
+        emit(ResponseMapper.responseToPlaceList(ApiResult.Success(response)))
+    }.catch {
+        emit(ResponseMapper.responseToPlaceList(ApiResult.Error(it)))
+    }
 }

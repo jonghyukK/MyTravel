@@ -17,7 +17,6 @@ import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import org.kjh.mytravel.model.Bookmark
-import org.kjh.mytravel.model.Post
 import org.kjh.mytravel.model.User
 import org.kjh.mytravel.model.mapToPresenter
 

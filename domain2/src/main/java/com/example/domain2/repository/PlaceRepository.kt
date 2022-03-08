@@ -19,4 +19,6 @@ interface PlaceRepository {
     suspend fun getPlaceRanking(): Flow<ApiResult<List<PlaceWithRankEntity>>>
 
     suspend fun getPlaceBanners(): Flow<ApiResult<List<BannerEntity>>>
+
+    suspend fun getPlacesBySubCityName(subCityName: String): Flow<ApiResult<List<PlaceEntity>>>
 }

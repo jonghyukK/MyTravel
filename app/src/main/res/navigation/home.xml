@@ -8,21 +8,16 @@
     <fragment
         android:id="@+id/homeFragment"
         android:name="org.kjh.mytravel.ui.home.HomeFragment"
-        tools:layout="@layout/fragment_home">
+        tools:layout="@layout/fragment_home" >
         <action
-            android:id="@+id/action_homeFragment_to_homeSpecificCityPagerFragment"
-            app:destination="@id/homeSpecificCityPagerFragment"
-            app:enterAnim="@anim/slide_in_right"
-            app:exitAnim="@anim/slide_out_left"
-            app:popEnterAnim="@anim/slide_in_left"
-            app:popExitAnim="@anim/slide_out_right" />
+            android:id="@+id/action_homeFragment_to_placeListByCityNameFragment"
+            app:destination="@id/placeListByCityNameFragment" />
     </fragment>
-
     <fragment
-        android:id="@+id/homeSpecificCityPagerFragment"
-        android:name="org.kjh.mytravel.ui.home.HomeSpecificCityPagerFragment"
-        android:label="지역별 여행지"
-        tools:layout="@layout/fragment_home_specific_city_pager">
+        android:id="@+id/placeListByCityNameFragment"
+        android:name="org.kjh.mytravel.ui.place.PlaceListByCityNameFragment"
+        tools:layout="@layout/fragment_place_list_by_city_name">
+
         <argument
             android:name="cityName"
             app:argType="string" />

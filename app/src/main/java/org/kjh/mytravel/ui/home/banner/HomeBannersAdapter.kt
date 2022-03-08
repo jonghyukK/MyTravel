@@ -5,7 +5,6 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.ListAdapter
 import org.kjh.mytravel.databinding.VhHomeBannerItemBinding
 import org.kjh.mytravel.model.Banner
-import org.kjh.mytravel.ui.uistate.BannerItemUiState
 
 /**
  * MyTravel
@@ -15,14 +14,15 @@ import org.kjh.mytravel.ui.uistate.BannerItemUiState
  * Description:
  */
 
-class HomeBannersAdapter
-    : ListAdapter<Banner, HomeBannerViewHolder>(Banner.DiffCallback) {
+class HomeBannersAdapter(
+    private val onClickBanner: (Banner) -> Unit
+) : ListAdapter<Banner, HomeBannerViewHolder>(Banner.DiffCallback) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) =
         HomeBannerViewHolder(
             VhHomeBannerItemBinding.inflate(
                 LayoutInflater.from(parent.context), parent, false
-            )
+            ), onClickBanner
         )
 
     override fun onBindViewHolder(holder: HomeBannerViewHolder, position: Int) {
