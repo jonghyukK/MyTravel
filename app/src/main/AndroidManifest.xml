@@ -22,8 +22,7 @@
             android:theme="@style/Base.Theme.AppCompat"/>
         <activity
             android:name=".ui.MainActivity"
-            android:exported="true"
-            android:theme="@style/Theme.MyTravel.Transparent">
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

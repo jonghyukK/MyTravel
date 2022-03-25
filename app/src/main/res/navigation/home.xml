@@ -11,7 +11,11 @@
         tools:layout="@layout/fragment_home" >
         <action
             android:id="@+id/action_homeFragment_to_placeListByCityNameFragment"
-            app:destination="@id/placeListByCityNameFragment" />
+            app:destination="@id/placeListByCityNameFragment"
+            app:enterAnim="@anim/scale_up"
+            app:exitAnim="@anim/scale_up_over"
+            app:popEnterAnim="@anim/scale_down"
+            app:popExitAnim="@anim/fade_out"/>
     </fragment>
     <fragment
         android:id="@+id/placeListByCityNameFragment"

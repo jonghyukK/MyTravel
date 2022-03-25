@@ -4,22 +4,22 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph"
     app:startDestination="@+id/home">
-
     <action
         android:id="@+id/action_global_placePagerFragment"
         app:destination="@id/placePagerFragment"
-        app:enterAnim="@anim/fade_in"
-        app:exitAnim="@anim/fade_out"
-        app:popEnterAnim="@anim/fade_in"
-        app:popExitAnim="@anim/fade_out"/>
+        app:enterAnim="@anim/scale_up"
+        app:exitAnim="@anim/scale_up_over"
+        app:popEnterAnim="@anim/scale_down"
+        app:popExitAnim="@anim/fade_out"
+        />
 
     <action
         android:id="@+id/action_global_userFragment"
         app:destination="@id/userFragment"
-        app:enterAnim="@anim/slide_in_right"
-        app:exitAnim="@anim/slide_out_left"
-        app:popEnterAnim="@anim/slide_in_left"
-        app:popExitAnim="@anim/slide_out_right" />
+        app:enterAnim="@anim/scale_up"
+        app:exitAnim="@anim/scale_up_over"
+        app:popEnterAnim="@anim/scale_down"
+        app:popExitAnim="@anim/fade_out" />
 
     <fragment
         android:id="@+id/userFragment"

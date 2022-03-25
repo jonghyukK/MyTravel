@@ -59,7 +59,6 @@ class BookMarkFragment : BaseFragment<FragmentBookMarkBinding>(R.layout.fragment
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        initToolbarWithNavigation()
         initBookMarkRecyclerView()
 
         viewLifecycleOwner.lifecycleScope.launch {
@@ -79,10 +78,5 @@ class BookMarkFragment : BaseFragment<FragmentBookMarkBinding>(R.layout.fragment
         binding.rvBookMarkList.apply {
             adapter = bookMarkListAdapter
         }
-    }
-
-    private fun initToolbarWithNavigation() {
-        val appConfig = (requireActivity() as MainActivity).appBarConfiguration
-        binding.tbBookmarkToolbar.setupWithNavController(findNavController(), appConfig)
     }
 }

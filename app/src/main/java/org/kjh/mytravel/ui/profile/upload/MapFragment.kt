@@ -32,7 +32,6 @@ class MapFragment
         super.onViewCreated(view, savedInstanceState)
         binding.viewModel = viewModel
 
-        initToolbarWithNavigation()
         initNaverMapFragment()
         initClickEvents()
 
@@ -71,12 +70,6 @@ class MapFragment
         binding.btnAddPlaceInfo.setOnClickListener {
             uploadViewModel.updatePlaceItem(viewModel.tempSelectedPlaceItem.value!!)
             findNavController().popBackStack()
-        }
-    }
-
-    private fun initToolbarWithNavigation() {
-        binding.tbMapToolbar.apply {
-            setupWithNavController(findNavController())
         }
     }
 

@@ -35,32 +35,20 @@ class MainActivity : AppCompatActivity() {
         ) as NavHostFragment
         navController = navHostFragment.navController
 
-        binding.bnvBottomNav.apply {
-            setupWithNavController(navController)
-
-//            mainViewModel.addTabBackStack(this.menu.getItem(0).itemId)
-//
-//            setOnItemSelectedListener { item ->
-//
-//                val navOptions: NavOptions = NavOptions.Builder()
-//                    .setLaunchSingleTop(true)
-//                    .setRestoreState(true)
-//                    .setPopUpTo(
-//                        navController.graph.findStartDestination().id,
-//                        false,  // inclusive
-//                        true
-//                    ) // saveState
-//                    .build()
-//
-//                navController.navigate(item.itemId, null, navOptions)
-
-//                mainViewModel.addTabBackStack(item.itemId)
-//                NavigationUI.onNavDestinationSelected(item, navController)
-//                true
-//            }
-        }
+        binding.tbMainToolbar.setupWithNavController(navController, appBarConfiguration)
+        binding.bnvBottomNav.setupWithNavController(navController)
 
         navController.addOnDestinationChangedListener { _, destination, _ ->
+            binding.tbMainToolbar.visibility =
+                if (destination.id == R.id.homeFragment
+                    || destination.id == R.id.placePagerFragment
+                    || destination.id == R.id.profileFragment
+                    || destination.id == R.id.selectPhotoFragment
+                    || destination.id == R.id.writePostFragment
+                    || destination.id == R.id.userFragment
+                    || destination.id == R.id.notLoginFragment
+                ) View.GONE else View.VISIBLE
+
             binding.bnvBottomNav.visibility =
                 if (destination.id != R.id.homeFragment
                     && destination.id != R.id.bookMarkFragment

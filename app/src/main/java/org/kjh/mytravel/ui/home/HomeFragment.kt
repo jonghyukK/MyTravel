@@ -2,8 +2,7 @@ package org.kjh.mytravel.ui.home
 
 import android.graphics.Color
 import android.os.Bundle
-import android.view.*
-import android.view.View.*
+import android.view.View
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
@@ -16,11 +15,11 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.PagerSnapHelper
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.appbar.AppBarLayout
-import com.orhanobut.logger.Logger
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
-import org.kjh.mytravel.*
+import org.kjh.mytravel.NavGraphDirections
+import org.kjh.mytravel.R
 import org.kjh.mytravel.databinding.FragmentHomeBinding
 import org.kjh.mytravel.ui.MainActivity
 import org.kjh.mytravel.ui.base.BaseFragment

@@ -133,7 +133,7 @@ class SelectPhotoFragment
         }
     }
 
-    private fun nextMenuIsVisible(selectedItems: List<MediaStoreImage>){
+    private fun nextMenuIsVisible(selectedItems: List<MediaStoreImage>) {
         if (selectedItems.isNotEmpty() && binding.tbSelectPhotoToolbar.menu.isEmpty()) {
             binding.tbSelectPhotoToolbar.inflateMenu(R.menu.menu_next)
         } else if (selectedItems.isEmpty())

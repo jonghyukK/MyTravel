@@ -26,7 +26,6 @@ class SettingFragment : BaseFragment<FragmentSettingBinding>(R.layout.fragment_s
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        initToolbarWithNavigation()
         initClickEvents()
 
         viewLifecycleOwner.lifecycleScope.launch {
@@ -54,9 +53,5 @@ class SettingFragment : BaseFragment<FragmentSettingBinding>(R.layout.fragment_s
         binding.tvLogout.setOnClickListener {
             viewModel.logout()
         }
-    }
-
-    private fun initToolbarWithNavigation() {
-        binding.tbSettings.setupWithNavController(findNavController())
     }
 }

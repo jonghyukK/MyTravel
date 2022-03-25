@@ -55,8 +55,6 @@ class ProfileEditFragment
         binding.viewModel = viewModel
         binding.fragment = this
 
-        initToolbarWithNavigation()
-
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.uiState.collect { uiState ->
@@ -86,9 +84,5 @@ class ProfileEditFragment
         }
 
         viewModel.makeUpdateUserInfo(filePath)
-    }
-
-    private fun initToolbarWithNavigation() {
-        binding.tbProfileEdit.setupWithNavController(findNavController())
     }
 }

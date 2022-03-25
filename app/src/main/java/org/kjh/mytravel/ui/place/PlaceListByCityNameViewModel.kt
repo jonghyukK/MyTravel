@@ -5,6 +5,8 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import com.example.domain2.entity.ApiResult
 import com.example.domain2.usecase.GetPlacesBySubCityNameUseCase
+import com.naver.maps.map.NaverMap
+import com.naver.maps.map.internal.NaverMapAccessor
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
@@ -25,7 +27,8 @@ import org.kjh.mytravel.model.mapToPresenter
  */
 
 data class PlaceListCityNameUiState(
-    val placeItems: List<Place> = listOf()
+    val placeItems: List<Place> = listOf(),
+    val naverMapReady: Boolean = false
 )
 
 class PlaceListByCityNameViewModel @AssistedInject constructor(
@@ -65,6 +68,14 @@ class PlaceListByCityNameViewModel @AssistedInject constructor(
                         }
                     }
                 }
+        }
+    }
+
+    fun onUpdateNaverMapReady(value: Boolean) {
+        _uiState.update { currentUiState ->
+            currentUiState.copy(
+                naverMapReady = value
+            )
         }
     }
 }
