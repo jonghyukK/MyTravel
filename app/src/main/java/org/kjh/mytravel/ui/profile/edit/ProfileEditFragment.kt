@@ -2,6 +2,8 @@ package org.kjh.mytravel.ui.profile.edit
 
 import android.os.Bundle
 import android.view.View
+import android.widget.Toast
+import androidx.core.view.isVisible
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
@@ -13,15 +15,18 @@ import androidx.navigation.ui.setupWithNavController
 import com.canhub.cropper.CropImageContract
 import com.canhub.cropper.CropImageView
 import com.canhub.cropper.options
+import com.orhanobut.logger.Logger
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import org.kjh.mytravel.R
 import org.kjh.mytravel.databinding.FragmentProfileEditBinding
+import org.kjh.mytravel.model.User
 import org.kjh.mytravel.ui.base.BaseFragment
+import org.kjh.mytravel.ui.base.UiState
 import org.kjh.mytravel.ui.profile.ProfileViewModel
 
-const val NGINX_PATH = "http://192.168.219.102/images/"
+const val NGINX_PATH = "http://192.168.219.103/images/"
 
 @AndroidEntryPoint
 class ProfileEditFragment
@@ -29,7 +34,6 @@ class ProfileEditFragment
 
     private val viewModel: ProfileEditViewModel by viewModels()
     private val profileViewModel: ProfileViewModel by activityViewModels()
-    private val args: ProfileEditFragmentArgs by navArgs()
 
     private val cropImage = registerForActivityResult(CropImageContract()) { result ->
         if (result.isSuccessful) {
@@ -44,26 +48,53 @@ class ProfileEditFragment
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-        if (savedInstanceState == null) {
-            viewModel.initProfileInfo(args.profileImg, args.nickName, args.introduce)
-        }
+        initProfileInfo()
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding.viewModel = viewModel
-        binding.fragment = this
+        binding.fragment  = this
+
+        initToolbarWithNavigation()
 
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                viewModel.uiState.collect { uiState ->
-                    if (uiState.isSuccess && uiState.userItem != null) {
-                        profileViewModel.updateMyProfile(uiState.userItem)
-                        findNavController().popBackStack()
+                viewModel.profileUpdateState.collect { state ->
+                    binding.pbLoading.isVisible = state is ProfileUpdateState.Loading
+                    when (state) {
+                        is ProfileUpdateState.Success -> handleSuccessCase(state.userItem)
+                        is ProfileUpdateState.Error   -> handleErrorCase(state.error)
                     }
                 }
             }
+        }
+    }
+
+    private fun initToolbarWithNavigation() {
+        binding.tbProfileEditToolbar.setupWithNavController(findNavController())
+    }
+
+    private fun handleSuccessCase(userItem: User) {
+        profileViewModel.updateProfileItem(profileItem = userItem)
+        findNavController().popBackStack()
+    }
+
+    private fun handleErrorCase(error: String?) {
+        error?.let {
+            showError(it)
+            viewModel.shownErrorToast()
+        }
+    }
+
+    // init ProfileImg, nickName, Introduce with Two-way Binding.
+    private fun initProfileInfo() {
+        profileViewModel.uiState.value.profileItem?.let {
+            viewModel.initProfileInfo(
+                profileImg = it.profileImg,
+                nickName   = it.nickName,
+                introduce  = it.introduce
+            )
         }
     }
 
@@ -77,7 +108,7 @@ class ProfileEditFragment
     }
 
     fun onClickSave(v: View) {
-        var filePath = viewModel.uiState.value.profileImg
+        var filePath = viewModel.profileImg.value
 
         if (filePath != null && filePath.startsWith(NGINX_PATH)) {
             filePath = filePath.replace(NGINX_PATH, "${requireContext().cacheDir.absolutePath}/")

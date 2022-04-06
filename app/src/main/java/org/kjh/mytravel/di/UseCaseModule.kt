@@ -78,9 +78,13 @@ object UseCaseModule {
 
     @Provides
     fun provideUpdateBookMarkUseCase(
-        userRepository: UserRepository,
-        loginPreferenceUseCase: GetLoginPreferenceUseCase
-    ): UpdateBookMarkUseCase = UpdateBookMarkUseCase(userRepository, loginPreferenceUseCase)
+        bookmarkRepository: BookmarkRepository
+    ): UpdateBookmarkUseCase = UpdateBookmarkUseCase(bookmarkRepository)
+
+    @Provides
+    fun provideGetBookmarkUseCase(
+        bookmarkRepository: BookmarkRepository
+    ): GetBookmarkUseCase = GetBookmarkUseCase(bookmarkRepository)
 
     @Provides
     fun provideUpdateProfileUseCase(

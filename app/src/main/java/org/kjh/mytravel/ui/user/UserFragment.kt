@@ -2,6 +2,7 @@ package org.kjh.mytravel.ui.user
 
 import android.os.Bundle
 import android.view.View
+import android.widget.Toast
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
@@ -10,6 +11,7 @@ import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.navigation.ui.setupWithNavController
+import com.orhanobut.logger.Logger
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
@@ -20,6 +22,7 @@ import org.kjh.mytravel.databinding.FragmentUserBinding
 import org.kjh.mytravel.model.Post
 import org.kjh.mytravel.ui.PostSmallListAdapter
 import org.kjh.mytravel.ui.base.BaseFragment
+import org.kjh.mytravel.ui.bookmark.BookMarkViewModel
 import org.kjh.mytravel.ui.profile.ProfileViewModel
 import javax.inject.Inject
 
@@ -35,36 +38,24 @@ class UserFragment
     private val viewModel: UserViewModel by viewModels {
         UserViewModel.provideFactory(userViewModelFactory, args.userEmail)
     }
+
+    private val bookmarkViewModel: BookMarkViewModel by activityViewModels()
     private val profileViewModel: ProfileViewModel by activityViewModels()
 
     private val postSmallListAdapter by lazy {
-        PostSmallListAdapter({ item -> onClickPostItem(item)}) { item ->
-            profileViewModel.updateMyBookmark(item.postId)
-        }
-    }
-
-    private fun onClickPostItem(item: Post) {
-        val action = NavGraphDirections.actionGlobalPlacePagerFragment(item.placeName)
-        findNavController().navigate(action)
+        PostSmallListAdapter(
+            onClickPost     = { item -> onClickPostItem(item)},
+            onClickBookmark = { item -> onClickBookmark(item)}
+        )
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding.viewModel = viewModel
+        binding.fragment = this
 
         initToolbarWithNavigation()
         initUserPostsRecyclerView()
-        initClickEvents()
-
-        viewLifecycleOwner.lifecycleScope.launch {
-            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                profileViewModel.uiState.collect { uiState ->
-                    uiState.userItem?.let { currentUser ->
-                        viewModel.updateUserPostBookmarkState(currentUser.bookMarks)
-                    }
-                }
-            }
-        }
 
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
@@ -73,35 +64,63 @@ class UserFragment
                         postSmallListAdapter.submitList(uiState.userItem.posts)
                     }
 
-                    if (uiState.successFollowOrNot) {
-                        profileViewModel.uiState.value.userItem?.let {
-                            profileViewModel.updateMyProfile(
-                                it.copy(
-                                    followingCount = if (uiState.userItem?.isFollowing!!) {
-                                        it.followingCount + 1
-                                    } else {
-                                        it.followingCount - 1
-                                    }
-                                )
-                            )
-                        }
+                    uiState.isError?.let {
+                        showError(it)
+                        viewModel.shownErrorToast()
+                    }
+                }
+            }
+        }
 
-                        viewModel.sentRequestUpdateMyFollowCount()
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.followState.collect { followState ->
+                    when (followState) {
+                        is FollowState.Success -> {
+                            profileViewModel.updateProfileItem(followState.followItem.myProfile)
+//                            viewModel.initFollowState()
+                        }
+                        is FollowState.Error -> {
+                            followState.error?.let {
+                                showError(it)
+                                viewModel.initFollowState()
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                bookmarkViewModel.uiState.collect { uiState ->
+                    viewModel.updateUserPostBookmarkState(uiState.bookmarkItems)
+
+                    uiState.isError?.let {
+                        showError(it)
+                        bookmarkViewModel.shownErrorToast()
                     }
                 }
             }
         }
     }
 
-    private fun initClickEvents() {
-        binding.btnFollow.setOnClickListener {
-            viewModel.makeRequestFollow(targetEmail = args.userEmail)
-        }
+    private fun onClickPostItem(item: Post) {
+        navigateWithAction(NavGraphDirections.actionGlobalPlacePagerFragment(item.placeName))
+    }
+
+    private fun onClickBookmark(item: Post) {
+        bookmarkViewModel.updateBookmark(item.postId, item.placeName)
+    }
+
+    fun onClickFollowOrUnFollow(v: View) {
+        viewModel.makeRequestFollow(targetEmail = args.userEmail)
     }
 
     private fun initUserPostsRecyclerView() {
         binding.rvUserPostList.apply {
             adapter = postSmallListAdapter
+            setHasFixedSize(true)
             addItemDecoration(ProfilePostsGridItemDecoration(requireContext()))
         }
     }

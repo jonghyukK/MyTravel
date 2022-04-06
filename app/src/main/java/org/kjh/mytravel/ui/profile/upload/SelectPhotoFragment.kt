@@ -27,7 +27,10 @@ class SelectPhotoFragment
 
     private lateinit var tracker: SelectionTracker<Uri>
 
-    private val uploadViewModel: UploadViewModel by navGraphViewModels(R.id.nav_nested_upload){ defaultViewModelProviderFactory }
+    private val uploadViewModel: UploadViewModel by navGraphViewModels(R.id.nav_nested_upload) {
+        defaultViewModelProviderFactory
+    }
+
     private val viewModel: SelectPhotoViewModel by viewModels()
 
     private val mediaStoreImagesAdapter by lazy {
@@ -54,8 +57,8 @@ class SelectPhotoFragment
 
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                uploadViewModel.uiState.collect { dataState ->
-                    with (dataState.selectedItems) {
+                uploadViewModel.uploadItemState.collect { uploadItemState ->
+                    with (uploadItemState.selectedItems) {
                         selectedPhotoListAdapter.submitList(this)
                         restoreSelectionTracker(this)
                         nextMenuIsVisible(this)
@@ -77,14 +80,12 @@ class SelectPhotoFragment
             setupWithNavController(findNavController())
             inflateMenu(R.menu.menu_next)
             setOnMenuItemClickListener {
-                when (it.itemId) {
-                    R.id.next -> {
-                        val action = SelectPhotoFragmentDirections.actionSelectPhotoFragmentToWritePostFragment()
-                        findNavController().navigate(action)
-                        true
-                    }
-                    else -> false
+                if (it.itemId == R.id.next) {
+                    navigateWithAction(
+                        SelectPhotoFragmentDirections.actionSelectPhotoFragmentToWritePostFragment()
+                    )
                 }
+                false
             }
         }
     }
@@ -98,6 +99,7 @@ class SelectPhotoFragment
     private fun initLocalPhotoRecyclerView(savedInstanceState: Bundle?) {
         binding.rvLocalImages.apply {
             adapter = mediaStoreImagesAdapter
+            setHasFixedSize(true)
             addItemDecoration(UploadGridLayoutItemDecor())
         }
 
@@ -114,11 +116,10 @@ class SelectPhotoFragment
     private fun onSelectionChanged() {
         val selectedList = mutableListOf<MediaStoreImage>()
 
-        for (i in tracker.selection) {
-            mediaStoreImagesAdapter.currentList.find { it.contentUri == i }
-                ?.let {
-                    selectedList.add(it)
-                }
+        for (uri in tracker.selection) {
+            mediaStoreImagesAdapter.currentList.find { it.contentUri == uri }?.let {
+                selectedList.add(it)
+            }
         }
 
         uploadViewModel.updateSelectedImages(selectedList)
@@ -126,9 +127,7 @@ class SelectPhotoFragment
 
     private fun restoreSelectionTracker(selectedItems: List<MediaStoreImage>) {
         if (selectedItems.isNotEmpty() && tracker.selection.size() == 0) {
-            val list = selectedItems.map {
-                it.contentUri
-            }
+            val list = selectedItems.map { it.contentUri }
             tracker.setItemsSelected(list, true)
         }
     }

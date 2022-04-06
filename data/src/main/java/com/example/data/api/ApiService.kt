@@ -2,6 +2,7 @@ package com.example.data.api
 
 import com.example.data.model.api.*
 import com.example.domain2.entity.*
+import kotlinx.coroutines.flow.Flow
 import okhttp3.MultipartBody
 import retrofit2.http.*
 
@@ -59,7 +60,7 @@ interface ApiService {
     suspend fun requestFollowOrUnFollow(
         @Query("myEmail") myEmail: String,
         @Query("targetEmail") targetEmail: String
-    ): UserApiModel
+    ): FollowApiModel
 
     @GET("post/recent")
     suspend fun getRecentPosts(
@@ -77,13 +78,6 @@ interface ApiService {
     suspend fun getPlaceRanking(): PlaceRankingApiModel
 
 
-    @PUT("user/bookmark")
-    suspend fun updateBookmark(
-        @Query("email") email: String,
-        @Query("postId") postId: Int
-    ): BookmarksApiModel
-
-
     @GET("banners")
     suspend fun getHomeBanners(): BannersApiModel
 
@@ -91,4 +85,16 @@ interface ApiService {
     suspend fun getPlacesBySubCityName(
         @Query("subCityName") subCityName: String
     ): PlacesApiModel
+
+    @PUT("bookmarks")
+    suspend fun updateBookmark(
+        @Query("myEmail") myEmail    : String,
+        @Query("postId") postId      : Int,
+        @Query("placeName") placeName: String
+    ): BookmarksApiModel
+
+    @GET("bookmarks")
+    suspend fun getBookmarks(
+        @Query("myEmail") myEmail    : String
+    ): BookmarksApiModel
 }

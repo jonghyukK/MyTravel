@@ -15,9 +15,9 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import org.kjh.mytravel.model.Banner
-import org.kjh.mytravel.model.PlaceWithRanking
 import org.kjh.mytravel.model.Post
 import org.kjh.mytravel.model.mapToPresenter
+import org.kjh.mytravel.ui.base.UiState
 import javax.inject.Inject
 
 /**
@@ -28,16 +28,9 @@ import javax.inject.Inject
  * Description:
  */
 
-data class PlaceRankingUiState(
-    val placeRankingItems: List<PlaceWithRanking> = listOf()
-)
-
-data class RecentPostsUiState(
-    val recentPlaceItems: PagingData<Post>? = null
-)
-
-data class HomeBannersUiState(
-    val homeBannerItems: List<Banner> = listOf()
+data class HomeUiState(
+    val isCollapsed : Boolean = false,
+    val isRefresh   : Boolean = false
 )
 
 @HiltViewModel
@@ -48,77 +41,90 @@ class HomeViewModel @Inject constructor(
     val loginPreferenceUseCase: GetLoginPreferenceUseCase
 ): ViewModel() {
 
-    private val _homeBannersUiState = MutableStateFlow(HomeBannersUiState())
-    val homeBannersUiString: StateFlow<HomeBannersUiState> = _homeBannersUiState
+    private val _homeBannersUiState: MutableStateFlow<UiState> = MutableStateFlow(UiState.Loading)
+    val homeBannersUiState: StateFlow<UiState> = _homeBannersUiState
 
-    private val _recentPostsUiState = MutableStateFlow(RecentPostsUiState())
-    val recentPostsUiState: StateFlow<RecentPostsUiState> = _recentPostsUiState
+    private val _homeRankingsUiState: MutableStateFlow<UiState> = MutableStateFlow(UiState.Loading)
+    val homeRankingsUiState: StateFlow<UiState> = _homeRankingsUiState
 
-    private val _placeRankingUiState = MutableStateFlow(PlaceRankingUiState())
-    val placeRankingUiState: StateFlow<PlaceRankingUiState> = _placeRankingUiState
+    private val _homeUiState = MutableStateFlow(HomeUiState())
+    val homeUiState: StateFlow<HomeUiState> = _homeUiState
+
+    private var currentRecentPostsPagingData: Flow<PagingData<Post>>? = null
 
     init {
+        getHomeBanners()
+        getPlaceRankings()
+    }
+
+    // API - home Banners.
+    private fun getHomeBanners() {
         viewModelScope.launch {
             getHomeBannersUseCase()
-                .collect { result ->
-                    when (result) {
-                        is ApiResult.Success ->
-                            _homeBannersUiState.update { currentUiState ->
-                                currentUiState.copy(
-                                    homeBannerItems = result.data.map {
-                                        it.mapToPresenter()
-                                    }
-                                )
-                            }
-                    }
-                }
-        }
-
-        viewModelScope.launch {
-            getRecentPostsUseCase(loginPreferenceUseCase().email)
-                .map { pagingData ->
-                    pagingData.map { it.mapToPresenter() }
-                }
-                .cachedIn(viewModelScope)
-                .collectLatest { result ->
-                    _recentPostsUiState.update {
-                        it.copy(recentPlaceItems = result)
-                    }
-                }
-        }
-
-        viewModelScope.launch {
-            getPlaceRankingUseCase()
-                .collect { result ->
-                    when (result) {
+                .collect { apiResult ->
+                    when (apiResult) {
+                        is ApiResult.Loading -> {}
                         is ApiResult.Success -> {
-                            _placeRankingUiState.update { currentUiState ->
-                                currentUiState.copy(
-                                    placeRankingItems = result.data.map { it.mapToPresenter() }
-                                )
-                            }
+                            val data = apiResult.data.map { it.mapToPresenter() }
+                            _homeBannersUiState.value = UiState.Success(data)
+                        }
+                        is ApiResult.Error -> {
+                            Logger.e("${apiResult.throwable}")
+                            _homeBannersUiState.value = UiState.Error(apiResult.throwable)
                         }
                     }
                 }
         }
     }
 
-    fun updateRecentPosts() {
+    // API - home Place Rankings.
+    private fun getPlaceRankings() {
         viewModelScope.launch {
-            getRecentPostsUseCase(loginPreferenceUseCase().email)
-                .map { pagingData ->
-                    pagingData.map { it.mapToPresenter() }
-                }
-                .cachedIn(viewModelScope)
-                .collectLatest { result ->
-                    if (_recentPostsUiState.value.recentPlaceItems != result) {
-                        Logger.e("Added New Post")
+            getPlaceRankingUseCase()
+                .collect { apiResult ->
+                    when (apiResult) {
+                        is ApiResult.Loading -> {}
+                        is ApiResult.Success -> {
+                            val data = apiResult.data.map { it.mapToPresenter() }
+                            _homeRankingsUiState.value = UiState.Success(data)
+                        }
+                        is ApiResult.Error -> {
+                            Logger.e("${apiResult.throwable}")
+                            _homeRankingsUiState.value = UiState.Error(apiResult.throwable)
+                        }
                     }
+                }
+        }
+    }
 
-                    _recentPostsUiState.update {
-                        it.copy(recentPlaceItems = result)
-                    }
-                }
+    // API - home Recent Posts.
+    suspend fun getRecentPostPagingData(): Flow<PagingData<Post>> {
+        val lastResult = currentRecentPostsPagingData
+
+        if (lastResult != null) {
+            return lastResult
+        }
+
+        val newResult = getRecentPostsUseCase(loginPreferenceUseCase().email)
+            .map { pagingData ->
+                pagingData.map { it.mapToPresenter() }
+            }
+            .cachedIn(viewModelScope)
+        currentRecentPostsPagingData = newResult
+
+        return newResult
+    }
+
+
+    fun refreshRecentPosts(value: Boolean) {
+        _homeUiState.update {
+            it.copy(isRefresh = value)
+        }
+    }
+
+    fun updateCollapsingState(value: Boolean) {
+        _homeUiState.update {
+            it.copy(isCollapsed = value)
         }
     }
 }

@@ -2,6 +2,7 @@ package com.example.data.datasource
 
 import com.example.data.api.ApiService
 import com.example.data.model.api.BookmarksApiModel
+import com.example.data.model.api.FollowApiModel
 import com.example.data.model.api.UserApiModel
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
@@ -31,12 +32,7 @@ interface UserRemoteDataSource {
     suspend fun requestFollowOrUnFollow(
         myEmail: String,
         targetEmail: String
-    ): UserApiModel
-
-    suspend fun updateBookmark(
-        email: String,
-        postId: Int
-    ): BookmarksApiModel
+    ): FollowApiModel
 }
 
 class UserRemoteDataSourceImpl @Inject constructor(
@@ -77,10 +73,4 @@ class UserRemoteDataSourceImpl @Inject constructor(
         myEmail    : String,
         targetEmail: String
     ) = apiService.requestFollowOrUnFollow(myEmail, targetEmail)
-
-    override suspend fun updateBookmark(
-        email: String,
-        postId: Int
-    ) = apiService.updateBookmark(email, postId)
-
 }

@@ -6,16 +6,12 @@ import com.example.domain2.entity.ApiResult
 import com.example.domain2.repository.LoginPreferencesRepository
 import com.example.domain2.usecase.GetLoginPreferenceUseCase
 import com.example.domain2.usecase.GetUserUseCase
-import com.example.domain2.usecase.UpdateBookMarkUseCase
 import com.orhanobut.logger.Logger
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
+import org.kjh.mytravel.R
 import org.kjh.mytravel.model.Bookmark
-import org.kjh.mytravel.model.Post
 import org.kjh.mytravel.model.User
 import org.kjh.mytravel.model.mapToPresenter
 import javax.inject.Inject
@@ -28,97 +24,110 @@ import javax.inject.Inject
  * Description:
  */
 
+//sealed class ProfileUiState {
+//    object Loading  : ProfileUiState()
+//    object NotLogin : ProfileUiState()
+//    data class Success(val profileItem: User): ProfileUiState()
+//    data class Error(val error: Throwable?): ProfileUiState()
+//}
+
 data class ProfileUiState(
-    val userItem  : User? = null,
-    val isLoading : Boolean = false,
-    val isLoggedIn: Boolean = true
+    val isLoading  : Boolean = false,
+    val profileItem: User? = null,
+    val isError    : String? = null
 )
+
+sealed class LoginState {
+    object Init: LoginState()
+    object LoggedIn : LoginState()
+    object NotLogIn : LoginState()
+}
 
 @HiltViewModel
 class ProfileViewModel @Inject constructor(
     private val getUserUseCase: GetUserUseCase,
     private val getLoginPreferenceUseCase: GetLoginPreferenceUseCase,
-    private val updateBookMarkUseCase: UpdateBookMarkUseCase,
     private val loginPreferencesRepository: LoginPreferencesRepository
 ): ViewModel() {
     private val _uiState : MutableStateFlow<ProfileUiState> = MutableStateFlow(ProfileUiState())
     val uiState: StateFlow<ProfileUiState> = _uiState
 
+    private val _loginState: MutableStateFlow<LoginState> = MutableStateFlow(LoginState.Init)
+    val loginState = _loginState.asStateFlow()
+
     init {
+        checkLoginState()
+    }
+
+    private fun checkLoginState() {
         viewModelScope.launch {
-            loginPreferencesRepository.loginInfoPreferencesFlow.collect {
-                _uiState.value = ProfileUiState(isLoggedIn = it.isLoggedIn)
-                if (it.isLoggedIn) {
-                    getMyProfileData()
+            loginPreferencesRepository.loginInfoPreferencesFlow
+                .collect {
+                    _loginState.value = if (it.isLoggedIn) LoginState.LoggedIn else LoginState.NotLogIn
+
+                    if (it.isLoggedIn)
+                        getMyProfileData()
                 }
-            }
         }
     }
 
     private fun getMyProfileData() {
-       viewModelScope.launch {
+        viewModelScope.launch {
             getUserUseCase.getMyProfile(getLoginPreferenceUseCase().email)
-                .collect { result ->
-                    when (result) {
-                        is ApiResult.Loading -> _uiState.update {
-                            it.copy(isLoading = true)
-                        }
-                        is ApiResult.Success -> {
+                .collect { apiResult ->
+                    when (apiResult) {
+                        is ApiResult.Loading ->
+                            _uiState.value = ProfileUiState(isLoading = true)
+
+                        is ApiResult.Success ->
+                            _uiState.update {
+                                it.copy(
+                                    isLoading   = false,
+                                    profileItem = apiResult.data.mapToPresenter()
+                                )
+                            }
+
+                        is ApiResult.Error ->
                             _uiState.update {
                                 it.copy(
                                     isLoading = false,
-                                    userItem  = result.data.mapToPresenter()
+                                    isError   = apiResult.throwable.localizedMessage
                                 )
                             }
-                        }
-                        is ApiResult.Error -> _uiState.update {
-                            it.copy(
-                                isLoading = false
-                            )
-                        }
                     }
                 }
         }
     }
 
-    fun updateMyProfile(userItem: User) {
+    fun shownErrorToast() {
         _uiState.update {
             it.copy(
-                userItem = userItem
+                isError = null
             )
         }
     }
 
-    fun updateMyBookmark(postId: Int) {
-        viewModelScope.launch {
-            updateBookMarkUseCase(
-                postId = postId
-            ).collect { result ->
-                when (result) {
-                    is ApiResult.Success -> {
-                        val newBookmarks = result.data.map { it.mapToPresenter() }
-
-                        _uiState.value.userItem?.let { user ->
-                            val updatedPosts = user.posts.map { currentPost ->
-                                currentPost.copy(
-                                    isBookmarked = newBookmarks.find { it.placeName == currentPost.placeName } != null
+    fun updatePostBookmarkState(bookmarks: List<Bookmark>) {
+        _uiState.value.profileItem?.let { profileItem ->
+            if (profileItem.posts.isNotEmpty()) {
+                _uiState.update { currentUiState ->
+                    currentUiState.copy(
+                        profileItem = currentUiState.profileItem!!.copy(
+                            posts = currentUiState.profileItem.posts.map { post ->
+                                post.copy(
+                                    isBookmarked = bookmarks.find { it.placeName == post.placeName } != null
                                 )
                             }
-
-                            Logger.d("${updatedPosts}")
-
-                            _uiState.update {
-                                it.copy(
-                                    userItem = user.copy(
-                                        posts = updatedPosts,
-                                        bookMarks = newBookmarks
-                                    )
-                                )
-                            }
-                        }
-                    }
+                        )
+                    )
                 }
             }
+        }
+    }
+
+    fun updateProfileItem(profileItem: User) {
+        _uiState.update {
+            it.copy(profileItem = profileItem)
         }
     }
 }

@@ -68,4 +68,12 @@ object DataSourceModule {
     ): PlaceRemoteDataSource {
         return PlaceRemoteDataSourceImpl(apiService)
     }
+
+    @Singleton
+    @Provides
+    fun provideBookmarkDataSource(
+        apiService: ApiService
+    ): BookmarkRemoteDataSource {
+        return BookmarkRemoteDataSourceImpl(apiService)
+    }
 }

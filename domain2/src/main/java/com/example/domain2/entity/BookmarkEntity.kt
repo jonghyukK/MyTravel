@@ -18,6 +18,6 @@ data class BookmarkEntity(
     val placeAddress: String,
     val profileImg  : String? = null,
     val createdDate : String,
-    val isBookmarked: Boolean = false,
+    val isBookmarked: Boolean = true,
     val imageUrl    : List<String> = listOf()
 )

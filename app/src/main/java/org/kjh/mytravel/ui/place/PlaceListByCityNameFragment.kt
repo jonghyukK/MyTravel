@@ -28,6 +28,7 @@ import org.kjh.mytravel.NavGraphDirections
 import org.kjh.mytravel.R
 import org.kjh.mytravel.databinding.FragmentPlaceListByCityNameBinding
 import org.kjh.mytravel.model.Place
+import org.kjh.mytravel.statusBarHeight
 import org.kjh.mytravel.ui.base.BaseFragment
 import javax.inject.Inject
 
@@ -44,9 +45,8 @@ class PlaceListByCityNameFragment
     }
 
     private val args: PlaceListByCityNameFragmentArgs by navArgs()
-//    private lateinit var naverMap: NaverMap
-    private lateinit var bsBehavior: BottomSheetBehavior<View>
     private var naverMap: NaverMap? = null
+    private lateinit var bsBehavior: BottomSheetBehavior<View>
 
     private val placeListByCityNameAdapter by lazy {
         PlaceListByCityNameAdapter { placeName ->
@@ -57,10 +57,10 @@ class PlaceListByCityNameFragment
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
         binding.subCityName = args.cityName
         binding.fragment = this
 
+        initToolbarWithNavigation()
         initPlaceListBottomSheet()
 
         viewLifecycleOwner.lifecycleScope.launch {
@@ -120,6 +120,10 @@ class PlaceListByCityNameFragment
         }
     }
 
+    private fun initToolbarWithNavigation() {
+        binding.tbPlaceListByCityNameToolbar.setupWithNavController(findNavController())
+    }
+
     private fun initPlaceListBottomSheet() {
         if (::bsBehavior.isInitialized) {
             binding.btnShowMap.isVisible = bsBehavior.state == STATE_EXPANDED
@@ -138,9 +142,11 @@ class PlaceListByCityNameFragment
 
             val dp = resources.displayMetrics.density
             val mapHeight    = binding.map.layoutParams.height / dp
-            val tbHeight     = requireActivity().findViewById<Toolbar>(R.id.tb_mainToolbar).layoutParams.height / dp
+            val tbHeight     = binding.tbPlaceListByCityNameToolbar.layoutParams.height / dp
             val deviceHeight = resources.displayMetrics.heightPixels / dp
+            val statusBarHeight = requireContext().statusBarHeight() / dp
 
+            expandedOffset = ((tbHeight + statusBarHeight) * dp).toInt()
             peekHeight = ((deviceHeight - mapHeight - tbHeight) * dp).toInt()
         }
 

@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
+import android.widget.Toast
 import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
@@ -55,26 +56,21 @@ class MapSearchFragment
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding.viewModel = viewModel
+        binding.fragment = this
 
         initSearchPlaceRecyclerView()
-
-        binding.btnCancel.setOnClickListener {
-            dismiss()
-        }
-
-        binding.etSearch.setOnEditorActionListener { _, actionId, _ ->
-            if (actionId == EditorInfo.IME_ACTION_SEARCH) {
-                viewModel.makeSearchPlace()
-                true
-            }
-            false
-        }
+        initEditorActionListener()
 
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.uiState.collect { uiState ->
-                    binding.pbLoading.isVisible = uiState.isLoading
-                    mapSearchPlaceListAdapter.submitList(uiState.placeList)
+                    binding.pbLoading.isVisible = uiState is MapSearchState.Loading
+                    when (uiState) {
+                        is MapSearchState.Success ->
+                            mapSearchPlaceListAdapter.submitList(uiState.items)
+                        is MapSearchState.Error ->
+                            Toast.makeText(requireContext(), uiState.error.toString(), Toast.LENGTH_SHORT).show()
+                    }
                 }
             }
         }
@@ -82,8 +78,22 @@ class MapSearchFragment
 
     private fun initSearchPlaceRecyclerView() {
         binding.rvSearchList.apply {
+            setHasFixedSize(true)
             adapter = mapSearchPlaceListAdapter
         }
+    }
+
+    private fun initEditorActionListener() {
+        binding.etSearch.setOnEditorActionListener { _, actionId, _ ->
+            if (actionId == EditorInfo.IME_ACTION_SEARCH) {
+                viewModel.makeSearchPlace()
+            }
+            false
+        }
+    }
+
+    fun onClickCancel(v: View) {
+        dismiss()
     }
 
     companion object {

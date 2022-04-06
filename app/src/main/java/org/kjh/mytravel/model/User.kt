@@ -18,7 +18,7 @@ data class User(
     val followingCount : Int = 0,
     val followCount    : Int = 0,
     val introduce      : String? = null,
-    val isFollowing    : Boolean? = null,
+    val isFollowing    : Boolean = false,
     val posts          : List<Post> = listOf(),
     val bookMarks      : List<Bookmark> = listOf()
 )

@@ -2,17 +2,21 @@ package org.kjh.mytravel.ui
 
 import android.graphics.Color
 import android.net.Uri
-import android.widget.EditText
 import android.widget.ImageView
 import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.core.view.isVisible
 import androidx.databinding.BindingAdapter
-import androidx.fragment.app.FragmentContainerView
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.PagerSnapHelper
+import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.google.android.material.appbar.AppBarLayout
+import com.google.android.material.appbar.CollapsingToolbarLayout
+import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
-import com.naver.maps.map.MapFragment
+import com.orhanobut.logger.Logger
 import org.kjh.mytravel.InputValidator
 import org.kjh.mytravel.InputValidator.INPUT_TYPE_EMAIl
 import org.kjh.mytravel.InputValidator.INPUT_TYPE_PW
@@ -20,6 +24,10 @@ import org.kjh.mytravel.InputValidator.isValidateEmail
 import org.kjh.mytravel.InputValidator.isValidateNickName
 import org.kjh.mytravel.InputValidator.isValidatePw
 import org.kjh.mytravel.R
+import org.kjh.mytravel.model.Banner
+import org.kjh.mytravel.ui.base.UiState
+import org.kjh.mytravel.ui.home.banner.HomeBannerItemDecoration
+import org.kjh.mytravel.ui.home.banner.HomeBannersAdapter
 
 /**
  * MyTravel
@@ -105,5 +113,11 @@ object MyBindingAdapter {
     @BindingAdapter("app:isVisible")
     fun bindVisible(view: ProgressBar, isVisible: Boolean) {
         view.isVisible = isVisible
+    }
+
+    @JvmStatic
+    @BindingAdapter("showLoading")
+    fun bindShowLoading(view: ProgressBar, uiState: UiState) {
+        view.isVisible = uiState is UiState.Loading
     }
 }

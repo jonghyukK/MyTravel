@@ -16,7 +16,7 @@ import org.kjh.mytravel.model.Post
  * Description:
  */
 class PostSmallListAdapter(
-    private val onClickItem: (Post) -> Unit,
+    private val onClickPost    : (Post) -> Unit,
     private val onClickBookmark: (Post) -> Unit
 ): ListAdapter<Post, PostItemSmallViewHolder>(Post.DiffCallback) {
 
@@ -24,7 +24,7 @@ class PostSmallListAdapter(
        PostItemSmallViewHolder(
             VhProfilePostItemBinding.inflate(
                 LayoutInflater.from(parent.context), parent, false
-            ), onClickItem, onClickBookmark
+            ), onClickPost, onClickBookmark
        )
 
     override fun onBindViewHolder(holder: PostItemSmallViewHolder, position: Int) {
@@ -34,7 +34,7 @@ class PostSmallListAdapter(
 
 class PostItemSmallViewHolder(
     val binding: VhProfilePostItemBinding,
-    private val onClickItem: (Post) -> Unit,
+    private val onClickPost    : (Post) -> Unit,
     private val onClickBookmark: (Post) -> Unit
 ): RecyclerView.ViewHolder(binding.root) {
 
@@ -42,7 +42,7 @@ class PostItemSmallViewHolder(
         binding.postItem = item
 
         itemView.setOnClickListener {
-            onClickItem(item)
+            onClickPost(item)
         }
 
         binding.ivBookmark.setOnClickListener {

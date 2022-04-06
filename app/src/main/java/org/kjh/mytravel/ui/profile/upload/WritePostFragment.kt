@@ -2,6 +2,7 @@ package org.kjh.mytravel.ui.profile.upload
 
 import android.os.Bundle
 import android.view.View
+import androidx.core.view.isVisible
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
@@ -35,21 +36,38 @@ class WritePostFragment
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding.uploadViewModel = uploadViewModel
+        binding.fragment = this
 
         initToolbarWithNavigation()
         initImageRecyclerView()
-        initClickEvents()
 
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                uploadViewModel.uiState.collect {
+                uploadViewModel.uploadItemState.collect {
                     if (it.selectedItems.isNotEmpty())
                         writePostImagesAdapter.submitList(it.selectedItems)
+                }
+            }
+        }
 
-                    if (it.uploadSuccess && it.userItem != null) {
-                        profileViewModel.updateMyProfile(it.userItem)
-                        homeViewModel.updateRecentPosts()
-                        navigateProfileWhenSuccessUpload()
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                uploadViewModel.uploadState.collect { state ->
+                    binding.pbLoading.isVisible = state is UploadState.Loading
+
+                    when (state) {
+                        is UploadState.Success -> {
+                            profileViewModel.updateProfileItem(profileItem = state.userItem)
+                            homeViewModel.refreshRecentPosts(true)
+                            navigateProfileWhenSuccessUpload()
+                        }
+
+                        is UploadState.Error -> {
+                            state.error?.let {
+                                showError(it)
+                                uploadViewModel.initUploadState()
+                            }
+                        }
                     }
                 }
             }
@@ -57,21 +75,17 @@ class WritePostFragment
     }
 
     private fun navigateProfileWhenSuccessUpload() {
-        val action = WritePostFragmentDirections.actionGlobalProfileFragment()
-        findNavController().navigate(action)
+        navigateWithAction(WritePostFragmentDirections.actionGlobalProfileFragment())
     }
 
-    private fun initClickEvents() {
-        binding.tvAddLocation.setOnClickListener {
-            val action = WritePostFragmentDirections.actionWritePostFragmentToMapFragment()
-            findNavController().navigate(action)
-        }
+    fun onClickAddLocation(v: View) {
+        navigateWithAction(WritePostFragmentDirections.actionWritePostFragmentToMapFragment())
     }
 
     private fun initImageRecyclerView() {
         binding.rvSelectedImages.apply {
             adapter = writePostImagesAdapter
-            val snapHelper: SnapHelper = PagerSnapHelper()
+            val snapHelper = PagerSnapHelper()
             snapHelper.attachToRecyclerView(this)
         }
     }

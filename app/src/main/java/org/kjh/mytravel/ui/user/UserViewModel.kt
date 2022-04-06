@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import com.example.domain2.entity.ApiResult
+import com.example.domain2.repository.UserRepository
 import com.example.domain2.usecase.GetLoginPreferenceUseCase
 import com.example.domain2.usecase.GetUserUseCase
 import com.example.domain2.usecase.MakeRequestFollowOrNotUseCase
@@ -11,14 +12,13 @@ import com.orhanobut.logger.Logger
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import org.kjh.mytravel.model.Bookmark
+import org.kjh.mytravel.model.Follow
 import org.kjh.mytravel.model.User
 import org.kjh.mytravel.model.mapToPresenter
+import javax.inject.Singleton
 
 /**
  * MyTravel
@@ -31,8 +31,15 @@ import org.kjh.mytravel.model.mapToPresenter
 data class UserUiState(
     val userItem  : User? = null,
     val isLoading : Boolean = false,
-    val successFollowOrNot : Boolean = false
+    val isError   : String? = null
 )
+
+sealed class FollowState {
+    object Init : FollowState()
+    object Loading: FollowState()
+    data class Success(val followItem: Follow): FollowState()
+    data class Error(val error: String?): FollowState()
+}
 
 class UserViewModel @AssistedInject constructor(
     private val getUserUseCase: GetUserUseCase,
@@ -59,23 +66,34 @@ class UserViewModel @AssistedInject constructor(
     private val _uiState = MutableStateFlow(UserUiState())
     val uiState : StateFlow<UserUiState> = _uiState
 
+    private val _followState: MutableStateFlow<FollowState> = MutableStateFlow(FollowState.Init)
+    val followState = _followState.asStateFlow()
+
     init {
         viewModelScope.launch {
             getUserUseCase(
                 myEmail     = getLoginPreferenceUseCase().email,
                 targetEmail = initUserEmail
-            ).collect { result ->
-                    when (result) {
-                        is ApiResult.Loading -> _uiState.value = UserUiState(isLoading = true)
+            ).collect { apiResult ->
+                    when (apiResult) {
+                        is ApiResult.Loading ->
+                            _uiState.value = UserUiState(isLoading = true)
+
                         is ApiResult.Success -> {
                             _uiState.update {
                                 it.copy(
                                     isLoading = false,
-                                    userItem = result.data.mapToPresenter()
+                                    userItem  = apiResult.data.mapToPresenter()
                                 )
                             }
                         }
-                        is ApiResult.Error -> {}
+                        is ApiResult.Error ->
+                            _uiState.update {
+                                it.copy(
+                                    isLoading = false,
+                                    isError   = apiResult.throwable.localizedMessage
+                                )
+                            }
                     }
                 }
         }
@@ -86,37 +104,27 @@ class UserViewModel @AssistedInject constructor(
             makeRequestFollowOrNotUseCase(
                 myEmail     = getLoginPreferenceUseCase().email,
                 targetEmail = targetEmail
-            ).collect { result ->
-                    when (result) {
-                        is ApiResult.Loading ->
-                            _uiState.update {
-                                it.copy(isLoading = true, successFollowOrNot = false)
-                            }
+            ).collect { apiResult ->
+                    when (apiResult) {
+                        is ApiResult.Loading -> _followState.value = FollowState.Loading
 
                         is ApiResult.Success -> {
-                            val userData = result.data.mapToPresenter()
+                            val targetProfile = apiResult.data.targetProfile.mapToPresenter()
+
                             _uiState.update {
-                                it.copy(
-                                    isLoading = false,
-                                    userItem = it.userItem?.copy(
-                                        followCount = userData.followCount,
-                                        isFollowing = userData.isFollowing
-                                    ),
-                                    successFollowOrNot = true
-                                )
+                                it.copy(userItem = targetProfile)
                             }
+
+                            _followState.value = FollowState.Success(Follow(
+                                apiResult.data.myProfile.mapToPresenter(),
+                                targetProfile
+                            ))
                         }
-                        is ApiResult.Error -> {
-                            Logger.e(result.throwable.localizedMessage)
-                        }
+
+                        is ApiResult.Error ->
+                            _followState.value = FollowState.Error(apiResult.throwable.localizedMessage)
                     }
                 }
-        }
-    }
-
-    fun sentRequestUpdateMyFollowCount() {
-        _uiState.update { currentUiState ->
-            currentUiState.copy(successFollowOrNot = false)
         }
     }
 
@@ -131,6 +139,16 @@ class UserViewModel @AssistedInject constructor(
                     )
                 )
             }
+        }
+    }
+
+    fun initFollowState() {
+        _followState.value = FollowState.Init
+    }
+
+    fun shownErrorToast() {
+        _uiState.update {
+            it.copy(isError = null)
         }
     }
 }

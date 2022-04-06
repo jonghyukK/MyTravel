@@ -8,13 +8,11 @@ import com.example.domain2.usecase.GetLoginPreferenceUseCase
 import com.example.domain2.usecase.UpdateProfileUseCase
 import com.orhanobut.logger.Logger
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import org.kjh.mytravel.model.User
 import org.kjh.mytravel.model.mapToPresenter
+import org.kjh.mytravel.ui.base.UiState
 import javax.inject.Inject
 
 /**
@@ -25,40 +23,35 @@ import javax.inject.Inject
  * Description:
  */
 
-data class ProfileEditUiState(
-    val profileImg: String? = null,
-    val userItem  : User?   = null,
-    val isLoading : Boolean = false,
-    val isSuccess : Boolean = false,
-)
+sealed class ProfileUpdateState {
+    object Init : ProfileUpdateState()
+    object Loading : ProfileUpdateState()
+    data class Success(val userItem: User): ProfileUpdateState()
+    data class Error(val error: String?): ProfileUpdateState()
+}
 
 @HiltViewModel
 class ProfileEditViewModel @Inject constructor(
     private val updateProfileUseCase: UpdateProfileUseCase,
     private val getLoginPreferenceUseCase: GetLoginPreferenceUseCase
 ): ViewModel() {
-    private val _uiState = MutableStateFlow(ProfileEditUiState())
-    val uiState: StateFlow<ProfileEditUiState> = _uiState
+    private val _profileImg: MutableStateFlow<String?> = MutableStateFlow(null)
+    val profileImg = _profileImg.asStateFlow()
+
+    private val _profileUpdateState: MutableStateFlow<ProfileUpdateState> = MutableStateFlow(ProfileUpdateState.Init)
+    val profileUpdateState = _profileUpdateState.asStateFlow()
 
     val inputNickName  = MutableLiveData<String>()
     val inputIntroduce = MutableLiveData<String?>()
 
     fun initProfileInfo(profileImg: String?, nickName: String, introduce: String?) {
-        viewModelScope.launch {
-            _uiState.value = ProfileEditUiState(profileImg)
-            inputNickName.value = nickName
-            inputIntroduce.value = introduce
-        }
+        _profileImg.value    = profileImg
+        inputNickName.value  = nickName
+        inputIntroduce.value = introduce
     }
 
     fun updateProfileImg(uri: String) {
-        viewModelScope.launch {
-            _uiState.update {
-                it.copy(
-                    profileImg = uri
-                )
-            }
-        }
+        _profileImg.value = uri
     }
 
     fun makeUpdateUserInfo(filePath: String?) {
@@ -71,31 +64,23 @@ class ProfileEditViewModel @Inject constructor(
                 email      = getLoginPreferenceUseCase().email,
                 nickName   = nickName,
                 introduce  = introduce
-            ).collect { result ->
-                when (result) {
-                    is ApiResult.Loading -> _uiState.update {
-                        it.copy(
-                            isLoading = true
-                        )
-                    }
-                    is ApiResult.Success -> _uiState.update {
-                        it.copy(
-                            isLoading = false,
-                            isSuccess = true,
-                            userItem  = result.data.mapToPresenter()
-                        )
-                    }
+            ).collect { apiResult ->
+                when (apiResult) {
+                    is ApiResult.Loading ->
+                        _profileUpdateState.value = ProfileUpdateState.Loading
+
+                    is ApiResult.Success ->
+                        _profileUpdateState.value = ProfileUpdateState.Success(apiResult.data.mapToPresenter())
+
                     is ApiResult.Error -> {
-                        _uiState.update {
-                            it.copy(
-                                isLoading = false,
-                                isSuccess = false
-                            )
-                        }
-                        Logger.e(result.throwable.localizedMessage!!)
+                        _profileUpdateState.value = ProfileUpdateState.Error(apiResult.throwable.localizedMessage)
                     }
                 }
             }
         }
+    }
+
+    fun shownErrorToast() {
+        _profileUpdateState.value = ProfileUpdateState.Init
     }
 }

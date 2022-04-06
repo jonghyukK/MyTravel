@@ -3,12 +3,16 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/bookmark"
-    app:route="bookmark_route"
     app:startDestination="@+id/bookMarkFragment">
 
     <fragment
         android:id="@+id/bookMarkFragment"
         android:name="org.kjh.mytravel.ui.bookmark.BookMarkFragment"
-        android:label="BookMarkFragment"
-        tools:layout="@layout/fragment_book_mark"/>
+        android:label="@string/bookmark"
+        tools:layout="@layout/fragment_book_mark">
+
+        <argument
+            android:name="showBnv"
+            android:defaultValue="true" />
+    </fragment>
 </navigation>

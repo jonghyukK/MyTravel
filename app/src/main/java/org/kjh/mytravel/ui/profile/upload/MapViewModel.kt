@@ -1,9 +1,9 @@
 package org.kjh.mytravel.ui.profile.upload
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import org.kjh.mytravel.model.MapQueryItem
 import javax.inject.Inject
 
@@ -17,10 +17,10 @@ import javax.inject.Inject
 
 @HiltViewModel
 class MapViewModel @Inject constructor(): ViewModel() {
-    private val _tempSelectedPlaceItem = MutableLiveData<MapQueryItem>()
-    val tempSelectedPlaceItem : LiveData<MapQueryItem> = _tempSelectedPlaceItem
+    private val _selectedLocationItem: MutableStateFlow<MapQueryItem?> = MutableStateFlow(null)
+    val selectedLocationItem = _selectedLocationItem.asStateFlow()
 
     fun setTempPlaceItem(item: MapQueryItem) {
-        _tempSelectedPlaceItem.value = item
+        _selectedLocationItem.value = item
     }
 }

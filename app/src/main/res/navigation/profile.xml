@@ -9,6 +9,11 @@
         android:id="@+id/profileFragment"
         android:name="org.kjh.mytravel.ui.profile.ProfileFragment"
         tools:layout="@layout/fragment_profile" >
+
+        <argument
+            android:name="showBnv"
+            android:defaultValue="true" />
+
         <action
             android:id="@+id/action_profileFragment_to_selectPhotoFragment"
             app:destination="@id/nav_nested_upload" />
@@ -27,7 +32,12 @@
     <fragment
         android:id="@+id/notLoginFragment"
         android:name="org.kjh.mytravel.ui.profile.NotLoginFragment"
-        tools:layout="@layout/fragment_not_login"/>
+        tools:layout="@layout/fragment_not_login">
+
+        <argument
+            android:name="showBnv"
+            android:defaultValue="true" />
+    </fragment>
 
     <navigation android:id="@+id/nav_nested_upload"
         app:startDestination="@id/selectPhotoFragment">
@@ -77,19 +87,6 @@
         android:name="org.kjh.mytravel.ui.profile.edit.ProfileEditFragment"
         android:label="프로필 편집"
         tools:layout="@layout/fragment_profile_edit" >
-
-        <argument
-            android:name="profileImg"
-            app:argType="string"
-            app:nullable="true"/>
-        <argument
-            android:name="nickName"
-            app:argType="string"/>
-        <argument
-            android:name="introduce"
-            app:argType="string"
-            app:nullable="true"/>
-
     </fragment>
 
 

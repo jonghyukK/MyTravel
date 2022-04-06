@@ -2,8 +2,11 @@ package com.example.domain2.repository
 
 import com.example.domain2.entity.ApiResult
 import com.example.domain2.entity.BookmarkEntity
+import com.example.domain2.entity.FollowEntity
 import com.example.domain2.entity.UserEntity
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharedFlow
 
 /**
  * MyTravel
@@ -13,7 +16,6 @@ import kotlinx.coroutines.flow.Flow
  * Description:
  */
 interface UserRepository {
-
     suspend fun getMyProfile(
         myEmail: String
     ): Flow<ApiResult<UserEntity>>
@@ -33,10 +35,5 @@ interface UserRepository {
     suspend fun requestFollowOrUnFollow(
         myEmail    : String,
         targetEmail: String
-    ): Flow<ApiResult<UserEntity>>
-
-    suspend fun updateBookmark(
-        email: String,
-        postId: Int
-    ): Flow<ApiResult<List<BookmarkEntity>>>
+    ): Flow<ApiResult<FollowEntity>>
 }

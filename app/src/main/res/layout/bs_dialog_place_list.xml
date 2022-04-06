@@ -7,11 +7,11 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:behavior_hideable="false"
-        android:fitsSystemWindows="true"
         android:saveEnabled="true"
         app:behavior_fitToContents="false"
         app:behavior_halfExpandedRatio="0.1"
         android:background="@color/white"
+        android:layout_marginBottom="90dp"
         app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior">
 
         <androidx.recyclerview.widget.RecyclerView

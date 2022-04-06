@@ -7,9 +7,12 @@ import com.example.domain2.entity.BannerEntity
 import com.example.domain2.entity.PlaceEntity
 import com.example.domain2.entity.PlaceWithRankEntity
 import com.example.domain2.repository.PlaceRepository
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.retry
+import retrofit2.HttpException
 import javax.inject.Inject
 
 /**
@@ -50,6 +53,9 @@ class PlaceRepositoryImpl @Inject constructor(
 
         val response = placeRemoteDataSource.getPlaceBanners()
         emit(ResponseMapper.responseToBannerEntityList(ApiResult.Success(response)))
+    }.retry(3) {
+        delay(3000)
+     it is HttpException
     }.catch {
         emit(ResponseMapper.responseToBannerEntityList(ApiResult.Error(it)))
     }

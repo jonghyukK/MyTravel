@@ -17,7 +17,7 @@ data class UserEntity(
     val followingCount : Int = 0,
     val followCount    : Int = 0,
     val introduce      : String? = null,
-    val isFollowing    : Boolean? = null,
+    val isFollowing    : Boolean = false,
     val posts          : List<PostEntity> = listOf(),
     val bookMarks      : List<BookmarkEntity> = listOf()
 )

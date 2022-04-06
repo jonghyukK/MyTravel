@@ -4,14 +4,18 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph"
     app:startDestination="@+id/home">
+
+    <include app:graph="@navigation/bookmark" />
+    <include app:graph="@navigation/profile" />
+    <include app:graph="@navigation/home" />
+
     <action
         android:id="@+id/action_global_placePagerFragment"
         app:destination="@id/placePagerFragment"
         app:enterAnim="@anim/scale_up"
         app:exitAnim="@anim/scale_up_over"
         app:popEnterAnim="@anim/scale_down"
-        app:popExitAnim="@anim/fade_out"
-        />
+        app:popExitAnim="@anim/fade_out" />
 
     <action
         android:id="@+id/action_global_userFragment"
@@ -33,14 +37,9 @@
     <fragment
         android:id="@+id/placePagerFragment"
         android:name="org.kjh.mytravel.ui.place.PlacePagerFragment"
-        android:label=""
         tools:layout="@layout/fragment_place_pager">
         <argument
             android:name="placeName"
             app:argType="string" />
     </fragment>
-
-    <include app:graph="@navigation/bookmark" />
-    <include app:graph="@navigation/profile" />
-    <include app:graph="@navigation/home" />
 </navigation>

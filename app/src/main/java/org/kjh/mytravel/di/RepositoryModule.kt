@@ -73,6 +73,14 @@ object RepositoryModule {
 
     @Singleton
     @Provides
+    fun provideBookmarkRepository(
+        dataSource: BookmarkRemoteDataSource
+    ): BookmarkRepository {
+        return BookmarkRepositoryImpl(dataSource)
+    }
+
+    @Singleton
+    @Provides
     fun provideLoginPreferencesRepository(
         dataStore: DataStore<Preferences>
     ): LoginPreferencesRepository {

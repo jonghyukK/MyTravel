@@ -16,7 +16,7 @@ import kotlinx.coroutines.launch
 import org.kjh.mytravel.R
 import org.kjh.mytravel.databinding.FragmentPlacePagerBinding
 import org.kjh.mytravel.ui.base.BaseFragment
-import org.kjh.mytravel.ui.profile.ProfileViewModel
+import org.kjh.mytravel.ui.bookmark.BookMarkViewModel
 import javax.inject.Inject
 
 val TAB_TITLE = listOf("데이로그", "정보")
@@ -33,24 +33,27 @@ class PlacePagerFragment : BaseFragment<FragmentPlacePagerBinding>(R.layout.frag
         PlaceViewModel.provideFactory(placeViewModelFactory, args.placeName)
     }
 
-    private val profileViewModel: ProfileViewModel by activityViewModels()
+    private val bookmarkViewModel: BookMarkViewModel by activityViewModels()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding.viewModel = viewModel
 
-//        postponeEnterTransition()
-
-        initToolbarWithAppBarLayout()
+        initToolbarWithNavigation()
+        initAppBarLayout()
         initTabLayoutWithPager()
 
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                profileViewModel.uiState.collect { uiState ->
-                    uiState.userItem?.let { user ->
-                        val hasBookmark = user.bookMarks.find { it.placeName == args.placeName } != null
-                       updateBookmarkIcon(hasBookmark)
-//                        startPostponedEnterTransition()
+                bookmarkViewModel.uiState.collect { uiState ->
+                    val isBookmarkedPlace =
+                        uiState.bookmarkItems.find { it.placeName == args.placeName } != null
+
+                    updateBookmarkIcon(isBookmarkedPlace)
+
+                    uiState.isError?.let {
+                        showError(it)
+                        bookmarkViewModel.shownErrorToast()
                     }
                 }
             }
@@ -59,44 +62,39 @@ class PlacePagerFragment : BaseFragment<FragmentPlacePagerBinding>(R.layout.frag
 
     private fun updateBookmarkIcon(hasBookmark: Boolean) {
         with (binding.tbPlacePagerToolbar.menu.getItem(0)) {
-            setIcon(
-                if (hasBookmark) {
-                R.drawable.ic_rank
-            } else {
-                R.drawable.ic_bookmark
-            })
+            setIcon(if (hasBookmark) R.drawable.ic_rank else R.drawable.ic_bookmark)
             isVisible = true
         }
     }
 
-
-    private fun initToolbarWithAppBarLayout() {
-        with (binding) {
-            tbPlacePagerToolbar.setupWithNavController(findNavController())
-            tbPlacePagerToolbar.inflateMenu(R.menu.menu_bookmark)
-            tbPlacePagerToolbar.setOnMenuItemClickListener { menu ->
+    private fun initToolbarWithNavigation() {
+        binding.tbPlacePagerToolbar.apply {
+            setupWithNavController(findNavController())
+            inflateMenu(R.menu.menu_bookmark)
+            setOnMenuItemClickListener { menu ->
                 when (menu.itemId) {
                     R.id.bookmark -> {
-                        viewModel?.let {
-                            it.uiState.value.placeItem?.let { placeItem ->
-                                profileViewModel.updateMyBookmark(placeItem.posts[0].postId)
-                            }
+                        val placeItem = viewModel.uiState.value.placeItem
+                        placeItem?.let {
+                            bookmarkViewModel.updateBookmark(it.posts[0].postId, it.placeName)
                         }
                         true
                     }
                     else -> false
                 }
             }
-
-            var scrollRange = -1
-            abl.addOnOffsetChangedListener(AppBarLayout.OnOffsetChangedListener { barLayout, verticalOffset ->
-                if (scrollRange == -1) {
-                    scrollRange = barLayout?.totalScrollRange!!
-                }
-
-                ctl.title = if (scrollRange + verticalOffset == 0) args.placeName else " "
-            })
         }
+    }
+
+    private fun initAppBarLayout() {
+        var scrollRange = -1
+        binding.abl.addOnOffsetChangedListener(AppBarLayout.OnOffsetChangedListener { barLayout, verticalOffset ->
+            if (scrollRange == -1) {
+                scrollRange = barLayout?.totalScrollRange!!
+            }
+
+            binding.ctl.title = if (scrollRange + verticalOffset == 0) args.placeName else " "
+        })
     }
 
     private fun initTabLayoutWithPager() {

@@ -7,10 +7,7 @@ import com.example.domain2.entity.ApiResult
 import com.example.domain2.usecase.GetLoginPreferenceUseCase
 import com.example.domain2.usecase.UploadPostUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import org.kjh.mytravel.model.MapQueryItem
 import org.kjh.mytravel.model.MediaStoreImage
@@ -26,72 +23,78 @@ import javax.inject.Inject
  * Description:
  */
 
-data class UploadUiState(
+data class UploadItemState(
     val selectedItems: List<MediaStoreImage> = listOf(),
     val placeItem    : MapQueryItem? = null,
     val content      : String? = "",
-    val isLoading    : Boolean = false,
-    val uploadSuccess: Boolean = false,
-    val userItem     : User? = null
 )
+
+sealed class UploadState {
+    object Init : UploadState()
+    object Loading: UploadState()
+    data class Success(val userItem: User): UploadState()
+    data class Error(val error: String?): UploadState()
+}
 
 @HiltViewModel
 class UploadViewModel @Inject constructor(
     private val uploadPostUseCase: UploadPostUseCase,
     private val getLoginPreferenceUseCase: GetLoginPreferenceUseCase
 ): ViewModel() {
-    private val _uiState = MutableStateFlow(UploadUiState())
-    val uiState : StateFlow<UploadUiState> = _uiState
+    private val _uploadItemState = MutableStateFlow(UploadItemState())
+    val uploadItemState = _uploadItemState.asStateFlow()
+
+    private val _uploadState: MutableStateFlow<UploadState> = MutableStateFlow(UploadState.Init)
+    val uploadState = _uploadState.asStateFlow()
 
     val content = MutableLiveData<String>()
 
     fun updateSelectedImages(items: List<MediaStoreImage>) {
-        viewModelScope.launch {
-            _uiState.update {
-                it.copy(selectedItems = items)
-            }
+        _uploadItemState.update {
+            it.copy(selectedItems = items)
         }
     }
 
     fun updatePlaceItem(item: MapQueryItem) {
-        viewModelScope.launch {
-            _uiState.update {
-                it.copy(placeItem = item)
-            }
+        _uploadItemState.update {
+            it.copy(placeItem = item)
         }
+    }
+
+    fun initUploadState() {
+        _uploadState.value = UploadState.Init
     }
 
     fun makeUploadPost() {
         viewModelScope.launch {
-            val imgPathList = uiState.value.selectedItems.map {
-                it.realPath
+            val imgPathList = _uploadItemState.value.selectedItems.map { it.realPath }
+            val placeInfo   = _uploadItemState.value.placeItem
+            val content     = content.value.toString()
+
+            if (imgPathList.isEmpty() || placeInfo == null || content.isBlank()) {
+                _uploadState.value = UploadState.Error("필수 입력 정보를 확인해 주세요.")
+                return@launch
             }
-            val placeInfo = uiState.value.placeItem
-            val content = content.value.toString()
 
-            if (uiState.value.selectedItems.isNotEmpty() && placeInfo != null) {
-                uploadPostUseCase(
-                    email            = getLoginPreferenceUseCase().email,
-                    x                = placeInfo.x,
-                    y                = placeInfo.y,
-                    file             = imgPathList,
-                    content          = content,
-                    placeName        = placeInfo.placeName,
-                    placeAddress     = placeInfo.placeAddress,
-                    placeRoadAddress = placeInfo.placeRoadAddress
-                ).collect { result ->
-                    when (result) {
-                        is ApiResult.Loading -> _uiState.update { it.copy(isLoading = true) }
-                        is ApiResult.Success -> _uiState.update {
-                            it.copy(
-                                isLoading = false,
-                                uploadSuccess = true,
-                                userItem = result.data.mapToPresenter()
-                            )
-                        }
+            uploadPostUseCase(
+                email = getLoginPreferenceUseCase().email,
+                x = placeInfo.x,
+                y = placeInfo.y,
+                file = imgPathList,
+                content = content,
+                placeName = placeInfo.placeName,
+                placeAddress = placeInfo.placeAddress,
+                placeRoadAddress = placeInfo.placeRoadAddress
+            ).collect { apiResult ->
+                when (apiResult) {
+                    is ApiResult.Loading ->
+                        _uploadState.value = UploadState.Loading
 
-                        is ApiResult.Error -> _uiState.update { it.copy(isLoading = false) }
-                    }
+                    is ApiResult.Success ->
+                        _uploadState.value = UploadState.Success(apiResult.data.mapToPresenter())
+
+                    is ApiResult.Error ->
+                        _uploadState.value = UploadState.Error(apiResult.throwable.localizedMessage)
                 }
             }
         }

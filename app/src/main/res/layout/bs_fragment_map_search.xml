@@ -7,6 +7,9 @@
         <variable
             name="viewModel"
             type="org.kjh.mytravel.ui.profile.upload.MapSearchViewModel" />
+        <variable
+            name="fragment"
+            type="org.kjh.mytravel.ui.profile.upload.MapSearchFragment" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -33,8 +36,9 @@
             android:id="@+id/btn_cancel"
             android:layout_width="0dp"
             android:layout_height="0dp"
-            android:text="취소"
+            android:text="@string/cancel"
             android:layout_marginEnd="20dp"
+            android:onClick="@{fragment::onClickCancel}"
             app:layout_constraintHorizontal_weight="0.2"
             app:layout_constraintTop_toTopOf="@+id/et_search"
             app:layout_constraintBottom_toBottomOf="@+id/et_search"

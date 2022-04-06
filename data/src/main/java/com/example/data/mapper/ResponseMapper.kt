@@ -46,6 +46,17 @@ object ResponseMapper {
         }
     }
 
+    // FollowApiModel -> FollowEntity
+    fun responseToFollowEntity(
+        response: ApiResult<FollowApiModel>
+    ): ApiResult<FollowEntity> {
+        return when (response) {
+            is ApiResult.Success -> ApiResult.Success(response.data.data.mapToDomain())
+            is ApiResult.Error   -> ApiResult.Error(response.throwable)
+            is ApiResult.Loading -> ApiResult.Loading()
+        }
+    }
+
     // PlaceApiModel -> PlaceEntity
     fun responseToPlace(
         response: ApiResult<PlaceApiModel>

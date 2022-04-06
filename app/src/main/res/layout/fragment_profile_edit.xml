@@ -16,15 +16,23 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
+        <com.google.android.material.appbar.MaterialToolbar
+            android:id="@+id/tb_profileEditToolbar"
+            android:layout_width="0dp"
+            android:layout_height="?attr/actionBarSize"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"/>
+
         <com.google.android.material.imageview.ShapeableImageView
             android:id="@+id/siv_profileImg"
             android:layout_width="130dp"
             android:layout_height="130dp"
             android:scaleType="centerCrop"
             android:layout_marginTop="70dp"
-            app:imgUrl="@{viewModel.uiState.profileImg}"
+            app:imgUrl="@{viewModel.profileImg}"
             app:shapeAppearanceOverlay="@style/circle"
-            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tb_profileEditToolbar"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent" />
 
@@ -102,7 +110,6 @@
             android:id="@+id/pb_loading"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:isVisible="@{viewModel.uiState.loading}"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"

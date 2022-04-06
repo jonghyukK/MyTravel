@@ -2,11 +2,14 @@ package org.kjh.mytravel.ui.place
 
 import android.os.Bundle
 import android.view.View
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import androidx.navigation.NavOptions
 import androidx.navigation.fragment.findNavController
+import com.orhanobut.logger.Logger
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import org.kjh.mytravel.NavGraphDirections
@@ -14,6 +17,12 @@ import org.kjh.mytravel.R
 import org.kjh.mytravel.databinding.FragmentPlaceDayLogBinding
 import org.kjh.mytravel.ui.base.BaseFragment
 
+fun Fragment.isInBackstack(desId: Int) = try {
+    findNavController().getBackStackEntry(desId)
+    true
+} catch (e: Exception) {
+    false
+}
 
 class PlaceDayLogFragment
     : BaseFragment<FragmentPlaceDayLogBinding>(R.layout.fragment_place_day_log) {
@@ -22,8 +31,9 @@ class PlaceDayLogFragment
 
     private val placeDayLogListAdapter by lazy {
         PlaceDayLogListAdapter { item ->
-            val action = NavGraphDirections.actionGlobalUserFragment(item.email)
-            findNavController().navigate(action)
+                val action = NavGraphDirections.actionGlobalUserFragment(item.email)
+                findNavController().navigate(action)
+//            }
         }
     }
 

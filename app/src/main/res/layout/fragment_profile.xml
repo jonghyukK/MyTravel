@@ -15,16 +15,18 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".ui.profile.ProfileFragment">
+        tools:context=".ui.profile.ProfileFragment"
+        android:fitsSystemWindows="true">
 
         <androidx.appcompat.widget.Toolbar
             android:id="@+id/tb_profileToolbar"
             android:layout_width="0dp"
             android:layout_height="?attr/actionBarSize"
-            app:title="@{viewModel.uiState.userItem.nickName}"
+            app:title="@{viewModel.uiState.profileItem.nickName}"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent"/>
+            app:layout_constraintTop_toTopOf="parent"
+            android:fitsSystemWindows="true"/>
 
         <androidx.coordinatorlayout.widget.CoordinatorLayout
             android:id="@+id/cdl_userContainer"
@@ -33,7 +35,8 @@
             app:layout_constraintTop_toBottomOf="@+id/tb_profileToolbar"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent">
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:fitsSystemWindows="true">
 
             <com.google.android.material.appbar.AppBarLayout
                 android:id="@+id/abl_userAppBarLayout"
@@ -56,7 +59,7 @@
                         android:layout_height="100dp"
                         android:scaleType="centerCrop"
                         app:shapeAppearanceOverlay="@style/circle"
-                        app:imgUrl="@{viewModel.uiState.userItem.profileImg}"
+                        app:imgUrl="@{viewModel.uiState.profileItem.profileImg}"
                         app:layout_constraintTop_toTopOf="parent"
                         app:layout_constraintStart_toStartOf="parent"/>
 
@@ -64,7 +67,7 @@
                         android:id="@+id/tv_postCount"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@{String.valueOf(viewModel.uiState.userItem.postCount)}"
+                        android:text="@{String.valueOf(viewModel.uiState.profileItem.postCount)}"
                         android:textColor="#444444"
                         android:textStyle="bold"
                         android:textSize="15sp"
@@ -78,7 +81,7 @@
                         android:id="@+id/tv_followerCount"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@{String.valueOf(viewModel.uiState.userItem.followCount)}"
+                        android:text="@{String.valueOf(viewModel.uiState.profileItem.followCount)}"
                         android:textColor="#444444"
                         android:textStyle="bold"
                         android:textSize="15sp"
@@ -92,7 +95,7 @@
                         android:id="@+id/tv_followingCount"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@{String.valueOf(viewModel.uiState.userItem.followingCount)}"
+                        android:text="@{String.valueOf(viewModel.uiState.profileItem.followingCount)}"
                         android:textColor="#444444"
                         android:textStyle="bold"
                         android:textSize="15sp"
@@ -153,7 +156,7 @@
                         android:textSize="14sp"
                         app:layout_constraintTop_toBottomOf="@+id/siv_profileImg"
                         app:layout_constraintStart_toStartOf="parent"
-                        android:text="@{viewModel.uiState.userItem.introduce}"/>
+                        android:text="@{viewModel.uiState.profileItem.introduce}"/>
 
                     <Button
                         android:id="@+id/btn_editProfile"
