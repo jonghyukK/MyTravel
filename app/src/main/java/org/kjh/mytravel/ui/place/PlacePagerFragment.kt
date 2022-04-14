@@ -11,12 +11,10 @@ import androidx.navigation.ui.setupWithNavController
 import com.google.android.material.appbar.AppBarLayout
 import com.google.android.material.tabs.TabLayoutMediator
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.launch
+import org.kjh.mytravel.MyProfileViewModel
 import org.kjh.mytravel.R
 import org.kjh.mytravel.databinding.FragmentPlacePagerBinding
 import org.kjh.mytravel.ui.base.BaseFragment
-import org.kjh.mytravel.ui.bookmark.BookMarkViewModel
 import javax.inject.Inject
 
 val TAB_TITLE = listOf("데이로그", "정보")
@@ -33,38 +31,17 @@ class PlacePagerFragment : BaseFragment<FragmentPlacePagerBinding>(R.layout.frag
         PlaceViewModel.provideFactory(placeViewModelFactory, args.placeName)
     }
 
-    private val bookmarkViewModel: BookMarkViewModel by activityViewModels()
+    private val myProfileViewModel: MyProfileViewModel by activityViewModels()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding.viewModel = viewModel
+        binding.myProfileViewModel = myProfileViewModel
+        binding.placeName = args.placeName
 
         initToolbarWithNavigation()
         initAppBarLayout()
         initTabLayoutWithPager()
-
-        viewLifecycleOwner.lifecycleScope.launch {
-            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                bookmarkViewModel.uiState.collect { uiState ->
-                    val isBookmarkedPlace =
-                        uiState.bookmarkItems.find { it.placeName == args.placeName } != null
-
-                    updateBookmarkIcon(isBookmarkedPlace)
-
-                    uiState.isError?.let {
-                        showError(it)
-                        bookmarkViewModel.shownErrorToast()
-                    }
-                }
-            }
-        }
-    }
-
-    private fun updateBookmarkIcon(hasBookmark: Boolean) {
-        with (binding.tbPlacePagerToolbar.menu.getItem(0)) {
-            setIcon(if (hasBookmark) R.drawable.ic_rank else R.drawable.ic_bookmark)
-            isVisible = true
-        }
     }
 
     private fun initToolbarWithNavigation() {
@@ -72,16 +49,10 @@ class PlacePagerFragment : BaseFragment<FragmentPlacePagerBinding>(R.layout.frag
             setupWithNavController(findNavController())
             inflateMenu(R.menu.menu_bookmark)
             setOnMenuItemClickListener { menu ->
-                when (menu.itemId) {
-                    R.id.bookmark -> {
-                        val placeItem = viewModel.uiState.value.placeItem
-                        placeItem?.let {
-                            bookmarkViewModel.updateBookmark(it.posts[0].postId, it.placeName)
-                        }
-                        true
-                    }
-                    else -> false
+                if (menu.itemId == R.id.bookmark) {
+                    onClickBookmark()
                 }
+                false
             }
         }
     }
@@ -106,5 +77,11 @@ class PlacePagerFragment : BaseFragment<FragmentPlacePagerBinding>(R.layout.frag
         TabLayoutMediator(binding.tlTabLayout, binding.pager) { tab, position ->
             tab.text = TAB_TITLE[position]
         }.attach()
+    }
+
+    private fun onClickBookmark() {
+        viewModel.uiState.value.placeItem?.let {
+            myProfileViewModel.updateBookmark(it.posts[0].postId, it.placeName)
+        }
     }
 }

@@ -87,6 +87,18 @@
         android:name="org.kjh.mytravel.ui.profile.edit.ProfileEditFragment"
         android:label="프로필 편집"
         tools:layout="@layout/fragment_profile_edit" >
+
+        <argument
+            android:name="profileImg"
+            app:argType="string"
+            app:nullable="true"/>
+        <argument
+            android:name="nickName"
+            app:argType="string" />
+        <argument
+            android:name="introduce"
+            app:argType="string"
+            app:nullable="true"/>
     </fragment>
 
 

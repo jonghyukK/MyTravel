@@ -4,21 +4,18 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import com.example.domain2.entity.ApiResult
-import com.example.domain2.repository.UserRepository
 import com.example.domain2.usecase.GetLoginPreferenceUseCase
 import com.example.domain2.usecase.GetUserUseCase
 import com.example.domain2.usecase.MakeRequestFollowOrNotUseCase
-import com.orhanobut.logger.Logger
+import com.example.domain2.usecase.UpdateBookmarkUseCase
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
-import org.kjh.mytravel.model.Bookmark
 import org.kjh.mytravel.model.Follow
 import org.kjh.mytravel.model.User
 import org.kjh.mytravel.model.mapToPresenter
-import javax.inject.Singleton
 
 /**
  * MyTravel
@@ -77,7 +74,11 @@ class UserViewModel @AssistedInject constructor(
             ).collect { apiResult ->
                     when (apiResult) {
                         is ApiResult.Loading ->
-                            _uiState.value = UserUiState(isLoading = true)
+                            _uiState.update {
+                                it.copy(
+                                    isLoading = true
+                                )
+                            }
 
                         is ApiResult.Success -> {
                             _uiState.update {
@@ -125,20 +126,6 @@ class UserViewModel @AssistedInject constructor(
                             _followState.value = FollowState.Error(apiResult.throwable.localizedMessage)
                     }
                 }
-        }
-    }
-
-    fun updateUserPostBookmarkState(bookmarks: List<Bookmark>) {
-        _uiState.value.userItem?.let {
-            _uiState.update { currentUiState ->
-                currentUiState.copy(
-                    userItem = currentUiState.userItem!!.copy(
-                        posts = currentUiState.userItem.posts.map { currentPost ->
-                            currentPost.copy(isBookmarked = bookmarks.find { it.placeName == currentPost.placeName } != null)
-                        }
-                    )
-                )
-            }
         }
     }
 

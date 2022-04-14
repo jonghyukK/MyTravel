@@ -2,7 +2,6 @@ package org.kjh.mytravel.ui.user
 
 import android.os.Bundle
 import android.view.View
-import android.widget.Toast
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
@@ -14,7 +13,9 @@ import androidx.navigation.ui.setupWithNavController
 import com.orhanobut.logger.Logger
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
+import org.kjh.mytravel.MyProfileViewModel
 import org.kjh.mytravel.NavGraphDirections
 import org.kjh.mytravel.ProfilePostsGridItemDecoration
 import org.kjh.mytravel.R
@@ -22,8 +23,6 @@ import org.kjh.mytravel.databinding.FragmentUserBinding
 import org.kjh.mytravel.model.Post
 import org.kjh.mytravel.ui.PostSmallListAdapter
 import org.kjh.mytravel.ui.base.BaseFragment
-import org.kjh.mytravel.ui.bookmark.BookMarkViewModel
-import org.kjh.mytravel.ui.profile.ProfileViewModel
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -39,8 +38,7 @@ class UserFragment
         UserViewModel.provideFactory(userViewModelFactory, args.userEmail)
     }
 
-    private val bookmarkViewModel: BookMarkViewModel by activityViewModels()
-    private val profileViewModel: ProfileViewModel by activityViewModels()
+    private val myProfileViewModel: MyProfileViewModel by activityViewModels()
 
     private val postSmallListAdapter by lazy {
         PostSmallListAdapter(
@@ -52,6 +50,7 @@ class UserFragment
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding.viewModel = viewModel
+        binding.myProfileViewModel = myProfileViewModel
         binding.fragment = this
 
         initToolbarWithNavigation()
@@ -59,10 +58,19 @@ class UserFragment
 
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                viewModel.uiState.collect { uiState ->
-                    uiState.userItem?.let {
-                        postSmallListAdapter.submitList(uiState.userItem.posts)
+                myProfileViewModel.isError.collectLatest {
+                    Logger.e("User")
+                    it?.let {
+                        showError(it)
                     }
+                }
+            }
+        }
+
+
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.uiState.collect { uiState ->
 
                     uiState.isError?.let {
                         showError(it)
@@ -77,8 +85,7 @@ class UserFragment
                 viewModel.followState.collect { followState ->
                     when (followState) {
                         is FollowState.Success -> {
-                            profileViewModel.updateProfileItem(followState.followItem.myProfile)
-//                            viewModel.initFollowState()
+                            myProfileViewModel.updateMyProfile(followState.followItem.myProfile)
                         }
                         is FollowState.Error -> {
                             followState.error?.let {
@@ -90,19 +97,6 @@ class UserFragment
                 }
             }
         }
-
-        viewLifecycleOwner.lifecycleScope.launch {
-            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                bookmarkViewModel.uiState.collect { uiState ->
-                    viewModel.updateUserPostBookmarkState(uiState.bookmarkItems)
-
-                    uiState.isError?.let {
-                        showError(it)
-                        bookmarkViewModel.shownErrorToast()
-                    }
-                }
-            }
-        }
     }
 
     private fun onClickPostItem(item: Post) {
@@ -110,7 +104,7 @@ class UserFragment
     }
 
     private fun onClickBookmark(item: Post) {
-        bookmarkViewModel.updateBookmark(item.postId, item.placeName)
+        myProfileViewModel.updateBookmark(item.postId, item.placeName)
     }
 
     fun onClickFollowOrUnFollow(v: View) {

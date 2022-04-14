@@ -44,7 +44,6 @@ class MapFragment
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.selectedLocationItem.collect { mapQueryItem ->
-                    binding.btnAddPlaceInfo.isVisible = mapQueryItem != null
                     mapQueryItem?.let {
                         setMarketAtPlace(it)
                     }

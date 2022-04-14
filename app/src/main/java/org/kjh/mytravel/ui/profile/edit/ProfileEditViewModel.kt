@@ -2,18 +2,20 @@ package org.kjh.mytravel.ui.profile.edit
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import com.example.domain2.entity.ApiResult
 import com.example.domain2.usecase.GetLoginPreferenceUseCase
 import com.example.domain2.usecase.UpdateProfileUseCase
-import com.orhanobut.logger.Logger
-import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.*
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedFactory
+import dagger.assisted.AssistedInject
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import org.kjh.mytravel.model.User
 import org.kjh.mytravel.model.mapToPresenter
-import org.kjh.mytravel.ui.base.UiState
-import javax.inject.Inject
 
 /**
  * MyTravel
@@ -30,33 +32,48 @@ sealed class ProfileUpdateState {
     data class Error(val error: String?): ProfileUpdateState()
 }
 
-@HiltViewModel
-class ProfileEditViewModel @Inject constructor(
-    private val updateProfileUseCase: UpdateProfileUseCase,
-    private val getLoginPreferenceUseCase: GetLoginPreferenceUseCase
+
+class ProfileEditViewModel @AssistedInject constructor(
+    private val updateProfileUseCase     : UpdateProfileUseCase,
+    private val getLoginPreferenceUseCase: GetLoginPreferenceUseCase,
+    @Assisted("initProfileImg") private val initProfileImg: String?,
+    @Assisted("initNickName"  ) private val initNickName: String,
+    @Assisted("initIntroduce" ) private val initIntroduce: String?,
 ): ViewModel() {
-    private val _profileImg: MutableStateFlow<String?> = MutableStateFlow(null)
+
+    @AssistedFactory
+    interface ProfileEditAssistedFactory {
+        fun create(
+            @Assisted("initProfileImg") initProfileImg: String?,
+            @Assisted("initNickName"  ) initNickName: String,
+            @Assisted("initIntroduce" ) initIntroduce: String?
+        ): ProfileEditViewModel
+    }
+
+    companion object {
+        fun provideFactory(
+            assistedFactory: ProfileEditAssistedFactory,
+            initProfileImg : String?,
+            initNickName   : String,
+            initIntroduce  : String?
+        ): ViewModelProvider.Factory = object: ViewModelProvider.Factory {
+            override fun <T : ViewModel> create(modelClass: Class<T>) =
+                assistedFactory.create(initProfileImg, initNickName, initIntroduce) as T
+        }
+    }
+
+    private val _profileImg: MutableStateFlow<String?> = MutableStateFlow(initProfileImg)
     val profileImg = _profileImg.asStateFlow()
 
     private val _profileUpdateState: MutableStateFlow<ProfileUpdateState> = MutableStateFlow(ProfileUpdateState.Init)
     val profileUpdateState = _profileUpdateState.asStateFlow()
 
-    val inputNickName  = MutableLiveData<String>()
-    val inputIntroduce = MutableLiveData<String?>()
-
-    fun initProfileInfo(profileImg: String?, nickName: String, introduce: String?) {
-        _profileImg.value    = profileImg
-        inputNickName.value  = nickName
-        inputIntroduce.value = introduce
-    }
-
-    fun updateProfileImg(uri: String) {
-        _profileImg.value = uri
-    }
+    val inputNickName  = MutableStateFlow(initNickName)
+    val inputIntroduce = MutableStateFlow(initIntroduce)
 
     fun makeUpdateUserInfo(filePath: String?) {
-        val nickName  = inputNickName.value.toString()
-        val introduce = inputIntroduce.value.toString()
+        val nickName  = inputNickName.value
+        val introduce = inputIntroduce.value
 
         viewModelScope.launch {
             updateProfileUseCase(
@@ -78,6 +95,10 @@ class ProfileEditViewModel @Inject constructor(
                 }
             }
         }
+    }
+
+    fun updateProfileImg(uri: String) {
+        _profileImg.value = uri
     }
 
     fun shownErrorToast() {

@@ -29,19 +29,19 @@
         <entry key="app/src/main/res/layout/fragment_list.xml" value="0.9102564102564102" />
         <entry key="app/src/main/res/layout/fragment_login.xml" value="0.5" />
         <entry key="app/src/main/res/layout/fragment_ma_search.xml" value="0.1" />
-        <entry key="app/src/main/res/layout/fragment_map.xml" value="0.49537037037037035" />
+        <entry key="app/src/main/res/layout/fragment_map.xml" value="0.1" />
         <entry key="app/src/main/res/layout/fragment_map_search.xml" value="0.36203703703703705" />
         <entry key="app/src/main/res/layout/fragment_not_login.xml" value="0.15185185185185185" />
-        <entry key="app/src/main/res/layout/fragment_place_day_log.xml" value="0.36046511627906974" />
+        <entry key="app/src/main/res/layout/fragment_place_day_log.xml" value="0.1" />
         <entry key="app/src/main/res/layout/fragment_place_detail.xml" value="0.4995366079703429" />
         <entry key="app/src/main/res/layout/fragment_place_info.xml" value="0.5231481481481481" />
         <entry key="app/src/main/res/layout/fragment_place_list_by_city_name.xml" value="0.5111111111111111" />
         <entry key="app/src/main/res/layout/fragment_place_pager.xml" value="0.1" />
         <entry key="app/src/main/res/layout/fragment_profile.xml" value="0.1" />
-        <entry key="app/src/main/res/layout/fragment_profile_edit.xml" value="0.9385416666666667" />
+        <entry key="app/src/main/res/layout/fragment_profile_edit.xml" value="0.1" />
         <entry key="app/src/main/res/layout/fragment_select_bucket_bottom_sheet.xml" value="0.43425925925925923" />
-        <entry key="app/src/main/res/layout/fragment_select_photo.xml" value="0.7222222222222222" />
-        <entry key="app/src/main/res/layout/fragment_setting.xml" value="0.5379008746355685" />
+        <entry key="app/src/main/res/layout/fragment_select_photo.xml" value="0.1" />
+        <entry key="app/src/main/res/layout/fragment_setting.xml" value="0.28425925925925927" />
         <entry key="app/src/main/res/layout/fragment_test.xml" value="0.42063492063492064" />
         <entry key="app/src/main/res/layout/fragment_user.xml" value="0.1" />
         <entry key="app/src/main/res/layout/fragment_write_post.xml" value="0.6259259259259259" />

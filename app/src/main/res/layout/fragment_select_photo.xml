@@ -7,6 +7,9 @@
         <variable
             name="viewModel"
             type="org.kjh.mytravel.ui.profile.upload.SelectPhotoViewModel" />
+        <variable
+            name="uploadViewModel"
+            type="org.kjh.mytravel.ui.profile.upload.UploadViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -19,6 +22,7 @@
             android:layout_width="0dp"
             android:layout_height="?attr/actionBarSize"
             android:background="@color/white"
+            isVisibleMenu="@{uploadViewModel.uploadItemState.selectedItems.size() != 0}"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -33,7 +37,8 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/tb_selectPhotoToolbar"
-            tools:listitem="@layout/vh_rect_image_with_close_btn" />
+            tools:listitem="@layout/vh_rect_image_with_close_btn"
+            bindItems="@{uploadViewModel.uploadItemState.selectedItems}"/>
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rv_localImages"
@@ -44,7 +49,9 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/rv_selectedImages"
-            app:spanCount="3" />
+            app:spanCount="3"
+            bindItems="@{viewModel.mediaStoreImages}"
+            />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>

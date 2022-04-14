@@ -9,10 +9,7 @@ import com.orhanobut.logger.Logger
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import org.kjh.mytravel.model.Place
 import org.kjh.mytravel.model.mapToPresenter
@@ -26,8 +23,9 @@ import org.kjh.mytravel.model.mapToPresenter
  */
 
 data class PlaceUiState(
+    val isLoading: Boolean = false,
     val placeItem: Place? = null,
-    val isUpdatedBookmark : Boolean = false,
+    val isError  : String? = null
 )
 
 class PlaceViewModel @AssistedInject constructor(
@@ -52,21 +50,34 @@ class PlaceViewModel @AssistedInject constructor(
     }
 
     private val _uiState = MutableStateFlow(PlaceUiState())
-    val uiState : StateFlow<PlaceUiState> = _uiState
+    val uiState = _uiState.asStateFlow()
 
     init {
         viewModelScope.launch {
             getPlaceUseCase(initPlaceName)
-                .collect { result ->
-                    when (result) {
-                        is ApiResult.Loading -> {}
-                        is ApiResult.Success -> _uiState.update {
-                            it.copy(
-                                placeItem = result.data.mapToPresenter()
-                            )
+                .collect { apiResult ->
+                    when (apiResult) {
+                        is ApiResult.Loading ->
+                            _uiState.update {
+                                it.copy(isLoading = true)
+                            }
+
+                        is ApiResult.Success -> {
+                            _uiState.update {
+                                it.copy(
+                                    isLoading = false,
+                                    placeItem = apiResult.data.mapToPresenter()
+                                )
+                            }
                         }
+
                         is ApiResult.Error -> {
-                            Logger.e(result.throwable.localizedMessage)
+                            _uiState.update {
+                                it.copy(
+                                    isLoading = false,
+                                    isError   = apiResult.throwable.localizedMessage
+                                )
+                            }
                         }
                     }
                 }

@@ -4,6 +4,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
+        <import type="android.view.View" />
         <variable
             name="viewModel"
             type="org.kjh.mytravel.ui.profile.upload.MapViewModel" />
@@ -56,7 +57,7 @@
             android:layout_width="0dp"
             android:layout_height="50dp"
             android:layout_margin="30dp"
-            android:visibility="gone"
+            android:visibility="@{viewModel.selectedLocationItem == null ? View.GONE : View.VISIBLE}"
             android:onClick="@{fragment::onClickApplyPlaceInfo}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"

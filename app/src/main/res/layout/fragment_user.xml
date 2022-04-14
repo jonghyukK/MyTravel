@@ -8,6 +8,9 @@
             name="viewModel"
             type="org.kjh.mytravel.ui.user.UserViewModel" />
         <variable
+            name="myProfileViewModel"
+            type="org.kjh.mytravel.MyProfileViewModel" />
+        <variable
             name="fragment"
             type="org.kjh.mytravel.ui.user.UserFragment" />
     </data>
@@ -182,6 +185,8 @@
                 android:layout_height="match_parent"
                 app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
                 app:spanCount="2"
+                bookmarks="@{myProfileViewModel.myProfileState.bookMarks}"
+                bindItems="@{viewModel.uiState.userItem.posts}"
                 app:layout_behavior="@string/appbar_scrolling_view_behavior" />
 
 

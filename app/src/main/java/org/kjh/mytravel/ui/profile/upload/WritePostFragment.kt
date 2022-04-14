@@ -11,22 +11,21 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.navGraphViewModels
 import androidx.navigation.ui.setupWithNavController
 import androidx.recyclerview.widget.PagerSnapHelper
-import androidx.recyclerview.widget.SnapHelper
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
+import org.kjh.mytravel.MyProfileViewModel
 import org.kjh.mytravel.R
 import org.kjh.mytravel.databinding.FragmentWritePostBinding
 import org.kjh.mytravel.ui.base.BaseFragment
 import org.kjh.mytravel.ui.home.HomeViewModel
-import org.kjh.mytravel.ui.profile.ProfileViewModel
 
 @AndroidEntryPoint
 class WritePostFragment
     : BaseFragment<FragmentWritePostBinding>(R.layout.fragment_write_post) {
 
     private val uploadViewModel: UploadViewModel by navGraphViewModels(R.id.nav_nested_upload){ defaultViewModelProviderFactory }
-    private val profileViewModel: ProfileViewModel by activityViewModels()
+    private val myProfileViewModel: MyProfileViewModel by activityViewModels()
     private val homeViewModel: HomeViewModel by activityViewModels()
 
     private val writePostImagesAdapter by lazy {
@@ -43,21 +42,12 @@ class WritePostFragment
 
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                uploadViewModel.uploadItemState.collect {
-                    if (it.selectedItems.isNotEmpty())
-                        writePostImagesAdapter.submitList(it.selectedItems)
-                }
-            }
-        }
-
-        viewLifecycleOwner.lifecycleScope.launch {
-            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 uploadViewModel.uploadState.collect { state ->
                     binding.pbLoading.isVisible = state is UploadState.Loading
 
                     when (state) {
                         is UploadState.Success -> {
-                            profileViewModel.updateProfileItem(profileItem = state.userItem)
+                            myProfileViewModel.updateMyProfile(profileItem = state.userItem)
                             homeViewModel.refreshRecentPosts(true)
                             navigateProfileWhenSuccessUpload()
                         }

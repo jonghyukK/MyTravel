@@ -59,36 +59,12 @@ class MapSearchFragment
         binding.fragment = this
 
         initSearchPlaceRecyclerView()
-        initEditorActionListener()
-
-        viewLifecycleOwner.lifecycleScope.launch {
-            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                viewModel.uiState.collect { uiState ->
-                    binding.pbLoading.isVisible = uiState is MapSearchState.Loading
-                    when (uiState) {
-                        is MapSearchState.Success ->
-                            mapSearchPlaceListAdapter.submitList(uiState.items)
-                        is MapSearchState.Error ->
-                            Toast.makeText(requireContext(), uiState.error.toString(), Toast.LENGTH_SHORT).show()
-                    }
-                }
-            }
-        }
     }
 
     private fun initSearchPlaceRecyclerView() {
         binding.rvSearchList.apply {
             setHasFixedSize(true)
             adapter = mapSearchPlaceListAdapter
-        }
-    }
-
-    private fun initEditorActionListener() {
-        binding.etSearch.setOnEditorActionListener { _, actionId, _ ->
-            if (actionId == EditorInfo.IME_ACTION_SEARCH) {
-                viewModel.makeSearchPlace()
-            }
-            false
         }
     }
 

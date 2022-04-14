@@ -20,7 +20,7 @@ import javax.inject.Singleton
  * Description:
  */
 
-private const val BASE_API_URL = "http://192.168.219.103:8080/"
+private const val BASE_API_URL = "http://192.168.219.102:8080/"
 private const val BASE_KAKAO_API_URL = "https://dapi.kakao.com/"
 
 @Module

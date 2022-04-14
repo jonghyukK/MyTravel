@@ -10,45 +10,25 @@ import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavOptions
 import androidx.navigation.fragment.findNavController
-import com.orhanobut.logger.Logger
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
+import org.kjh.mytravel.MyProfileViewModel
 import org.kjh.mytravel.NavGraphDirections
 import org.kjh.mytravel.ProfilePostsGridItemDecoration
 import org.kjh.mytravel.R
 import org.kjh.mytravel.databinding.FragmentProfileBinding
-import org.kjh.mytravel.model.Bookmark
 import org.kjh.mytravel.model.Post
 import org.kjh.mytravel.ui.PostSmallListAdapter
 import org.kjh.mytravel.ui.base.BaseFragment
-import org.kjh.mytravel.ui.bookmark.BookMarkViewModel
-import org.kjh.mytravel.ui.bookmark.BookmarkUiState
 
 
-/**
- *
- *  [ UiState Modeling ]
- *
- *  해당 Fragment에선 아래와 같이 UiState를 Sealed Class로 묶기 보단,
- *  UiState를 Data Class로 만들어 부분적인 Update를 이용하는게 나음.
- *  Xml에 DataBinding하기에도 편함.
- *
- *  sealed class ProfileUiState {
-        object Loading  : ProfileUiState()
-        object NotLogin : ProfileUiState()
-        data class Success(val profileItem: User): ProfileUiState()
-        data class Error  (val error: Throwable?): ProfileUiState()
-    }
- *
- */
 @AndroidEntryPoint
 class ProfileFragment
     :BaseFragment<FragmentProfileBinding>(R.layout.fragment_profile) {
 
-    private val bookmarkViewModel: BookMarkViewModel by activityViewModels()
-    private val viewModel: ProfileViewModel by activityViewModels()
+    private val myProfileViewModel: MyProfileViewModel by activityViewModels()
 
     private val myPostListAdapter by lazy {
         PostSmallListAdapter(
@@ -76,35 +56,19 @@ class ProfileFragment
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        binding.viewModel = viewModel
         binding.fragment = this
+        binding.myProfileViewModel = myProfileViewModel
 
         initToolbarWithNavigation()
         initMyPostRecyclerView()
 
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                viewModel.loginState.collect { loginState ->
-                    when (loginState) {
-                        is LoginState.LoggedIn -> handleLoggedInFlow()
-                        is LoginState.NotLogIn -> handleNotLoginFlow()
-                    }
-                }
-            }
-        }
-    }
-
-    private fun handleLoggedInFlow() {
-        viewLifecycleOwner.lifecycleScope.launch {
-            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                viewModel.uiState.collect { uiState ->
-                    uiState.profileItem?.let {
-                        myPostListAdapter.submitList(uiState.profileItem.posts)
-                    }
-
-                    uiState.isError?.let {
-                        showError(it)
-                        viewModel.shownErrorToast()
+                myProfileViewModel.isLoggedIn.collect { isLoggedIn ->
+                    if (!isLoggedIn) {
+                        navigateWithAction(
+                            ProfileFragmentDirections.actionProfileFragmentToNotLoginFragment()
+                        )
                     }
                 }
             }
@@ -112,22 +76,11 @@ class ProfileFragment
 
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                bookmarkViewModel.uiState.collectLatest { bookmarkState ->
-                    viewModel.updatePostBookmarkState(bookmarkState.bookmarkItems)
-
-                    bookmarkState.isError?.let {
-                        showError(it)
-                        bookmarkViewModel.shownErrorToast()
-                    }
+                myProfileViewModel.isError.collectLatest {
+                    it?.let { showError(it) }
                 }
             }
         }
-    }
-
-    private fun handleNotLoginFlow() {
-        navigateWithAction(
-            ProfileFragmentDirections.actionProfileFragmentToNotLoginFragment()
-        )
     }
 
     private fun initToolbarWithNavigation() {
@@ -155,8 +108,8 @@ class ProfileFragment
 
     private fun initMyPostRecyclerView() {
         binding.rvMyPostList.apply {
-            adapter = myPostListAdapter
             setHasFixedSize(true)
+            adapter = myPostListAdapter
             addItemDecoration(ProfilePostsGridItemDecoration(requireContext()))
         }
     }
@@ -167,12 +120,18 @@ class ProfileFragment
     }
 
     private fun onClickBookmark(item: Post) {
-        bookmarkViewModel.updateBookmark(item.postId, item.placeName)
+        myProfileViewModel.updateBookmark(item.postId, item.placeName)
     }
 
     fun onClickProfileEdit(v: View) {
+        val myProfileData = myProfileViewModel.myProfileState.value!!
+
         navigateWithAction(
-            ProfileFragmentDirections.actionProfileFragmentToProfileEditFragment()
+            ProfileFragmentDirections.actionProfileFragmentToProfileEditFragment(
+                myProfileData.profileImg,
+                myProfileData.nickName,
+                myProfileData.introduce
+            )
         )
     }
 }

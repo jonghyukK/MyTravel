@@ -2,6 +2,7 @@ package org.kjh.mytravel.ui.profile.settings
 
 import android.os.Bundle
 import android.view.View
+import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
@@ -13,6 +14,7 @@ import com.orhanobut.logger.Logger
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
+import org.kjh.mytravel.MyProfileViewModel
 import org.kjh.mytravel.R
 import org.kjh.mytravel.databinding.FragmentSettingBinding
 import org.kjh.mytravel.ui.base.BaseFragment
@@ -25,8 +27,9 @@ class SettingFragment : BaseFragment<FragmentSettingBinding>(R.layout.fragment_s
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        binding.viewModel = viewModel
 
-        initClickEvents()
+        initToolbarWithNavigation()
 
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
@@ -40,6 +43,10 @@ class SettingFragment : BaseFragment<FragmentSettingBinding>(R.layout.fragment_s
         }
     }
 
+    private fun initToolbarWithNavigation() {
+        binding.tbSettingToolbar.setupWithNavController(findNavController())
+    }
+
     private fun navigateHomeWhenSuccessLogOut() {
         val startDestination = findNavController().graph.startDestinationId
         val navOptions = NavOptions.Builder()
@@ -47,11 +54,5 @@ class SettingFragment : BaseFragment<FragmentSettingBinding>(R.layout.fragment_s
             .build()
 
         findNavController().navigate(startDestination, null, navOptions)
-    }
-
-    private fun initClickEvents() {
-        binding.tvLogout.setOnClickListener {
-            viewModel.logout()
-        }
     }
 }

@@ -4,10 +4,11 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
-        <variable
-            name="viewModel"
-            type="org.kjh.mytravel.ui.bookmark.BookMarkViewModel" />
         <import type="android.view.View" />
+
+        <variable
+            name="myProfileViewModel"
+            type="org.kjh.mytravel.MyProfileViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -26,17 +27,6 @@
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"/>
-
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/rv_bookMarkList"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            app:layout_constraintTop_toBottomOf="@+id/tb_bookmarkToolbar"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
-            app:spanCount="3"/>
 
         <ImageView
             android:id="@+id/iv_bookmark"
@@ -82,8 +72,20 @@
             android:id="@+id/group_bookmarkEmpty"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:visibility="@{viewModel.uiState.Empty ? View.VISIBLE : View.GONE}"
+            android:visibility="@{myProfileViewModel.myProfileState.bookMarks.size == 0 ? View.VISIBLE : View.GONE}"
             app:constraint_referenced_ids="iv_bookmark, tv_nothing_bookmark_desc1, tv_do_bookmark" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rv_bookMarkList"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:layout_constraintTop_toBottomOf="@+id/tb_bookmarkToolbar"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+            app:spanCount="3"
+            bindItems="@{myProfileViewModel.myProfileState.bookMarks}"/>
 
         <ProgressBar
             android:id="@+id/pb_loading"
@@ -93,7 +95,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:isVisible="@{viewModel.uiState.loading}" />
+            app:isVisible="@{myProfileViewModel.isLoading()}" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

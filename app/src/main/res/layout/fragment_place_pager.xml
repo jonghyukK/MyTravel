@@ -7,6 +7,12 @@
         <variable
             name="viewModel"
             type="org.kjh.mytravel.ui.place.PlaceViewModel" />
+        <variable
+            name="myProfileViewModel"
+            type="org.kjh.mytravel.MyProfileViewModel" />
+        <variable
+            name="placeName"
+            type="String" />
     </data>
 
     <androidx.coordinatorlayout.widget.CoordinatorLayout
@@ -33,6 +39,8 @@
                     android:id="@+id/tb_placePagerToolbar"
                     android:layout_width="match_parent"
                     android:layout_height="?attr/actionBarSize"
+                    app:bookmarkList="@{myProfileViewModel.myProfileState.bookMarks}"
+                    app:placeName="@{placeName}"
                     app:layout_collapseMode="pin" />
 
                 <androidx.constraintlayout.widget.ConstraintLayout
@@ -94,6 +102,13 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             app:layout_behavior="@string/appbar_scrolling_view_behavior" />
+
+        <ProgressBar
+            android:id="@+id/pb_loading"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            app:isVisible="@{viewModel.uiState.loading}"/>
 
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 </layout>

@@ -2,21 +2,16 @@ package org.kjh.mytravel.ui
 
 import android.graphics.Color
 import android.net.Uri
-import android.widget.ImageView
-import android.widget.ProgressBar
-import android.widget.TextView
+import android.view.inputmethod.EditorInfo
+import android.widget.*
+import androidx.appcompat.widget.Toolbar
+import androidx.core.view.get
 import androidx.core.view.isVisible
 import androidx.databinding.BindingAdapter
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.PagerSnapHelper
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.google.android.material.appbar.AppBarLayout
-import com.google.android.material.appbar.CollapsingToolbarLayout
-import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
-import com.orhanobut.logger.Logger
 import org.kjh.mytravel.InputValidator
 import org.kjh.mytravel.InputValidator.INPUT_TYPE_EMAIl
 import org.kjh.mytravel.InputValidator.INPUT_TYPE_PW
@@ -24,10 +19,16 @@ import org.kjh.mytravel.InputValidator.isValidateEmail
 import org.kjh.mytravel.InputValidator.isValidateNickName
 import org.kjh.mytravel.InputValidator.isValidatePw
 import org.kjh.mytravel.R
-import org.kjh.mytravel.model.Banner
+import org.kjh.mytravel.isBookmarkedPlace
+import org.kjh.mytravel.model.Bookmark
+import org.kjh.mytravel.model.MediaStoreImage
+import org.kjh.mytravel.model.Post
 import org.kjh.mytravel.ui.base.UiState
-import org.kjh.mytravel.ui.home.banner.HomeBannerItemDecoration
-import org.kjh.mytravel.ui.home.banner.HomeBannersAdapter
+import org.kjh.mytravel.ui.bookmark.BookmarkListAdapter
+import org.kjh.mytravel.ui.place.PlaceDayLogListAdapter
+import org.kjh.mytravel.ui.profile.edit.ProfileUpdateState
+import org.kjh.mytravel.ui.profile.upload.*
+import org.kjh.mytravel.updateBookmarkStateWithPosts
 
 /**
  * MyTravel
@@ -38,6 +39,124 @@ import org.kjh.mytravel.ui.home.banner.HomeBannersAdapter
  */
 
 object MyBindingAdapter {
+
+    @JvmStatic
+    @BindingAdapter("bindItems")
+    fun RecyclerView.bindPostItems(items: List<Post>? = listOf()) {
+        val adapter = this.adapter
+
+        if (adapter != null && adapter is PostSmallListAdapter) {
+            adapter.submitList(items)
+        } else if (adapter is PlaceDayLogListAdapter) {
+            adapter.submitList(items)
+        }
+    }
+
+    @JvmStatic
+    @BindingAdapter("bindItems", "bookmarks")
+    fun RecyclerView.bindPostItems(items: List<Post>?, bookmarks: List<Bookmark>?) {
+        val postItems = items?.updateBookmarkStateWithPosts(
+            bookmarks ?: emptyList()) ?: emptyList()
+
+        val adapter = this.adapter
+
+        if (adapter != null && adapter is PostSmallListAdapter) {
+            adapter.submitList(postItems)
+        }
+    }
+
+    @JvmStatic
+    @BindingAdapter("bindItems")
+    fun RecyclerView.bindBookmarkItems(items: List<Bookmark>? = listOf()) {
+        val adapter = this.adapter
+
+        if (adapter != null && adapter is BookmarkListAdapter) {
+            adapter.submitList(items)
+        }
+    }
+
+    @JvmStatic
+    @BindingAdapter("bindItems")
+    fun RecyclerView.bindMediaStoreItems(items: List<MediaStoreImage>? = listOf()) {
+        val adapter = this.adapter
+
+        if (adapter != null) {
+            if (adapter is MediaStoreImageListAdapter)
+                adapter.submitList(items)
+            else if (adapter is SelectedPhotoListAdapter)
+                adapter.submitList(items)
+            else if (adapter is WritePostImagesAdapter)
+                adapter.submitList(items)
+        }
+    }
+
+    @JvmStatic
+    @BindingAdapter("bindItems")
+    fun RecyclerView.bindMapSearchItems(uiState: MapSearchState) {
+        when (uiState) {
+            is MapSearchState.Success -> {
+                val adapter = this.adapter
+
+                if (adapter is MapSearchPlaceListAdapter)
+                    adapter.submitList(uiState.items)
+            }
+            is MapSearchState.Error ->
+                Toast.makeText(this.context, uiState.error, Toast.LENGTH_SHORT).show()
+        }
+    }
+
+
+
+
+    @JvmStatic
+    @BindingAdapter("onEditorActionListener")
+    fun bindOnEditorActionListener(view: EditText, action: () -> Unit) {
+        view.setOnEditorActionListener { _, actionId, _ ->
+            if (actionId == EditorInfo.IME_ACTION_SEARCH) {
+                action()
+            }
+            false
+        }
+    }
+
+    @JvmStatic
+    @BindingAdapter("showLoading")
+    fun bindLoading(view: ProgressBar, uiState: MapSearchState) {
+        view.isVisible = uiState is MapSearchState.Loading
+    }
+
+    @JvmStatic
+    @BindingAdapter("showLoading")
+    fun bindLoading(view: ProgressBar, uiState: ProfileUpdateState) {
+        view.isVisible = uiState is ProfileUpdateState.Loading
+    }
+
+
+    @JvmStatic
+    @BindingAdapter(value = ["app:bookmarkList", "app:placeName"], requireAll = true)
+    fun bindToolbarMenuIconWithBookmark(
+        view      : Toolbar,
+        items     : List<Bookmark>?,
+        placeName : String
+    ) {
+        val isBookmarked = items?.isBookmarkedPlace(placeName) ?: false
+
+        val bookmarkIcon = if (isBookmarked) R.drawable.ic_rank else R.drawable.ic_bookmark
+        view.menu[0].setIcon(bookmarkIcon)
+    }
+
+    @JvmStatic
+    @BindingAdapter("isVisibleMenu")
+    fun bindShowMenu(view: Toolbar, isVisible: Boolean) {
+        view.menu[0].isVisible = isVisible
+    }
+
+
+
+
+
+
+
 
     @JvmStatic
     @BindingAdapter("imgResource")

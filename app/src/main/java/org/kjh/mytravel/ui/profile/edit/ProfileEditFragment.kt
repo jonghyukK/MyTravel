@@ -2,7 +2,6 @@ package org.kjh.mytravel.ui.profile.edit
 
 import android.os.Bundle
 import android.view.View
-import android.widget.Toast
 import androidx.core.view.isVisible
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
@@ -15,25 +14,33 @@ import androidx.navigation.ui.setupWithNavController
 import com.canhub.cropper.CropImageContract
 import com.canhub.cropper.CropImageView
 import com.canhub.cropper.options
-import com.orhanobut.logger.Logger
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
+import org.kjh.mytravel.MyProfileViewModel
 import org.kjh.mytravel.R
 import org.kjh.mytravel.databinding.FragmentProfileEditBinding
 import org.kjh.mytravel.model.User
 import org.kjh.mytravel.ui.base.BaseFragment
-import org.kjh.mytravel.ui.base.UiState
-import org.kjh.mytravel.ui.profile.ProfileViewModel
+import javax.inject.Inject
 
-const val NGINX_PATH = "http://192.168.219.103/images/"
+const val NGINX_PATH = "http://192.168.219.102/images/"
 
 @AndroidEntryPoint
 class ProfileEditFragment
     : BaseFragment<FragmentProfileEditBinding>(R.layout.fragment_profile_edit) {
 
-    private val viewModel: ProfileEditViewModel by viewModels()
-    private val profileViewModel: ProfileViewModel by activityViewModels()
+    private val args: ProfileEditFragmentArgs by navArgs()
+
+    @Inject
+    lateinit var profileEditViewModelFactory: ProfileEditViewModel.ProfileEditAssistedFactory
+
+    private val viewModel: ProfileEditViewModel by viewModels {
+        ProfileEditViewModel.provideFactory(profileEditViewModelFactory,
+            args.profileImg, args.nickName, args.introduce)
+    }
+
+    private val myProfileViewModel: MyProfileViewModel by activityViewModels()
 
     private val cropImage = registerForActivityResult(CropImageContract()) { result ->
         if (result.isSuccessful) {
@@ -46,15 +53,11 @@ class ProfileEditFragment
         }
     }
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        initProfileInfo()
-    }
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding.viewModel = viewModel
         binding.fragment  = this
+        binding.myProfileViewModel = myProfileViewModel
 
         initToolbarWithNavigation()
 
@@ -76,7 +79,7 @@ class ProfileEditFragment
     }
 
     private fun handleSuccessCase(userItem: User) {
-        profileViewModel.updateProfileItem(profileItem = userItem)
+        myProfileViewModel.updateMyProfile(profileItem = userItem)
         findNavController().popBackStack()
     }
 
@@ -84,17 +87,6 @@ class ProfileEditFragment
         error?.let {
             showError(it)
             viewModel.shownErrorToast()
-        }
-    }
-
-    // init ProfileImg, nickName, Introduce with Two-way Binding.
-    private fun initProfileInfo() {
-        profileViewModel.uiState.value.profileItem?.let {
-            viewModel.initProfileInfo(
-                profileImg = it.profileImg,
-                nickName   = it.nickName,
-                introduce  = it.introduce
-            )
         }
     }
 

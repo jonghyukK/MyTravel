@@ -4,6 +4,7 @@ import android.net.Uri
 import android.os.Bundle
 import android.view.View
 import androidx.core.view.isEmpty
+import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
@@ -45,24 +46,17 @@ class SelectPhotoFragment
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        binding.viewModel = viewModel
+        binding.viewModel       = viewModel
+        binding.uploadViewModel = uploadViewModel
 
         initToolbarWithNavigation()
         initLocalPhotoRecyclerView(savedInstanceState)
         initSelectedImagesRecyclerView()
 
-        viewModel.mediaStoreImages.observe(viewLifecycleOwner) { mediaStoreImages ->
-            mediaStoreImagesAdapter.submitList(mediaStoreImages)
-        }
-
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 uploadViewModel.uploadItemState.collect { uploadItemState ->
-                    with (uploadItemState.selectedItems) {
-                        selectedPhotoListAdapter.submitList(this)
-                        restoreSelectionTracker(this)
-                        nextMenuIsVisible(this)
-                    }
+                    restoreSelectionTracker(uploadItemState.selectedItems)
                 }
             }
         }
@@ -130,12 +124,5 @@ class SelectPhotoFragment
             val list = selectedItems.map { it.contentUri }
             tracker.setItemsSelected(list, true)
         }
-    }
-
-    private fun nextMenuIsVisible(selectedItems: List<MediaStoreImage>) {
-        if (selectedItems.isNotEmpty() && binding.tbSelectPhotoToolbar.menu.isEmpty()) {
-            binding.tbSelectPhotoToolbar.inflateMenu(R.menu.menu_next)
-        } else if (selectedItems.isEmpty())
-            binding.tbSelectPhotoToolbar.menu.clear()
     }
 }
