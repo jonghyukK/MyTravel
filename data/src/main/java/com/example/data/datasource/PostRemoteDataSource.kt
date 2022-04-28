@@ -29,7 +29,6 @@ interface PostRemoteDataSource {
     ): UserApiModel
 
     suspend fun getRecentPosts(
-        myEmail: String,
         page: Int,
         size: Int
     ): PostsApiModel
@@ -69,8 +68,7 @@ class PostRemoteDataSourceImpl @Inject constructor(
     }
 
     override suspend fun getRecentPosts(
-        myEmail: String,
         page: Int,
         size: Int
-    ) = apiService.getRecentPosts(myEmail, page, size)
+    ) = apiService.getRecentPosts(page, size)
 }

@@ -1,6 +1,5 @@
 package org.kjh.mytravel.ui.profile.edit
 
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
@@ -14,8 +13,10 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
+import org.kjh.mytravel.model.UiState
 import org.kjh.mytravel.model.User
 import org.kjh.mytravel.model.mapToPresenter
+import org.kjh.mytravel.utils.ErrorMsg
 
 /**
  * MyTravel
@@ -24,14 +25,6 @@ import org.kjh.mytravel.model.mapToPresenter
  *
  * Description:
  */
-
-sealed class ProfileUpdateState {
-    object Init : ProfileUpdateState()
-    object Loading : ProfileUpdateState()
-    data class Success(val userItem: User): ProfileUpdateState()
-    data class Error(val error: String?): ProfileUpdateState()
-}
-
 
 class ProfileEditViewModel @AssistedInject constructor(
     private val updateProfileUseCase     : UpdateProfileUseCase,
@@ -65,12 +58,14 @@ class ProfileEditViewModel @AssistedInject constructor(
     private val _profileImg: MutableStateFlow<String?> = MutableStateFlow(initProfileImg)
     val profileImg = _profileImg.asStateFlow()
 
-    private val _profileUpdateState: MutableStateFlow<ProfileUpdateState> = MutableStateFlow(ProfileUpdateState.Init)
+    private val _profileUpdateState: MutableStateFlow<UiState<User>> = MutableStateFlow(UiState.Init)
     val profileUpdateState = _profileUpdateState.asStateFlow()
 
     val inputNickName  = MutableStateFlow(initNickName)
     val inputIntroduce = MutableStateFlow(initIntroduce)
 
+
+    // API - Update My Profile.
     fun makeUpdateUserInfo(filePath: String?) {
         val nickName  = inputNickName.value
         val introduce = inputIntroduce.value
@@ -84,13 +79,13 @@ class ProfileEditViewModel @AssistedInject constructor(
             ).collect { apiResult ->
                 when (apiResult) {
                     is ApiResult.Loading ->
-                        _profileUpdateState.value = ProfileUpdateState.Loading
+                        _profileUpdateState.value = UiState.Loading
 
                     is ApiResult.Success ->
-                        _profileUpdateState.value = ProfileUpdateState.Success(apiResult.data.mapToPresenter())
+                        _profileUpdateState.value = UiState.Success(apiResult.data.mapToPresenter())
 
                     is ApiResult.Error -> {
-                        _profileUpdateState.value = ProfileUpdateState.Error(apiResult.throwable.localizedMessage)
+                        _profileUpdateState.value = UiState.Error(ErrorMsg.ERROR_MY_PROFILE_UPDATE)
                     }
                 }
             }
@@ -102,6 +97,6 @@ class ProfileEditViewModel @AssistedInject constructor(
     }
 
     fun shownErrorToast() {
-        _profileUpdateState.value = ProfileUpdateState.Init
+        _profileUpdateState.value = UiState.Init
     }
 }

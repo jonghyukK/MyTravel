@@ -5,7 +5,6 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.PagerSnapHelper
 import androidx.recyclerview.widget.RecyclerView
-import org.kjh.mytravel.LinearLayoutItemDecoration
 import org.kjh.mytravel.databinding.VhPlaceRankingRowBinding
 
 /**
@@ -15,17 +14,19 @@ import org.kjh.mytravel.databinding.VhPlaceRankingRowBinding
  *
  * Description:
  */
-class PlaceRankingListOuterAdapter(
+class PlaceRankingHorizontalWrapAdapter(
     private val placeRankingAdapter: PlaceRankingListAdapter
-): RecyclerView.Adapter<PlaceRankingListOuterAdapter.PlaceRankingRowViewHolder>() {
+): RecyclerView.Adapter<PlaceRankingHorizontalWrapAdapter.PlaceRankingRowViewHolder>() {
     private val state = mutableMapOf<Int, Parcelable?>()
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) =
-        PlaceRankingRowViewHolder(
-            VhPlaceRankingRowBinding.inflate(
-                LayoutInflater.from(parent.context), parent, false
-            )
+
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PlaceRankingRowViewHolder {
+        val binding = VhPlaceRankingRowBinding.inflate(
+            LayoutInflater.from(parent.context), parent, false
         )
+
+        return PlaceRankingRowViewHolder(binding)
+    }
 
     override fun onBindViewHolder(holder: PlaceRankingRowViewHolder, position: Int) {
         holder.bind(placeRankingAdapter)
@@ -51,7 +52,7 @@ class PlaceRankingListOuterAdapter(
 
                 if (itemDecorationCount == 0) {
                     addItemDecoration(
-                        LinearLayoutItemDecoration(
+                        PlaceRankingHorizontalItemDecoration(
                             this.context, 20, 20, 0, 0
                         )
                     )

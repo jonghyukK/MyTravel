@@ -56,3 +56,8 @@ fun BookmarkEntity.mapToPresenter() =
         isBookmarked,
         imageUrl
     )
+
+fun List<Bookmark>.isBookmarkedPlace(placeName: String) =
+    this.let { bookmarkList ->
+        bookmarkList.find { it.placeName == placeName } != null
+    }

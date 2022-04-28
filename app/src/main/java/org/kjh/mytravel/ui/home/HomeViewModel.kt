@@ -2,7 +2,6 @@ package org.kjh.mytravel.ui.home
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import androidx.paging.PagingData
 import androidx.paging.cachedIn
 import androidx.paging.map
 import com.example.domain2.entity.ApiResult
@@ -10,14 +9,18 @@ import com.example.domain2.usecase.GetHomeBannersUseCase
 import com.example.domain2.usecase.GetLoginPreferenceUseCase
 import com.example.domain2.usecase.GetPlaceRankingUseCase
 import com.example.domain2.usecase.GetRecentPostsUseCase
-import com.orhanobut.logger.Logger
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import org.kjh.mytravel.model.Banner
-import org.kjh.mytravel.model.Post
+import org.kjh.mytravel.model.PlaceWithRanking
+import org.kjh.mytravel.model.UiState
 import org.kjh.mytravel.model.mapToPresenter
-import org.kjh.mytravel.ui.base.UiState
+import org.kjh.mytravel.utils.ErrorMsg
 import javax.inject.Inject
 
 /**
@@ -28,11 +31,6 @@ import javax.inject.Inject
  * Description:
  */
 
-data class HomeUiState(
-    val isCollapsed : Boolean = false,
-    val isRefresh   : Boolean = false
-)
-
 @HiltViewModel
 class HomeViewModel @Inject constructor(
     val getHomeBannersUseCase: GetHomeBannersUseCase,
@@ -41,16 +39,21 @@ class HomeViewModel @Inject constructor(
     val loginPreferenceUseCase: GetLoginPreferenceUseCase
 ): ViewModel() {
 
-    private val _homeBannersUiState: MutableStateFlow<UiState> = MutableStateFlow(UiState.Loading)
-    val homeBannersUiState: StateFlow<UiState> = _homeBannersUiState
+    // Home Banners UiState.
+    private val _homeBannersUiState: MutableStateFlow<UiState<List<Banner>>> = MutableStateFlow(
+        UiState.Loading)
+    val homeBannersUiState = _homeBannersUiState.asStateFlow()
 
-    private val _homeRankingsUiState: MutableStateFlow<UiState> = MutableStateFlow(UiState.Loading)
-    val homeRankingsUiState: StateFlow<UiState> = _homeRankingsUiState
+    // Home Ranking UiState.
+    private val _homeRankingsUiState: MutableStateFlow<UiState<List<PlaceWithRanking>>> = MutableStateFlow(
+        UiState.Loading)
+    val homeRankingsUiState = _homeRankingsUiState.asStateFlow()
 
-    private val _homeUiState = MutableStateFlow(HomeUiState())
-    val homeUiState: StateFlow<HomeUiState> = _homeUiState
+    private val _refreshLatestPostsPagingData = MutableStateFlow(false)
+    val refreshLatestPostsPagingData = _refreshLatestPostsPagingData.asStateFlow()
 
-    private var currentRecentPostsPagingData: Flow<PagingData<Post>>? = null
+    val scope: CoroutineScope
+    get() = viewModelScope
 
     init {
         getHomeBanners()
@@ -63,15 +66,16 @@ class HomeViewModel @Inject constructor(
             getHomeBannersUseCase()
                 .collect { apiResult ->
                     when (apiResult) {
-                        is ApiResult.Loading -> {}
+                        is ApiResult.Loading ->
+                            _homeBannersUiState.value = UiState.Loading
+
                         is ApiResult.Success -> {
                             val data = apiResult.data.map { it.mapToPresenter() }
                             _homeBannersUiState.value = UiState.Success(data)
                         }
-                        is ApiResult.Error -> {
-                            Logger.e("${apiResult.throwable}")
-                            _homeBannersUiState.value = UiState.Error(apiResult.throwable)
-                        }
+
+                        is ApiResult.Error ->
+                            _homeBannersUiState.value = UiState.Error(ErrorMsg.ERROR_BANNER_API)
                     }
                 }
         }
@@ -83,48 +87,35 @@ class HomeViewModel @Inject constructor(
             getPlaceRankingUseCase()
                 .collect { apiResult ->
                     when (apiResult) {
-                        is ApiResult.Loading -> {}
+                        is ApiResult.Loading ->
+                            _homeRankingsUiState.value = UiState.Loading
+
                         is ApiResult.Success -> {
                             val data = apiResult.data.map { it.mapToPresenter() }
                             _homeRankingsUiState.value = UiState.Success(data)
                         }
-                        is ApiResult.Error -> {
-                            Logger.e("${apiResult.throwable}")
-                            _homeRankingsUiState.value = UiState.Error(apiResult.throwable)
-                        }
+
+                        is ApiResult.Error ->
+                            _homeRankingsUiState.value = UiState.Error(ErrorMsg.ERROR_PLACE_RANKING_API)
                     }
                 }
         }
     }
 
-    // API - home Recent Posts.
-    suspend fun getRecentPostPagingData(): Flow<PagingData<Post>> {
-        val lastResult = currentRecentPostsPagingData
+    // API - Home Latest Posts Paging Data.
+    val latestPostsPagingData = getRecentPostsUseCase()
+        .map { pagingData -> pagingData.map { it.mapToPresenter() } }
+        .cachedIn(viewModelScope)
 
-        if (lastResult != null) {
-            return lastResult
-        }
-
-        val newResult = getRecentPostsUseCase(loginPreferenceUseCase().email)
-            .map { pagingData ->
-                pagingData.map { it.mapToPresenter() }
-            }
-            .cachedIn(viewModelScope)
-        currentRecentPostsPagingData = newResult
-
-        return newResult
+    fun initHomeBannersUiState() {
+        _homeBannersUiState.value = UiState.Init
     }
 
-
-    fun refreshRecentPosts(value: Boolean) {
-        _homeUiState.update {
-            it.copy(isRefresh = value)
-        }
+    fun initPlaceRankingsUiState() {
+        _homeRankingsUiState.value = UiState.Init
     }
 
-    fun updateCollapsingState(value: Boolean) {
-        _homeUiState.update {
-            it.copy(isCollapsed = value)
-        }
+    fun refreshLatestPosts(value: Boolean) {
+        _refreshLatestPostsPagingData.value = value
     }
 }

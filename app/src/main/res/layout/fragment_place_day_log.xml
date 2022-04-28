@@ -22,7 +22,7 @@
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             android:orientation="vertical"
             tools:listitem="@layout/vh_place_day_log_item"
-            bindItems="@{viewModel.uiState.placeItem.posts}"
+            bindPostItems="@{viewModel.uiState.placeItem.posts}"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"

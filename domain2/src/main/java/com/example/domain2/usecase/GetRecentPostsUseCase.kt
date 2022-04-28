@@ -12,5 +12,5 @@ import com.example.domain2.repository.PostRepository
 class GetRecentPostsUseCase(
     private val postRepository: PostRepository
 ){
-    operator fun invoke(myEmail: String) = postRepository.getRecentPostsPagingData(myEmail)
+    operator fun invoke() = postRepository.getRecentPostsPagingData()
 }

@@ -18,21 +18,37 @@ import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import org.kjh.mytravel.R
 import org.kjh.mytravel.databinding.BsFragmentMapSearchBinding
+import org.kjh.mytravel.model.MapQueryItem
 import org.kjh.mytravel.ui.base.BaseBottomSheetDialogFragment
 
+interface MapSearchClickEvent {
+    fun onClickSearch()
+    fun onClickCancel(v: View)
+    fun onClickQueryItem(item: MapQueryItem)
+}
 
 @AndroidEntryPoint
 class MapSearchFragment
-    : BaseBottomSheetDialogFragment<BsFragmentMapSearchBinding>(R.layout.bs_fragment_map_search) {
+    : BaseBottomSheetDialogFragment<BsFragmentMapSearchBinding>(R.layout.bs_fragment_map_search), MapSearchClickEvent {
 
-    private val viewModel: MapSearchViewModel by viewModels()
+    private val viewModel   : MapSearchViewModel by viewModels()
     private val mapViewModel: MapViewModel by viewModels({ requireParentFragment() })
 
     private val mapSearchPlaceListAdapter by lazy {
-        MapSearchPlaceListAdapter { item ->
-            mapViewModel.setTempPlaceItem(item)
-            dismiss()
-        }
+        MapSearchPlaceListAdapter { item -> onClickQueryItem(item) }
+    }
+
+    override fun onClickSearch() {
+        viewModel.makeSearchPlace()
+    }
+
+    override fun onClickCancel(v: View) {
+        dismiss()
+    }
+
+    override fun onClickQueryItem(item: MapQueryItem) {
+        mapViewModel.setTempPlaceItem(item)
+        dismiss()
     }
 
     override fun onStart() {
@@ -58,22 +74,25 @@ class MapSearchFragment
         binding.viewModel = viewModel
         binding.fragment = this
 
-        initSearchPlaceRecyclerView()
+        initView()
     }
 
-    private fun initSearchPlaceRecyclerView() {
+    private fun initView() {
         binding.rvSearchList.apply {
             setHasFixedSize(true)
             adapter = mapSearchPlaceListAdapter
         }
-    }
 
-    fun onClickCancel(v: View) {
-        dismiss()
+        binding.etSearch.setOnEditorActionListener { _, actionId, _ ->
+            if (actionId == EditorInfo.IME_ACTION_SEARCH)
+                onClickSearch()
+            false
+        }
     }
 
     companion object {
         const val TAG = "MapSearchFragment"
+
         @JvmStatic
         fun newInstance() = MapSearchFragment()
     }

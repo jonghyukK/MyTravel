@@ -27,7 +27,6 @@
             android:text="@={viewModel.searchQuery}"
             android:imeOptions="actionSearch"
             android:inputType="text"
-            onEditorActionListener="@{() -> viewModel.makeSearchPlace()}"
             app:layout_constraintHorizontal_weight="0.8"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -56,14 +55,13 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             android:orientation="vertical"
-            bindItems="@{viewModel.uiState}"
-            />
+            bindMapSearchItems="@{viewModel.uiState}" />
 
         <ProgressBar
             android:id="@+id/pb_loading"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            showLoading="@{viewModel.uiState}"
+            app:isVisible="@{viewModel.uiState.loading}"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"

@@ -10,26 +10,25 @@ import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.navigation.ui.setupWithNavController
-import com.orhanobut.logger.Logger
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
-import org.kjh.mytravel.MyProfileViewModel
 import org.kjh.mytravel.NavGraphDirections
-import org.kjh.mytravel.ProfilePostsGridItemDecoration
 import org.kjh.mytravel.R
 import org.kjh.mytravel.databinding.FragmentUserBinding
-import org.kjh.mytravel.model.Post
-import org.kjh.mytravel.ui.PostSmallListAdapter
+import org.kjh.mytravel.ui.MyProfileViewModel
 import org.kjh.mytravel.ui.base.BaseFragment
 import javax.inject.Inject
 
+interface UserPageClickEvent {
+    fun onClickPostItem(placeName: String)
+    fun onClickBookmark(postId: Int, placeName: String)
+    fun onClickFollowOrNot(v: View)
+}
+
 @AndroidEntryPoint
 class UserFragment
-    : BaseFragment<FragmentUserBinding>(R.layout.fragment_user) {
-
-    private val args: UserFragmentArgs by navArgs()
+    : BaseFragment<FragmentUserBinding>(R.layout.fragment_user), UserPageClickEvent {
 
     @Inject
     lateinit var userViewModelFactory: UserViewModel.UserNameAssistedFactory
@@ -38,59 +37,61 @@ class UserFragment
         UserViewModel.provideFactory(userViewModelFactory, args.userEmail)
     }
 
+    private val args: UserFragmentArgs by navArgs()
     private val myProfileViewModel: MyProfileViewModel by activityViewModels()
 
     private val postSmallListAdapter by lazy {
-        PostSmallListAdapter(
-            onClickPost     = { item -> onClickPostItem(item)},
-            onClickBookmark = { item -> onClickBookmark(item)}
+        UserPostListAdapter(
+            onClickPost     = { item -> onClickPostItem(item.placeName)},
+            onClickBookmark = { item -> onClickBookmark(item.postId, item.placeName)}
         )
+    }
+
+    override fun onClickPostItem(placeName: String) {
+        navigateWithAction(NavGraphDirections.actionGlobalPlacePagerFragment(placeName))
+    }
+
+    override fun onClickBookmark(postId: Int, placeName: String) {
+        myProfileViewModel.updateBookmark(postId, placeName)
+    }
+
+    override fun onClickFollowOrNot(v: View) {
+        viewModel.makeRequestFollow(targetEmail = args.userEmail)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding.viewModel = viewModel
+        binding.fragment  = this
         binding.myProfileViewModel = myProfileViewModel
-        binding.fragment = this
 
-        initToolbarWithNavigation()
-        initUserPostsRecyclerView()
+        initView()
+        observe()
+    }
 
+    private fun observe() {
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                myProfileViewModel.isError.collectLatest {
-                    Logger.e("User")
-                    it?.let {
-                        showError(it)
-                    }
-                }
-            }
-        }
-
-
-        viewLifecycleOwner.lifecycleScope.launch {
-            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                viewModel.uiState.collect { uiState ->
-
-                    uiState.isError?.let {
-                        showError(it)
-                        viewModel.shownErrorToast()
-                    }
-                }
-            }
-        }
-
-        viewLifecycleOwner.lifecycleScope.launch {
-            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                viewModel.followState.collect { followState ->
-                    when (followState) {
-                        is FollowState.Success -> {
-                            myProfileViewModel.updateMyProfile(followState.followItem.myProfile)
+                launch {
+                    viewModel.uiState.collect { uiState ->
+                        uiState.isError?.let {
+                            showError(it)
+                            viewModel.shownErrorToast()
                         }
-                        is FollowState.Error -> {
-                            followState.error?.let {
-                                showError(it)
-                                viewModel.initFollowState()
+                    }
+                }
+
+                launch {
+                    viewModel.followState.collect { followState ->
+                        when (followState) {
+                            is FollowState.Success -> {
+                                myProfileViewModel.updateMyProfile(followState.followItem.myProfile)
+                            }
+                            is FollowState.Error -> {
+                                followState.error?.let {
+                                    showError(it)
+                                    viewModel.initFollowState()
+                                }
                             }
                         }
                     }
@@ -99,27 +100,13 @@ class UserFragment
         }
     }
 
-    private fun onClickPostItem(item: Post) {
-        navigateWithAction(NavGraphDirections.actionGlobalPlacePagerFragment(item.placeName))
-    }
+    private fun initView() {
+        binding.tbUserToolbar.setupWithNavController(findNavController())
 
-    private fun onClickBookmark(item: Post) {
-        myProfileViewModel.updateBookmark(item.postId, item.placeName)
-    }
-
-    fun onClickFollowOrUnFollow(v: View) {
-        viewModel.makeRequestFollow(targetEmail = args.userEmail)
-    }
-
-    private fun initUserPostsRecyclerView() {
         binding.rvUserPostList.apply {
             adapter = postSmallListAdapter
             setHasFixedSize(true)
-            addItemDecoration(ProfilePostsGridItemDecoration(requireContext()))
+            addItemDecoration(UserPostsGridItemDecoration(requireContext()))
         }
-    }
-
-    private fun initToolbarWithNavigation() {
-        binding.tbUserToolbar.setupWithNavController(findNavController())
     }
 }

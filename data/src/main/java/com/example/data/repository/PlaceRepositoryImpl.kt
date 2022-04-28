@@ -53,9 +53,6 @@ class PlaceRepositoryImpl @Inject constructor(
 
         val response = placeRemoteDataSource.getPlaceBanners()
         emit(ResponseMapper.responseToBannerEntityList(ApiResult.Success(response)))
-    }.retry(3) {
-        delay(3000)
-     it is HttpException
     }.catch {
         emit(ResponseMapper.responseToBannerEntityList(ApiResult.Error(it)))
     }

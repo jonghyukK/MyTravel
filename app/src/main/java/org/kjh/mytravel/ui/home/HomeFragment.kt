@@ -2,182 +2,110 @@ package org.kjh.mytravel.ui.home
 
 import android.os.Bundle
 import android.view.View
-import android.widget.Toast
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.ConcatAdapter
-import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.PagerSnapHelper
-import androidx.recyclerview.widget.RecyclerView
-import com.google.android.material.appbar.AppBarLayout
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import org.kjh.mytravel.NavGraphDirections
 import org.kjh.mytravel.R
 import org.kjh.mytravel.databinding.FragmentHomeBinding
-import org.kjh.mytravel.model.Banner
-import org.kjh.mytravel.model.PlaceWithRanking
 import org.kjh.mytravel.ui.base.BaseFragment
-import org.kjh.mytravel.ui.base.UiState
+import org.kjh.mytravel.ui.home.banner.BannerListAdapter
 import org.kjh.mytravel.ui.home.banner.HomeBannerItemDecoration
-import org.kjh.mytravel.ui.home.banner.HomeBannersAdapter
+import org.kjh.mytravel.ui.home.latest.LatestPostListAdapter
+import org.kjh.mytravel.ui.home.ranking.PlaceRankingHorizontalWrapAdapter
 import org.kjh.mytravel.ui.home.ranking.PlaceRankingListAdapter
-import org.kjh.mytravel.ui.home.ranking.PlaceRankingListOuterAdapter
 
+interface HomeClickEvent {
+    fun onClickBannerItem(topic: String)
+    fun onClickRankingItem(placeName: String)
+    fun onClickLatestPostItem(placeName: String)
+}
 
 @AndroidEntryPoint
-class HomeFragment : BaseFragment<FragmentHomeBinding>(R.layout.fragment_home) {
+class HomeFragment : BaseFragment<FragmentHomeBinding>(R.layout.fragment_home), HomeClickEvent {
 
     private val viewModel: HomeViewModel by activityViewModels()
-    private var bannerCount = 0
 
-    // Home "Banner" Adapter.
-    private val homeBannerAdapter by lazy {
-        HomeBannersAdapter { item ->
-            navigateWithAction(
-                HomeFragmentDirections.actionHomeFragmentToPlaceListByCityNameFragment(item.bannerTopic))
-        }.apply {
-            setHasStableIds(true)
-        }
+    // Adapter for "Banners"
+    private val bannerListAdapter by lazy {
+        BannerListAdapter { item -> onClickBannerItem(item.bannerTopic) }
     }
 
-    // Home "Ranking" Adapter.
-    private val placeRankingAdapter by lazy {
-        PlaceRankingListAdapter { item ->
-            navigateWithAction(NavGraphDirections.actionGlobalPlacePagerFragment(item.place.placeName))
-        }
+    // Adapter for "Rankings"
+    private val placeRankingListAdapter by lazy {
+        PlaceRankingListAdapter { item -> onClickRankingItem(item.place.placeName) }
     }
 
-    // Home "Recent Place" Adapter.
-    private val recentPlaceAdapter by lazy {
-        RecentPlaceListAdapter { item ->
-            navigateWithAction(NavGraphDirections.actionGlobalPlacePagerFragment(item.placeName))
-        }
+    // Adapter for "Rankings" that Horizontal Wrapper.
+    private val placeRankingHorizontalWrapAdapter by lazy {
+        PlaceRankingHorizontalWrapAdapter(placeRankingListAdapter)
     }
 
-    // [Ranking, Recent Place] Concat Adapter.
+    // Adapter for "Latest Posts"
+    private val latestPostListAdapter by lazy {
+        LatestPostListAdapter { item -> onClickLatestPostItem(item.placeName) }
+    }
+
+    // Concat Adapter for [Ranking, Latest Posts].
     private val homeConcatAdapter by lazy {
-        ConcatAdapter(PlaceRankingListOuterAdapter(placeRankingAdapter), recentPlaceAdapter)
+        ConcatAdapter(placeRankingHorizontalWrapAdapter, latestPostListAdapter)
+    }
+
+    override fun onClickBannerItem(topic: String) {
+        navigateWithAction(HomeFragmentDirections.actionHomeFragmentToPlaceListByCityNameFragment(topic))
+    }
+
+    override fun onClickRankingItem(placeName: String) {
+        navigateWithAction(NavGraphDirections.actionGlobalPlacePagerFragment(placeName))
+    }
+
+    override fun onClickLatestPostItem(placeName: String) {
+        navigateWithAction(NavGraphDirections.actionGlobalPlacePagerFragment(placeName))
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        binding.homeConcatAdapter  = homeConcatAdapter
-        binding.homeBannersAdapter = homeBannerAdapter
         binding.viewModel = viewModel
+        binding.fragment  = this
+        binding.placeRankingListAdapter = placeRankingListAdapter
+        binding.latestPostListAdapter   = latestPostListAdapter
 
-        initAppBarWithCollapsingToolbarLayout()
-        initHomeBannerRecyclerView()
-
-
-        viewLifecycleOwner.lifecycleScope.launch {
-            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                viewModel.homeBannersUiState.collect { uiState ->
-                    handleHomeBannerState(uiState)
-                }
-            }
-        }
-
-        viewLifecycleOwner.lifecycleScope.launch {
-            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                viewModel.homeRankingsUiState.collect { uiState ->
-                    handlePlaceRankingState(uiState)
-                }
-            }
-        }
-
-        viewLifecycleOwner.lifecycleScope.launch {
-            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                viewModel.homeUiState.collect { uiState ->
-                    if (uiState.isRefresh) {
-                        recentPlaceAdapter.refresh()
-                        binding.rvHomeRecyclerView.scrollToPosition(0)
-                        viewModel.refreshRecentPosts(false)
-                    }
-                }
-            }
-        }
-
-        viewLifecycleOwner.lifecycleScope.launch {
-            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                viewModel.getRecentPostPagingData().collectLatest {
-                    recentPlaceAdapter.submitData(pagingData = it)
-                }
-            }
-        }
+        initView()
+        observe()
     }
 
-    @Suppress("UNCHECKED_CAST")
-    private fun handleHomeBannerState(uiState: UiState) {
-        when (uiState) {
-            is UiState.Success<*> -> {
-                val items = uiState.data as List<Banner>
-                bannerCount = items.size
-                homeBannerAdapter.submitList(items)
-            }
-            is UiState.Error ->
-                Toast.makeText(requireContext(), getString(R.string.error_home_banner_api), Toast.LENGTH_SHORT).show()
-        }
-    }
-
-    @Suppress("UNCHECKED_CAST")
-    private fun handlePlaceRankingState(uiState: UiState) {
-        when (uiState) {
-            is UiState.Success<*> -> {
-                placeRankingAdapter.submitList(uiState.data as List<PlaceWithRanking>)
-            }
-            is UiState.Error ->
-                Toast.makeText(requireContext(), getString(R.string.error_home_ranking_api), Toast.LENGTH_SHORT).show()
-        }
-    }
-
-    // init AppBar, CollapsingToolbar, Toolbar
-    private fun initAppBarWithCollapsingToolbarLayout() {
-        with (binding) {
-            var scrollRange = -1
-            binding.ablHomeAppBarLayout.addOnOffsetChangedListener(
-                AppBarLayout.OnOffsetChangedListener { appBarLayout, verticalOffset ->
-                    if (scrollRange == -1) {
-                        scrollRange = appBarLayout?.totalScrollRange!!
-                    }
-
-                    viewModel?.updateCollapsingState(scrollRange + verticalOffset == 0)
-                }
-            )
-        }
-    }
-
-    // init Home Banner RecyclerView.
-    private fun initHomeBannerRecyclerView() {
+    private fun initView() {
         binding.rvHomeBannerList.apply {
             setHasFixedSize(true)
-
+            adapter = bannerListAdapter
             addItemDecoration(HomeBannerItemDecoration())
-
             val pagerSnapHelper = PagerSnapHelper()
             pagerSnapHelper.attachToRecyclerView(this)
+        }
 
-            // circulate for "Home Banner Loop".
-            addOnScrollListener(object: RecyclerView.OnScrollListener() {
-                val linearLayoutManager = (this@apply.layoutManager as LinearLayoutManager)
+        binding.rvHomeRecyclerView.apply {
+            setHasFixedSize(true)
+            adapter = homeConcatAdapter
+        }
+    }
 
-                override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
-                    val firstItemVisible: Int = linearLayoutManager.findFirstVisibleItemPosition()
-
-                    if (firstItemVisible != 1 && (firstItemVisible % bannerCount == 1)) {
-                        linearLayoutManager.scrollToPosition(1)
-                    } else if (firstItemVisible == 0) {
-                        linearLayoutManager.scrollToPositionWithOffset(
-                            bannerCount,
-                            -recyclerView.computeHorizontalScrollOffset()
-                        )
+    private fun observe() {
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.refreshLatestPostsPagingData.collect { isRefresh ->
+                    if (isRefresh) {
+                        latestPostListAdapter.refresh()
+                        binding.rvHomeRecyclerView.scrollToPosition(0)
+                        viewModel.refreshLatestPosts(false)
                     }
                 }
-            })
+            }
         }
     }
 

@@ -5,8 +5,8 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import org.kjh.mytravel.databinding.VhRectImageBigBinding
-import org.kjh.mytravel.dpToPx
 import org.kjh.mytravel.model.MediaStoreImage
+import org.kjh.mytravel.utils.dpToPx
 
 /**
  * MyTravel

@@ -9,7 +9,7 @@
             type="org.kjh.mytravel.ui.user.UserViewModel" />
         <variable
             name="myProfileViewModel"
-            type="org.kjh.mytravel.MyProfileViewModel" />
+            type="org.kjh.mytravel.ui.MyProfileViewModel" />
         <variable
             name="fragment"
             type="org.kjh.mytravel.ui.user.UserFragment" />
@@ -170,7 +170,7 @@
                         android:layout_marginBottom="15dp"
                         android:textSize="13sp"
                         android:text="@{viewModel.uiState.userItem.following ? @string/following : @string/follow}"
-                        android:onClick="@{fragment::onClickFollowOrUnFollow}"
+                        android:onClick="@{fragment::onClickFollowOrNot}"
                         app:layout_constraintTop_toBottomOf="@+id/tv_userIntroduce"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
@@ -185,8 +185,8 @@
                 android:layout_height="match_parent"
                 app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
                 app:spanCount="2"
-                bookmarks="@{myProfileViewModel.myProfileState.bookMarks}"
-                bindItems="@{viewModel.uiState.userItem.posts}"
+                bookmarks="@{myProfileViewModel.myProfileState.myBookmarkItems}"
+                bindPostItems="@{viewModel.uiState.userItem.posts}"
                 app:layout_behavior="@string/appbar_scrolling_view_behavior" />
 
 

@@ -1,4 +1,4 @@
-package org.kjh.mytravel
+package org.kjh.mytravel.utils
 
 import org.kjh.mytravel.ui.profile.signup.isValidPattern
 

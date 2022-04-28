@@ -1,4 +1,4 @@
-package org.kjh.mytravel.ui.home
+package org.kjh.mytravel.ui.home.latest
 
 import android.os.Parcelable
 import android.view.LayoutInflater
@@ -17,9 +17,9 @@ import org.kjh.mytravel.ui.RectImageListAdapter
  *
  * Description:
  */
-class RecentPlaceListAdapter(
+class LatestPostListAdapter(
     private val onClickPost: (Post) -> Unit
-): PagingDataAdapter<Post, RecentPlaceListAdapter.PlaceItemViewHolder>(
+): PagingDataAdapter<Post, LatestPostListAdapter.PlaceItemViewHolder>(
     Post.DiffCallback) {
     private val state = mutableMapOf<Int, Parcelable?>()
 

@@ -6,7 +6,7 @@
     <data>
         <variable
             name="myProfileViewModel"
-            type="org.kjh.mytravel.MyProfileViewModel" />
+            type="org.kjh.mytravel.ui.MyProfileViewModel" />
         <variable
             name="fragment"
             type="org.kjh.mytravel.ui.profile.ProfileFragment" />
@@ -22,7 +22,7 @@
             android:id="@+id/tb_profileToolbar"
             android:layout_width="0dp"
             android:layout_height="?attr/actionBarSize"
-            app:title="@{myProfileViewModel.myProfileState.nickName}"
+            app:title="@{myProfileViewModel.myProfileState.myProfileItem.nickName}"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
@@ -59,7 +59,7 @@
                         android:layout_height="100dp"
                         android:scaleType="centerCrop"
                         app:shapeAppearanceOverlay="@style/circle"
-                        app:imgUrl="@{myProfileViewModel.myProfileState.profileImg}"
+                        app:imgUrl="@{myProfileViewModel.myProfileState.myProfileItem.profileImg}"
                         app:layout_constraintTop_toTopOf="parent"
                         app:layout_constraintStart_toStartOf="parent"/>
 
@@ -67,7 +67,7 @@
                         android:id="@+id/tv_postCount"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@{String.valueOf(myProfileViewModel.myProfileState.postCount)}"
+                        android:text="@{String.valueOf(myProfileViewModel.myProfileState.myProfileItem.postCount)}"
                         android:textColor="#444444"
                         android:textStyle="bold"
                         android:textSize="15sp"
@@ -81,7 +81,7 @@
                         android:id="@+id/tv_followerCount"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@{String.valueOf(myProfileViewModel.myProfileState.followCount)}"
+                        android:text="@{String.valueOf(myProfileViewModel.myProfileState.myProfileItem.followCount)}"
                         android:textColor="#444444"
                         android:textStyle="bold"
                         android:textSize="15sp"
@@ -95,7 +95,7 @@
                         android:id="@+id/tv_followingCount"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@{String.valueOf(myProfileViewModel.myProfileState.followingCount)}"
+                        android:text="@{String.valueOf(myProfileViewModel.myProfileState.myProfileItem.followingCount)}"
                         android:textColor="#444444"
                         android:textStyle="bold"
                         android:textSize="15sp"
@@ -156,7 +156,7 @@
                         android:textSize="14sp"
                         app:layout_constraintTop_toBottomOf="@+id/siv_profileImg"
                         app:layout_constraintStart_toStartOf="parent"
-                        android:text="@{myProfileViewModel.myProfileState.introduce}"/>
+                        android:text="@{myProfileViewModel.myProfileState.myProfileItem.introduce}"/>
 
                     <Button
                         android:id="@+id/btn_editProfile"
@@ -166,7 +166,7 @@
                         android:layout_marginBottom="15dp"
                         android:text="@string/edit_profile"
                         android:textSize="13sp"
-                        android:onClick="@{fragment::onClickProfileEdit}"
+                        android:onClick="@{() -> fragment.onClickProfileEdit(myProfileViewModel.myProfileState.myProfileItem)}"
                         app:layout_constraintTop_toBottomOf="@+id/tv_userIntroduce"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
@@ -182,8 +182,18 @@
                 android:fitsSystemWindows="true"
                 app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
                 app:spanCount="2"
-                bindItems="@{myProfileViewModel.myProfileState.posts}"
+                bindPostItems="@{myProfileViewModel.myProfileState.myPostItems}"
                 app:layout_behavior="@string/appbar_scrolling_view_behavior" />
         </androidx.coordinatorlayout.widget.CoordinatorLayout>
+
+        <ProgressBar
+            android:id="@+id/pb_loading"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:isVisible="@{myProfileViewModel.isLoading()}"/>
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

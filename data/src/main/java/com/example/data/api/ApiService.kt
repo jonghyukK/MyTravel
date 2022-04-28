@@ -64,7 +64,6 @@ interface ApiService {
 
     @GET("post/recent")
     suspend fun getRecentPosts(
-        @Query("myEmail") myEmail: String,
         @Query("page") page: Int,
         @Query("size") size: Int
     ): PostsApiModel
@@ -76,7 +75,6 @@ interface ApiService {
 
     @GET("place/ranking")
     suspend fun getPlaceRanking(): PlaceRankingApiModel
-
 
     @GET("banners")
     suspend fun getHomeBanners(): BannersApiModel

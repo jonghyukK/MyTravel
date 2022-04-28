@@ -14,9 +14,13 @@ import org.kjh.mytravel.model.Banner
  * Description:
  */
 
-class HomeBannersAdapter(
+class BannerListAdapter(
     private val onClickBanner: (Banner) -> Unit
 ) : ListAdapter<Banner, HomeBannerViewHolder>(Banner.DiffCallback) {
+
+    init {
+        setHasStableIds(true)
+    }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) =
         HomeBannerViewHolder(

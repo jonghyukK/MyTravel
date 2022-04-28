@@ -9,7 +9,7 @@
             type="org.kjh.mytravel.ui.place.PlaceViewModel" />
         <variable
             name="myProfileViewModel"
-            type="org.kjh.mytravel.MyProfileViewModel" />
+            type="org.kjh.mytravel.ui.MyProfileViewModel" />
         <variable
             name="placeName"
             type="String" />
@@ -39,7 +39,7 @@
                     android:id="@+id/tb_placePagerToolbar"
                     android:layout_width="match_parent"
                     android:layout_height="?attr/actionBarSize"
-                    app:bookmarkList="@{myProfileViewModel.myProfileState.bookMarks}"
+                    app:bookmarkList="@{myProfileViewModel.myProfileState.myBookmarkItems}"
                     app:placeName="@{placeName}"
                     app:layout_collapseMode="pin" />
 

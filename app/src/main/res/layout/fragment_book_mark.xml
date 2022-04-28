@@ -8,7 +8,7 @@
 
         <variable
             name="myProfileViewModel"
-            type="org.kjh.mytravel.MyProfileViewModel" />
+            type="org.kjh.mytravel.ui.MyProfileViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -72,7 +72,7 @@
             android:id="@+id/group_bookmarkEmpty"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:visibility="@{myProfileViewModel.myProfileState.bookMarks.size == 0 ? View.VISIBLE : View.GONE}"
+            android:visibility="@{myProfileViewModel.myProfileState.myBookmarkItems.size == 0 ? View.VISIBLE : View.GONE}"
             app:constraint_referenced_ids="iv_bookmark, tv_nothing_bookmark_desc1, tv_do_bookmark" />
 
         <androidx.recyclerview.widget.RecyclerView
@@ -85,7 +85,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
             app:spanCount="3"
-            bindItems="@{myProfileViewModel.myProfileState.bookMarks}"/>
+            bindItems="@{myProfileViewModel.myProfileState.myBookmarkItems}"/>
 
         <ProgressBar
             android:id="@+id/pb_loading"

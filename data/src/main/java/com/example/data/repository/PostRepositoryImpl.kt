@@ -10,6 +10,7 @@ import com.example.domain2.entity.ApiResult
 import com.example.domain2.entity.PostEntity
 import com.example.domain2.entity.UserEntity
 import com.example.domain2.repository.PostRepository
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.flow
@@ -44,7 +45,7 @@ class PostRepositoryImpl @Inject constructor(
         emit(ResponseMapper.responseToUserEntity(ApiResult.Error(it)))
     }
 
-    override fun getRecentPostsPagingData(myEmail: String)
+    override fun getRecentPostsPagingData()
     : Flow<PagingData<PostEntity>> {
         return Pager(
             config = PagingConfig(
@@ -52,7 +53,7 @@ class PostRepositoryImpl @Inject constructor(
                 initialLoadSize = 5,
                 enablePlaceholders = false
             ),
-            pagingSourceFactory = { RecentPostsPagingSource(postRemoteDataSource, myEmail)}
+            pagingSourceFactory = { RecentPostsPagingSource(postRemoteDataSource)}
         ).flow
     }
 }

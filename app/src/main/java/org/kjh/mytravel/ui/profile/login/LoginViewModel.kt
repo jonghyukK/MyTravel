@@ -6,9 +6,9 @@ import com.example.domain2.usecase.MakeLoginRequestUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
-import org.kjh.mytravel.InputValidator
-import org.kjh.mytravel.InputValidator.isValidateEmail
-import org.kjh.mytravel.InputValidator.isValidatePw
+import org.kjh.mytravel.utils.InputValidator
+import org.kjh.mytravel.utils.InputValidator.isValidateEmail
+import org.kjh.mytravel.utils.InputValidator.isValidatePw
 import org.kjh.mytravel.model.mapToPresenter
 import javax.inject.Inject
 

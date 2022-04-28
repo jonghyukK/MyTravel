@@ -22,10 +22,14 @@ import org.kjh.mytravel.databinding.FragmentMapBinding
 import org.kjh.mytravel.model.MapQueryItem
 import org.kjh.mytravel.ui.base.BaseFragment
 
+interface MapClickEvent {
+    fun onClickOpenMapSearchFragment(v: View)
+    fun onClickApplySearchedPlace(item: MapQueryItem)
+}
 
 @AndroidEntryPoint
 class MapFragment
-    : BaseFragment<FragmentMapBinding>(R.layout.fragment_map), OnMapReadyCallback {
+    : BaseFragment<FragmentMapBinding>(R.layout.fragment_map), OnMapReadyCallback, MapClickEvent {
 
     private val uploadViewModel: UploadViewModel
             by navGraphViewModels(R.id.nav_nested_upload){ defaultViewModelProviderFactory }
@@ -33,14 +37,32 @@ class MapFragment
     private val viewModel: MapViewModel by viewModels()
     private lateinit var naverMap: NaverMap
 
+    override fun onClickOpenMapSearchFragment(v: View) {
+        MapSearchFragment.newInstance().show(childFragmentManager, MapSearchFragment.TAG)
+    }
+
+    override fun onClickApplySearchedPlace(item: MapQueryItem) {
+        uploadViewModel.updatePlaceItem(item)
+        findNavController().popBackStack()
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding.viewModel = viewModel
         binding.fragment = this
 
-        initNaverMapFragment()
-        initToolbarWithNavigation()
+        initView()
+        observe()
+    }
 
+    private fun initView() {
+        binding.tbMapToolbar.setupWithNavController(findNavController())
+
+        val mapFragment = childFragmentManager.findFragmentById(R.id.map) as MapFragment
+        mapFragment.getMapAsync(this)
+    }
+
+    private fun observe() {
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.selectedLocationItem.collect { mapQueryItem ->
@@ -66,25 +88,7 @@ class MapFragment
         }
     }
 
-    private fun initToolbarWithNavigation() {
-        binding.tbMapToolbar.setupWithNavController(findNavController())
-    }
-
-    private fun initNaverMapFragment() {
-        val mapFragment = childFragmentManager.findFragmentById(R.id.map) as MapFragment
-        mapFragment.getMapAsync(this)
-    }
-
     override fun onMapReady(p0: NaverMap) {
         naverMap = p0
-    }
-
-    fun onClickOpenSearchFragment(v: View) {
-        MapSearchFragment.newInstance().show(childFragmentManager, MapSearchFragment.TAG)
-    }
-
-    fun onClickApplyPlaceInfo(v: View) {
-        uploadViewModel.updatePlaceItem(viewModel.selectedLocationItem.value!!)
-        findNavController().popBackStack()
     }
 }

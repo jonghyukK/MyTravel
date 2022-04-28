@@ -15,13 +15,12 @@ import com.example.domain2.entity.PostEntity
  */
 class RecentPostsPagingSource(
     private val postRemoteDataSource: PostRemoteDataSource,
-    private val myEmail: String
 ): PagingSource<Int, PostEntity>() {
 
     override suspend fun load(params: LoadParams<Int>): LoadResult<Int, PostEntity> {
         try {
             val nextPageNumber = params.key ?: 0
-            val response = postRemoteDataSource.getRecentPosts(myEmail, nextPageNumber, params.loadSize)
+            val response = postRemoteDataSource.getRecentPosts(nextPageNumber, params.loadSize)
 
             val postItems = response.data
             val nextKey = if (postItems.isEmpty()) {
@@ -31,10 +30,10 @@ class RecentPostsPagingSource(
             }
 
             Log.e("RecentPostsPagingSource", """
-                nextPageNumber : ${nextPageNumber}
-                loadSize : ${params.loadSize}
-                itemCount : ${postItems.size}
-                nextKey : ${nextKey}
+                nextPageNumber  : $nextPageNumber
+                loadSize        : ${params.loadSize}
+                itemCount       : ${postItems.size}
+                nextKey         : $nextKey
             """.trimIndent())
 
             return LoadResult.Page(

@@ -26,5 +26,5 @@ interface PostRepository {
         y : String
     ): Flow<ApiResult<UserEntity>>
 
-    fun getRecentPostsPagingData(myEmail: String): Flow<PagingData<PostEntity>>
+    fun getRecentPostsPagingData(): Flow<PagingData<PostEntity>>
 }

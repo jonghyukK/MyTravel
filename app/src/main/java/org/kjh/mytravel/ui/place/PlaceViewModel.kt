@@ -53,6 +53,11 @@ class PlaceViewModel @AssistedInject constructor(
     val uiState = _uiState.asStateFlow()
 
     init {
+        getPlaceInfoWithPlaceName()
+    }
+
+    // API - get Place Info by placeName.
+    private fun getPlaceInfoWithPlaceName() {
         viewModelScope.launch {
             getPlaceUseCase(initPlaceName)
                 .collect { apiResult ->

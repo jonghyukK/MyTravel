@@ -17,31 +17,35 @@ import org.kjh.mytravel.R
 import org.kjh.mytravel.databinding.FragmentPlaceDayLogBinding
 import org.kjh.mytravel.ui.base.BaseFragment
 
+interface PlaceDayLogClickEvent {
+    fun onClickUserInfo(email: String)
+}
+
 class PlaceDayLogFragment
-    : BaseFragment<FragmentPlaceDayLogBinding>(R.layout.fragment_place_day_log) {
+    : BaseFragment<FragmentPlaceDayLogBinding>(R.layout.fragment_place_day_log), PlaceDayLogClickEvent {
 
     private val viewModel: PlaceViewModel by viewModels({ requireParentFragment() })
 
     private val placeDayLogListAdapter by lazy {
-        PlaceDayLogListAdapter { item -> onClickUserInfoInPost(item.email) }
+        PlaceDayLogListAdapter { item -> onClickUserInfo(item.email) }
+    }
+
+    override fun onClickUserInfo(email: String) {
+        navigateWithAction(NavGraphDirections.actionGlobalUserFragment(email))
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding.viewModel = viewModel
 
-        initPostListByPlace()
+        initView()
     }
 
-    private fun initPostListByPlace() {
+    private fun initView() {
         binding.rvPlaceDayLogList.apply {
-            adapter = placeDayLogListAdapter
             setHasFixedSize(true)
+            adapter = placeDayLogListAdapter
         }
-    }
-
-    private fun onClickUserInfoInPost(email: String) {
-        navigateWithAction(NavGraphDirections.actionGlobalUserFragment(email))
     }
 
     override fun onResume() {

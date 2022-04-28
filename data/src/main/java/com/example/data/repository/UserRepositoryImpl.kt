@@ -55,8 +55,8 @@ class UserRepositoryImpl @Inject constructor(
         introduce   : String?
     ): Flow<ApiResult<UserEntity>> = flow {
         emit(ApiResult.Loading())
+        
         val response = userRemoteDataSource.makeRequestProfileUpdate(profileUrl, email, nickName, introduce)
-
         emit(ResponseMapper.responseToUserEntity(ApiResult.Success(response)))
     }.catch {
         emit(ResponseMapper.responseToUserEntity(ApiResult.Error(it)))

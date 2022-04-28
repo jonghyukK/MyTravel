@@ -2,30 +2,27 @@ package org.kjh.mytravel.ui.bookmark
 
 import android.os.Bundle
 import android.view.View
-import android.widget.Toast
 import androidx.activity.addCallback
 import androidx.fragment.app.activityViewModels
-import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.lifecycleScope
-import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavOptions
 import androidx.navigation.fragment.findNavController
-import com.orhanobut.logger.Logger
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.flow.collectLatest
-import kotlinx.coroutines.launch
-import org.kjh.mytravel.MyProfileViewModel
 import org.kjh.mytravel.NavGraphDirections
 import org.kjh.mytravel.R
 import org.kjh.mytravel.databinding.FragmentBookMarkBinding
 import org.kjh.mytravel.model.Bookmark
+import org.kjh.mytravel.ui.MyProfileViewModel
 import org.kjh.mytravel.ui.base.BaseFragment
+
+interface BookmarkClickEvent {
+    fun onClickPostItem(item: Bookmark)
+    fun onClickBookmark(item: Bookmark)
+}
 
 @AndroidEntryPoint
 class BookMarkFragment
-    : BaseFragment<FragmentBookMarkBinding>(R.layout.fragment_book_mark) {
+    : BaseFragment<FragmentBookMarkBinding>(R.layout.fragment_book_mark), BookmarkClickEvent {
 
     private val myProfileViewModel: MyProfileViewModel by activityViewModels()
 
@@ -34,6 +31,14 @@ class BookMarkFragment
             onClickItem     = { item -> onClickPostItem(item)},
             onClickBookmark = { item -> onClickBookmark(item)}
         )
+    }
+
+    override fun onClickPostItem(item: Bookmark) {
+        navigateWithAction(NavGraphDirections.actionGlobalPlacePagerFragment(item.placeName))
+    }
+
+    override fun onClickBookmark(item: Bookmark) {
+        myProfileViewModel.updateBookmark(item.postId, item.placeName)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -57,29 +62,13 @@ class BookMarkFragment
         super.onViewCreated(view, savedInstanceState)
         binding.myProfileViewModel = myProfileViewModel
 
-        initBookMarkRecyclerView()
-
-        viewLifecycleOwner.lifecycleScope.launch {
-            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                myProfileViewModel.isError.collectLatest {
-                    it?.let { showError(it) }
-                }
-            }
-        }
+        initView()
     }
 
-    private fun initBookMarkRecyclerView() {
+    private fun initView() {
         binding.rvBookMarkList.apply {
             setHasFixedSize(true)
             adapter = bookMarkListAdapter
         }
-    }
-
-    private fun onClickPostItem(item: Bookmark) {
-        navigateWithAction(NavGraphDirections.actionGlobalPlacePagerFragment(item.placeName))
-    }
-
-    private fun onClickBookmark(item: Bookmark) {
-        myProfileViewModel.updateBookmark(item.postId, item.placeName)
     }
 }
