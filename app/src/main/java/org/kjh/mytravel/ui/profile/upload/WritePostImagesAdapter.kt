@@ -17,7 +17,7 @@ import org.kjh.mytravel.utils.dpToPx
  */
 
 class WritePostImagesAdapter
-    : ListAdapter<MediaStoreImage, TempImagesViewHolder>(MediaStoreImage.DiffCallback){
+    : ListAdapter<MediaStoreImage, TempImagesViewHolder>(MediaStoreImage.diffCallback){
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) =
         TempImagesViewHolder(

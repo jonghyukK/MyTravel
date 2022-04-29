@@ -27,63 +27,47 @@ object RepositoryModule {
     @Provides
     fun provideSignUpRepository(
         dataSource: SignUpRemoteDataSource
-    ): SignUpRepository {
-        return SignUpRepositoryImpl(dataSource)
-    }
+    ): SignUpRepository = SignUpRepositoryImpl(dataSource)
 
     @Singleton
     @Provides
     fun provideLoginRepository(
         dataSource: LoginRemoteDataSource
-    ): LoginRepository {
-        return LoginRepositoryImpl(dataSource)
-    }
+    ): LoginRepository = LoginRepositoryImpl(dataSource)
 
     @Singleton
     @Provides
     fun provideUserRepository(
         dataSource: UserRemoteDataSource
-    ): UserRepository {
-        return UserRepositoryImpl(dataSource)
-    }
+    ): UserRepository = UserRepositoryImpl(dataSource)
 
     @Singleton
     @Provides
     fun providePostRepository(
         dataSource: PostRemoteDataSource
-    ): PostRepository {
-        return PostRepositoryImpl(dataSource)
-    }
+    ): PostRepository = PostRepositoryImpl(dataSource)
 
     @Singleton
     @Provides
     fun provideMapRepository(
         dataSource: MapRemoteDataSource
-    ): MapRepository {
-        return MapRepositoryImpl(dataSource)
-    }
+    ): MapRepository = MapRepositoryImpl(dataSource)
 
     @Singleton
     @Provides
     fun providePlaceRepository(
         dataSource: PlaceRemoteDataSource
-    ): PlaceRepository {
-        return PlaceRepositoryImpl(dataSource)
-    }
+    ): PlaceRepository = PlaceRepositoryImpl(dataSource)
 
     @Singleton
     @Provides
     fun provideBookmarkRepository(
         dataSource: BookmarkRemoteDataSource
-    ): BookmarkRepository {
-        return BookmarkRepositoryImpl(dataSource)
-    }
+    ): BookmarkRepository = BookmarkRepositoryImpl(dataSource)
 
     @Singleton
     @Provides
     fun provideLoginPreferencesRepository(
         dataStore: DataStore<Preferences>
-    ): LoginPreferencesRepository {
-        return LoginPreferencesRepositoryImpl(dataStore)
-    }
+    ): LoginPreferencesRepository = LoginPreferencesRepositoryImpl(dataStore)
 }

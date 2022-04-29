@@ -20,12 +20,12 @@ import javax.inject.Singleton
  * Description:
  */
 
-private const val BASE_API_URL = "http://192.168.219.102:8080/"
-private const val BASE_KAKAO_API_URL = "https://dapi.kakao.com/"
-
 @Module
 @InstallIn(SingletonComponent::class)
 object NetworkModule {
+
+    private const val BASE_API_URL       = "http://192.168.219.102:8080/"
+    private const val BASE_KAKAO_API_URL = "https://dapi.kakao.com/"
 
     @Singleton
     @Provides
@@ -46,18 +46,17 @@ object NetworkModule {
 
     @Singleton
     @Provides
-    fun provideApiService(retrofit: Retrofit.Builder): ApiService {
-        return retrofit
+    fun provideApiService(retrofit: Retrofit.Builder): ApiService =
+        retrofit
             .build()
             .create(ApiService::class.java)
-    }
 
     @Singleton
     @Provides
-    fun provideKakaoApiService(retrofit: Retrofit.Builder): KakaoApiService {
-        return retrofit
+    fun provideKakaoApiService(retrofit: Retrofit.Builder): KakaoApiService =
+        retrofit
             .baseUrl(BASE_KAKAO_API_URL)
             .build()
             .create(KakaoApiService::class.java)
-    }
+
 }

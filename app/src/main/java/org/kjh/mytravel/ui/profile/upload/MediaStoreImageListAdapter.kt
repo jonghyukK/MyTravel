@@ -21,7 +21,7 @@ import org.kjh.mytravel.model.MediaStoreImage
  */
 
 class MediaStoreImageListAdapter :
-    ListAdapter<MediaStoreImage, MediaStoreImageListAdapter.SelectPhotoViewHolder>(MediaStoreImage.DiffCallback){
+    ListAdapter<MediaStoreImage, MediaStoreImageListAdapter.SelectPhotoViewHolder>(MediaStoreImage.diffCallback){
 
     init {
         setHasStableIds(true)

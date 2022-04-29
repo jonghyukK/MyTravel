@@ -1,4 +1,4 @@
-package org.kjh.mytravel.ui.place.bycityname
+package org.kjh.mytravel.ui.place.subcity
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
@@ -11,12 +11,11 @@ import dagger.assisted.AssistedInject
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import org.kjh.mytravel.model.Place
-import org.kjh.mytravel.model.UiState
+import org.kjh.mytravel.ui.common.UiState
 import org.kjh.mytravel.model.mapToPresenter
-import org.kjh.mytravel.utils.ErrorMsg
+import org.kjh.mytravel.ui.common.ErrorMsg
 
 /**
  * MyTravel
@@ -26,14 +25,14 @@ import org.kjh.mytravel.utils.ErrorMsg
  * Description:
  */
 
-class PlaceListByCityNameViewModel @AssistedInject constructor(
+class PlacesBySubCityViewModel @AssistedInject constructor(
     private val getPlacesBySubCityNameUseCase: GetPlacesBySubCityNameUseCase,
     @Assisted private val initSubCityName: String
 ): ViewModel() {
 
     @AssistedFactory
     interface SubCityNameAssistedFactory {
-        fun create(subCityName: String): PlaceListByCityNameViewModel
+        fun create(subCityName: String): PlacesBySubCityViewModel
     }
 
     companion object {

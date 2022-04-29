@@ -20,11 +20,12 @@ import kotlin.math.max
  * Description:
  */
 
-class HomeBannerItemDecoration : RecyclerView.ItemDecoration() {
-    private val DP = Resources.getSystem().displayMetrics.density
+class BannerItemDecoration : RecyclerView.ItemDecoration() {
+
+    private val dp = Resources.getSystem().displayMetrics.density
 
     private val textPaint = Paint().apply {
-        textSize = 18 * DP
+        textSize = 18 * dp
         color    = Color.WHITE
         isAntiAlias = true
     }
@@ -39,11 +40,8 @@ class HomeBannerItemDecoration : RecyclerView.ItemDecoration() {
         if (currentChildPosition != RecyclerView.NO_POSITION) {
             val text = "${(currentChildPosition % (itemTotalCount / 2)) + 1}/${itemTotalCount / 2}"
 
-            val padding20 = 20 * DP
-            val padding30 = 30 * DP
-
-//            val startX = parent.width - padding30 - textPaint.measureText(text)
-//            val startY = parent.height - padding20
+            val padding20 = 20 * dp
+            val padding30 = 30 * dp
 
             val resourceId = parent.resources.getIdentifier("status_bar_height", "dimen", "android")
             var result = 0
@@ -51,10 +49,8 @@ class HomeBannerItemDecoration : RecyclerView.ItemDecoration() {
                 result = parent.resources.getDimensionPixelSize(resourceId)
             }
 
-
-
             val startX = parent.width - padding30 - textPaint.measureText(text)
-            val startY = (result / 2) * DP + textPaint.measureText(text)
+            val startY = (result / 2) * dp + textPaint.measureText(text)
 
             c.drawText(text, startX, 200f, textPaint)
         }

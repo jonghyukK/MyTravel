@@ -18,7 +18,7 @@ data class MediaStoreImage(
     val bucketName  : String
 ) {
     companion object {
-        val DiffCallback = object : DiffUtil.ItemCallback<MediaStoreImage>() {
+        val diffCallback = object : DiffUtil.ItemCallback<MediaStoreImage>() {
             override fun areItemsTheSame(
                 oldItem: MediaStoreImage,
                 newItem: MediaStoreImage

@@ -23,7 +23,7 @@ data class Place(
     val posts   : List<Post> = listOf()
 ) {
     companion object {
-        val DiffCallback = object : DiffUtil.ItemCallback<Place>() {
+        val diffCallback = object : DiffUtil.ItemCallback<Place>() {
             override fun areItemsTheSame(
                 oldItem: Place,
                 newItem: Place

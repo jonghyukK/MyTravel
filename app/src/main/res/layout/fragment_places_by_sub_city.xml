@@ -9,10 +9,10 @@
             type="String" />
         <variable
             name="fragment"
-            type="org.kjh.mytravel.ui.place.bycityname.PlaceListByCityNameFragment" />
+            type="org.kjh.mytravel.ui.place.subcity.PlacesBySubCityFragment" />
         <variable
             name="viewModel"
-            type="org.kjh.mytravel.ui.place.bycityname.PlaceListByCityNameViewModel" />
+            type="org.kjh.mytravel.ui.place.subcity.PlacesBySubCityViewModel" />
     </data>
 
     <androidx.coordinatorlayout.widget.CoordinatorLayout
@@ -25,7 +25,7 @@
             android:id="@+id/container"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            tools:context=".ui.place.bycityname.PlaceListByCityNameFragment">
+            tools:context=".ui.place.subcity.PlacesBySubCityFragment">
 
             <com.google.android.material.appbar.MaterialToolbar
                 android:id="@+id/tb_placeListByCityNameToolbar"

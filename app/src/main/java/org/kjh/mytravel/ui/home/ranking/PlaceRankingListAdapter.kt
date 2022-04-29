@@ -16,7 +16,7 @@ import org.kjh.mytravel.model.PlaceWithRanking
  */
 class PlaceRankingListAdapter(
     private val onClickPlaceItem: (PlaceWithRanking) -> Unit
-) : ListAdapter<PlaceWithRanking, PlaceRankingViewHolder>(PlaceRankingDiffUtil) {
+) : ListAdapter<PlaceWithRanking, PlaceRankingViewHolder>(PlaceWithRanking.diffCallback) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) =
         PlaceRankingViewHolder(
@@ -29,17 +29,3 @@ class PlaceRankingListAdapter(
         holder.bind(getItem(position))
     }
 }
-
-object PlaceRankingDiffUtil: DiffUtil.ItemCallback<PlaceWithRanking>() {
-    override fun areItemsTheSame(
-        oldItem: PlaceWithRanking,
-        newItem: PlaceWithRanking
-    ) = oldItem.place.placeId == newItem.place.placeId
-
-    override fun areContentsTheSame(
-        oldItem: PlaceWithRanking,
-        newItem: PlaceWithRanking
-    ) = oldItem == newItem
-}
-
-

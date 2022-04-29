@@ -10,7 +10,8 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import org.kjh.mytravel.model.*
-import org.kjh.mytravel.utils.ErrorMsg
+import org.kjh.mytravel.ui.common.UiState
+import org.kjh.mytravel.ui.common.ErrorMsg
 import javax.inject.Inject
 
 /**

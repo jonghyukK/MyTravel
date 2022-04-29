@@ -17,7 +17,7 @@ data class Banner(
     val bannerTopic: String
 ) {
     companion object {
-        val DiffCallback = object : DiffUtil.ItemCallback<Banner>() {
+        val diffCallback = object : DiffUtil.ItemCallback<Banner>() {
             override fun areItemsTheSame(
                 oldItem: Banner,
                 newItem: Banner

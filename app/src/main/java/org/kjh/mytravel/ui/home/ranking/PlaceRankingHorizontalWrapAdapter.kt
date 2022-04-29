@@ -17,8 +17,8 @@ import org.kjh.mytravel.databinding.VhPlaceRankingRowBinding
 class PlaceRankingHorizontalWrapAdapter(
     private val placeRankingAdapter: PlaceRankingListAdapter
 ): RecyclerView.Adapter<PlaceRankingHorizontalWrapAdapter.PlaceRankingRowViewHolder>() {
-    private val state = mutableMapOf<Int, Parcelable?>()
 
+    private val state = mutableMapOf<Int, Parcelable?>()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PlaceRankingRowViewHolder {
         val binding = VhPlaceRankingRowBinding.inflate(
@@ -52,7 +52,7 @@ class PlaceRankingHorizontalWrapAdapter(
 
                 if (itemDecorationCount == 0) {
                     addItemDecoration(
-                        PlaceRankingHorizontalItemDecoration(
+                        PlaceRankingItemDecoration(
                             this.context, 20, 20, 0, 0
                         )
                     )

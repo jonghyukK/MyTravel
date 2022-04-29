@@ -13,10 +13,10 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
-import org.kjh.mytravel.model.UiState
+import org.kjh.mytravel.ui.common.UiState
 import org.kjh.mytravel.model.User
 import org.kjh.mytravel.model.mapToPresenter
-import org.kjh.mytravel.utils.ErrorMsg
+import org.kjh.mytravel.ui.common.ErrorMsg
 
 /**
  * MyTravel

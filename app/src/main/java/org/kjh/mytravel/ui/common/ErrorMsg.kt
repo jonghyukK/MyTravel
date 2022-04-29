@@ -1,4 +1,4 @@
-package org.kjh.mytravel.utils
+package org.kjh.mytravel.ui.common
 
 import org.kjh.mytravel.R
 

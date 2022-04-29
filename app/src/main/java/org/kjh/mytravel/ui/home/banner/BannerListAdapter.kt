@@ -16,20 +16,20 @@ import org.kjh.mytravel.model.Banner
 
 class BannerListAdapter(
     private val onClickBanner: (Banner) -> Unit
-) : ListAdapter<Banner, HomeBannerViewHolder>(Banner.DiffCallback) {
+) : ListAdapter<Banner, BannerViewHolder>(Banner.diffCallback) {
 
     init {
         setHasStableIds(true)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) =
-        HomeBannerViewHolder(
+        BannerViewHolder(
             VhHomeBannerItemBinding.inflate(
                 LayoutInflater.from(parent.context), parent, false
             ), onClickBanner
         )
 
-    override fun onBindViewHolder(holder: HomeBannerViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: BannerViewHolder, position: Int) {
         holder.bind(getItem(position % currentList.size))
     }
 

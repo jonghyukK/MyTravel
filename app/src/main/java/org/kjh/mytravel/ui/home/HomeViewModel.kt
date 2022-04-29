@@ -18,9 +18,9 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import org.kjh.mytravel.model.Banner
 import org.kjh.mytravel.model.PlaceWithRanking
-import org.kjh.mytravel.model.UiState
+import org.kjh.mytravel.ui.common.UiState
 import org.kjh.mytravel.model.mapToPresenter
-import org.kjh.mytravel.utils.ErrorMsg
+import org.kjh.mytravel.ui.common.ErrorMsg
 import javax.inject.Inject
 
 /**

@@ -19,7 +19,7 @@ data class MapQueryItem(
     val y               : String
 ) {
     companion object {
-        val DiffCallback = object : DiffUtil.ItemCallback<MapQueryItem>() {
+        val diffCallback = object : DiffUtil.ItemCallback<MapQueryItem>() {
             override fun areItemsTheSame(
                 oldItem: MapQueryItem,
                 newItem: MapQueryItem

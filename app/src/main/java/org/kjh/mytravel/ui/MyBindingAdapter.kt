@@ -26,8 +26,9 @@ import kotlinx.coroutines.launch
 import org.kjh.mytravel.R
 import org.kjh.mytravel.model.*
 import org.kjh.mytravel.ui.bookmark.BookmarkListAdapter
+import org.kjh.mytravel.ui.common.UiState
 import org.kjh.mytravel.ui.home.banner.BannerListAdapter
-import org.kjh.mytravel.ui.home.latest.LatestPostListAdapter
+import org.kjh.mytravel.ui.home.latest.LatestPostPagingDataAdapter
 import org.kjh.mytravel.ui.home.ranking.PlaceRankingListAdapter
 import org.kjh.mytravel.ui.place.PlaceDayLogListAdapter
 import org.kjh.mytravel.ui.profile.MyPostListAdapter
@@ -36,12 +37,12 @@ import org.kjh.mytravel.ui.profile.upload.MediaStoreImageListAdapter
 import org.kjh.mytravel.ui.profile.upload.SelectedPhotoListAdapter
 import org.kjh.mytravel.ui.profile.upload.WritePostImagesAdapter
 import org.kjh.mytravel.ui.user.UserPostListAdapter
-import org.kjh.mytravel.utils.InputValidator
-import org.kjh.mytravel.utils.InputValidator.INPUT_TYPE_EMAIl
-import org.kjh.mytravel.utils.InputValidator.INPUT_TYPE_PW
-import org.kjh.mytravel.utils.InputValidator.isValidateEmail
-import org.kjh.mytravel.utils.InputValidator.isValidateNickName
-import org.kjh.mytravel.utils.InputValidator.isValidatePw
+import org.kjh.mytravel.ui.user.InputValidator
+import org.kjh.mytravel.ui.user.InputValidator.INPUT_TYPE_EMAIl
+import org.kjh.mytravel.ui.user.InputValidator.INPUT_TYPE_PW
+import org.kjh.mytravel.ui.user.InputValidator.isValidateEmail
+import org.kjh.mytravel.ui.user.InputValidator.isValidateNickName
+import org.kjh.mytravel.ui.user.InputValidator.isValidatePw
 
 /**
  * MyTravel
@@ -88,7 +89,7 @@ object MyBindingAdapter {
     @BindingAdapter(value = ["bindLatestPostItems", "latestPostListAdapter", "scope"], requireAll = true)
     fun RecyclerView.bindLatestPostItems(
         pagingData   : Flow<PagingData<Post>>,
-        adapter      : LatestPostListAdapter?,
+        adapter      : LatestPostPagingDataAdapter?,
         scope        : CoroutineScope
     ) {
         scope.launch {

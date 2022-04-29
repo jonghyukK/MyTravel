@@ -17,31 +17,31 @@ import org.kjh.mytravel.ui.RectImageListAdapter
  *
  * Description:
  */
-class LatestPostListAdapter(
+class LatestPostPagingDataAdapter(
     private val onClickPost: (Post) -> Unit
-): PagingDataAdapter<Post, LatestPostListAdapter.PlaceItemViewHolder>(
-    Post.DiffCallback) {
+): PagingDataAdapter<Post, LatestPostPagingDataAdapter.LatestPostViewHolder>(Post.diffCallback) {
+
     private val state = mutableMapOf<Int, Parcelable?>()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) =
-        PlaceItemViewHolder(
+        LatestPostViewHolder(
             VhPlaceRecentItemBinding.inflate(
                 LayoutInflater.from(parent.context), parent, false
             )
         )
 
-    override fun onBindViewHolder(holder: PlaceItemViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: LatestPostViewHolder, position: Int) {
         holder.bind(getItem(position)!!)
     }
 
-    override fun onViewRecycled(holder: PlaceItemViewHolder) {
+    override fun onViewRecycled(holder: LatestPostViewHolder) {
         super.onViewRecycled(holder)
 
         val key = holder.layoutPosition
         state[key] = holder.binding.rvRecentPlaceList.layoutManager?.onSaveInstanceState()
     }
 
-    inner class PlaceItemViewHolder(
+    inner class LatestPostViewHolder(
         val binding: VhPlaceRecentItemBinding
     ): RecyclerView.ViewHolder(binding.root) {
         lateinit var pageSnapHelper: PagerSnapHelper

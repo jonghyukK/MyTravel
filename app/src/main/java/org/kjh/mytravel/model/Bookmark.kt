@@ -25,7 +25,7 @@ data class Bookmark(
     val imageUrl    : List<String> = listOf()
 ){
     companion object {
-        val DiffCallback = object : DiffUtil.ItemCallback<Bookmark>() {
+        val diffCallback = object : DiffUtil.ItemCallback<Bookmark>() {
             override fun areItemsTheSame(
                 oldItem: Bookmark,
                 newItem: Bookmark

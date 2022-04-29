@@ -17,7 +17,7 @@ import org.kjh.mytravel.model.Bookmark
 class BookmarkListAdapter(
     private val onClickItem: (Bookmark) -> Unit,
     private val onClickBookmark: (Bookmark) -> Unit
-): ListAdapter<Bookmark, BookmarkItemSmallViewHolder>(Bookmark.DiffCallback) {
+): ListAdapter<Bookmark, BookmarkItemSmallViewHolder>(Bookmark.diffCallback) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) =
         BookmarkItemSmallViewHolder(

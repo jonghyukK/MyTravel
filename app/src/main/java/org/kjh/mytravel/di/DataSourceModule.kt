@@ -23,57 +23,43 @@ object DataSourceModule {
 
     @Singleton
     @Provides
-    fun provideSignUpDataSource(
+    fun provideSignUpRemoteDataSource(
         apiService: ApiService
-    ): SignUpRemoteDataSource {
-        return SignUpDataSourceImpl(apiService)
-    }
+    ): SignUpRemoteDataSource = SignUpDataSourceImpl(apiService)
 
     @Singleton
     @Provides
-    fun provideLoginDataSource(
+    fun provideLoginRemoteDataSource(
         apiService: ApiService
-    ): LoginRemoteDataSource {
-        return LoginDataSourceImpl(apiService)
-    }
+    ): LoginRemoteDataSource = LoginDataSourceImpl(apiService)
 
     @Singleton
     @Provides
-    fun provideUserDataSource(
+    fun provideUserRemoteDataSource(
         apiService: ApiService
-    ): UserRemoteDataSource {
-        return UserRemoteDataSourceImpl(apiService)
-    }
+    ): UserRemoteDataSource = UserRemoteDataSourceImpl(apiService)
 
     @Singleton
     @Provides
-    fun provideMapDataSource(
+    fun providePostRemoteDataSource(
+        apiService: ApiService
+    ): PostRemoteDataSource = PostRemoteDataSourceImpl(apiService)
+
+    @Singleton
+    @Provides
+    fun providePlaceRemoteDataSource(
+        apiService: ApiService
+    ): PlaceRemoteDataSource = PlaceRemoteDataSourceImpl(apiService)
+
+    @Singleton
+    @Provides
+    fun provideBookmarkRemoteDataSource(
+        apiService: ApiService
+    ): BookmarkRemoteDataSource = BookmarkRemoteDataSourceImpl(apiService)
+
+    @Singleton
+    @Provides
+    fun provideMapRemoteDataSource(
         kakaoApiService: KakaoApiService
-    ): MapRemoteDataSource {
-        return MapRemoteDataSourceImpl(kakaoApiService)
-    }
-
-    @Singleton
-    @Provides
-    fun providePostDataSource(
-        apiService: ApiService
-    ): PostRemoteDataSource {
-        return PostRemoteDataSourceImpl(apiService)
-    }
-
-    @Singleton
-    @Provides
-    fun providePlaceDataSource(
-        apiService: ApiService
-    ): PlaceRemoteDataSource {
-        return PlaceRemoteDataSourceImpl(apiService)
-    }
-
-    @Singleton
-    @Provides
-    fun provideBookmarkDataSource(
-        apiService: ApiService
-    ): BookmarkRemoteDataSource {
-        return BookmarkRemoteDataSourceImpl(apiService)
-    }
+    ): MapRemoteDataSource = MapRemoteDataSourceImpl(kakaoApiService)
 }

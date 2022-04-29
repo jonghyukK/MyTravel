@@ -1,6 +1,4 @@
-package org.kjh.mytravel.model
-
-import org.kjh.mytravel.utils.ErrorMsg
+package org.kjh.mytravel.ui.common
 
 /**
  * MyTravel

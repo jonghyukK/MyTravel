@@ -16,7 +16,7 @@
             type="org.kjh.mytravel.ui.home.ranking.PlaceRankingListAdapter" />
         <variable
             name="latestPostListAdapter"
-            type="org.kjh.mytravel.ui.home.latest.LatestPostListAdapter" />
+            type="org.kjh.mytravel.ui.home.latest.LatestPostPagingDataAdapter" />
     </data>
 
     <androidx.coordinatorlayout.widget.CoordinatorLayout

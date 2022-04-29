@@ -16,7 +16,7 @@ import org.kjh.mytravel.model.MediaStoreImage
  */
 class SelectedPhotoListAdapter(
     private val onDeleteImg: (MediaStoreImage) -> Unit
-) : ListAdapter<MediaStoreImage, SelectedPhotoViewHolder>(MediaStoreImage.DiffCallback) {
+) : ListAdapter<MediaStoreImage, SelectedPhotoViewHolder>(MediaStoreImage.diffCallback) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) =
         SelectedPhotoViewHolder(

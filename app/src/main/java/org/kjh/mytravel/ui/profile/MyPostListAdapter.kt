@@ -16,7 +16,7 @@ import org.kjh.mytravel.model.Post
 class MyPostListAdapter(
     private val onClickPost    : (Post) -> Unit,
     private val onClickBookmark: (Post) -> Unit
-): ListAdapter<Post, MyPostItemViewHolder>(Post.DiffCallback) {
+): ListAdapter<Post, MyPostItemViewHolder>(Post.diffCallback) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) =
         MyPostItemViewHolder(

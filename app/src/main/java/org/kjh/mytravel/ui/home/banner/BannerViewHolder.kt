@@ -12,7 +12,7 @@ import org.kjh.mytravel.model.Banner
  * Description:
  */
 
-class HomeBannerViewHolder(
+class BannerViewHolder(
     private val binding: VhHomeBannerItemBinding,
     private val onClickBanner: (Banner) -> Unit
 ) : RecyclerView.ViewHolder(binding.root) {

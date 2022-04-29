@@ -25,7 +25,7 @@ data class Post(
     val imageUrl    : List<String> = listOf()
 ){
     companion object {
-        val DiffCallback = object : DiffUtil.ItemCallback<Post>() {
+        val diffCallback = object : DiffUtil.ItemCallback<Post>() {
             override fun areItemsTheSame(
                 oldItem: Post,
                 newItem: Post

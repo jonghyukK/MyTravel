@@ -1,4 +1,4 @@
-package org.kjh.mytravel.ui.place.bycityname
+package org.kjh.mytravel.ui.place.subcity
 
 import android.content.res.Resources
 import android.graphics.Rect
@@ -14,7 +14,7 @@ import org.kjh.mytravel.utils.dpToPx
  * Description:
  */
 
-class PostListInPlaceListByCityNameItemDecoration: RecyclerView.ItemDecoration() {
+class PlacesBySubCityPostItemDecoration: RecyclerView.ItemDecoration() {
     private val dm = Resources.getSystem().displayMetrics
 
     override fun getItemOffsets(

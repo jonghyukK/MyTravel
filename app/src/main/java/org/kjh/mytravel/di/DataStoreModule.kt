@@ -21,21 +21,18 @@ import javax.inject.Singleton
  * Description:
  */
 
-const val LOGIN_INFO_PREFERENCES_NAME = "login_info_preferences"
-
-val Context.dataStore by preferencesDataStore(LOGIN_INFO_PREFERENCES_NAME)
-
 @Module
 @InstallIn(SingletonComponent::class)
 object DataStoreModule {
+
+    private const val LOGIN_INFO_PREFERENCES_NAME = "login_info_preferences"
+    private val Context.dataStore by preferencesDataStore(LOGIN_INFO_PREFERENCES_NAME)
 
     @Singleton
     @Provides
     fun provideDataStore(
         @ApplicationContext context: Context
-    ): DataStore<Preferences> {
-        return context.dataStore
-    }
+    ): DataStore<Preferences> = context.dataStore
 
     @Singleton
     @Provides

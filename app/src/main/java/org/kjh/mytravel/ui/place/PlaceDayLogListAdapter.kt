@@ -21,7 +21,7 @@ import org.kjh.mytravel.ui.RectImageListAdapter
 
 class PlaceDayLogListAdapter(
     private val onClickDayLog: (Post) -> Unit,
-): ListAdapter<Post, PlaceDayLogListAdapter.PlaceDayLogViewHolder>(Post.DiffCallback) {
+): ListAdapter<Post, PlaceDayLogListAdapter.PlaceDayLogViewHolder>(Post.diffCallback) {
     private val lmState = mutableMapOf<Int, Parcelable?>()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) =

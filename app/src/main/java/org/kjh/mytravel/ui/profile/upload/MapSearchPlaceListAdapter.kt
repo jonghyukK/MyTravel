@@ -16,7 +16,7 @@ import org.kjh.mytravel.model.MapQueryItem
  */
 class MapSearchPlaceListAdapter(
     private val onClickPlace: (MapQueryItem) -> Unit
-) : ListAdapter<MapQueryItem, MapSearchPlaceListAdapter.MapSearchPlaceViewHolder>(MapQueryItem.DiffCallback) {
+) : ListAdapter<MapQueryItem, MapSearchPlaceListAdapter.MapSearchPlaceViewHolder>(MapQueryItem.diffCallback) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) =
         MapSearchPlaceViewHolder(

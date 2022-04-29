@@ -17,13 +17,14 @@ import org.kjh.mytravel.utils.dpToPx
 private const val DEFAULT_PADDING_20 = 20
 private const val DEFAULT_PADDING_0  = 0
 
-class PlaceRankingHorizontalItemDecoration(
+class PlaceRankingItemDecoration(
     ctx     : Context,
     left    : Int = DEFAULT_PADDING_20,
     right   : Int = DEFAULT_PADDING_20,
     top     : Int = DEFAULT_PADDING_0,
     bottom  : Int = DEFAULT_PADDING_0
 ): RecyclerView.ItemDecoration() {
+
     private val _left   : Int = left.dpToPx(ctx)
     private val _right  : Int = right.dpToPx(ctx)
     private val _top    : Int = top.dpToPx(ctx)

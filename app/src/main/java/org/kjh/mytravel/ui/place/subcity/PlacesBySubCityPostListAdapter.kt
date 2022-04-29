@@ -1,4 +1,4 @@
-package org.kjh.mytravel.ui.place.bycityname
+package org.kjh.mytravel.ui.place.subcity
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -15,33 +15,20 @@ import org.kjh.mytravel.model.Post
  * Description:
  */
 
-class PlaceListByCityNamePostListAdapter(
+class PlacesBySubCityPostListAdapter(
     private val onClickPostItem: (Post) -> Unit
-) : ListAdapter<Post, PlaceListByCityNameItemViewHolder>(Post.DiffCallback) {
+) : ListAdapter<Post, PlacesBySubCityPostViewHolder>(Post.diffCallback) {
 
     override fun onCreateViewHolder(
         parent: ViewGroup,
         viewType: Int
-    ) = PlaceListByCityNameItemViewHolder(
+    ) = PlacesBySubCityPostViewHolder(
         VhPlaceByCityNameItemBinding.inflate(
             LayoutInflater.from(parent.context), parent, false
         ), onClickPostItem
     )
 
-    override fun onBindViewHolder(holder: PlaceListByCityNameItemViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: PlacesBySubCityPostViewHolder, position: Int) {
         holder.bind(getItem(position))
-    }
-}
-
-class PlaceListByCityNameItemViewHolder(
-    private val binding: VhPlaceByCityNameItemBinding,
-    private val onClickPostItem: (Post) -> Unit
-): RecyclerView.ViewHolder(binding.root) {
-
-    fun bind(item: Post) {
-        binding.postItem = item
-        itemView.setOnClickListener {
-            onClickPostItem(item)
-        }
     }
 }
