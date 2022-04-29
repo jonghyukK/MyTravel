@@ -23,7 +23,7 @@
     </fragment>
     <fragment
         android:id="@+id/placeListByCityNameFragment"
-        android:name="org.kjh.mytravel.ui.place.PlaceListByCityNameFragment"
+        android:name="org.kjh.mytravel.ui.place.bycityname.PlaceListByCityNameFragment"
         tools:layout="@layout/fragment_place_list_by_city_name">
 
         <argument

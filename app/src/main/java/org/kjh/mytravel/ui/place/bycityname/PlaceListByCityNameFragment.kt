@@ -1,7 +1,8 @@
-package org.kjh.mytravel.ui.place
+package org.kjh.mytravel.ui.place.bycityname
 
 import android.os.Bundle
 import android.view.View
+import android.widget.Toast
 import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
@@ -22,14 +23,21 @@ import org.kjh.mytravel.NavGraphDirections
 import org.kjh.mytravel.R
 import org.kjh.mytravel.databinding.FragmentPlaceListByCityNameBinding
 import org.kjh.mytravel.model.Place
+import org.kjh.mytravel.model.UiState
 import org.kjh.mytravel.ui.base.BaseFragment
 import org.kjh.mytravel.utils.statusBarHeight
 import javax.inject.Inject
 
+interface PlaceByCityNameClickEvent {
+    fun onClickPlaceItem(placeName: String)
+    fun onClickShowMap(v: View)
+}
 
 @AndroidEntryPoint
 class PlaceListByCityNameFragment
-    : BaseFragment<FragmentPlaceListByCityNameBinding>(R.layout.fragment_place_list_by_city_name), OnMapReadyCallback
+    : BaseFragment<FragmentPlaceListByCityNameBinding>(R.layout.fragment_place_list_by_city_name),
+    OnMapReadyCallback,
+    PlaceByCityNameClickEvent
 {
     @Inject
     lateinit var subCityNameAssistedFactory: PlaceListByCityNameViewModel.SubCityNameAssistedFactory
@@ -44,15 +52,24 @@ class PlaceListByCityNameFragment
 
     private val placeListByCityNameAdapter by lazy {
         PlaceListByCityNameAdapter { placeName ->
-            val action = NavGraphDirections.actionGlobalPlacePagerFragment(placeName)
-            findNavController().navigate(action)
+            onClickPlaceItem(placeName)
         }
+    }
+
+    override fun onClickPlaceItem(placeName: String) {
+        navigateWithAction(NavGraphDirections.actionGlobalPlacePagerFragment(placeName))
+    }
+
+    override fun onClickShowMap(v: View) {
+        bsBehavior.state = STATE_COLLAPSED
+        binding.bsPlaceList.rvPlaceListBySubCityName.layoutManager?.scrollToPosition(0)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        binding.viewModel   = viewModel
         binding.subCityName = args.cityName
-        binding.fragment = this
+        binding.fragment    = this
 
         initToolbarWithNavigation()
         initPlaceListBottomSheet()
@@ -60,62 +77,24 @@ class PlaceListByCityNameFragment
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.uiState.collect { uiState ->
-                    placeListByCityNameAdapter.submitList(uiState.placeItems)
-
-                    val fm = childFragmentManager
-
-                    val options = NaverMapOptions()
-                        .camera(CameraPosition(LatLng(37.32628054915, 129.020854083678), 8.0))
-
-                    val mapFragment = fm.findFragmentById(R.id.map) as MapFragment?
-                        ?: MapFragment.newInstance(options).also {
-                            fm.beginTransaction().add(R.id.map, it).commit()
+                    when (uiState) {
+                        is UiState.Success -> {
+                            placeListByCityNameAdapter.submitList(uiState.data)
+                            setMarkerAtPlaceList(uiState.data)
                         }
-                    mapFragment.getMapAsync(this@PlaceListByCityNameFragment)
-
-                    if (uiState.naverMapReady && uiState.placeItems.isNotEmpty()) {
-                        setMarkerAtPlaceList(uiState.placeItems)
+                        is UiState.Error ->
+                            Toast.makeText(requireContext(), uiState.errorMsg.res, Toast.LENGTH_SHORT).show()
                     }
                 }
             }
         }
     }
 
-
-    override fun onDestroyView() {
-        naverMap = null
-        viewModel.onUpdateNaverMapReady(false)
-        super.onDestroyView()
-    }
-
-    private fun setMarkerAtPlaceList(placeItems: List<Place>) {
-        val right = placeItems.maxOf { place -> place.x }.toDouble()
-        val left  = placeItems.minOf { place -> place.x }.toDouble()
-        val rl = (right + left) / 2
-
-        val top    = placeItems.minOf { it.y }.toDouble()
-        val bottom = placeItems.maxOf { it.y }.toDouble()
-        val tb = (top + bottom) / 2
-
-        val camera = CameraUpdate.scrollAndZoomTo(
-            LatLng(
-                tb,
-                rl,
-            ), 9.0
-        ).animate(CameraAnimation.None)
-
-//        naverMap?.moveCamera(camera)
-
-        placeItems.forEach { place ->
-            val marker = Marker()
-            marker.position = LatLng(place.y.toDouble(), place.x.toDouble())
-            marker.captionText = place.placeName
-            marker.map = naverMap
-        }
-    }
-
     private fun initToolbarWithNavigation() {
         binding.tbPlaceListByCityNameToolbar.setupWithNavController(findNavController())
+
+        val mapFragment = childFragmentManager.findFragmentById(R.id.map) as MapFragment
+        mapFragment.getMapAsync(this)
     }
 
     private fun initPlaceListBottomSheet() {
@@ -147,15 +126,42 @@ class PlaceListByCityNameFragment
         binding.bsPlaceList.rvPlaceListBySubCityName.adapter = placeListByCityNameAdapter
     }
 
-    fun onClickBtnShowMap(v: View) {
-        bsBehavior.state = STATE_COLLAPSED
-        binding.bsPlaceList.rvPlaceListBySubCityName.layoutManager?.scrollToPosition(0)
+
+    override fun onDestroyView() {
+        naverMap = null
+//        viewModel.onUpdateNaverMapReady(false)
+        super.onDestroyView()
+    }
+
+    private fun setMarkerAtPlaceList(placeItems: List<Place>) {
+        val right = placeItems.maxOf { place -> place.x }.toDouble()
+        val left  = placeItems.minOf { place -> place.x }.toDouble()
+        val rl = (right + left) / 2
+
+        val top    = placeItems.minOf { it.y }.toDouble()
+        val bottom = placeItems.maxOf { it.y }.toDouble()
+        val tb = (top + bottom) / 2
+
+        val camera = CameraUpdate.scrollAndZoomTo(
+            LatLng(
+                tb,
+                rl,
+            ), 9.0
+        ).animate(CameraAnimation.None)
+
+        naverMap?.moveCamera(camera)
+
+        placeItems.forEach { place ->
+            val marker = Marker()
+            marker.position = LatLng(place.y.toDouble(), place.x.toDouble())
+            marker.captionText = place.placeName
+            marker.map = naverMap
+        }
     }
 
     override fun onMapReady(p0: NaverMap) {
-        if (naverMap == null) {
+//        if (naverMap == null) {
             naverMap = p0
-            viewModel.onUpdateNaverMapReady(true)
-        }
+//        }
     }
 }

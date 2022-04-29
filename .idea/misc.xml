@@ -35,7 +35,7 @@
         <entry key="app/src/main/res/layout/fragment_place_day_log.xml" value="0.1" />
         <entry key="app/src/main/res/layout/fragment_place_detail.xml" value="0.4995366079703429" />
         <entry key="app/src/main/res/layout/fragment_place_info.xml" value="0.5231481481481481" />
-        <entry key="app/src/main/res/layout/fragment_place_list_by_city_name.xml" value="0.5111111111111111" />
+        <entry key="app/src/main/res/layout/fragment_place_list_by_city_name.xml" value="0.1" />
         <entry key="app/src/main/res/layout/fragment_place_pager.xml" value="0.1" />
         <entry key="app/src/main/res/layout/fragment_profile.xml" value="0.1" />
         <entry key="app/src/main/res/layout/fragment_profile_edit.xml" value="0.1" />

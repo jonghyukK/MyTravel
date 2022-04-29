@@ -20,5 +20,6 @@ enum class ErrorMsg(val res: Int) {
     ERROR_PLACE_RANKING_API(R.string.error_home_ranking_api),
     ERROR_UPLOAD_INPUT_CHECK(R.string.error_check_inputs),
     ERROR_UPLOAD_POST_FAIL(R.string.error_upload_fail),
-    ERROR_MAP_SEARCH_FAIL(R.string.error_map_search_fail)
+    ERROR_MAP_SEARCH_FAIL(R.string.error_map_search_fail),
+    ERROR_PLACE_BY_CITYNAME_FAIL(R.string.error_whole_place_by_city_name_api)
 }

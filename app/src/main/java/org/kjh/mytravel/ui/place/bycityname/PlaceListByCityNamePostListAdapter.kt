@@ -1,4 +1,4 @@
-package org.kjh.mytravel.ui.place
+package org.kjh.mytravel.ui.place.bycityname
 
 import android.view.LayoutInflater
 import android.view.ViewGroup

@@ -9,7 +9,10 @@
             type="String" />
         <variable
             name="fragment"
-            type="org.kjh.mytravel.ui.place.PlaceListByCityNameFragment" />
+            type="org.kjh.mytravel.ui.place.bycityname.PlaceListByCityNameFragment" />
+        <variable
+            name="viewModel"
+            type="org.kjh.mytravel.ui.place.bycityname.PlaceListByCityNameViewModel" />
     </data>
 
     <androidx.coordinatorlayout.widget.CoordinatorLayout
@@ -22,7 +25,7 @@
             android:id="@+id/container"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            tools:context=".ui.place.PlaceListByCityNameFragment">
+            tools:context=".ui.place.bycityname.PlaceListByCityNameFragment">
 
             <com.google.android.material.appbar.MaterialToolbar
                 android:id="@+id/tb_placeListByCityNameToolbar"
@@ -33,7 +36,7 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"/>
 
-            <FrameLayout
+            <androidx.fragment.app.FragmentContainerView
                 android:id="@+id/map"
                 android:layout_width="0dp"
                 android:layout_height="350dp"
@@ -41,7 +44,8 @@
                 app:layout_collapseParallaxMultiplier="1.0"
                 app:layout_constraintTop_toBottomOf="@+id/tb_placeListByCityNameToolbar"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent" />
+                app:layout_constraintEnd_toEndOf="parent"
+                android:name="com.naver.maps.map.MapFragment"/>
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <include
@@ -53,8 +57,16 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:visibility="gone"
+            android:layout_marginBottom="30dp"
             android:text="@string/show_map"
-            android:onClick="@{fragment::onClickBtnShowMap}"
+            android:onClick="@{fragment::onClickShowMap}"
             android:layout_gravity="bottom|center_horizontal"/>
+
+        <ProgressBar
+            android:id="@+id/pb_loading"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            app:isVisible="@{viewModel.uiState.loading}"/>
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 </layout>

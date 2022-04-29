@@ -1,12 +1,10 @@
-package org.kjh.mytravel.ui.place
+package org.kjh.mytravel.ui.place.bycityname
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import com.example.domain2.entity.ApiResult
 import com.example.domain2.usecase.GetPlacesBySubCityNameUseCase
-import com.naver.maps.map.NaverMap
-import com.naver.maps.map.internal.NaverMapAccessor
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
@@ -16,7 +14,9 @@ import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import org.kjh.mytravel.model.Place
+import org.kjh.mytravel.model.UiState
 import org.kjh.mytravel.model.mapToPresenter
+import org.kjh.mytravel.utils.ErrorMsg
 
 /**
  * MyTravel
@@ -25,11 +25,6 @@ import org.kjh.mytravel.model.mapToPresenter
  *
  * Description:
  */
-
-data class PlaceListCityNameUiState(
-    val placeItems: List<Place> = listOf(),
-    val naverMapReady: Boolean = false
-)
 
 class PlaceListByCityNameViewModel @AssistedInject constructor(
     private val getPlacesBySubCityNameUseCase: GetPlacesBySubCityNameUseCase,
@@ -51,31 +46,29 @@ class PlaceListByCityNameViewModel @AssistedInject constructor(
         }
     }
 
-    private val _uiState = MutableStateFlow(PlaceListCityNameUiState())
-    val uiState : StateFlow<PlaceListCityNameUiState> = _uiState
+    private val _uiState: MutableStateFlow<UiState<List<Place>>> = MutableStateFlow(UiState.Loading)
+    val uiState : StateFlow<UiState<List<Place>>> = _uiState
 
     init {
-        viewModelScope.launch {
-            getPlacesBySubCityNameUseCase(initSubCityName)
-                .collect { result ->
-                    when (result) {
-                        is ApiResult.Success -> {
-                            _uiState.update { currentUiState ->
-                                currentUiState.copy(
-                                    placeItems = result.data.map { it.mapToPresenter() }
-                                )
-                            }
-                        }
-                    }
-                }
-        }
+        getPlacesBySubCityName()
     }
 
-    fun onUpdateNaverMapReady(value: Boolean) {
-        _uiState.update { currentUiState ->
-            currentUiState.copy(
-                naverMapReady = value
-            )
+    // API - get Places By SubCityName.
+    private fun getPlacesBySubCityName() {
+        viewModelScope.launch {
+            getPlacesBySubCityNameUseCase(initSubCityName)
+                .collect { apiResult ->
+                    when (apiResult) {
+                        is ApiResult.Loading ->
+                            _uiState.value = UiState.Loading
+
+                        is ApiResult.Success ->
+                            _uiState.value = UiState.Success(apiResult.data.map { it.mapToPresenter() })
+
+                        is ApiResult.Error ->
+                            _uiState.value = UiState.Error(ErrorMsg.ERROR_PLACE_BY_CITYNAME_FAIL)
+                    }
+                }
         }
     }
 }
