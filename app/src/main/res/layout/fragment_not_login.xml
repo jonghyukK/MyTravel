@@ -6,7 +6,7 @@
     <data>
         <variable
             name="fragment"
-            type="org.kjh.mytravel.ui.profile.NotLoginFragment" />
+            type="org.kjh.mytravel.ui.features.profile.NotLoginFragment" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout

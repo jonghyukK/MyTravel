@@ -6,10 +6,10 @@
     <data>
         <variable
             name="viewModel"
-            type="org.kjh.mytravel.ui.profile.upload.SelectPhotoViewModel" />
+            type="org.kjh.mytravel.ui.features.profile.upload.SelectPhotoViewModel" />
         <variable
             name="uploadViewModel"
-            type="org.kjh.mytravel.ui.profile.upload.UploadViewModel" />
+            type="org.kjh.mytravel.ui.features.profile.upload.UploadViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout

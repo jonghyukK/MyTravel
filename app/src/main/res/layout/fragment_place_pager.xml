@@ -6,10 +6,10 @@
     <data>
         <variable
             name="viewModel"
-            type="org.kjh.mytravel.ui.place.PlaceViewModel" />
+            type="org.kjh.mytravel.ui.features.place.PlaceViewModel" />
         <variable
             name="myProfileViewModel"
-            type="org.kjh.mytravel.ui.MyProfileViewModel" />
+            type="org.kjh.mytravel.ui.features.profile.MyProfileViewModel" />
         <variable
             name="placeName"
             type="String" />

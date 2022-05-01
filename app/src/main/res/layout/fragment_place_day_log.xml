@@ -6,14 +6,14 @@
     <data>
         <variable
             name="viewModel"
-            type="org.kjh.mytravel.ui.place.PlaceViewModel" />
+            type="org.kjh.mytravel.ui.features.place.PlaceViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/cl_placeDayLogContainer"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".ui.place.PlaceInfoFragment">
+        tools:context=".ui.features.place.PlaceInfoFragment">
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rv_placeDayLogList"

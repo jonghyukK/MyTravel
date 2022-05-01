@@ -1,7 +1,7 @@
 package org.kjh.mytravel.model
 
 import androidx.recyclerview.widget.DiffUtil
-import com.example.domain2.entity.BookmarkEntity
+import org.kjh.domain.entity.BookmarkEntity
 
 /**
  * MyTravel

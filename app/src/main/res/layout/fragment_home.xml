@@ -7,16 +7,16 @@
 
         <variable
             name="fragment"
-            type="org.kjh.mytravel.ui.home.HomeFragment" />
+            type="org.kjh.mytravel.ui.features.home.HomeFragment" />
         <variable
             name="viewModel"
-            type="org.kjh.mytravel.ui.home.HomeViewModel" />
+            type="org.kjh.mytravel.ui.features.home.HomeViewModel" />
         <variable
             name="placeRankingListAdapter"
-            type="org.kjh.mytravel.ui.home.ranking.PlaceRankingListAdapter" />
+            type="org.kjh.mytravel.ui.features.home.ranking.PlaceRankingListAdapter" />
         <variable
             name="latestPostListAdapter"
-            type="org.kjh.mytravel.ui.home.latest.LatestPostPagingDataAdapter" />
+            type="org.kjh.mytravel.ui.features.home.latest.LatestPostPagingDataAdapter" />
     </data>
 
     <androidx.coordinatorlayout.widget.CoordinatorLayout

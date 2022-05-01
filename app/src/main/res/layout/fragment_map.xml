@@ -7,10 +7,10 @@
         <import type="android.view.View" />
         <variable
             name="viewModel"
-            type="org.kjh.mytravel.ui.profile.upload.MapViewModel" />
+            type="org.kjh.mytravel.ui.features.profile.upload.MapViewModel" />
         <variable
             name="fragment"
-            type="org.kjh.mytravel.ui.profile.upload.MapFragment" />
+            type="org.kjh.mytravel.ui.features.profile.upload.MapFragment" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout

@@ -1,7 +1,7 @@
 package org.kjh.mytravel.di
 
-import com.example.domain2.repository.*
-import com.example.domain2.usecase.*
+import org.kjh.domain.repository.*
+import org.kjh.domain.usecase.*
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn

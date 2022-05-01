@@ -2,9 +2,9 @@ package org.kjh.mytravel.di
 
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
-import com.example.data.datasource.*
-import com.example.data.repository.*
-import com.example.domain2.repository.*
+import org.kjh.data.datasource.*
+import org.kjh.data.repository.*
+import org.kjh.domain.repository.*
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn

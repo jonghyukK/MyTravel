@@ -1,0 +1,42 @@
+package org.kjh.data.datasource
+
+import org.kjh.data.api.ApiService
+import org.kjh.data.model.api.BannersApiModel
+import org.kjh.data.model.api.PlaceApiModel
+import org.kjh.data.model.api.PlaceRankingApiModel
+import org.kjh.data.model.api.PlacesApiModel
+import javax.inject.Inject
+
+/**
+ * MyTravel
+ * Class: PlaceRemoteDataSource
+ * Created by jonghyukkang on 2022/01/28.
+ *
+ * Description:
+ */
+interface PlaceRemoteDataSource {
+    suspend fun getPlace(placeName: String): PlaceApiModel
+
+    suspend fun getPlaceRanking(): PlaceRankingApiModel
+
+    suspend fun getPlaceBanners(): BannersApiModel
+
+    suspend fun getPlacesBySubCityName(subCityName: String): PlacesApiModel
+}
+
+class PlaceRemoteDataSourceImpl @Inject constructor(
+    private val apiService: ApiService
+): PlaceRemoteDataSource {
+
+    override suspend fun getPlace(placeName: String) =
+        apiService.getPlaceByPlaceName(placeName)
+
+    override suspend fun getPlaceRanking() =
+        apiService.getPlaceRanking()
+
+    override suspend fun getPlaceBanners() =
+        apiService.getHomeBanners()
+
+    override suspend fun getPlacesBySubCityName(subCityName: String) =
+        apiService.getPlacesBySubCityName(subCityName)
+}

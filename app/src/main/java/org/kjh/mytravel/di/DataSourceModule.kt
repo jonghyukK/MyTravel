@@ -1,8 +1,8 @@
 package org.kjh.mytravel.di
 
-import com.example.data.api.ApiService
-import com.example.data.api.KakaoApiService
-import com.example.data.datasource.*
+import org.kjh.data.api.ApiService
+import org.kjh.data.api.KakaoApiService
+import org.kjh.data.datasource.*
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn

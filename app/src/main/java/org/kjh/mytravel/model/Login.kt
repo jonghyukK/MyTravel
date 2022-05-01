@@ -1,6 +1,6 @@
 package org.kjh.mytravel.model
 
-import com.example.domain2.entity.LoginEntity
+import org.kjh.domain.entity.LoginEntity
 
 /**
  * MyTravel

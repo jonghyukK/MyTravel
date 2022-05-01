@@ -17,6 +17,7 @@ import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import org.kjh.mytravel.R
 import org.kjh.mytravel.databinding.ActivityMainBinding
+import org.kjh.mytravel.ui.features.profile.MyProfileViewModel
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {

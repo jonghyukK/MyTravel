@@ -1,7 +1,7 @@
 package org.kjh.mytravel.model
 
 import androidx.recyclerview.widget.DiffUtil
-import com.example.domain2.entity.MapQueryEntity
+import org.kjh.domain.entity.MapQueryEntity
 
 /**
  * MyTravel

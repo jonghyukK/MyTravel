@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/bookMarkFragment"
-        android:name="org.kjh.mytravel.ui.bookmark.BookMarkFragment"
+        android:name="org.kjh.mytravel.ui.features.bookmark.BookMarkFragment"
         android:label="@string/bookmark"
         tools:layout="@layout/fragment_book_mark">
 

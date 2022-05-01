@@ -6,10 +6,10 @@
     <data>
         <variable
             name="viewModel"
-            type="org.kjh.mytravel.ui.profile.upload.MapSearchViewModel" />
+            type="org.kjh.mytravel.ui.features.profile.upload.MapSearchViewModel" />
         <variable
             name="fragment"
-            type="org.kjh.mytravel.ui.profile.upload.MapSearchFragment" />
+            type="org.kjh.mytravel.ui.features.profile.upload.MapSearchFragment" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout

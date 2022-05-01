@@ -6,16 +6,16 @@
     <data>
         <variable
             name="myProfileViewModel"
-            type="org.kjh.mytravel.ui.MyProfileViewModel" />
+            type="org.kjh.mytravel.ui.features.profile.MyProfileViewModel" />
         <variable
             name="fragment"
-            type="org.kjh.mytravel.ui.profile.ProfileFragment" />
+            type="org.kjh.mytravel.ui.features.profile.ProfileFragment" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".ui.profile.ProfileFragment"
+        tools:context=".ui.features.profile.ProfileFragment"
         android:fitsSystemWindows="true">
 
         <androidx.appcompat.widget.Toolbar

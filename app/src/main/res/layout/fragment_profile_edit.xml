@@ -6,10 +6,10 @@
     <data>
         <variable
             name="viewModel"
-            type="org.kjh.mytravel.ui.profile.edit.ProfileEditViewModel" />
+            type="org.kjh.mytravel.ui.features.profile.edit.ProfileEditViewModel" />
         <variable
             name="fragment"
-            type="org.kjh.mytravel.ui.profile.edit.ProfileEditFragment" />
+            type="org.kjh.mytravel.ui.features.profile.edit.ProfileEditFragment" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
