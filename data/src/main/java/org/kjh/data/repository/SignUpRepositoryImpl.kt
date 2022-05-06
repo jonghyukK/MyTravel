@@ -26,7 +26,7 @@ class SignUpRepositoryImpl @Inject constructor(
         pw   : String,
         nick : String
     ): Flow<ApiResult<SignUpEntity>> = flow {
-        emit(ApiResult.Loading())
+        emit(ApiResult.Loading)
 
         val response = dataSource.makeSignUpRequest(email, pw, nick)
         emit(ResponseMapper.responseToSignUpEntity(ApiResult.Success(response)))

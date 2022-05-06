@@ -21,7 +21,7 @@ class MapRepositoryImpl @Inject constructor(
     private val mapRemoteDataSource: MapRemoteDataSource
 ): MapRepository {
     override suspend fun searchPlace(query: String): Flow<ApiResult<List<MapQueryEntity>>> = flow {
-        emit(ApiResult.Loading())
+        emit(ApiResult.Loading)
 
         val response = mapRemoteDataSource.searchPlace(query)
         emit(ResponseMapper.responseToMapQuery(ApiResult.Success(response)))

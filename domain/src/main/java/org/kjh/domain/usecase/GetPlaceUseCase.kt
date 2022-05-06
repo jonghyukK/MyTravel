@@ -13,5 +13,5 @@ class GetPlaceUseCase(
     private val placeRepository: PlaceRepository
 ) {
     suspend operator fun invoke(placeName: String) =
-        placeRepository.getPlace(placeName)
+        placeRepository.fetchPlaceDetailByPlaceName(placeName)
 }

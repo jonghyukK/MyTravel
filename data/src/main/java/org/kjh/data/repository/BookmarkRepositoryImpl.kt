@@ -19,26 +19,26 @@ class BookmarkRepositoryImpl @Inject constructor(
     private val bookmarkRemoteDataSource: BookmarkRemoteDataSource
 ): BookmarkRepository {
 
-    override suspend fun getMyBookmarkList(
+    override suspend fun fetchMyBookmarks(
         myEmail: String
     ): Flow<ApiResult<List<BookmarkEntity>>> = flow {
-        emit(ApiResult.Loading())
+        emit(ApiResult.Loading)
 
-        val response = bookmarkRemoteDataSource.getMyBookmarks(myEmail)
-        emit(ResponseMapper.responseToBookMark(ApiResult.Success(response)))
+        val response = bookmarkRemoteDataSource.fetchMyBookmarks(myEmail)
+        emit(ResponseMapper.responseToBookMark(ApiResult.Success(response.data)))
     }.catch {
         emit(ResponseMapper.responseToBookMark(ApiResult.Error(it)))
     }
 
-    override suspend fun updateBookmark(
-        myEmail: String,
-        postId: Int,
+    override suspend fun updateMyBookmarks(
+        myEmail  : String,
+        postId   : Int,
         placeName: String
     ): Flow<ApiResult<List<BookmarkEntity>>> = flow{
-        emit(ApiResult.Loading())
+        emit(ApiResult.Loading)
 
-        val response = bookmarkRemoteDataSource.updateBookmark(myEmail, postId, placeName)
-        emit(ResponseMapper.responseToBookMark(ApiResult.Success(response)))
+        val response = bookmarkRemoteDataSource.updateMyBookmarks(myEmail, postId, placeName)
+        emit(ResponseMapper.responseToBookMark(ApiResult.Success(response.data)))
     }.catch {
         emit(ResponseMapper.responseToBookMark(ApiResult.Error(it)))
     }

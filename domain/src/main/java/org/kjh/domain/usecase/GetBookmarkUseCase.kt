@@ -12,6 +12,7 @@ import org.kjh.domain.repository.BookmarkRepository
 class GetBookmarkUseCase(
     private val bookmarkRepository: BookmarkRepository
 ) {
-    suspend operator fun invoke(myEmail: String) =
-        bookmarkRepository.getMyBookmarkList(myEmail)
+    suspend operator fun invoke(
+        myEmail: String
+    ) = bookmarkRepository.fetchMyBookmarks(myEmail)
 }

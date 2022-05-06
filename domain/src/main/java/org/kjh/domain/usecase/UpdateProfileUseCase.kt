@@ -14,8 +14,8 @@ class UpdateProfileUseCase(
 ){
     suspend operator fun invoke(
         profileImg: String?,
-        email: String,
-        nickName: String,
-        introduce: String?
-    ) = userRepository.updateUserProfile(profileImg, email, nickName, introduce)
+        email     : String,
+        nickName  : String,
+        introduce : String?
+    ) = userRepository.updateMyProfile(profileImg, email, nickName, introduce)
 }

@@ -1,7 +1,10 @@
 package org.kjh.data.api
 
 import okhttp3.MultipartBody
-import org.kjh.data.model.api.*
+import org.kjh.data.model.*
+import org.kjh.data.model.api.LoginApiModel
+import org.kjh.data.model.api.SignUpApiModel
+import org.kjh.data.model.base.BaseApiModel
 import retrofit2.http.*
 
 /**
@@ -27,23 +30,33 @@ interface ApiService {
     ): LoginApiModel
 
     @GET("user")
-    suspend fun getUser(
+    suspend fun fetchUser(
         @Query("myEmail"    ) myEmail    : String,
         @Query("targetEmail") targetEmail: String? = null
-    ): UserApiModel
+    ): BaseApiModel<UserModel>
 
     @Multipart
     @PUT("user/update")
-    suspend fun updateUser(
+    suspend fun updateMyProfile(
         @Part file: MultipartBody.Part,
         @Query("email"      ) email     : String,
         @Query("nickName"   ) nickName  : String,
         @Query("introduce"  ) introduce : String?
-    ): UserApiModel
+    ): BaseApiModel<UserModel>
 
+    @PUT("user/follow")
+    suspend fun updateFollowState(
+        @Query("myEmail") myEmail: String,
+        @Query("targetEmail") targetEmail: String
+    ): BaseApiModel<FollowModel>
+
+
+    /***********************************************
+     *  about Post.
+     ***********************************************/
     @Multipart
     @POST("user/upload")
-    suspend fun makeRequestPostUpload(
+    suspend fun uploadPost(
         @Part file: List<MultipartBody.Part>,
         @Query("email"          ) email         : String,
         @Query("content"        ) content       : String? = null,
@@ -52,45 +65,49 @@ interface ApiService {
         @Query("placeRoadAddress") placeRoadAddress: String,
         @Query("x") x: String,
         @Query("y") y: String
-    ): UserApiModel
-
-    @PUT("user/follow")
-    suspend fun requestFollowOrUnFollow(
-        @Query("myEmail") myEmail: String,
-        @Query("targetEmail") targetEmail: String
-    ): FollowApiModel
+    ): BaseApiModel<UserModel>
 
     @GET("post/recent")
-    suspend fun getRecentPosts(
+    suspend fun fetchLatestPosts(
         @Query("page") page: Int,
         @Query("size") size: Int
-    ): PostsApiModel
+    ): BaseApiModel<List<PostModel>>
 
+
+    /***********************************************
+     *  about Place.
+     ***********************************************/
     @GET("place")
-    suspend fun getPlaceByPlaceName(
+    suspend fun fetchPlaceDetailByPlaceName(
         @Query("placeName") placeName: String
-    ): PlaceApiModel
+    ): BaseApiModel<PlaceModel>
 
     @GET("place/ranking")
-    suspend fun getPlaceRanking(): PlaceRankingApiModel
+    suspend fun fetchPlaceRankings()
+    : BaseApiModel<List<PlaceWithRankModel>>
 
     @GET("banners")
-    suspend fun getHomeBanners(): BannersApiModel
+    suspend fun fetchPlaceBanners()
+    : BaseApiModel<List<BannerModel>>
 
     @GET("place/subCityName")
-    suspend fun getPlacesBySubCityName(
+    suspend fun fetchPlacesBySubCityName(
         @Query("subCityName") subCityName: String
-    ): PlacesApiModel
+    ): BaseApiModel<List<PlaceModel>>
 
+
+    /***********************************************
+     *  about Bookmark.
+     ***********************************************/
     @PUT("bookmarks")
-    suspend fun updateBookmark(
+    suspend fun updateMyBookmarks(
         @Query("myEmail") myEmail    : String,
         @Query("postId") postId      : Int,
         @Query("placeName") placeName: String
-    ): BookmarksApiModel
+    ): BaseApiModel<List<BookmarkModel>>
 
     @GET("bookmarks")
-    suspend fun getBookmarks(
-        @Query("myEmail") myEmail    : String
-    ): BookmarksApiModel
+    suspend fun fetchMyBookmarks(
+        @Query("myEmail") myEmail: String
+    ): BaseApiModel<List<BookmarkModel>>
 }

@@ -20,7 +20,7 @@ class RecentPostsPagingSource(
     override suspend fun load(params: LoadParams<Int>): LoadResult<Int, PostEntity> {
         try {
             val nextPageNumber = params.key ?: 0
-            val response = postRemoteDataSource.getRecentPosts(nextPageNumber, params.loadSize)
+            val response = postRemoteDataSource.fetchLatestPosts(nextPageNumber, params.loadSize)
 
             val postItems = response.data
             val nextKey = if (postItems.isEmpty()) {

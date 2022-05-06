@@ -21,5 +21,5 @@ class UploadPostUseCase(
         placeRoadAddress: String,
         x: String,
         y: String
-    ) = postRepository.makeRequestUploadPost(file, email, content, placeName, placeAddress, placeRoadAddress, x, y)
+    ) = postRepository.uploadPost(file, email, content, placeName, placeAddress, placeRoadAddress, x, y)
 }

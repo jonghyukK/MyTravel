@@ -13,13 +13,13 @@ import kotlinx.coroutines.flow.Flow
  */
 interface BookmarkRepository {
 
-    suspend fun getMyBookmarkList(
+    suspend fun fetchMyBookmarks(
         myEmail: String
     ): Flow<ApiResult<List<BookmarkEntity>>>
 
-    suspend fun updateBookmark(
-        myEmail: String,
-        postId: Int,
+    suspend fun updateMyBookmarks(
+        myEmail  : String,
+        postId   : Int,
         placeName: String
     ): Flow<ApiResult<List<BookmarkEntity>>>
 }

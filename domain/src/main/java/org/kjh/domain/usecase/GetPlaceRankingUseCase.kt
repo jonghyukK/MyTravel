@@ -12,5 +12,5 @@ import org.kjh.domain.repository.PlaceRepository
 class GetPlaceRankingUseCase(
     private val placeRepository: PlaceRepository
 ){
-    suspend operator fun invoke() = placeRepository.getPlaceRanking()
+    suspend operator fun invoke() = placeRepository.fetchPlaceRankings()
 }

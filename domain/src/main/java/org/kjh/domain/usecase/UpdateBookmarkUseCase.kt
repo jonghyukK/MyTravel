@@ -13,8 +13,8 @@ class UpdateBookmarkUseCase(
     private val bookmarkRepository: BookmarkRepository
 ) {
     suspend operator fun invoke(
-        myEmail: String,
-        postId: Int,
+        myEmail  : String,
+        postId   : Int,
         placeName: String
-    ) = bookmarkRepository.updateBookmark(myEmail, postId, placeName)
+    ) = bookmarkRepository.updateMyBookmarks(myEmail, postId, placeName)
 }

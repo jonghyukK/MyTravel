@@ -14,11 +14,17 @@ import kotlinx.coroutines.flow.Flow
  * Description:
  */
 interface PlaceRepository {
-    suspend fun getPlace(placeName: String): Flow<ApiResult<PlaceEntity>>
+    suspend fun fetchPlaceDetailByPlaceName(
+        placeName: String
+    ): Flow<ApiResult<PlaceEntity>>
 
-    suspend fun getPlaceRanking(): Flow<ApiResult<List<PlaceWithRankEntity>>>
+    suspend fun fetchPlaceRankings()
+    : Flow<ApiResult<List<PlaceWithRankEntity>>>
 
-    suspend fun getPlaceBanners(): Flow<ApiResult<List<BannerEntity>>>
+    suspend fun fetchPlaceBanners()
+    : Flow<ApiResult<List<BannerEntity>>>
 
-    suspend fun getPlacesBySubCityName(subCityName: String): Flow<ApiResult<List<PlaceEntity>>>
+    suspend fun fetchPlacesBySubCityName(
+        subCityName: String
+    ): Flow<ApiResult<List<PlaceEntity>>>
 }

@@ -2,14 +2,14 @@ package org.kjh.mytravel.ui.features.profile
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.launch
 import org.kjh.domain.entity.ApiResult
 import org.kjh.domain.repository.LoginPreferencesRepository
 import org.kjh.domain.usecase.GetLoginPreferenceUseCase
 import org.kjh.domain.usecase.GetUserUseCase
 import org.kjh.domain.usecase.UpdateBookmarkUseCase
-import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.*
-import kotlinx.coroutines.launch
 import org.kjh.mytravel.model.*
 import org.kjh.mytravel.ui.common.ErrorMsg
 import javax.inject.Inject

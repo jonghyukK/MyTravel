@@ -12,5 +12,5 @@ import org.kjh.domain.repository.PlaceRepository
 class GetHomeBannersUseCase(
     private val placeRepository: PlaceRepository
 ){
-    suspend operator fun invoke() = placeRepository.getPlaceBanners()
+    suspend operator fun invoke() = placeRepository.fetchPlaceBanners()
 }

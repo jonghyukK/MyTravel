@@ -15,10 +15,10 @@ class GetUserUseCase(
 ){
     suspend fun getMyProfile(
         myEmail: String
-    ) = userRepository.getMyProfile(myEmail)
+    ) = userRepository.fetchMyProfile(myEmail)
 
     suspend operator fun invoke(
         myEmail    : String,
         targetEmail: String? = null
-    ) = userRepository.getUser(myEmail, targetEmail)
+    ) = userRepository.fetchUser(myEmail, targetEmail)
 }

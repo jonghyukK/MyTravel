@@ -1,7 +1,7 @@
 package org.kjh.data.mapper
 
+import org.kjh.data.model.*
 import org.kjh.data.model.api.*
-import org.kjh.data.model.mapToDomain
 import org.kjh.domain.entity.*
 
 /**
@@ -20,7 +20,7 @@ object ResponseMapper {
         return when (response) {
             is ApiResult.Success -> ApiResult.Success(response.data.mapToDomain())
             is ApiResult.Error   -> ApiResult.Error(response.throwable)
-            is ApiResult.Loading -> ApiResult.Loading()
+            is ApiResult.Loading -> ApiResult.Loading
         }
     }
 
@@ -31,92 +31,84 @@ object ResponseMapper {
         return when (response) {
             is ApiResult.Success -> ApiResult.Success(response.data.mapToDomain())
             is ApiResult.Error   -> ApiResult.Error(response.throwable)
-            is ApiResult.Loading -> ApiResult.Loading()
+            is ApiResult.Loading -> ApiResult.Loading
         }
     }
 
-    // UserApiModel -> UserEntity
+    // UserModel -> UserEntity
     fun responseToUserEntity(
-        response: ApiResult<UserApiModel>
+        response: ApiResult<UserModel>
     ): ApiResult<UserEntity> {
         return when (response) {
-            is ApiResult.Success -> ApiResult.Success(response.data.data.mapToDomain())
+            is ApiResult.Success -> ApiResult.Success(response.data.mapToDomain())
             is ApiResult.Error   -> ApiResult.Error(response.throwable)
-            is ApiResult.Loading -> ApiResult.Loading()
+            is ApiResult.Loading -> ApiResult.Loading
         }
     }
 
-    // FollowApiModel -> FollowEntity
+    // FollowModel -> FollowEntity
     fun responseToFollowEntity(
-        response: ApiResult<FollowApiModel>
+        response: ApiResult<FollowModel>
     ): ApiResult<FollowEntity> {
         return when (response) {
-            is ApiResult.Success -> ApiResult.Success(response.data.data.mapToDomain())
+            is ApiResult.Success -> ApiResult.Success(response.data.mapToDomain())
             is ApiResult.Error   -> ApiResult.Error(response.throwable)
-            is ApiResult.Loading -> ApiResult.Loading()
+            is ApiResult.Loading -> ApiResult.Loading
         }
     }
 
-    // PlaceApiModel -> PlaceEntity
+    // PlaceModel -> PlaceEntity
     fun responseToPlace(
-        response: ApiResult<PlaceApiModel>
+        response: ApiResult<PlaceModel>
     ): ApiResult<PlaceEntity> {
         return when (response) {
-            is ApiResult.Success -> ApiResult.Success(response.data.data.mapToDomain())
+            is ApiResult.Success -> ApiResult.Success(response.data.mapToDomain())
             is ApiResult.Error   -> ApiResult.Error(response.throwable)
-            is ApiResult.Loading -> ApiResult.Loading()
+            is ApiResult.Loading -> ApiResult.Loading
         }
     }
 
-    // PlacesApiModel -> List<PlaceEntity>
+    // List<PlaceModel> -> List<PlaceEntity>
     fun responseToPlaceList(
-        response: ApiResult<PlacesApiModel>
+        response: ApiResult<List<PlaceModel>>
     ): ApiResult<List<PlaceEntity>> {
         return when (response) {
-            is ApiResult.Success -> ApiResult.Success(
-                response.data.data.map { it.mapToDomain() }
-            )
+            is ApiResult.Success -> ApiResult.Success(response.data.map { it.mapToDomain() })
             is ApiResult.Error   -> ApiResult.Error(response.throwable)
-            is ApiResult.Loading -> ApiResult.Loading()
+            is ApiResult.Loading -> ApiResult.Loading
         }
     }
 
-    // PlaceRankingApiModel -> List<PlaceWithRankEntity>
+    // List<PlaceWithRankModel> -> List<PlaceWithRankEntity>
     fun responseToPlaceRankingList(
-        response: ApiResult<PlaceRankingApiModel>
+        response: ApiResult<List<PlaceWithRankModel>>
     ): ApiResult<List<PlaceWithRankEntity>> {
         return when (response) {
-            is ApiResult.Success -> ApiResult.Success(
-                response.data.data.map { it.mapToDomain() }
-            )
+            is ApiResult.Success -> ApiResult.Success(response.data.map { it.mapToDomain() })
             is ApiResult.Error   -> ApiResult.Error(response.throwable)
-            is ApiResult.Loading -> ApiResult.Loading()
+            is ApiResult.Loading -> ApiResult.Loading
         }
     }
 
-    // BannersApiModel -> List<BannerEntity>
+    // List<BannerModel> -> List<BannerEntity>
     fun responseToBannerEntityList(
-        response: ApiResult<BannersApiModel>
+        response: ApiResult<List<BannerModel>>
     ): ApiResult<List<BannerEntity>> {
         return when (response) {
-            is ApiResult.Success -> ApiResult.Success(
-                response.data.data.map { it.mapToDomain() }
-            )
+            is ApiResult.Success -> ApiResult.Success(response.data.map { it.mapToDomain() })
             is ApiResult.Error   -> ApiResult.Error(response.throwable)
-            is ApiResult.Loading -> ApiResult.Loading()
+            is ApiResult.Loading -> ApiResult.Loading
         }
     }
 
-    // BookmarksApiModel -> List<BookmarkEntity>
+    // List<BookmarkModel> -> List<BookmarkEntity>
     fun responseToBookMark(
-        response: ApiResult<BookmarksApiModel>
+        response: ApiResult<List<BookmarkModel>>
     ): ApiResult<List<BookmarkEntity>> {
         return when (response) {
-            is ApiResult.Success -> ApiResult.Success(
-                response.data.data.map { it.mapToDomain() }
-            )
+            is ApiResult.Success -> ApiResult.Success(response.data.map { it.mapToDomain() })
             is ApiResult.Error   -> ApiResult.Error(response.throwable)
-            is ApiResult.Loading -> ApiResult.Loading()
+            is ApiResult.Loading -> ApiResult.Loading
         }
     }
 
@@ -125,11 +117,9 @@ object ResponseMapper {
         response: ApiResult<MapQueryApiModel>
     ): ApiResult<List<MapQueryEntity>> {
         return when (response) {
-            is ApiResult.Success -> ApiResult.Success(
-                response.data.mapQueries.map { it.mapToDomain() }
-            )
+            is ApiResult.Success -> ApiResult.Success(response.data.mapQueries.map { it.mapToDomain() })
             is ApiResult.Error   -> ApiResult.Error(response.throwable)
-            is ApiResult.Loading -> ApiResult.Loading()
+            is ApiResult.Loading -> ApiResult.Loading
         }
     }
 
@@ -139,7 +129,7 @@ object ResponseMapper {
 //        return when (response) {
 //            is ApiResult.Success -> ApiResult.Success(response.data)
 //            is ApiResult.Error   -> ApiResult.Error(response.throwable)
-//            is ApiResult.Loading -> ApiResult.Loading()
+//            is ApiResult.Loading -> ApiResult.Loading
 //        }
 //    }
 }

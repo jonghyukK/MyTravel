@@ -13,5 +13,5 @@ class MakeRequestFollowOrNotUseCase(
     private val userRepository: UserRepository
 ) {
     suspend operator fun invoke(myEmail: String, targetEmail: String) =
-        userRepository.requestFollowOrUnFollow(myEmail, targetEmail)
+        userRepository.updateFollowState(myEmail, targetEmail)
 }

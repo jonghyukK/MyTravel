@@ -1,11 +1,12 @@
 package org.kjh.data.datasource
 
-import org.kjh.data.api.ApiService
-import org.kjh.data.model.api.FollowApiModel
-import org.kjh.data.model.api.UserApiModel
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
 import okhttp3.RequestBody.Companion.asRequestBody
+import org.kjh.data.api.ApiService
+import org.kjh.data.model.base.BaseApiModel
+import org.kjh.data.model.FollowModel
+import org.kjh.data.model.UserModel
 import java.io.File
 import javax.inject.Inject
 
@@ -17,38 +18,43 @@ import javax.inject.Inject
  * Description:
  */
 interface UserRemoteDataSource {
-    suspend fun getMyProfile(myEmail: String): UserApiModel
+    suspend fun fetchMyProfile(
+        myEmail: String
+    ): BaseApiModel<UserModel>
 
-    suspend fun getUser(myEmail: String, targetEmail: String? = null): UserApiModel
+    suspend fun fetchUser(
+        myEmail    : String,
+        targetEmail: String? = null
+    ): BaseApiModel<UserModel>
 
-    suspend fun makeRequestProfileUpdate(
+    suspend fun updateMyProfile(
         profileUrl: String?,
-        email: String,
-        nickName: String,
-        introduce: String?
-    ): UserApiModel
+        email     : String,
+        nickName  : String,
+        introduce : String?
+    ): BaseApiModel<UserModel>
 
-    suspend fun requestFollowOrUnFollow(
-        myEmail: String,
+    suspend fun updateFollowState(
+        myEmail    : String,
         targetEmail: String
-    ): FollowApiModel
+    ): BaseApiModel<FollowModel>
 }
 
 class UserRemoteDataSourceImpl @Inject constructor(
     private val apiService: ApiService
 ): UserRemoteDataSource {
-    override suspend fun getMyProfile(myEmail: String) =
-        apiService.getUser(myEmail)
+    override suspend fun fetchMyProfile(myEmail: String)
+    = apiService.fetchUser(myEmail)
 
-    override suspend fun getUser(myEmail: String, targetEmail: String?) =
-        apiService.getUser(myEmail, targetEmail)
+    override suspend fun fetchUser(myEmail: String, targetEmail: String?)
+    = apiService.fetchUser(myEmail, targetEmail)
 
-    override suspend fun makeRequestProfileUpdate(
+    override suspend fun updateMyProfile(
         profileUrl: String?,
         email: String,
         nickName: String,
         introduce: String?
-    ): UserApiModel {
+    ): BaseApiModel<UserModel> {
         var filePath = profileUrl
 
         if (profileUrl != null && profileUrl.startsWith("/data")) {
@@ -61,15 +67,15 @@ class UserRemoteDataSourceImpl @Inject constructor(
             MultipartBody.Part.createFormData("file", tempFile.name, requestFile)
         } ?: MultipartBody.Part.createFormData("empty", "empty")
 
-        return apiService.updateUser(
+        return apiService.updateMyProfile(
             file = file,
             email = email,
             nickName = nickName,
             introduce = introduce)
     }
 
-    override suspend fun requestFollowOrUnFollow(
+    override suspend fun updateFollowState(
         myEmail    : String,
         targetEmail: String
-    ) = apiService.requestFollowOrUnFollow(myEmail, targetEmail)
+    ) = apiService.updateFollowState(myEmail, targetEmail)
 }

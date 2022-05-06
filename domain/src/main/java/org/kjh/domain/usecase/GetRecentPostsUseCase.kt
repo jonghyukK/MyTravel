@@ -12,5 +12,5 @@ import org.kjh.domain.repository.PostRepository
 class GetRecentPostsUseCase(
     private val postRepository: PostRepository
 ){
-    operator fun invoke() = postRepository.getRecentPostsPagingData()
+    operator fun invoke() = postRepository.fetchLatestPosts()
 }

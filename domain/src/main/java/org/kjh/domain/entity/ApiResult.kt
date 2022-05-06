@@ -7,11 +7,12 @@ package org.kjh.domain.entity
  *
  * Description:
  */
-sealed class ApiResult<T> {
 
-    class Success<T>(val data: T): ApiResult<T>()
+sealed class ApiResult<out T: Any> {
 
-    class Loading<T>: ApiResult<T>()
+    object Loading: ApiResult<Nothing>()
 
-    class Error<T>(val throwable: Throwable) : ApiResult<T>()
+    data class Success<out T: Any>(val data: T): ApiResult<T>()
+
+    data class Error(val throwable: Throwable): ApiResult<Nothing>()
 }

@@ -13,23 +13,24 @@ import kotlinx.coroutines.flow.Flow
  * Description:
  */
 interface UserRepository {
-    suspend fun getMyProfile(
+
+    suspend fun fetchMyProfile(
         myEmail: String
     ): Flow<ApiResult<UserEntity>>
 
-    suspend fun getUser(
+    suspend fun fetchUser(
         myEmail    : String,
         targetEmail: String? = null
     ): Flow<ApiResult<UserEntity>>
 
-    suspend fun updateUserProfile(
+    suspend fun updateMyProfile(
         profileUrl  : String?,
         email       : String,
         nickName    : String,
         introduce   : String?
     ): Flow<ApiResult<UserEntity>>
 
-    suspend fun requestFollowOrUnFollow(
+    suspend fun updateFollowState(
         myEmail    : String,
         targetEmail: String
     ): Flow<ApiResult<FollowEntity>>

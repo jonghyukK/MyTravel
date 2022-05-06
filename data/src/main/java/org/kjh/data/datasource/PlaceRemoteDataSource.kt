@@ -1,10 +1,10 @@
 package org.kjh.data.datasource
 
 import org.kjh.data.api.ApiService
-import org.kjh.data.model.api.BannersApiModel
-import org.kjh.data.model.api.PlaceApiModel
-import org.kjh.data.model.api.PlaceRankingApiModel
-import org.kjh.data.model.api.PlacesApiModel
+import org.kjh.data.model.BannerModel
+import org.kjh.data.model.base.BaseApiModel
+import org.kjh.data.model.PlaceModel
+import org.kjh.data.model.PlaceWithRankModel
 import javax.inject.Inject
 
 /**
@@ -15,28 +15,33 @@ import javax.inject.Inject
  * Description:
  */
 interface PlaceRemoteDataSource {
-    suspend fun getPlace(placeName: String): PlaceApiModel
 
-    suspend fun getPlaceRanking(): PlaceRankingApiModel
+    suspend fun fetchPlaceDetailByPlaceName(placeName: String)
+    : BaseApiModel<PlaceModel>
 
-    suspend fun getPlaceBanners(): BannersApiModel
+    suspend fun fetchPlaceRankings()
+    : BaseApiModel<List<PlaceWithRankModel>>
 
-    suspend fun getPlacesBySubCityName(subCityName: String): PlacesApiModel
+    suspend fun fetchPlaceBanners()
+    : BaseApiModel<List<BannerModel>>
+
+    suspend fun fetchPlacesBySubCityName(subCityName: String)
+    : BaseApiModel<List<PlaceModel>>
 }
 
 class PlaceRemoteDataSourceImpl @Inject constructor(
     private val apiService: ApiService
 ): PlaceRemoteDataSource {
 
-    override suspend fun getPlace(placeName: String) =
-        apiService.getPlaceByPlaceName(placeName)
+    override suspend fun fetchPlaceDetailByPlaceName(placeName: String)
+    = apiService.fetchPlaceDetailByPlaceName(placeName)
 
-    override suspend fun getPlaceRanking() =
-        apiService.getPlaceRanking()
+    override suspend fun fetchPlaceRankings()
+    = apiService.fetchPlaceRankings()
 
-    override suspend fun getPlaceBanners() =
-        apiService.getHomeBanners()
+    override suspend fun fetchPlaceBanners()
+    = apiService.fetchPlaceBanners()
 
-    override suspend fun getPlacesBySubCityName(subCityName: String) =
-        apiService.getPlacesBySubCityName(subCityName)
+    override suspend fun fetchPlacesBySubCityName(subCityName: String)
+    = apiService.fetchPlacesBySubCityName(subCityName)
 }

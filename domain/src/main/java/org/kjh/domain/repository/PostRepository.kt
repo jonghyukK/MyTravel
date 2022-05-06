@@ -15,7 +15,8 @@ import kotlinx.coroutines.flow.Flow
  */
 
 interface PostRepository {
-    suspend fun makeRequestUploadPost(
+
+    suspend fun uploadPost(
         file        : List<String>,
         email       : String,
         content     : String? = null,
@@ -26,5 +27,5 @@ interface PostRepository {
         y : String
     ): Flow<ApiResult<UserEntity>>
 
-    fun getRecentPostsPagingData(): Flow<PagingData<PostEntity>>
+    fun fetchLatestPosts(): Flow<PagingData<PostEntity>>
 }

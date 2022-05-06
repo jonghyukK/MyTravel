@@ -13,5 +13,5 @@ class GetPlacesBySubCityNameUseCase(
     private val placeRepository: PlaceRepository
 ) {
     suspend operator fun invoke(subCityName: String) =
-        placeRepository.getPlacesBySubCityName(subCityName)
+        placeRepository.fetchPlacesBySubCityName(subCityName)
 }

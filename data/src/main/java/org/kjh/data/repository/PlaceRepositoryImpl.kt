@@ -23,43 +23,43 @@ class PlaceRepositoryImpl @Inject constructor(
     private val placeRemoteDataSource: PlaceRemoteDataSource
 ): PlaceRepository {
 
-    override suspend fun getPlace(
+    override suspend fun fetchPlaceDetailByPlaceName(
         placeName: String
     ): Flow<ApiResult<PlaceEntity>> = flow {
-        emit(ApiResult.Loading())
+        emit(ApiResult.Loading)
 
-        val response = placeRemoteDataSource.getPlace(placeName)
-        emit(ResponseMapper.responseToPlace(ApiResult.Success(response)))
+        val response = placeRemoteDataSource.fetchPlaceDetailByPlaceName(placeName)
+        emit(ResponseMapper.responseToPlace(ApiResult.Success(response.data)))
     }.catch {
         emit(ResponseMapper.responseToPlace(ApiResult.Error(it)))
     }
 
-    override suspend fun getPlaceRanking()
+    override suspend fun fetchPlaceRankings()
     : Flow<ApiResult<List<PlaceWithRankEntity>>> = flow {
-        emit(ApiResult.Loading())
+        emit(ApiResult.Loading)
 
-        val response = placeRemoteDataSource.getPlaceRanking()
-        emit(ResponseMapper.responseToPlaceRankingList(ApiResult.Success(response)))
+        val response = placeRemoteDataSource.fetchPlaceRankings()
+        emit(ResponseMapper.responseToPlaceRankingList(ApiResult.Success(response.data)))
     }.catch {
         emit(ResponseMapper.responseToPlaceRankingList(ApiResult.Error(it)))
     }
 
-    override suspend fun getPlaceBanners()
+    override suspend fun fetchPlaceBanners()
     : Flow<ApiResult<List<BannerEntity>>> = flow {
-        emit(ApiResult.Loading())
+        emit(ApiResult.Loading)
 
-        val response = placeRemoteDataSource.getPlaceBanners()
-        emit(ResponseMapper.responseToBannerEntityList(ApiResult.Success(response)))
+        val response = placeRemoteDataSource.fetchPlaceBanners()
+        emit(ResponseMapper.responseToBannerEntityList(ApiResult.Success(response.data)))
     }.catch {
         emit(ResponseMapper.responseToBannerEntityList(ApiResult.Error(it)))
     }
 
-    override suspend fun getPlacesBySubCityName(subCityName: String)
+    override suspend fun fetchPlacesBySubCityName(subCityName: String)
     : Flow<ApiResult<List<PlaceEntity>>> = flow {
-        emit(ApiResult.Loading())
+        emit(ApiResult.Loading)
 
-        val response = placeRemoteDataSource.getPlacesBySubCityName(subCityName)
-        emit(ResponseMapper.responseToPlaceList(ApiResult.Success(response)))
+        val response = placeRemoteDataSource.fetchPlacesBySubCityName(subCityName)
+        emit(ResponseMapper.responseToPlaceList(ApiResult.Success(response.data)))
     }.catch {
         emit(ResponseMapper.responseToPlaceList(ApiResult.Error(it)))
     }

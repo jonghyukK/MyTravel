@@ -1,11 +1,12 @@
 package org.kjh.data.datasource
 
 import org.kjh.data.api.ApiService
-import org.kjh.data.model.api.PostsApiModel
-import org.kjh.data.model.api.UserApiModel
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
 import okhttp3.RequestBody.Companion.asRequestBody
+import org.kjh.data.model.base.BaseApiModel
+import org.kjh.data.model.PostModel
+import org.kjh.data.model.UserModel
 import java.io.File
 import javax.inject.Inject
 
@@ -17,6 +18,7 @@ import javax.inject.Inject
  * Description:
  */
 interface PostRemoteDataSource {
+
     suspend fun uploadPost(
         file        : List<String>,
         email       : String,
@@ -26,12 +28,12 @@ interface PostRemoteDataSource {
         placeRoadAddress: String,
         x : String,
         y : String
-    ): UserApiModel
+    ): BaseApiModel<UserModel>
 
-    suspend fun getRecentPosts(
+    suspend fun fetchLatestPosts(
         page: Int,
         size: Int
-    ): PostsApiModel
+    ): BaseApiModel<List<PostModel>>
 }
 
 class PostRemoteDataSourceImpl @Inject constructor(
@@ -47,7 +49,7 @@ class PostRemoteDataSourceImpl @Inject constructor(
         placeRoadAddress: String,
         x: String,
         y: String
-    ): UserApiModel {
+    ): BaseApiModel<UserModel> {
 
         val fileBody = file.map {
             val tempFile = File(it)
@@ -55,7 +57,7 @@ class PostRemoteDataSourceImpl @Inject constructor(
             MultipartBody.Part.createFormData("file", tempFile.name, requestFile)
         }
 
-        return apiService.makeRequestPostUpload(
+        return apiService.uploadPost(
             file = fileBody,
             email = email,
             content = content,
@@ -67,8 +69,8 @@ class PostRemoteDataSourceImpl @Inject constructor(
         )
     }
 
-    override suspend fun getRecentPosts(
+    override suspend fun fetchLatestPosts(
         page: Int,
         size: Int
-    ) = apiService.getRecentPosts(page, size)
+    ) = apiService.fetchLatestPosts(page, size)
 }

@@ -25,7 +25,7 @@ class LoginRepositoryImpl @Inject constructor(
         email: String,
         pw   : String
     ): Flow<ApiResult<LoginEntity>> = flow {
-        emit(ApiResult.Loading())
+        emit(ApiResult.Loading)
 
         val response = dataSource.makeLoginRequest(email, pw)
         emit(ResponseMapper.responseToLoginEntity(ApiResult.Success(response)))
