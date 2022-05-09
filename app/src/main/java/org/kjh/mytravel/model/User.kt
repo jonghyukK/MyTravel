@@ -10,17 +10,17 @@ import org.kjh.domain.entity.UserEntity
  * Description:
  */
 data class User(
-    val userId      : Int = 0,
-    val email       : String = "",
-    val nickName    : String = "",
-    val profileImg  : String? = null,
-    val postCount   : Int = 0,
-    val followingCount : Int = 0,
-    val followCount    : Int = 0,
-    val introduce      : String? = null,
-    val isFollowing    : Boolean = false,
-    val posts          : List<Post> = listOf(),
-    val bookMarks      : List<Bookmark> = listOf()
+    val userId      : Int,
+    val email       : String,
+    val nickName    : String,
+    val profileImg  : String?,
+    val postCount   : Int,
+    val followingCount : Int,
+    val followCount    : Int,
+    val introduce      : String?,
+    val isFollowing    : Boolean,
+    val posts          : List<Post>,
+    val bookMarks      : List<Bookmark>
 )
 
 fun UserEntity.mapToPresenter() =

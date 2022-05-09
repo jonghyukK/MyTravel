@@ -20,7 +20,7 @@ data class Place(
     val x       : String,
     val y       : String,
     val placeImg: String,
-    val posts   : List<Post> = listOf()
+    val posts   : List<Post>
 ) {
     companion object {
         val diffCallback = object : DiffUtil.ItemCallback<Place>() {

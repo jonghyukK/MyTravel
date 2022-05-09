@@ -11,7 +11,7 @@ import org.kjh.domain.entity.SignUpEntity
  */
 data class SignUp(
     val isSuccess     : Boolean,
-    val signUpErrorMsg: String? = null,
+    val signUpErrorMsg: String?,
 )
 
 fun SignUpEntity.mapToPresenter() =

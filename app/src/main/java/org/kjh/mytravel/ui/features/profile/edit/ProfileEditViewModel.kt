@@ -58,6 +58,8 @@ class ProfileEditViewModel @AssistedInject constructor(
     private val _profileImg: MutableStateFlow<String?> = MutableStateFlow(initProfileImg)
     val profileImg = _profileImg.asStateFlow()
 
+    private val _isProfileImgModified = MutableStateFlow(false)
+
     private val _profileUpdateState: MutableStateFlow<UiState<User>> = MutableStateFlow(UiState.Init)
     val profileUpdateState = _profileUpdateState.asStateFlow()
 
@@ -66,13 +68,14 @@ class ProfileEditViewModel @AssistedInject constructor(
 
 
     // API - Update My Profile.
-    fun makeUpdateUserInfo(filePath: String?) {
+    fun makeUpdateUserInfo() {
+        val profileImg = if (_isProfileImgModified.value) _profileImg.value else null
         val nickName  = inputNickName.value
         val introduce = inputIntroduce.value
 
         viewModelScope.launch {
             updateProfileUseCase(
-                profileImg = filePath,
+                profileImg = profileImg,
                 email      = getLoginPreferenceUseCase().email,
                 nickName   = nickName,
                 introduce  = introduce
@@ -94,6 +97,7 @@ class ProfileEditViewModel @AssistedInject constructor(
 
     fun updateProfileImg(uri: String) {
         _profileImg.value = uri
+        _isProfileImgModified.value = true
     }
 
     fun shownErrorToast() {

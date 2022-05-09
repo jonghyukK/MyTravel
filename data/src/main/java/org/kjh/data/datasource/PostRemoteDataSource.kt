@@ -1,13 +1,10 @@
 package org.kjh.data.datasource
 
 import org.kjh.data.api.ApiService
-import okhttp3.MediaType.Companion.toMediaTypeOrNull
-import okhttp3.MultipartBody
-import okhttp3.RequestBody.Companion.asRequestBody
-import org.kjh.data.model.base.BaseApiModel
 import org.kjh.data.model.PostModel
 import org.kjh.data.model.UserModel
-import java.io.File
+import org.kjh.data.model.base.BaseApiModel
+import org.kjh.data.utils.FileUtils
 import javax.inject.Inject
 
 /**
@@ -41,33 +38,25 @@ class PostRemoteDataSourceImpl @Inject constructor(
 ): PostRemoteDataSource {
 
     override suspend fun uploadPost(
-        file: List<String>,
-        email: String,
-        content: String?,
-        placeName: String,
+        file        : List<String>,
+        email       : String,
+        content     : String?,
+        placeName   : String,
         placeAddress: String,
         placeRoadAddress: String,
-        x: String,
-        y: String
-    ): BaseApiModel<UserModel> {
-
-        val fileBody = file.map {
-            val tempFile = File(it)
-            val requestFile = tempFile.asRequestBody("multipart/form-data".toMediaTypeOrNull())
-            MultipartBody.Part.createFormData("file", tempFile.name, requestFile)
-        }
-
-        return apiService.uploadPost(
-            file = fileBody,
-            email = email,
-            content = content,
-            placeName = placeName,
+        x           : String,
+        y           : String
+    ) = apiService.uploadPost(
+            x            = x,
+            y            = y,
+            file         = FileUtils.makeFormDataListForUpload(file),
+            email        = email,
+            content      = content,
+            placeName    = placeName,
             placeAddress = placeAddress,
-            placeRoadAddress = placeRoadAddress,
-            x = x,
-            y = y
+            placeRoadAddress = placeRoadAddress
         )
-    }
+
 
     override suspend fun fetchLatestPosts(
         page: Int,

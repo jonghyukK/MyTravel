@@ -20,7 +20,7 @@ data class PlaceModel(
     val x: String,
     val y: String,
     val placeImg: String,
-    val posts : List<PostModel> = listOf()
+    val posts : List<PostModel>
 )
 
 fun PlaceModel.mapToDomain() =

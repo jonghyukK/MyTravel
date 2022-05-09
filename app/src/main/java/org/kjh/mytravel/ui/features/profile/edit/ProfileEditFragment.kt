@@ -14,6 +14,7 @@ import androidx.navigation.ui.setupWithNavController
 import com.canhub.cropper.CropImageContract
 import com.canhub.cropper.CropImageView
 import com.canhub.cropper.options
+import com.orhanobut.logger.Logger
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
@@ -25,11 +26,8 @@ import org.kjh.mytravel.ui.features.profile.MyProfileViewModel
 import org.kjh.mytravel.ui.base.BaseFragment
 import javax.inject.Inject
 
-const val NGINX_PATH = "http://192.168.219.102/images/"
-
 interface ProfileEditClickEvent {
     fun onClickProfileImgEdit(v: View)
-    fun onClickSave(v: View)
 }
 
 @AndroidEntryPoint
@@ -66,16 +64,6 @@ class ProfileEditFragment
                 setCropShape(CropImageView.CropShape.OVAL)
             }
         )
-    }
-
-    override fun onClickSave(v: View) {
-        var filePath = viewModel.profileImg.value
-
-        if (filePath != null && filePath.startsWith(NGINX_PATH)) {
-            filePath = filePath.replace(NGINX_PATH, "${requireContext().cacheDir.absolutePath}/")
-        }
-
-        viewModel.makeUpdateUserInfo(filePath)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

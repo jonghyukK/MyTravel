@@ -14,15 +14,15 @@ data class Bookmark(
     val postId      : Int,
     val email       : String,
     val nickName    : String,
-    val content     : String? = null,
+    val content     : String?,
     val cityName    : String,
     val subCityName : String,
     val placeName   : String,
     val placeAddress: String,
-    val profileImg  : String? = null,
+    val profileImg  : String?,
     val createdDate : String,
-    val isBookmarked: Boolean = true,
-    val imageUrl    : List<String> = listOf()
+    val isBookmarked: Boolean,
+    val imageUrl    : List<String>
 ){
     companion object {
         val diffCallback = object : DiffUtil.ItemCallback<Bookmark>() {

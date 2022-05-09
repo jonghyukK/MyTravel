@@ -1,13 +1,10 @@
 package org.kjh.data.datasource
 
-import okhttp3.MediaType.Companion.toMediaTypeOrNull
-import okhttp3.MultipartBody
-import okhttp3.RequestBody.Companion.asRequestBody
 import org.kjh.data.api.ApiService
-import org.kjh.data.model.base.BaseApiModel
 import org.kjh.data.model.FollowModel
 import org.kjh.data.model.UserModel
-import java.io.File
+import org.kjh.data.model.base.BaseApiModel
+import org.kjh.data.utils.FileUtils
 import javax.inject.Inject
 
 /**
@@ -51,28 +48,15 @@ class UserRemoteDataSourceImpl @Inject constructor(
 
     override suspend fun updateMyProfile(
         profileUrl: String?,
-        email: String,
-        nickName: String,
-        introduce: String?
-    ): BaseApiModel<UserModel> {
-        var filePath = profileUrl
-
-        if (profileUrl != null && profileUrl.startsWith("/data")) {
-            filePath = profileUrl.replace("${email}_", "")
-        }
-
-        val file = filePath?.let {
-            val tempFile = File(filePath)
-            val requestFile = tempFile.asRequestBody("multipart/form-data".toMediaTypeOrNull())
-            MultipartBody.Part.createFormData("file", tempFile.name, requestFile)
-        } ?: MultipartBody.Part.createFormData("empty", "empty")
-
-        return apiService.updateMyProfile(
-            file = file,
-            email = email,
-            nickName = nickName,
+        email     : String,
+        nickName  : String,
+        introduce : String?
+    ): BaseApiModel<UserModel>
+    = apiService.updateMyProfile(
+            file      = FileUtils.makeFormDataForUpload(profileUrl),
+            email     = email,
+            nickName  = nickName,
             introduce = introduce)
-    }
 
     override suspend fun updateFollowState(
         myEmail    : String,

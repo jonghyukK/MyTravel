@@ -9,15 +9,15 @@ package org.kjh.domain.entity
  */
 
 data class UserEntity(
-    val userId      : Int = 0,
-    val email       : String = "",
-    val nickName    : String = "",
-    val profileImg  : String? = null,
-    val postCount   : Int = 0,
-    val followingCount : Int = 0,
-    val followCount    : Int = 0,
-    val introduce      : String? = null,
-    val isFollowing    : Boolean = false,
-    val posts          : List<PostEntity> = listOf(),
-    val bookMarks      : List<BookmarkEntity> = listOf()
+    val userId      : Int,
+    val email       : String,
+    val nickName    : String,
+    val profileImg  : String?,
+    val postCount   : Int,
+    val followingCount : Int,
+    val followCount    : Int,
+    val introduce      : String?,
+    val isFollowing    : Boolean,
+    val posts          : List<PostEntity>,
+    val bookMarks      : List<BookmarkEntity>
 )
