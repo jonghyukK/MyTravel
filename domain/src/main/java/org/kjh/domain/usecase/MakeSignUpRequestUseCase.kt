@@ -17,16 +17,12 @@ class MakeSignUpRequestUseCase(
     private val saveLogInPreferenceUseCase: SaveLogInPreferenceUseCase,
 ){
     suspend operator fun invoke(email: String, pw: String, nickName: String) =
-        repository.makeRequestSignUp(email, pw, nickName)
+        repository.requestSignUp(email, pw, nickName)
             .map {
-                if (it is ApiResult.Success && it.data.isRegistered) {
-                    saveLogInPreferenceUseCase(
-                        LoginInfoPreferences(
-                            email,
-                            true
-                        )
-                    )
+                if (it is ApiResult.Success && it.data.isSuccess) {
+                    saveLogInPreferenceUseCase(LoginInfoPreferences(email, true))
                 }
+
                 it
             }
 }

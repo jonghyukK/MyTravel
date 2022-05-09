@@ -10,9 +10,9 @@ import org.kjh.domain.entity.LoginEntity
  * Description:
  */
 data class Login(
-    val isLoggedIn: Boolean,
-    val errorMsg  : String? = null,
+    val isSuccess    : Boolean,
+    val loginErrorMsg: String?,
 )
 
 fun LoginEntity.mapToPresenter() =
-    Login(isLoggedIn, errorMsg)
+    Login(isSuccess, loginErrorMsg)

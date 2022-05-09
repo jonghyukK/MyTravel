@@ -52,12 +52,12 @@ class LoginViewModel @Inject constructor(
                         LoginUiState(isLoading = true)
 
                     is ApiResult.Success -> {
-                        val loginData = result.data.mapToPresenter()
+                        val loginResult = result.data.mapToPresenter()
 
                         _uiState.value = LoginUiState(
                             isLoading  = false,
-                            isLoggedIn = loginData.isLoggedIn,
-                            loginError = loginData.errorMsg
+                            isLoggedIn = loginResult.isSuccess,
+                            loginError = loginResult.loginErrorMsg
                         )
                     }
                     is ApiResult.Error ->

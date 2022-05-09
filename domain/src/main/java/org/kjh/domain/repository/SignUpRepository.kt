@@ -12,9 +12,10 @@ import kotlinx.coroutines.flow.Flow
  * Description:
  */
 interface SignUpRepository {
-    suspend fun makeRequestSignUp(
+
+    suspend fun requestSignUp(
         email: String,
-        pw: String,
-        nick: String
+        pw   : String,
+        nick : String
     ): Flow<ApiResult<SignUpEntity>>
 }

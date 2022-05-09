@@ -21,15 +21,15 @@ class SignUpRepositoryImpl @Inject constructor(
     private val dataSource: SignUpRemoteDataSource
 ): SignUpRepository {
 
-    override suspend fun makeRequestSignUp(
+    override suspend fun requestSignUp(
         email: String,
         pw   : String,
         nick : String
     ): Flow<ApiResult<SignUpEntity>> = flow {
         emit(ApiResult.Loading)
 
-        val response = dataSource.makeSignUpRequest(email, pw, nick)
-        emit(ResponseMapper.responseToSignUpEntity(ApiResult.Success(response)))
+        val response = dataSource.requestSignUp(email, pw, nick)
+        emit(ResponseMapper.responseToSignUpEntity(ApiResult.Success(response.data)))
     }.catch {
         emit(ResponseMapper.responseToSignUpEntity(ApiResult.Error(it)))
     }

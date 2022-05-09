@@ -8,6 +8,6 @@ package org.kjh.domain.entity
  * Description:
  */
 data class LoginEntity(
-    val isLoggedIn: Boolean,
-    val errorMsg  : String? = null,
+    val isSuccess     : Boolean,
+    val loginErrorMsg : String?,
 )

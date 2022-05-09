@@ -2,6 +2,7 @@ package org.kjh.mytravel.utils
 
 import android.content.Context
 import android.util.DisplayMetrics
+import android.util.Patterns
 import android.util.TypedValue
 import org.kjh.mytravel.model.Bookmark
 import org.kjh.mytravel.model.Post
@@ -34,6 +35,9 @@ fun Int.dpToPx(ctx: Context) =
 
 
 fun Int.dpToPx(displayMetrics: DisplayMetrics): Int = (this * displayMetrics.density).toInt()
+
+fun String.isValidPattern(): Boolean =
+    Patterns.EMAIL_ADDRESS.matcher(this).matches()
 
 
 

@@ -13,18 +13,15 @@ import org.kjh.domain.repository.LoginRepository
  * Description:
  */
 class MakeLoginRequestUseCase(
-    private val loginRepository             : LoginRepository,
-    private val saveLogInPreferenceUseCase  : SaveLogInPreferenceUseCase
+    private val loginRepository           : LoginRepository,
+    private val saveLogInPreferenceUseCase: SaveLogInPreferenceUseCase
 ){
     suspend operator fun invoke(email: String, pw: String) =
-        loginRepository.makeRequestLogin(email, pw)
+        loginRepository.requestLogin(email, pw)
             .map {
-                if (it is ApiResult.Success && it.data.isLoggedIn) {
+                if (it is ApiResult.Success && it.data.isSuccess) {
                     saveLogInPreferenceUseCase(
-                        LoginInfoPreferences(
-                            email,
-                            true
-                        )
+                        LoginInfoPreferences(email, true)
                     )
                 }
                 it

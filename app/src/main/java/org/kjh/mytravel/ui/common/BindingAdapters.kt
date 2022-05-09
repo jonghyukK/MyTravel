@@ -274,9 +274,11 @@ object BindingAdapters {
 
     @JvmStatic
     @BindingAdapter("app:textWithVisible")
-    fun bindErrorTextWithVisible(v: TextView, value: String?) {
-        v.text = value
-        v.isVisible = value != null
+    fun bindErrorTextWithVisible(view: TextView, value: String?) {
+        view.apply {
+            text = value
+            isVisible = value != null
+        }
     }
 
     @JvmStatic

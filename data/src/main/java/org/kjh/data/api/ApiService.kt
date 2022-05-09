@@ -2,8 +2,6 @@ package org.kjh.data.api
 
 import okhttp3.MultipartBody
 import org.kjh.data.model.*
-import org.kjh.data.model.api.LoginApiModel
-import org.kjh.data.model.api.SignUpApiModel
 import org.kjh.data.model.base.BaseApiModel
 import retrofit2.http.*
 
@@ -21,13 +19,13 @@ interface ApiService {
         @Query("email"   ) email    : String,
         @Query("pw"      ) pw       : String,
         @Query("nickName") nickName : String
-    ): SignUpApiModel
+    ): BaseApiModel<SignUpModel>
 
     @GET("user/login")
-    suspend fun login(
+    suspend fun requestLogin(
         @Query("email") email    : String,
         @Query("pw"   ) pw       : String
-    ): LoginApiModel
+    ): BaseApiModel<LoginModel>
 
     @GET("user")
     suspend fun fetchUser(

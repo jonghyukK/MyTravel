@@ -9,6 +9,6 @@ package org.kjh.domain.entity
  */
 
 data class SignUpEntity(
-    val isRegistered: Boolean,
-    val errorMsg    : String? = null,
+    val isSuccess     : Boolean,
+    val signUpErrorMsg: String?,
 )

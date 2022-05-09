@@ -1,7 +1,7 @@
 package org.kjh.data.mapper
 
 import org.kjh.data.model.*
-import org.kjh.data.model.api.*
+import org.kjh.data.model.api.MapQueryApiModel
 import org.kjh.domain.entity.*
 
 /**
@@ -13,9 +13,9 @@ import org.kjh.domain.entity.*
  */
 object ResponseMapper {
 
-    // SignUpAPiModel -> SignUpEntity
+    // SignUpModel -> SignUpEntity
     fun responseToSignUpEntity(
-        response: ApiResult<SignUpApiModel>
+        response: ApiResult<SignUpModel>
     ): ApiResult<SignUpEntity> {
         return when (response) {
             is ApiResult.Success -> ApiResult.Success(response.data.mapToDomain())
@@ -24,9 +24,9 @@ object ResponseMapper {
         }
     }
 
-    // LoginApiModel -> LoginEntity
+    // LoginModel -> LoginEntity
     fun responseToLoginEntity(
-        response: ApiResult<LoginApiModel>
+        response: ApiResult<LoginModel>
     ): ApiResult<LoginEntity> {
         return when (response) {
             is ApiResult.Success -> ApiResult.Success(response.data.mapToDomain())

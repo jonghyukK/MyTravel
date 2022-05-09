@@ -1,7 +1,8 @@
 package org.kjh.data.datasource
 
 import org.kjh.data.api.ApiService
-import org.kjh.data.model.api.SignUpApiModel
+import org.kjh.data.model.SignUpModel
+import org.kjh.data.model.base.BaseApiModel
 import javax.inject.Inject
 
 /**
@@ -14,14 +15,19 @@ import javax.inject.Inject
 
 
 interface SignUpRemoteDataSource {
-    suspend fun makeSignUpRequest(email: String, pw: String, nickName: String): SignUpApiModel
+
+    suspend fun requestSignUp(
+        email   : String,
+        pw      : String,
+        nickName: String
+    ): BaseApiModel<SignUpModel>
 }
 
 class SignUpDataSourceImpl @Inject constructor(
     private val apiService: ApiService
 ): SignUpRemoteDataSource {
 
-    override suspend fun makeSignUpRequest(
+    override suspend fun requestSignUp(
         email   : String,
         pw      : String,
         nickName: String

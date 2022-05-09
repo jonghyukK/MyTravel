@@ -1,12 +1,11 @@
 package org.kjh.mytravel.ui.features.profile.signup
 
-import android.util.Patterns
 import androidx.lifecycle.*
-import org.kjh.domain.entity.ApiResult
-import org.kjh.domain.usecase.MakeSignUpRequestUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
+import org.kjh.domain.entity.ApiResult
+import org.kjh.domain.usecase.MakeSignUpRequestUseCase
 import org.kjh.mytravel.model.mapToPresenter
 import org.kjh.mytravel.ui.features.profile.InputValidator
 import org.kjh.mytravel.ui.features.profile.InputValidator.isValidateEmail
@@ -22,9 +21,6 @@ import javax.inject.Inject
  *
  * Description:
  */
-
-fun String.isValidPattern(): Boolean =
-    Patterns.EMAIL_ADDRESS.matcher(this).matches()
 
 data class SignUpUiState(
     val emailError      : String? = null,
@@ -62,13 +58,13 @@ class SignUpViewModel @Inject constructor(
                     is ApiResult.Loading -> _uiState.value = SignUpUiState(isLoading = true)
 
                     is ApiResult.Success -> {
-                        val signUpData = result.data.mapToPresenter()
+                        val signUpResult = result.data.mapToPresenter()
 
                         _uiState.value =
                             SignUpUiState(
                                 isLoading = false,
-                                isRegistered = signUpData.isRegistered,
-                                emailError   = signUpData.errorMsg
+                                isRegistered = signUpResult.isSuccess,
+                                emailError   = signUpResult.signUpErrorMsg
                             )
                     }
                     is ApiResult.Error -> _uiState.value = SignUpUiState(

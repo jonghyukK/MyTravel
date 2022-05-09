@@ -21,14 +21,14 @@ class LoginRepositoryImpl @Inject constructor(
     private val dataSource: LoginRemoteDataSource
 ): LoginRepository {
 
-    override suspend fun makeRequestLogin(
+    override suspend fun requestLogin(
         email: String,
         pw   : String
     ): Flow<ApiResult<LoginEntity>> = flow {
         emit(ApiResult.Loading)
 
-        val response = dataSource.makeLoginRequest(email, pw)
-        emit(ResponseMapper.responseToLoginEntity(ApiResult.Success(response)))
+        val response = dataSource.requestLogin(email, pw)
+        emit(ResponseMapper.responseToLoginEntity(ApiResult.Success(response.data)))
     }.catch {
         emit(ResponseMapper.responseToLoginEntity(ApiResult.Error(it)))
     }

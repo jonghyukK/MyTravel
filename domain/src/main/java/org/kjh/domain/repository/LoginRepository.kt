@@ -12,5 +12,9 @@ import kotlinx.coroutines.flow.Flow
  * Description:
  */
 interface LoginRepository {
-    suspend fun makeRequestLogin(email: String, pw: String): Flow<ApiResult<LoginEntity>>
+
+    suspend fun requestLogin(
+        email: String,
+        pw   : String
+    ): Flow<ApiResult<LoginEntity>>
 }
