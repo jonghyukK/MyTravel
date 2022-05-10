@@ -30,15 +30,10 @@ import javax.inject.Inject
 
 // todo : SubCity Page UI 경량화 작업 필요.
 
-interface PlaceByCityNameClickEvent {
-    fun onClickPlaceItem(placeName: String)
-    fun onClickShowMap(v: View)
-}
-
 @AndroidEntryPoint
-class PlacesBySubCityFragment
-    : BaseFragment<FragmentPlacesBySubCityBinding>(R.layout.fragment_places_by_sub_city),
-    OnMapReadyCallback, PlaceByCityNameClickEvent
+class PlacesBySubCityFragment :
+    BaseFragment<FragmentPlacesBySubCityBinding>(R.layout.fragment_places_by_sub_city),
+    OnMapReadyCallback
 {
     @Inject
     lateinit var subCityNameAssistedFactory: PlacesBySubCityViewModel.SubCityNameAssistedFactory
@@ -52,16 +47,14 @@ class PlacesBySubCityFragment
     private lateinit var bsBehavior: BottomSheetBehavior<View>
 
     private val placeListByCityNameAdapter by lazy {
-        PlacesBySubCityListAdapter { placeName ->
-            onClickPlaceItem(placeName)
-        }
+        PlacesBySubCityListAdapter { placeName -> onClickPlaceItem(placeName) }
     }
 
-    override fun onClickPlaceItem(placeName: String) {
+    private fun onClickPlaceItem(placeName: String) {
         navigateWithAction(NavGraphDirections.actionGlobalPlacePagerFragment(placeName))
     }
 
-    override fun onClickShowMap(v: View) {
+    fun onClickShowMap() {
         bsBehavior.state = STATE_COLLAPSED
         binding.bsPlaceList.rvPlaceListBySubCityName.layoutManager?.scrollToPosition(0)
     }

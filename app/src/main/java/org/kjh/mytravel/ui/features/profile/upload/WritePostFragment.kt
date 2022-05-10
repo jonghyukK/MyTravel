@@ -21,15 +21,11 @@ import org.kjh.mytravel.model.User
 import org.kjh.mytravel.ui.features.profile.MyProfileViewModel
 import org.kjh.mytravel.ui.base.BaseFragment
 import org.kjh.mytravel.ui.features.home.HomeViewModel
-
-interface WritePostClickEvent {
-    fun onClickAddLocation(v: View)
-    fun onClickUpload()
-}
+import org.kjh.mytravel.utils.onThrottleMenuItemClick
 
 @AndroidEntryPoint
 class WritePostFragment
-    : BaseFragment<FragmentWritePostBinding>(R.layout.fragment_write_post), WritePostClickEvent {
+    : BaseFragment<FragmentWritePostBinding>(R.layout.fragment_write_post) {
 
     private val uploadViewModel   : UploadViewModel by navGraphViewModels(R.id.nav_nested_upload) { defaultViewModelProviderFactory }
     private val myProfileViewModel: MyProfileViewModel by activityViewModels()
@@ -37,14 +33,6 @@ class WritePostFragment
 
     private val writePostImagesAdapter by lazy {
         WritePostImagesAdapter()
-    }
-
-    override fun onClickAddLocation(v: View) {
-        navigateWithAction(WritePostFragmentDirections.actionWritePostFragmentToMapFragment())
-    }
-
-    override fun onClickUpload() {
-        uploadViewModel.makeUploadPost()
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -60,13 +48,9 @@ class WritePostFragment
         binding.tbWritePostToolbar.apply {
             setupWithNavController(findNavController())
             inflateMenu(R.menu.menu_upload)
-            setOnMenuItemClickListener {
-                when (it.itemId) {
-                    R.id.upload -> {
-                        onClickUpload()
-                        true
-                    }
-                    else -> false
+            onThrottleMenuItemClick { menu ->
+                when (menu.itemId) {
+                    R.id.upload -> onClickUpload()
                 }
             }
         }
@@ -105,5 +89,13 @@ class WritePostFragment
 
     private fun navigateProfileWhenSuccessUpload() {
         navigateWithAction(WritePostFragmentDirections.actionGlobalProfileFragment())
+    }
+
+    fun onClickAddLocation() {
+        navigateWithAction(WritePostFragmentDirections.actionWritePostFragmentToMapFragment())
+    }
+
+    private fun onClickUpload() {
+        uploadViewModel.makeUploadPost()
     }
 }

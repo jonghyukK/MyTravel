@@ -38,7 +38,7 @@
             android:layout_height="0dp"
             android:text="@string/cancel"
             android:layout_marginEnd="20dp"
-            android:onClick="@{fragment::onClickCancel}"
+            onThrottleClick="@{fragment::dismiss}"
             app:layout_constraintHorizontal_weight="0.2"
             app:layout_constraintTop_toTopOf="@+id/et_search"
             app:layout_constraintBottom_toBottomOf="@+id/et_search"

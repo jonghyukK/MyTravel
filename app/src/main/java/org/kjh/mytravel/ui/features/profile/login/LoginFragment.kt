@@ -55,8 +55,7 @@ class LoginFragment
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.uiState.collect { state ->
                     if (state.isLoggedIn) {
-                        (parentFragment as NotLoginFragment)
-                            .navigateHomeWhenSuccessLoginOrSignUp()
+                        (parentFragment as NotLoginFragment).navigateHomeWhenSuccessLoginOrSignUp()
                     }
                 }
             }

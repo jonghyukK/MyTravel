@@ -8,6 +8,7 @@ import androidx.recyclerview.widget.PagerSnapHelper
 import androidx.recyclerview.widget.RecyclerView
 import org.kjh.mytravel.databinding.VhPlaceRecentItemBinding
 import org.kjh.mytravel.model.Post
+import org.kjh.mytravel.utils.onThrottleClick
 
 /**
  * MyTravel
@@ -47,7 +48,7 @@ class LatestPostPagingDataAdapter(
         fun bind(item: Post) {
             binding.post = item
 
-            itemView.setOnClickListener {
+            itemView.onThrottleClick {
                 onClickPost(item)
             }
 

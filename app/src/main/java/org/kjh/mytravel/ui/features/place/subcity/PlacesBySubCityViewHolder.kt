@@ -3,6 +3,7 @@ package org.kjh.mytravel.ui.features.place.subcity
 import androidx.recyclerview.widget.RecyclerView
 import org.kjh.mytravel.databinding.VhPlacesBySubCityRowBinding
 import org.kjh.mytravel.model.Place
+import org.kjh.mytravel.utils.onThrottleClick
 
 /**
  * MyTravel
@@ -32,7 +33,7 @@ class PlacesBySubCityViewHolder(
         binding.placeItem = item
         postListAdapter.submitList(item.posts)
 
-        itemView.setOnClickListener {
+        itemView.onThrottleClick {
             onClickPlaceItem(item.placeName)
         }
     }

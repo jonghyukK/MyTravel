@@ -15,37 +15,18 @@ import org.kjh.mytravel.model.Bookmark
  * Description:
  */
 class BookmarkListAdapter(
-    private val onClickItem: (Bookmark) -> Unit,
+    private val onClickItem    : (Bookmark) -> Unit,
     private val onClickBookmark: (Bookmark) -> Unit
-): ListAdapter<Bookmark, BookmarkItemSmallViewHolder>(Bookmark.diffCallback) {
+): ListAdapter<Bookmark, BookmarkItemViewHolder>(Bookmark.diffCallback) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) =
-        BookmarkItemSmallViewHolder(
+        BookmarkItemViewHolder(
             VhBookmarkPostItemBinding.inflate(
                 LayoutInflater.from(parent.context), parent, false
             ), onClickItem, onClickBookmark
         )
 
-    override fun onBindViewHolder(holder: BookmarkItemSmallViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: BookmarkItemViewHolder, position: Int) {
         holder.bind(getItem(position))
-    }
-}
-
-class BookmarkItemSmallViewHolder(
-    val binding: VhBookmarkPostItemBinding,
-    private val onClickItem: (Bookmark) -> Unit,
-    private val onClickBookmark: (Bookmark) -> Unit
-): RecyclerView.ViewHolder(binding.root) {
-
-    fun bind(item: Bookmark) {
-        binding.bookmarkItem = item
-
-        itemView.setOnClickListener {
-            onClickItem(item)
-        }
-
-        binding.ivBookmark.setOnClickListener {
-            onClickBookmark(item)
-        }
     }
 }

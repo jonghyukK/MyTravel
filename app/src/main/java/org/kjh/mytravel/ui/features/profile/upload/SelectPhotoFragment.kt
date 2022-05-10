@@ -18,15 +18,11 @@ import org.kjh.mytravel.R
 import org.kjh.mytravel.databinding.FragmentSelectPhotoBinding
 import org.kjh.mytravel.model.MediaStoreImage
 import org.kjh.mytravel.ui.base.BaseFragment
-
-interface SelectPhotoClickEvent {
-    fun onClickNext()
-    fun onClickMediaStoreItem()
-}
+import org.kjh.mytravel.utils.onThrottleMenuItemClick
 
 @AndroidEntryPoint
 class SelectPhotoFragment
-    : BaseFragment<FragmentSelectPhotoBinding>(R.layout.fragment_select_photo), SelectPhotoClickEvent {
+    : BaseFragment<FragmentSelectPhotoBinding>(R.layout.fragment_select_photo) {
 
     private val uploadViewModel: UploadViewModel by navGraphViewModels(R.id.nav_nested_upload) {
         defaultViewModelProviderFactory
@@ -60,13 +56,9 @@ class SelectPhotoFragment
         binding.tbSelectPhotoToolbar.apply {
             setupWithNavController(findNavController())
             inflateMenu(R.menu.menu_next)
-            setOnMenuItemClickListener {
-                when (it.itemId) {
-                    R.id.next -> {
-                        onClickNext()
-                        true
-                    }
-                    else -> false
+            onThrottleMenuItemClick { menu ->
+                when (menu.itemId) {
+                    R.id.next -> onClickNext()
                 }
             }
         }
@@ -119,13 +111,13 @@ class SelectPhotoFragment
         }
     }
 
-    override fun onClickNext() {
+    private fun onClickNext() {
         navigateWithAction(
             SelectPhotoFragmentDirections.actionSelectPhotoFragmentToWritePostFragment()
         )
     }
 
-    override fun onClickMediaStoreItem() {
+    private fun onClickMediaStoreItem() {
         val selectedList = mutableListOf<MediaStoreImage>()
 
         for (uri in tracker.selection) {

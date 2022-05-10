@@ -32,7 +32,7 @@
             app:layout_constraintTop_toBottomOf="@+id/tb_settingToolbar"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            android:onClick="@{() -> viewModel.logout()}"
+            onThrottleClick="@{viewModel::logout}"
             android:text="@string/logout"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>

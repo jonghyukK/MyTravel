@@ -59,7 +59,7 @@
             android:visibility="gone"
             android:layout_marginBottom="30dp"
             android:text="@string/show_map"
-            android:onClick="@{fragment::onClickShowMap}"
+            onThrottleClick="@{fragment::onClickShowMap}"
             android:layout_gravity="bottom|center_horizontal"/>
 
         <ProgressBar

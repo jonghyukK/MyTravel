@@ -3,6 +3,7 @@ package org.kjh.mytravel.ui.features.profile
 import androidx.recyclerview.widget.RecyclerView
 import org.kjh.mytravel.databinding.VhProfilePostItemBinding
 import org.kjh.mytravel.model.Post
+import org.kjh.mytravel.utils.onThrottleClick
 
 /**
  * MyTravel
@@ -20,11 +21,11 @@ class MyPostItemViewHolder(
     fun bind(item: Post) {
         binding.postItem = item
 
-        itemView.setOnClickListener {
+        itemView.onThrottleClick {
             onClickPost(item)
         }
 
-        binding.ivBookmark.setOnClickListener {
+        binding.ivBookmark.onThrottleClick {
             onClickBookmark(item)
         }
     }

@@ -21,14 +21,8 @@ import org.kjh.mytravel.ui.features.home.latest.LatestPostPagingDataAdapter
 import org.kjh.mytravel.ui.features.home.ranking.PlaceRankingHorizontalWrapAdapter
 import org.kjh.mytravel.ui.features.home.ranking.PlaceRankingListAdapter
 
-interface HomeClickEvent {
-    fun onClickBannerItem(topic: String)
-    fun onClickRankingItem(placeName: String)
-    fun onClickLatestPostItem(placeName: String)
-}
-
 @AndroidEntryPoint
-class HomeFragment : BaseFragment<FragmentHomeBinding>(R.layout.fragment_home), HomeClickEvent {
+class HomeFragment : BaseFragment<FragmentHomeBinding>(R.layout.fragment_home) {
 
     private val viewModel: HomeViewModel by activityViewModels()
 
@@ -52,15 +46,15 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(R.layout.fragment_home), 
         ConcatAdapter(placeRankingHorizontalWrapAdapter, latestPostListAdapter)
     }
 
-    override fun onClickBannerItem(topic: String) {
+    private fun onClickBannerItem(topic: String) {
         navigateWithAction(HomeFragmentDirections.actionHomeFragmentToPlaceListByCityNameFragment(topic))
     }
 
-    override fun onClickRankingItem(placeName: String) {
+    private fun onClickRankingItem(placeName: String) {
         navigateWithAction(NavGraphDirections.actionGlobalPlacePagerFragment(placeName))
     }
 
-    override fun onClickLatestPostItem(placeName: String) {
+    private fun onClickLatestPostItem(placeName: String) {
         navigateWithAction(NavGraphDirections.actionGlobalPlacePagerFragment(placeName))
     }
 

@@ -14,15 +14,9 @@ import org.kjh.mytravel.databinding.BsFragmentMapSearchBinding
 import org.kjh.mytravel.model.MapQueryItem
 import org.kjh.mytravel.ui.base.BaseBottomSheetDialogFragment
 
-interface MapSearchClickEvent {
-    fun onClickSearch()
-    fun onClickCancel(v: View)
-    fun onClickQueryItem(item: MapQueryItem)
-}
-
 @AndroidEntryPoint
 class MapSearchFragment
-    : BaseBottomSheetDialogFragment<BsFragmentMapSearchBinding>(R.layout.bs_fragment_map_search), MapSearchClickEvent {
+    : BaseBottomSheetDialogFragment<BsFragmentMapSearchBinding>(R.layout.bs_fragment_map_search) {
 
     private val viewModel   : MapSearchViewModel by viewModels()
     private val mapViewModel: MapViewModel by viewModels({ requireParentFragment() })
@@ -31,15 +25,11 @@ class MapSearchFragment
         MapSearchPlaceListAdapter { item -> onClickQueryItem(item) }
     }
 
-    override fun onClickSearch() {
+    private fun onClickSearch() {
         viewModel.makeSearchPlace()
     }
 
-    override fun onClickCancel(v: View) {
-        dismiss()
-    }
-
-    override fun onClickQueryItem(item: MapQueryItem) {
+    private fun onClickQueryItem(item: MapQueryItem) {
         mapViewModel.setTempPlaceItem(item)
         dismiss()
     }

@@ -10,6 +10,7 @@ import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavOptions
 import androidx.navigation.fragment.findNavController
+import com.orhanobut.logger.Logger
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
@@ -20,19 +21,12 @@ import org.kjh.mytravel.model.Post
 import org.kjh.mytravel.model.User
 import org.kjh.mytravel.ui.features.profile.MyProfileViewModel
 import org.kjh.mytravel.ui.base.BaseFragment
+import org.kjh.mytravel.utils.onThrottleMenuItemClick
 
-
-interface ProfileClickEvent {
-    fun onClickPost(item: Post)
-    fun onClickBookmark(item: Post)
-    fun onClickProfileEdit(myProfileItem: User)
-    fun onClickWritePost()
-    fun onClickSettings()
-}
 
 @AndroidEntryPoint
 class ProfileFragment
-    :BaseFragment<FragmentProfileBinding>(R.layout.fragment_profile), ProfileClickEvent {
+    :BaseFragment<FragmentProfileBinding>(R.layout.fragment_profile) {
 
     private val myProfileViewModel: MyProfileViewModel by activityViewModels()
 
@@ -43,15 +37,15 @@ class ProfileFragment
         )
     }
 
-    override fun onClickPost(item: Post) {
+    private fun onClickPost(item: Post) {
         navigateWithAction(NavGraphDirections.actionGlobalPlacePagerFragment(item.placeName))
     }
 
-    override fun onClickBookmark(item: Post) {
+    private fun onClickBookmark(item: Post) {
         myProfileViewModel.updateBookmark(item.postId, item.placeName)
     }
 
-    override fun onClickProfileEdit(myProfileItem: User) {
+    fun onClickProfileEdit(myProfileItem: User) {
         navigateWithAction(
             ProfileFragmentDirections.actionProfileFragmentToProfileEditFragment(
                 myProfileItem.profileImg, myProfileItem.nickName, myProfileItem.introduce
@@ -59,29 +53,12 @@ class ProfileFragment
         )
     }
 
-    override fun onClickWritePost() {
+    private fun onClickWritePost() {
         navigateWithAction(ProfileFragmentDirections.actionProfileFragmentToSelectPhotoFragment())
     }
 
-    override fun onClickSettings() {
+    private fun onClickSettings() {
         navigateWithAction(ProfileFragmentDirections.actionProfileFragmentToSettingFragment())
-    }
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-        val callback = requireActivity().onBackPressedDispatcher.addCallback(this) {
-            val navOptions =
-                NavOptions.Builder()
-                    .setLaunchSingleTop(true)
-                    .setRestoreState(true)
-                    .setPopUpTo(
-                        findNavController().graph.findStartDestination().id,
-                        inclusive = false,
-                        saveState = true
-                    ).build()
-            findNavController().navigate(R.id.home, null, navOptions)
-        }
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -96,19 +73,10 @@ class ProfileFragment
     private fun initView() {
         binding.tbProfileToolbar.apply {
             inflateMenu(R.menu.menu_profile)
-            setOnMenuItemClickListener {
+            onThrottleMenuItemClick {
                 when (it.itemId) {
-                    // 글쓰기
-                    R.id.write_post -> {
-                        onClickWritePost()
-                        true
-                    }
-                    // 설정
-                    R.id.settings -> {
-                        onClickSettings()
-                        true
-                    }
-                    else -> false
+                    R.id.write_post -> onClickWritePost()
+                    R.id.settings   -> onClickSettings()
                 }
             }
         }
@@ -125,12 +93,14 @@ class ProfileFragment
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 myProfileViewModel.isLoggedIn.collect { isLoggedIn ->
                     if (!isLoggedIn) {
-                        navigateWithAction(
-                            ProfileFragmentDirections.actionProfileFragmentToNotLoginFragment()
-                        )
+                        navigateToLoginPageWhenNotLogin()
                     }
                 }
             }
         }
+    }
+
+    private fun navigateToLoginPageWhenNotLogin() {
+        navigateWithAction(ProfileFragmentDirections.actionProfileFragmentToNotLoginFragment())
     }
 }

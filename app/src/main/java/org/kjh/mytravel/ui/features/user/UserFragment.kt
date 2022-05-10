@@ -20,15 +20,9 @@ import org.kjh.mytravel.ui.features.profile.MyProfileViewModel
 import org.kjh.mytravel.ui.base.BaseFragment
 import javax.inject.Inject
 
-interface UserPageClickEvent {
-    fun onClickPostItem(placeName: String)
-    fun onClickBookmark(postId: Int, placeName: String)
-    fun onClickFollowOrNot(v: View)
-}
-
 @AndroidEntryPoint
 class UserFragment
-    : BaseFragment<FragmentUserBinding>(R.layout.fragment_user), UserPageClickEvent {
+    : BaseFragment<FragmentUserBinding>(R.layout.fragment_user){
 
     @Inject
     lateinit var userViewModelFactory: UserViewModel.UserNameAssistedFactory
@@ -47,15 +41,15 @@ class UserFragment
         )
     }
 
-    override fun onClickPostItem(placeName: String) {
+    private fun onClickPostItem(placeName: String) {
         navigateWithAction(NavGraphDirections.actionGlobalPlacePagerFragment(placeName))
     }
 
-    override fun onClickBookmark(postId: Int, placeName: String) {
+    private fun onClickBookmark(postId: Int, placeName: String) {
         myProfileViewModel.updateBookmark(postId, placeName)
     }
 
-    override fun onClickFollowOrNot(v: View) {
+    fun onClickFollowOrNot() {
         viewModel.makeRequestFollow(targetEmail = args.userEmail)
     }
 

@@ -9,6 +9,7 @@ import androidx.recyclerview.widget.PagerSnapHelper
 import androidx.recyclerview.widget.RecyclerView
 import org.kjh.mytravel.databinding.VhPlaceDayLogItemBinding
 import org.kjh.mytravel.model.Post
+import org.kjh.mytravel.utils.onThrottleClick
 
 /**
  * MyTravel
@@ -49,7 +50,7 @@ class PlaceDayLogListAdapter(
             binding.post = item
 
             binding.group.referencedIds.forEach { id ->
-                binding.root.findViewById<View>(id).setOnClickListener {
+                binding.root.findViewById<View>(id).onThrottleClick {
                     onClickDayLog(item)
                 }
             }

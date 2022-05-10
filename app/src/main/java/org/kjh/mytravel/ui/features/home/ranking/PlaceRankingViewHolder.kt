@@ -3,6 +3,7 @@ package org.kjh.mytravel.ui.features.home.ranking
 import androidx.recyclerview.widget.RecyclerView
 import org.kjh.mytravel.databinding.VhPlaceRankingItemBinding
 import org.kjh.mytravel.model.PlaceWithRanking
+import org.kjh.mytravel.utils.onThrottleClick
 
 /**
  * MyTravel
@@ -19,7 +20,7 @@ class PlaceRankingViewHolder(
     fun bind(item: PlaceWithRanking) {
         binding.placeRanking = item
 
-        itemView.setOnClickListener {
+        itemView.onThrottleClick {
             onClickPlaceItem(item)
         }
     }

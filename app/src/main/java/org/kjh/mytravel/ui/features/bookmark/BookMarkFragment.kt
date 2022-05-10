@@ -15,14 +15,9 @@ import org.kjh.mytravel.model.Bookmark
 import org.kjh.mytravel.ui.base.BaseFragment
 import org.kjh.mytravel.ui.features.profile.MyProfileViewModel
 
-interface BookmarkClickEvent {
-    fun onClickPostItem(item: Bookmark)
-    fun onClickBookmark(item: Bookmark)
-}
-
 @AndroidEntryPoint
 class BookMarkFragment
-    : BaseFragment<FragmentBookMarkBinding>(R.layout.fragment_book_mark), BookmarkClickEvent {
+    : BaseFragment<FragmentBookMarkBinding>(R.layout.fragment_book_mark) {
 
     private val myProfileViewModel: MyProfileViewModel by activityViewModels()
 
@@ -33,29 +28,12 @@ class BookMarkFragment
         )
     }
 
-    override fun onClickPostItem(item: Bookmark) {
+    private fun onClickPostItem(item: Bookmark) {
         navigateWithAction(NavGraphDirections.actionGlobalPlacePagerFragment(item.placeName))
     }
 
-    override fun onClickBookmark(item: Bookmark) {
+    private fun onClickBookmark(item: Bookmark) {
         myProfileViewModel.updateBookmark(item.postId, item.placeName)
-    }
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-        val callback = requireActivity().onBackPressedDispatcher.addCallback(this) {
-            val navOptions =
-                NavOptions.Builder()
-                    .setLaunchSingleTop(true)
-                    .setRestoreState(true)
-                    .setPopUpTo(
-                        findNavController().graph.findStartDestination().id,
-                        inclusive = false,
-                        saveState = true
-                    ).build()
-            findNavController().navigate(R.id.home, null, navOptions)
-        }
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

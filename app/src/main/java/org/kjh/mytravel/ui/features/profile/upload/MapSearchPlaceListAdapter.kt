@@ -6,6 +6,7 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import org.kjh.mytravel.databinding.VhBsSearchPlaceBinding
 import org.kjh.mytravel.model.MapQueryItem
+import org.kjh.mytravel.utils.onThrottleClick
 
 /**
  * MyTravel
@@ -30,14 +31,14 @@ class MapSearchPlaceListAdapter(
     }
 
     class MapSearchPlaceViewHolder(
-        val binding: VhBsSearchPlaceBinding,
+        val binding     : VhBsSearchPlaceBinding,
         val onClickPlace: (MapQueryItem) -> Unit
     ): RecyclerView.ViewHolder(binding.root) {
 
         fun bind(item: MapQueryItem) {
             binding.mapQueryItem = item
 
-            itemView.setOnClickListener {
+            itemView.onThrottleClick {
                 onClickPlace(item)
             }
         }

@@ -26,7 +26,7 @@
             android:layout_height="30dp"
             android:src="@drawable/ic_close"
             android:background="@null"
-            android:onClick="@{() -> fragment.dismiss()}"
+            onThrottleClick="@{fragment::dismiss}"
             app:layout_constraintTop_toTopOf="@+id/tv_loginText"
             app:layout_constraintBottom_toBottomOf="@+id/tv_loginText"
             app:layout_constraintStart_toStartOf="parent" />
@@ -108,7 +108,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             android:enabled="@{viewModel.enableLogin}"
-            android:onClick="@{() -> viewModel.makeRequestLogin()}"
+            onThrottleClick="@{viewModel::makeRequestLogin}"
             android:text="@string/login"/>
 
         <ProgressBar

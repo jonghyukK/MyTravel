@@ -4,8 +4,13 @@ import android.content.Context
 import android.util.DisplayMetrics
 import android.util.Patterns
 import android.util.TypedValue
+import android.view.MenuItem
+import android.view.View
+import androidx.appcompat.widget.Toolbar
 import org.kjh.mytravel.model.Bookmark
 import org.kjh.mytravel.model.Post
+import org.kjh.mytravel.ui.common.OnThrottleClickListener
+import org.kjh.mytravel.ui.common.OnThrottleMenuItemClickListener
 
 /**
  * MyTravel
@@ -14,6 +19,8 @@ import org.kjh.mytravel.model.Post
  *
  * Description:
  */
+
+// todo : Extension 종류가 많아질 경우, ViewExtension, CollectionExtension 등 File 분리 필요.
 
 fun Context.statusBarHeight(): Int {
     val resourceId = resources.getIdentifier("status_bar_height", "dimen", "android")
@@ -38,6 +45,16 @@ fun Int.dpToPx(displayMetrics: DisplayMetrics): Int = (this * displayMetrics.den
 
 fun String.isValidPattern(): Boolean =
     Patterns.EMAIL_ADDRESS.matcher(this).matches()
+
+fun View.onThrottleClick(action: (v: View) -> Unit) {
+    val listener = View.OnClickListener { action(it) }
+    setOnClickListener(OnThrottleClickListener(listener))
+}
+
+fun Toolbar.onThrottleMenuItemClick(action: (MenuItem) -> Unit) {
+    val menuClickListener = OnThrottleMenuItemClickListener(action = { action(it) })
+    setOnMenuItemClickListener(menuClickListener)
+}
 
 
 

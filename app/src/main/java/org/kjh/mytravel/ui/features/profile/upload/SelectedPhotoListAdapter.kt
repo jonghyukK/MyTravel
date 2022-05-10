@@ -6,6 +6,7 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import org.kjh.mytravel.databinding.VhRectImageWithCloseBtnBinding
 import org.kjh.mytravel.model.MediaStoreImage
+import org.kjh.mytravel.utils.onThrottleClick
 
 /**
  * MyTravel
@@ -38,7 +39,7 @@ class SelectedPhotoViewHolder(
     fun bind(item: MediaStoreImage) {
         binding.item = item
 
-        binding.ivDeleteImg.setOnClickListener {
+        binding.ivDeleteImg.onThrottleClick {
             onDeleteImg(item)
         }
     }

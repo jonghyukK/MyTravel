@@ -2,6 +2,7 @@ package org.kjh.mytravel.ui.features.home.latest
 
 import androidx.recyclerview.widget.RecyclerView
 import org.kjh.mytravel.databinding.VhRectImageBinding
+import org.kjh.mytravel.utils.onThrottleClick
 
 /**
  * MyTravel
@@ -19,7 +20,7 @@ class LatestPostImageViewHolder(
     fun bind(imgResource: String) {
         binding.postImage = imgResource
 
-        itemView.setOnClickListener {
+        itemView.onThrottleClick {
             onClickImg()
         }
     }

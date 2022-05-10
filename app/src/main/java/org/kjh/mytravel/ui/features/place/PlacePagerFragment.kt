@@ -10,19 +10,18 @@ import androidx.navigation.fragment.navArgs
 import androidx.navigation.ui.setupWithNavController
 import com.google.android.material.appbar.AppBarLayout
 import com.google.android.material.tabs.TabLayoutMediator
+import com.orhanobut.logger.Logger
 import dagger.hilt.android.AndroidEntryPoint
 import org.kjh.mytravel.R
 import org.kjh.mytravel.databinding.FragmentPlacePagerBinding
 import org.kjh.mytravel.ui.features.profile.MyProfileViewModel
 import org.kjh.mytravel.ui.base.BaseFragment
+import org.kjh.mytravel.utils.onThrottleClick
+import org.kjh.mytravel.utils.onThrottleMenuItemClick
 import javax.inject.Inject
 
-interface PlaceDetailClickEvent {
-    fun onClickBookmark()
-}
-
 @AndroidEntryPoint
-class PlacePagerFragment : BaseFragment<FragmentPlacePagerBinding>(R.layout.fragment_place_pager), PlaceDetailClickEvent {
+class PlacePagerFragment : BaseFragment<FragmentPlacePagerBinding>(R.layout.fragment_place_pager) {
 
     @Inject
     lateinit var placeViewModelFactory: PlaceViewModel.PlaceNameAssistedFactory
@@ -33,12 +32,6 @@ class PlacePagerFragment : BaseFragment<FragmentPlacePagerBinding>(R.layout.frag
 
     private val args: PlacePagerFragmentArgs by navArgs()
     private val myProfileViewModel: MyProfileViewModel by activityViewModels()
-
-    override fun onClickBookmark() {
-        viewModel.uiState.value.placeItem?.let {
-            myProfileViewModel.updateBookmark(it.posts[0].postId, it.placeName)
-        }
-    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -55,13 +48,9 @@ class PlacePagerFragment : BaseFragment<FragmentPlacePagerBinding>(R.layout.frag
         binding.tbPlacePagerToolbar.apply {
             setupWithNavController(findNavController())
             inflateMenu(R.menu.menu_bookmark)
-            setOnMenuItemClickListener { menu ->
+            onThrottleMenuItemClick { menu ->
                 when (menu.itemId) {
-                    R.id.bookmark -> {
-                        onClickBookmark()
-                        true
-                    }
-                    else -> false
+                    R.id.bookmark -> onClickBookmark()
                 }
             }
         }
@@ -88,5 +77,11 @@ class PlacePagerFragment : BaseFragment<FragmentPlacePagerBinding>(R.layout.frag
         TabLayoutMediator(binding.tlTabLayout, binding.pager) { tab, position ->
             tab.text = tabTitles[position]
         }.attach()
+    }
+
+    private fun onClickBookmark() {
+        viewModel.uiState.value.placeItem?.let {
+            myProfileViewModel.updateBookmark(it.posts[0].postId, it.placeName)
+        }
     }
 }

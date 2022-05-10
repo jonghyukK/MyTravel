@@ -26,13 +26,9 @@ import org.kjh.mytravel.ui.features.profile.MyProfileViewModel
 import org.kjh.mytravel.ui.base.BaseFragment
 import javax.inject.Inject
 
-interface ProfileEditClickEvent {
-    fun onClickProfileImgEdit(v: View)
-}
-
 @AndroidEntryPoint
 class ProfileEditFragment
-    : BaseFragment<FragmentProfileEditBinding>(R.layout.fragment_profile_edit), ProfileEditClickEvent {
+    : BaseFragment<FragmentProfileEditBinding>(R.layout.fragment_profile_edit) {
 
     @Inject
     lateinit var profileEditViewModelFactory: ProfileEditViewModel.ProfileEditAssistedFactory
@@ -57,7 +53,7 @@ class ProfileEditFragment
         }
     }
 
-    override fun onClickProfileImgEdit(v: View) {
+    fun onClickProfileImgEdit() {
         cropImage.launch(
             options {
                 setGuidelines(CropImageView.Guidelines.ON)

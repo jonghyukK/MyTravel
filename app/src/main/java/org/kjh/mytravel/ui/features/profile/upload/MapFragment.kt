@@ -21,29 +21,15 @@ import org.kjh.mytravel.databinding.FragmentMapBinding
 import org.kjh.mytravel.model.MapQueryItem
 import org.kjh.mytravel.ui.base.BaseFragment
 
-interface MapClickEvent {
-    fun onClickOpenMapSearchFragment(v: View)
-    fun onClickApplySearchedPlace(item: MapQueryItem)
-}
-
 @AndroidEntryPoint
 class MapFragment
-    : BaseFragment<FragmentMapBinding>(R.layout.fragment_map), OnMapReadyCallback, MapClickEvent {
+    : BaseFragment<FragmentMapBinding>(R.layout.fragment_map), OnMapReadyCallback {
 
     private val uploadViewModel: UploadViewModel
             by navGraphViewModels(R.id.nav_nested_upload){ defaultViewModelProviderFactory }
 
     private val viewModel: MapViewModel by viewModels()
     private lateinit var naverMap: NaverMap
-
-    override fun onClickOpenMapSearchFragment(v: View) {
-        MapSearchFragment.newInstance().show(childFragmentManager, MapSearchFragment.TAG)
-    }
-
-    override fun onClickApplySearchedPlace(item: MapQueryItem) {
-        uploadViewModel.updatePlaceItem(item)
-        findNavController().popBackStack()
-    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -89,5 +75,14 @@ class MapFragment
 
     override fun onMapReady(p0: NaverMap) {
         naverMap = p0
+    }
+
+    fun onClickOpenMapSearchFragment() {
+        MapSearchFragment.newInstance().show(childFragmentManager, MapSearchFragment.TAG)
+    }
+
+    fun onClickApplySearchedPlace(item: MapQueryItem) {
+        uploadViewModel.updatePlaceItem(item)
+        findNavController().popBackStack()
     }
 }

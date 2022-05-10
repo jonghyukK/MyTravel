@@ -8,12 +8,8 @@ import org.kjh.mytravel.R
 import org.kjh.mytravel.databinding.FragmentPlaceDayLogBinding
 import org.kjh.mytravel.ui.base.BaseFragment
 
-interface PlaceDayLogClickEvent {
-    fun onClickUserInfo(email: String)
-}
-
 class PlaceDayLogFragment
-    : BaseFragment<FragmentPlaceDayLogBinding>(R.layout.fragment_place_day_log), PlaceDayLogClickEvent {
+    : BaseFragment<FragmentPlaceDayLogBinding>(R.layout.fragment_place_day_log) {
 
     private val viewModel: PlaceViewModel by viewModels({ requireParentFragment() })
 
@@ -21,7 +17,7 @@ class PlaceDayLogFragment
         PlaceDayLogListAdapter { item -> onClickUserInfo(item.email) }
     }
 
-    override fun onClickUserInfo(email: String) {
+    private fun onClickUserInfo(email: String) {
         navigateWithAction(NavGraphDirections.actionGlobalUserFragment(email))
     }
 

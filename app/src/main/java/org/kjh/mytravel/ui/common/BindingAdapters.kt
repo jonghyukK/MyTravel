@@ -2,6 +2,7 @@ package org.kjh.mytravel.ui.common
 
 import android.graphics.Color
 import android.net.Uri
+import android.view.View
 import android.widget.ImageView
 import android.widget.ProgressBar
 import android.widget.TextView
@@ -52,6 +53,13 @@ import org.kjh.mytravel.ui.features.profile.InputValidator.isValidatePw
  */
 
 object BindingAdapters {
+
+    @JvmStatic
+    @BindingAdapter("onThrottleClick")
+    fun View.onThrottleClick(action: () -> Unit) {
+        val listener = View.OnClickListener { action() }
+        setOnClickListener(OnThrottleClickListener(listener))
+    }
 
     @JvmStatic
     @BindingAdapter("bindHomeBannerItems", "errorCallback")

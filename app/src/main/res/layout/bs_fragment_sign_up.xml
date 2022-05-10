@@ -26,7 +26,7 @@
             android:layout_height="30dp"
             android:src="@drawable/ic_close"
             android:background="@null"
-            android:onClick="@{() -> fragment.dismiss()}"
+            onThrottleClick="@{fragment::dismiss}"
             app:layout_constraintTop_toTopOf="@+id/tv_signUpTitle"
             app:layout_constraintBottom_toBottomOf="@+id/tv_signUpTitle"
             app:layout_constraintStart_toStartOf="parent" />
@@ -131,7 +131,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             android:enabled="@{viewModel.enableSignUp}"
-            android:onClick="@{() -> viewModel.makeRequestSignUp()}"
+            onThrottleClick="@{viewModel::makeRequestSignUp}"
             android:text="@string/do_sign_up"/>
 
         <ProgressBar
