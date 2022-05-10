@@ -8,8 +8,6 @@ import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
 import androidx.fragment.app.Fragment
-import androidx.navigation.NavDirections
-import androidx.navigation.findNavController
 
 /**
  * MyTravel
@@ -39,10 +37,6 @@ abstract class BaseFragment<B: ViewDataBinding>(
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
-    }
-
-    fun navigateWithAction(action: NavDirections) {
-        _binding?.root?.findNavController()?.navigate(action)
     }
 
     fun showError(errorMsg: String) {

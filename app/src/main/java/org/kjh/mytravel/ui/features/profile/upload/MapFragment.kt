@@ -25,11 +25,10 @@ import org.kjh.mytravel.ui.base.BaseFragment
 class MapFragment
     : BaseFragment<FragmentMapBinding>(R.layout.fragment_map), OnMapReadyCallback {
 
+    private lateinit var naverMap: NaverMap
+    private val viewModel: MapViewModel by viewModels()
     private val uploadViewModel: UploadViewModel
             by navGraphViewModels(R.id.nav_nested_upload){ defaultViewModelProviderFactory }
-
-    private val viewModel: MapViewModel by viewModels()
-    private lateinit var naverMap: NaverMap
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)

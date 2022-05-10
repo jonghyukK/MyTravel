@@ -1,12 +1,16 @@
 package org.kjh.mytravel.ui.base
 
+import android.graphics.Color
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
+import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
+import org.kjh.mytravel.R
 
 /**
  * MyTravel
@@ -32,5 +36,23 @@ abstract class BaseBottomSheetDialogFragment<B: ViewDataBinding>(
         binding.lifecycleOwner = viewLifecycleOwner
 
         return binding.root
+    }
+
+    override fun onStart() {
+        super.onStart()
+
+        dialog?.let {
+            val bottomSheet = it.findViewById<View>(R.id.design_bottom_sheet)
+            bottomSheet.layoutParams.height = ViewGroup.LayoutParams.MATCH_PARENT
+        }
+
+        view?.post {
+            val parent = view!!.parent as View
+            val params = parent.layoutParams as CoordinatorLayout.LayoutParams
+            val behavior = params.behavior
+            val bottomSheetBehavior = behavior as BottomSheetBehavior<*>?
+            bottomSheetBehavior!!.peekHeight = view!!.measuredHeight
+            parent.setBackgroundColor(Color.TRANSPARENT)
+        }
     }
 }

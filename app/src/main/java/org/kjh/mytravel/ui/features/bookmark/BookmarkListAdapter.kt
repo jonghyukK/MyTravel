@@ -15,7 +15,7 @@ import org.kjh.mytravel.model.Bookmark
  * Description:
  */
 class BookmarkListAdapter(
-    private val onClickPost    : (Bookmark) -> Unit,
+    private val onClickPost    : (String) -> Unit,
     private val onClickBookmark: (Bookmark) -> Unit
 ): ListAdapter<Bookmark, BookmarkItemViewHolder>(Bookmark.diffCallback) {
 

@@ -25,13 +25,11 @@ class PlacePagerFragment : BaseFragment<FragmentPlacePagerBinding>(R.layout.frag
 
     @Inject
     lateinit var placeViewModelFactory: PlaceViewModel.PlaceNameAssistedFactory
-
+    private val args: PlacePagerFragmentArgs by navArgs()
+    private val myProfileViewModel: MyProfileViewModel by activityViewModels()
     private val viewModel by viewModels<PlaceViewModel> {
         PlaceViewModel.provideFactory(placeViewModelFactory, args.placeName)
     }
-
-    private val args: PlacePagerFragmentArgs by navArgs()
-    private val myProfileViewModel: MyProfileViewModel by activityViewModels()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -56,6 +54,12 @@ class PlacePagerFragment : BaseFragment<FragmentPlacePagerBinding>(R.layout.frag
         }
     }
 
+    private fun requestBookmarkStateUpdate() {
+        viewModel.uiState.value.placeItem?.let {
+            myProfileViewModel.updateBookmark(it.posts[0].postId, it.placeName)
+        }
+    }
+
     private fun initAppBarLayout() {
         var scrollRange = -1
         binding.abl.addOnOffsetChangedListener(AppBarLayout.OnOffsetChangedListener { barLayout, verticalOffset ->
@@ -77,11 +81,5 @@ class PlacePagerFragment : BaseFragment<FragmentPlacePagerBinding>(R.layout.frag
         TabLayoutMediator(binding.tlTabLayout, binding.pager) { tab, position ->
             tab.text = tabTitles[position]
         }.attach()
-    }
-
-    private fun requestBookmarkStateUpdate() {
-        viewModel.uiState.value.placeItem?.let {
-            myProfileViewModel.updateBookmark(it.posts[0].postId, it.placeName)
-        }
     }
 }

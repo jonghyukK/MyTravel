@@ -2,25 +2,20 @@ package org.kjh.mytravel.ui.features.profile
 
 import android.os.Bundle
 import android.view.View
-import androidx.activity.addCallback
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
-import androidx.navigation.NavGraph.Companion.findStartDestination
-import androidx.navigation.NavOptions
-import androidx.navigation.fragment.findNavController
-import com.orhanobut.logger.Logger
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
-import org.kjh.mytravel.NavGraphDirections
 import org.kjh.mytravel.R
 import org.kjh.mytravel.databinding.FragmentProfileBinding
 import org.kjh.mytravel.model.Post
 import org.kjh.mytravel.model.User
-import org.kjh.mytravel.ui.features.profile.MyProfileViewModel
 import org.kjh.mytravel.ui.base.BaseFragment
+import org.kjh.mytravel.utils.navigatePlaceDetailByPlaceName
+import org.kjh.mytravel.utils.navigateWithAction
 import org.kjh.mytravel.utils.onThrottleMenuItemClick
 
 
@@ -29,16 +24,11 @@ class ProfileFragment
     :BaseFragment<FragmentProfileBinding>(R.layout.fragment_profile) {
 
     private val myProfileViewModel: MyProfileViewModel by activityViewModels()
-
     private val myPostListAdapter by lazy {
         MyPostListAdapter(
-            onClickPost     = ::navigateToPlaceDetailPage,
+            onClickPost     = ::navigatePlaceDetailByPlaceName,
             onClickBookmark = ::requestBookmarkStateUpdate
         )
-    }
-
-    private fun navigateToPlaceDetailPage(item: Post) {
-        navigateWithAction(NavGraphDirections.actionGlobalPlacePagerFragment(item.placeName))
     }
 
     private fun requestBookmarkStateUpdate(item: Post) {

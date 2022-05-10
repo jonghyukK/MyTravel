@@ -32,9 +32,7 @@ class ProfileEditFragment
 
     @Inject
     lateinit var profileEditViewModelFactory: ProfileEditViewModel.ProfileEditAssistedFactory
-
     private val args: ProfileEditFragmentArgs by navArgs()
-
     private val myProfileViewModel: MyProfileViewModel by activityViewModels()
 
     private val viewModel: ProfileEditViewModel by viewModels {

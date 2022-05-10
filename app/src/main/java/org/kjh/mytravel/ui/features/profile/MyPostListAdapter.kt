@@ -14,7 +14,7 @@ import org.kjh.mytravel.model.Post
  * Description:
  */
 class MyPostListAdapter(
-    private val onClickPost    : (Post) -> Unit,
+    private val onClickPost    : (String) -> Unit,
     private val onClickBookmark: (Post) -> Unit
 ): ListAdapter<Post, MyPostItemViewHolder>(Post.diffCallback) {
 

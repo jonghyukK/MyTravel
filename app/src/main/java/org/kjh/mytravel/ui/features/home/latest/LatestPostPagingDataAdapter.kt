@@ -18,7 +18,7 @@ import org.kjh.mytravel.utils.onThrottleClick
  * Description:
  */
 class LatestPostPagingDataAdapter(
-    private val onClickPost: (Post) -> Unit
+    private val onClickPost: (String) -> Unit
 ): PagingDataAdapter<Post, LatestPostPagingDataAdapter.LatestPostViewHolder>(Post.diffCallback) {
     private val state = mutableMapOf<Int, Parcelable?>()
 
@@ -49,12 +49,12 @@ class LatestPostPagingDataAdapter(
             binding.post = item
 
             itemView.onThrottleClick {
-                onClickPost(item)
+                onClickPost(item.placeName)
             }
 
             binding.rvRecentPlaceList.apply {
                 adapter = LatestPostImageAdapter(item.imageUrl) {
-                    onClickPost(item)
+                    onClickPost(item.placeName)
                 }
                 setHasFixedSize(true)
                 pageSnapHelper = PagerSnapHelper()

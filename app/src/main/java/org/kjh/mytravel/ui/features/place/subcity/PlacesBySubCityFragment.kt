@@ -19,12 +19,12 @@ import com.naver.maps.map.overlay.Marker
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
-import org.kjh.mytravel.NavGraphDirections
 import org.kjh.mytravel.R
 import org.kjh.mytravel.databinding.FragmentPlacesBySubCityBinding
 import org.kjh.mytravel.model.Place
 import org.kjh.mytravel.ui.base.BaseFragment
 import org.kjh.mytravel.ui.common.UiState
+import org.kjh.mytravel.utils.navigatePlaceDetailByPlaceName
 import org.kjh.mytravel.utils.statusBarHeight
 import javax.inject.Inject
 
@@ -32,31 +32,19 @@ import javax.inject.Inject
 
 @AndroidEntryPoint
 class PlacesBySubCityFragment :
-    BaseFragment<FragmentPlacesBySubCityBinding>(R.layout.fragment_places_by_sub_city),
-    OnMapReadyCallback
-{
+    BaseFragment<FragmentPlacesBySubCityBinding>(R.layout.fragment_places_by_sub_city), OnMapReadyCallback {
+
     @Inject
     lateinit var subCityNameAssistedFactory: PlacesBySubCityViewModel.SubCityNameAssistedFactory
-
+    private lateinit var naverMap: NaverMap
+    private lateinit var bsBehavior: BottomSheetBehavior<View>
+    private val args: PlacesBySubCityFragmentArgs by navArgs()
     private val viewModel: PlacesBySubCityViewModel by viewModels {
         PlacesBySubCityViewModel.provideFactory(subCityNameAssistedFactory, args.cityName)
     }
 
-    private val args: PlacesBySubCityFragmentArgs by navArgs()
-    private var naverMap: NaverMap? = null
-    private lateinit var bsBehavior: BottomSheetBehavior<View>
-
     private val placeListByCityNameAdapter by lazy {
-        PlacesBySubCityListAdapter(onClickPlaceItem = ::navigateToPlaceDetailPage)
-    }
-
-    private fun navigateToPlaceDetailPage(placeName: String) {
-        navigateWithAction(NavGraphDirections.actionGlobalPlacePagerFragment(placeName))
-    }
-
-    fun scrollToTopWithBottomSheetCollapse() {
-        bsBehavior.state = STATE_COLLAPSED
-        binding.bsPlaceList.rvPlaceListBySubCityName.layoutManager?.scrollToPosition(0)
+        PlacesBySubCityListAdapter(onClickPlaceItem = ::navigatePlaceDetailByPlaceName)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -140,7 +128,7 @@ class PlacesBySubCityFragment :
             ), 9.0
         ).animate(CameraAnimation.None)
 
-        naverMap?.moveCamera(camera)
+        naverMap.moveCamera(camera)
 
         placeItems.forEach { place ->
             val marker = Marker()
@@ -164,14 +152,11 @@ class PlacesBySubCityFragment :
     }
 
     override fun onMapReady(p0: NaverMap) {
-        if (naverMap == null) {
-            naverMap = p0
-        }
+        naverMap = p0
     }
 
-    override fun onDestroyView() {
-        naverMap = null
-        super.onDestroyView()
+    fun scrollToTopWithBottomSheetCollapse() {
+        bsBehavior.state = STATE_COLLAPSED
+        binding.bsPlaceList.rvPlaceListBySubCityName.layoutManager?.scrollToPosition(0)
     }
-
 }

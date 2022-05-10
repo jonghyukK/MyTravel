@@ -18,7 +18,6 @@ import androidx.recyclerview.widget.RecyclerView
 class BannerItemDecoration : RecyclerView.ItemDecoration() {
 
     private val dp = Resources.getSystem().displayMetrics.density
-
     private val textPaint = Paint().apply {
         textSize = 18 * dp
         color    = Color.WHITE

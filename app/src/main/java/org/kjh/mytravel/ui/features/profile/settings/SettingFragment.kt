@@ -28,7 +28,14 @@ class SettingFragment : BaseFragment<FragmentSettingBinding>(R.layout.fragment_s
         binding.viewModel = viewModel
 
         initView()
+        observe()
+    }
 
+    private fun initView() {
+        binding.tbSettingToolbar.setupWithNavController(findNavController())
+    }
+
+    private fun observe() {
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.loginInfoPreferencesFlow.collect {
@@ -39,10 +46,6 @@ class SettingFragment : BaseFragment<FragmentSettingBinding>(R.layout.fragment_s
                 }
             }
         }
-    }
-
-    private fun initView() {
-        binding.tbSettingToolbar.setupWithNavController(findNavController())
     }
 
     private fun navigateHomeWhenSuccessLogOut() {

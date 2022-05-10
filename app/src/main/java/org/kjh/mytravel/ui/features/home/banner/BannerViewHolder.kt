@@ -15,14 +15,14 @@ import org.kjh.mytravel.utils.onThrottleClick
 
 class BannerViewHolder(
     private val binding      : VhHomeBannerItemBinding,
-    private val onClickBanner: (Banner) -> Unit
+    private val onClickBanner: (String) -> Unit
 ) : RecyclerView.ViewHolder(binding.root) {
 
     fun bind(item: Banner) {
         binding.bannerItem = item
 
         itemView.onThrottleClick {
-            onClickBanner(item)
+            onClickBanner(item.bannerTopic)
         }
     }
 }

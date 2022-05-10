@@ -1,13 +1,9 @@
 package org.kjh.mytravel.ui.features.profile.upload
 
-import android.graphics.Color
 import android.os.Bundle
 import android.view.View
-import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
-import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.fragment.app.viewModels
-import com.google.android.material.bottomsheet.BottomSheetBehavior
 import dagger.hilt.android.AndroidEntryPoint
 import org.kjh.mytravel.R
 import org.kjh.mytravel.databinding.BsFragmentMapSearchBinding
@@ -20,7 +16,6 @@ class MapSearchFragment
 
     private val viewModel   : MapSearchViewModel by viewModels()
     private val mapViewModel: MapViewModel by viewModels({ requireParentFragment() })
-
     private val mapSearchPlaceListAdapter by lazy {
         MapSearchPlaceListAdapter(onClickQueryItem = ::dismissAfterSetMapQueryItem)
     }
@@ -30,28 +25,10 @@ class MapSearchFragment
         dismiss()
     }
 
-    override fun onStart() {
-        super.onStart()
-
-        dialog?.let {
-            val bottomSheet = it.findViewById<View>(R.id.design_bottom_sheet)
-            bottomSheet.layoutParams.height = ViewGroup.LayoutParams.MATCH_PARENT
-        }
-
-        view?.post {
-            val parent = view!!.parent as View
-            val params = parent.layoutParams as CoordinatorLayout.LayoutParams
-            val behavior = params.behavior
-            val bottomSheetBehavior = behavior as BottomSheetBehavior<*>?
-            bottomSheetBehavior!!.peekHeight = view!!.measuredHeight
-            parent.setBackgroundColor(Color.TRANSPARENT)
-        }
-    }
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding.viewModel = viewModel
-        binding.fragment = this
+        binding.fragment  = this
 
         initView()
     }

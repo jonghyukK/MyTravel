@@ -14,7 +14,7 @@ import org.kjh.mytravel.utils.onThrottleClick
  */
 class MyPostItemViewHolder(
     val binding: VhProfilePostItemBinding,
-    private val onClickPost    : (Post) -> Unit,
+    private val onClickPost    : (String) -> Unit,
     private val onClickBookmark: (Post) -> Unit
 ): RecyclerView.ViewHolder(binding.root) {
 
@@ -22,7 +22,7 @@ class MyPostItemViewHolder(
         binding.postItem = item
 
         itemView.onThrottleClick {
-            onClickPost(item)
+            onClickPost(item.placeName)
         }
 
         binding.ivBookmark.onThrottleClick {

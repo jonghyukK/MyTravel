@@ -1,15 +1,11 @@
 package org.kjh.mytravel.ui.features.profile.signup
 
-import android.graphics.Color
 import android.os.Bundle
 import android.view.View
-import android.view.ViewGroup
-import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
-import com.google.android.material.bottomsheet.BottomSheetBehavior
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
@@ -32,33 +28,15 @@ class SignUpFragment
 
     private val viewModel: SignUpViewModel by viewModels()
 
-    companion object {
-        const val TAG = "SignUpFragment"
-    }
-
-    override fun onStart() {
-        super.onStart()
-
-        dialog?.let {
-            val bottomSheet = it.findViewById<View>(R.id.design_bottom_sheet)
-            bottomSheet.layoutParams.height = ViewGroup.LayoutParams.MATCH_PARENT
-        }
-
-        view?.post {
-            val parent = view!!.parent as View
-            val params = parent.layoutParams as CoordinatorLayout.LayoutParams
-            val behavior = params.behavior
-            val bottomSheetBehavior = behavior as BottomSheetBehavior<*>?
-            bottomSheetBehavior!!.peekHeight = view!!.measuredHeight
-            parent.setBackgroundColor(Color.TRANSPARENT)
-        }
-    }
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        binding.fragment = this
+        binding.fragment  = this
         binding.viewModel = viewModel
 
+        observe()
+    }
+
+    private fun observe() {
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.uiState.collect { state ->
@@ -76,9 +54,16 @@ class SignUpFragment
 
     override fun onDestroyView() {
         super.onDestroyView()
+        removeFocusChangeListener()
+    }
 
+    private fun removeFocusChangeListener() {
         binding.tieEmail.onFocusChangeListener    = null
         binding.tiePw.onFocusChangeListener       = null
         binding.tieNickName.onFocusChangeListener = null
+    }
+
+    companion object {
+        const val TAG = "SignUpFragment"
     }
 }

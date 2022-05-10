@@ -15,7 +15,7 @@ import org.kjh.mytravel.model.Banner
  */
 
 class BannerListAdapter(
-    private val onClickBanner: (Banner) -> Unit
+    private val onClickBanner: (String) -> Unit
 ) : ListAdapter<Banner, BannerViewHolder>(Banner.diffCallback) {
 
     init {

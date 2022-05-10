@@ -18,18 +18,19 @@ import org.kjh.mytravel.R
 import org.kjh.mytravel.databinding.FragmentSelectPhotoBinding
 import org.kjh.mytravel.model.MediaStoreImage
 import org.kjh.mytravel.ui.base.BaseFragment
+import org.kjh.mytravel.utils.navigateWithAction
 import org.kjh.mytravel.utils.onThrottleMenuItemClick
 
 @AndroidEntryPoint
 class SelectPhotoFragment
     : BaseFragment<FragmentSelectPhotoBinding>(R.layout.fragment_select_photo) {
 
+    private lateinit var tracker: SelectionTracker<Uri>
+    private val viewModel: SelectPhotoViewModel by viewModels()
+
     private val uploadViewModel: UploadViewModel by navGraphViewModels(R.id.nav_nested_upload) {
         defaultViewModelProviderFactory
     }
-
-    private lateinit var tracker: SelectionTracker<Uri>
-    private val viewModel: SelectPhotoViewModel by viewModels()
 
     private val mediaStoreImagesAdapter by lazy {
         MediaStoreImageListAdapter()
@@ -113,8 +114,7 @@ class SelectPhotoFragment
 
     private fun navigateToWritePostPage() {
         navigateWithAction(
-            SelectPhotoFragmentDirections.actionSelectPhotoFragmentToWritePostFragment()
-        )
+            SelectPhotoFragmentDirections.actionSelectPhotoFragmentToWritePostFragment())
     }
 
     private fun updateSelectedMediaStoreItems() {

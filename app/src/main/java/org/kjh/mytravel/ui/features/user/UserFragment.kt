@@ -13,12 +13,12 @@ import androidx.navigation.ui.setupWithNavController
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
-import org.kjh.mytravel.NavGraphDirections
 import org.kjh.mytravel.R
 import org.kjh.mytravel.databinding.FragmentUserBinding
 import org.kjh.mytravel.model.Post
-import org.kjh.mytravel.ui.features.profile.MyProfileViewModel
 import org.kjh.mytravel.ui.base.BaseFragment
+import org.kjh.mytravel.ui.features.profile.MyProfileViewModel
+import org.kjh.mytravel.utils.navigatePlaceDetailByPlaceName
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -27,23 +27,18 @@ class UserFragment
 
     @Inject
     lateinit var userViewModelFactory: UserViewModel.UserNameAssistedFactory
+    private val args: UserFragmentArgs by navArgs()
+    private val myProfileViewModel: MyProfileViewModel by activityViewModels()
 
     private val viewModel: UserViewModel by viewModels {
         UserViewModel.provideFactory(userViewModelFactory, args.userEmail)
     }
 
-    private val args: UserFragmentArgs by navArgs()
-    private val myProfileViewModel: MyProfileViewModel by activityViewModels()
-
     private val postSmallListAdapter by lazy {
         UserPostListAdapter(
-            onClickPost     = ::navigateToPlaceDetailPage,
+            onClickPost     = ::navigatePlaceDetailByPlaceName,
             onClickBookmark = ::requestBookmarkStateUpdate
         )
-    }
-
-    private fun navigateToPlaceDetailPage(post: Post) {
-        navigateWithAction(NavGraphDirections.actionGlobalPlacePagerFragment(post.placeName))
     }
 
     private fun requestBookmarkStateUpdate(post: Post) {
@@ -64,28 +59,32 @@ class UserFragment
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 launch {
-                    viewModel.uiState.collect { uiState ->
-                        uiState.isError?.let {
-                            showError(it)
-                            viewModel.shownErrorToast()
-                        }
-                    }
+                    viewModel.uiState.collect(::handleUiStateError)
                 }
 
                 launch {
-                    viewModel.followState.collect { followState ->
-                        when (followState) {
-                            is FollowState.Success -> {
-                                myProfileViewModel.updateMyProfile(followState.followItem.myProfile)
-                            }
-                            is FollowState.Error -> {
-                                followState.error?.let {
-                                    showError(it)
-                                    viewModel.initFollowState()
-                                }
-                            }
-                        }
-                    }
+                    viewModel.followState.collect(::handleFollowState)
+                }
+            }
+        }
+    }
+
+    private fun handleUiStateError(uiState: UserUiState) {
+        uiState.isError?.let {
+            showError(it)
+            viewModel.shownErrorToast()
+        }
+    }
+
+    private fun handleFollowState(followState: FollowState) {
+        when (followState) {
+            is FollowState.Success ->
+                myProfileViewModel.updateMyProfile(followState.followItem.myProfile)
+
+            is FollowState.Error -> {
+                followState.error?.let {
+                    showError(it)
+                    viewModel.initFollowState()
                 }
             }
         }

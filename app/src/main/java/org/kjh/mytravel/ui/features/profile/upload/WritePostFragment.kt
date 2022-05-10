@@ -16,11 +16,12 @@ import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import org.kjh.mytravel.R
 import org.kjh.mytravel.databinding.FragmentWritePostBinding
-import org.kjh.mytravel.ui.common.UiState
 import org.kjh.mytravel.model.User
-import org.kjh.mytravel.ui.features.profile.MyProfileViewModel
 import org.kjh.mytravel.ui.base.BaseFragment
+import org.kjh.mytravel.ui.common.UiState
 import org.kjh.mytravel.ui.features.home.HomeViewModel
+import org.kjh.mytravel.ui.features.profile.MyProfileViewModel
+import org.kjh.mytravel.utils.navigateWithAction
 import org.kjh.mytravel.utils.onThrottleMenuItemClick
 
 @AndroidEntryPoint
@@ -30,7 +31,6 @@ class WritePostFragment
     private val uploadViewModel   : UploadViewModel by navGraphViewModels(R.id.nav_nested_upload) { defaultViewModelProviderFactory }
     private val myProfileViewModel: MyProfileViewModel by activityViewModels()
     private val homeViewModel     : HomeViewModel by activityViewModels()
-
     private val writePostImagesAdapter by lazy {
         WritePostImagesAdapter()
     }

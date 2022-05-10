@@ -7,8 +7,13 @@ import android.util.TypedValue
 import android.view.MenuItem
 import android.view.View
 import androidx.appcompat.widget.Toolbar
+import androidx.fragment.app.Fragment
+import androidx.navigation.NavDirections
+import androidx.navigation.fragment.findNavController
+import org.kjh.mytravel.NavGraphDirections
 import org.kjh.mytravel.model.Bookmark
 import org.kjh.mytravel.model.Post
+import org.kjh.mytravel.ui.base.BaseFragment
 import org.kjh.mytravel.ui.common.OnThrottleClickListener
 import org.kjh.mytravel.ui.common.OnThrottleMenuItemClickListener
 
@@ -54,6 +59,15 @@ fun View.onThrottleClick(action: (v: View) -> Unit) {
 fun Toolbar.onThrottleMenuItemClick(action: (MenuItem) -> Unit) {
     val menuClickListener = OnThrottleMenuItemClickListener(action = { action(it) })
     setOnMenuItemClickListener(menuClickListener)
+}
+
+fun Fragment.navigatePlaceDetailByPlaceName(placeName: String) {
+    val action = NavGraphDirections.actionGlobalPlacePagerFragment(placeName)
+    navigateWithAction(action)
+}
+
+fun Fragment.navigateWithAction(action: NavDirections) {
+    findNavController().navigate(action)
 }
 
 

@@ -20,7 +20,7 @@ import org.kjh.mytravel.utils.onThrottleClick
  */
 
 class PlaceDayLogListAdapter(
-    private val onClickUser: (Post) -> Unit,
+    private val onClickUser: (String) -> Unit,
 ): ListAdapter<Post, PlaceDayLogListAdapter.PlaceDayLogViewHolder>(Post.diffCallback) {
     private val lmState = mutableMapOf<Int, Parcelable?>()
 
@@ -51,7 +51,7 @@ class PlaceDayLogListAdapter(
 
             binding.group.referencedIds.forEach { id ->
                 binding.root.findViewById<View>(id).onThrottleClick {
-                    onClickUser(item)
+                    onClickUser(item.email)
                 }
             }
 

@@ -14,14 +14,14 @@ import org.kjh.mytravel.model.PlaceWithRanking
  * Description:
  */
 class PlaceRankingListAdapter(
-    private val onClickRankingItem: (PlaceWithRanking) -> Unit
+    private val onClickRanking: (String) -> Unit
 ) : ListAdapter<PlaceWithRanking, PlaceRankingViewHolder>(PlaceWithRanking.diffCallback) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) =
         PlaceRankingViewHolder(
             VhPlaceRankingItemBinding.inflate(
                 LayoutInflater.from(parent.context), parent, false
-            ), onClickRankingItem
+            ), onClickRanking
         )
 
     override fun onBindViewHolder(holder: PlaceRankingViewHolder, position: Int) {

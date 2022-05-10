@@ -11,15 +11,16 @@ import androidx.recyclerview.widget.PagerSnapHelper
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
-import org.kjh.mytravel.NavGraphDirections
 import org.kjh.mytravel.R
 import org.kjh.mytravel.databinding.FragmentHomeBinding
 import org.kjh.mytravel.ui.base.BaseFragment
-import org.kjh.mytravel.ui.features.home.banner.BannerListAdapter
 import org.kjh.mytravel.ui.features.home.banner.BannerItemDecoration
+import org.kjh.mytravel.ui.features.home.banner.BannerListAdapter
 import org.kjh.mytravel.ui.features.home.latest.LatestPostPagingDataAdapter
 import org.kjh.mytravel.ui.features.home.ranking.PlaceRankingHorizontalWrapAdapter
 import org.kjh.mytravel.ui.features.home.ranking.PlaceRankingListAdapter
+import org.kjh.mytravel.utils.navigatePlaceDetailByPlaceName
+import org.kjh.mytravel.utils.navigateWithAction
 
 @AndroidEntryPoint
 class HomeFragment : BaseFragment<FragmentHomeBinding>(R.layout.fragment_home) {
@@ -27,18 +28,15 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(R.layout.fragment_home) {
     private val viewModel: HomeViewModel by activityViewModels()
 
     private val bannerListAdapter by lazy {
-        BannerListAdapter(
-            onClickBanner = { banner -> navigateToPlacesBySubCityPage(banner.bannerTopic) })
+        BannerListAdapter(onClickBanner = ::navigatePlacePageBySubCity)
     }
 
     private val placeRankingListAdapter by lazy {
-        PlaceRankingListAdapter(
-            onClickRankingItem = { ranking -> navigateToPlaceDetailPage(ranking.place.placeName) })
+        PlaceRankingListAdapter(onClickRanking = ::navigatePlaceDetailByPlaceName)
     }
 
     private val latestPostListAdapter by lazy {
-        LatestPostPagingDataAdapter(
-            onClickPost = { post -> navigateToPlaceDetailPage(post.placeName) })
+        LatestPostPagingDataAdapter(onClickPost = ::navigatePlaceDetailByPlaceName)
     }
 
     private val placeRankingHorizontalWrapAdapter by lazy {
@@ -49,12 +47,9 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(R.layout.fragment_home) {
         ConcatAdapter(placeRankingHorizontalWrapAdapter, latestPostListAdapter)
     }
 
-    private fun navigateToPlacesBySubCityPage(topic: String) {
-        navigateWithAction(HomeFragmentDirections.actionHomeFragmentToPlaceListByCityNameFragment(topic))
-    }
-
-    private fun navigateToPlaceDetailPage(placeName: String) {
-        navigateWithAction(NavGraphDirections.actionGlobalPlacePagerFragment(placeName))
+    private fun navigatePlacePageBySubCity(subCityName: String) {
+        navigateWithAction(
+            HomeFragmentDirections.actionHomeFragmentToPlaceListByCityNameFragment(subCityName))
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
