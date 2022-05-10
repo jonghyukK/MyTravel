@@ -58,7 +58,7 @@ class SelectPhotoFragment
             inflateMenu(R.menu.menu_next)
             onThrottleMenuItemClick { menu ->
                 when (menu.itemId) {
-                    R.id.next -> onClickNext()
+                    R.id.next -> navigateToWritePostPage()
                 }
             }
         }
@@ -78,7 +78,7 @@ class SelectPhotoFragment
     }
 
     private fun initTracker(savedInstanceState: Bundle?) {
-        tracker = MediaStoreSelectionTracker(binding.rvLocalImages) { onClickMediaStoreItem() }
+        tracker = MediaStoreSelectionTracker(binding.rvLocalImages) { updateSelectedMediaStoreItems() }
             .getTracker()
 
         mediaStoreImagesAdapter.tracker = tracker
@@ -111,13 +111,13 @@ class SelectPhotoFragment
         }
     }
 
-    private fun onClickNext() {
+    private fun navigateToWritePostPage() {
         navigateWithAction(
             SelectPhotoFragmentDirections.actionSelectPhotoFragmentToWritePostFragment()
         )
     }
 
-    private fun onClickMediaStoreItem() {
+    private fun updateSelectedMediaStoreItems() {
         val selectedList = mutableListOf<MediaStoreImage>()
 
         for (uri in tracker.selection) {

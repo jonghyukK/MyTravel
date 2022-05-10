@@ -53,15 +53,6 @@ class ProfileEditFragment
         }
     }
 
-    fun onClickProfileImgEdit() {
-        cropImage.launch(
-            options {
-                setGuidelines(CropImageView.Guidelines.ON)
-                setCropShape(CropImageView.CropShape.OVAL)
-            }
-        )
-    }
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding.viewModel = viewModel
@@ -96,5 +87,14 @@ class ProfileEditFragment
     private fun handleErrorCase(errorMsg: Int) {
         Toast.makeText(requireContext(), errorMsg, Toast.LENGTH_SHORT).show()
         viewModel.shownErrorToast()
+    }
+
+    fun startCropImageActivity() {
+        cropImage.launch(
+            options {
+                setGuidelines(CropImageView.Guidelines.ON)
+                setCropShape(CropImageView.CropShape.OVAL)
+            }
+        )
     }
 }

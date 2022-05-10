@@ -32,33 +32,17 @@ class ProfileFragment
 
     private val myPostListAdapter by lazy {
         MyPostListAdapter(
-            onClickPost     = { post -> onClickPost(post)},
-            onClickBookmark = { post -> onClickBookmark(post)}
+            onClickPost     = ::navigateToPlaceDetailPage,
+            onClickBookmark = ::requestBookmarkStateUpdate
         )
     }
 
-    private fun onClickPost(item: Post) {
+    private fun navigateToPlaceDetailPage(item: Post) {
         navigateWithAction(NavGraphDirections.actionGlobalPlacePagerFragment(item.placeName))
     }
 
-    private fun onClickBookmark(item: Post) {
+    private fun requestBookmarkStateUpdate(item: Post) {
         myProfileViewModel.updateBookmark(item.postId, item.placeName)
-    }
-
-    fun onClickProfileEdit(myProfileItem: User) {
-        navigateWithAction(
-            ProfileFragmentDirections.actionProfileFragmentToProfileEditFragment(
-                myProfileItem.profileImg, myProfileItem.nickName, myProfileItem.introduce
-            )
-        )
-    }
-
-    private fun onClickWritePost() {
-        navigateWithAction(ProfileFragmentDirections.actionProfileFragmentToSelectPhotoFragment())
-    }
-
-    private fun onClickSettings() {
-        navigateWithAction(ProfileFragmentDirections.actionProfileFragmentToSettingFragment())
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -75,8 +59,8 @@ class ProfileFragment
             inflateMenu(R.menu.menu_profile)
             onThrottleMenuItemClick {
                 when (it.itemId) {
-                    R.id.write_post -> onClickWritePost()
-                    R.id.settings   -> onClickSettings()
+                    R.id.write_post -> navigateToSelectPhotoPage()
+                    R.id.settings   -> navigateToSettingPage()
                 }
             }
         }
@@ -102,5 +86,21 @@ class ProfileFragment
 
     private fun navigateToLoginPageWhenNotLogin() {
         navigateWithAction(ProfileFragmentDirections.actionProfileFragmentToNotLoginFragment())
+    }
+
+    fun navigateToProfileEditPage(myProfileItem: User) {
+        navigateWithAction(
+            ProfileFragmentDirections.actionProfileFragmentToProfileEditFragment(
+                myProfileItem.profileImg, myProfileItem.nickName, myProfileItem.introduce
+            )
+        )
+    }
+
+    private fun navigateToSelectPhotoPage() {
+        navigateWithAction(ProfileFragmentDirections.actionProfileFragmentToSelectPhotoFragment())
+    }
+
+    private fun navigateToSettingPage() {
+        navigateWithAction(ProfileFragmentDirections.actionProfileFragmentToSettingFragment())
     }
 }

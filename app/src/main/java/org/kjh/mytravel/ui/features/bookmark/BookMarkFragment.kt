@@ -23,16 +23,16 @@ class BookMarkFragment
 
     private val bookMarkListAdapter by lazy {
         BookmarkListAdapter(
-            onClickItem     = { item -> onClickPostItem(item)},
-            onClickBookmark = { item -> onClickBookmark(item)}
+            onClickPost     = ::navigateToPlaceDetailPage,
+            onClickBookmark = ::requestBookmarkStateUpdate
         )
     }
 
-    private fun onClickPostItem(item: Bookmark) {
+    private fun navigateToPlaceDetailPage(item: Bookmark) {
         navigateWithAction(NavGraphDirections.actionGlobalPlacePagerFragment(item.placeName))
     }
 
-    private fun onClickBookmark(item: Bookmark) {
+    private fun requestBookmarkStateUpdate(item: Bookmark) {
         myProfileViewModel.updateBookmark(item.postId, item.placeName)
     }
 

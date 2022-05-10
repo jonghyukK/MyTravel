@@ -49,11 +49,11 @@ class NotLoginFragment
         navController.navigate(startDestination, null, navOptions)
     }
 
-    fun onClickSignUp() {
+    fun showSignUpPage() {
         SignUpFragment().show(childFragmentManager, SignUpFragment.TAG)
     }
 
-    fun onClickLogin() {
+    fun showLoginPage() {
         LoginFragment().show(childFragmentManager, LoginFragment.TAG)
     }
 }

@@ -50,7 +50,7 @@ class WritePostFragment
             inflateMenu(R.menu.menu_upload)
             onThrottleMenuItemClick { menu ->
                 when (menu.itemId) {
-                    R.id.upload -> onClickUpload()
+                    R.id.upload -> requestPostUpload()
                 }
             }
         }
@@ -91,11 +91,11 @@ class WritePostFragment
         navigateWithAction(WritePostFragmentDirections.actionGlobalProfileFragment())
     }
 
-    fun onClickAddLocation() {
+    fun navigateToMapPage() {
         navigateWithAction(WritePostFragmentDirections.actionWritePostFragmentToMapFragment())
     }
 
-    private fun onClickUpload() {
+    private fun requestPostUpload() {
         uploadViewModel.makeUploadPost()
     }
 }

@@ -50,7 +50,7 @@ class PlacePagerFragment : BaseFragment<FragmentPlacePagerBinding>(R.layout.frag
             inflateMenu(R.menu.menu_bookmark)
             onThrottleMenuItemClick { menu ->
                 when (menu.itemId) {
-                    R.id.bookmark -> onClickBookmark()
+                    R.id.bookmark -> requestBookmarkStateUpdate()
                 }
             }
         }
@@ -79,7 +79,7 @@ class PlacePagerFragment : BaseFragment<FragmentPlacePagerBinding>(R.layout.frag
         }.attach()
     }
 
-    private fun onClickBookmark() {
+    private fun requestBookmarkStateUpdate() {
         viewModel.uiState.value.placeItem?.let {
             myProfileViewModel.updateBookmark(it.posts[0].postId, it.placeName)
         }

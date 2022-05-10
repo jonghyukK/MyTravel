@@ -77,11 +77,11 @@ class MapFragment
         naverMap = p0
     }
 
-    fun onClickOpenMapSearchFragment() {
+    fun showMapSearchPage() {
         MapSearchFragment.newInstance().show(childFragmentManager, MapSearchFragment.TAG)
     }
 
-    fun onClickApplySearchedPlace(item: MapQueryItem) {
+    fun popBackStackAfterUpdateMapQuery(item: MapQueryItem) {
         uploadViewModel.updatePlaceItem(item)
         findNavController().popBackStack()
     }

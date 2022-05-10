@@ -16,6 +16,7 @@ import kotlinx.coroutines.launch
 import org.kjh.mytravel.NavGraphDirections
 import org.kjh.mytravel.R
 import org.kjh.mytravel.databinding.FragmentUserBinding
+import org.kjh.mytravel.model.Post
 import org.kjh.mytravel.ui.features.profile.MyProfileViewModel
 import org.kjh.mytravel.ui.base.BaseFragment
 import javax.inject.Inject
@@ -36,21 +37,17 @@ class UserFragment
 
     private val postSmallListAdapter by lazy {
         UserPostListAdapter(
-            onClickPost     = { item -> onClickPostItem(item.placeName)},
-            onClickBookmark = { item -> onClickBookmark(item.postId, item.placeName)}
+            onClickPost     = ::navigateToPlaceDetailPage,
+            onClickBookmark = ::requestBookmarkStateUpdate
         )
     }
 
-    private fun onClickPostItem(placeName: String) {
-        navigateWithAction(NavGraphDirections.actionGlobalPlacePagerFragment(placeName))
+    private fun navigateToPlaceDetailPage(post: Post) {
+        navigateWithAction(NavGraphDirections.actionGlobalPlacePagerFragment(post.placeName))
     }
 
-    private fun onClickBookmark(postId: Int, placeName: String) {
-        myProfileViewModel.updateBookmark(postId, placeName)
-    }
-
-    fun onClickFollowOrNot() {
-        viewModel.makeRequestFollow(targetEmail = args.userEmail)
+    private fun requestBookmarkStateUpdate(post: Post) {
+        myProfileViewModel.updateBookmark(post.postId, post.placeName)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -102,5 +99,9 @@ class UserFragment
             setHasFixedSize(true)
             addItemDecoration(UserPostsGridItemDecoration(requireContext()))
         }
+    }
+
+    fun requestUpdateFollowStateWithUser() {
+        viewModel.makeRequestFollow(targetEmail = args.userEmail)
     }
 }

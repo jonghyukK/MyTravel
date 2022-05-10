@@ -170,7 +170,7 @@
                         android:layout_marginBottom="15dp"
                         android:textSize="13sp"
                         android:text="@{viewModel.uiState.userItem.following ? @string/following : @string/follow}"
-                        onThrottleClick="@{fragment::onClickFollowOrNot}"
+                        onThrottleClick="@{fragment::requestUpdateFollowStateWithUser}"
                         app:layout_constraintTop_toBottomOf="@+id/tv_userIntroduce"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"

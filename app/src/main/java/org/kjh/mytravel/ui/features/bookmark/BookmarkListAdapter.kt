@@ -15,7 +15,7 @@ import org.kjh.mytravel.model.Bookmark
  * Description:
  */
 class BookmarkListAdapter(
-    private val onClickItem    : (Bookmark) -> Unit,
+    private val onClickPost    : (Bookmark) -> Unit,
     private val onClickBookmark: (Bookmark) -> Unit
 ): ListAdapter<Bookmark, BookmarkItemViewHolder>(Bookmark.diffCallback) {
 
@@ -23,7 +23,7 @@ class BookmarkListAdapter(
         BookmarkItemViewHolder(
             VhBookmarkPostItemBinding.inflate(
                 LayoutInflater.from(parent.context), parent, false
-            ), onClickItem, onClickBookmark
+            ), onClickPost, onClickBookmark
         )
 
     override fun onBindViewHolder(holder: BookmarkItemViewHolder, position: Int) {

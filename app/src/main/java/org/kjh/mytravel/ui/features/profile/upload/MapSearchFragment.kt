@@ -22,14 +22,10 @@ class MapSearchFragment
     private val mapViewModel: MapViewModel by viewModels({ requireParentFragment() })
 
     private val mapSearchPlaceListAdapter by lazy {
-        MapSearchPlaceListAdapter { item -> onClickQueryItem(item) }
+        MapSearchPlaceListAdapter(onClickQueryItem = ::dismissAfterSetMapQueryItem)
     }
 
-    private fun onClickSearch() {
-        viewModel.makeSearchPlace()
-    }
-
-    private fun onClickQueryItem(item: MapQueryItem) {
+    private fun dismissAfterSetMapQueryItem(item: MapQueryItem) {
         mapViewModel.setTempPlaceItem(item)
         dismiss()
     }
@@ -68,7 +64,7 @@ class MapSearchFragment
 
         binding.etSearch.setOnEditorActionListener { _, actionId, _ ->
             if (actionId == EditorInfo.IME_ACTION_SEARCH)
-                onClickSearch()
+                viewModel.makeSearchPlace()
             false
         }
     }

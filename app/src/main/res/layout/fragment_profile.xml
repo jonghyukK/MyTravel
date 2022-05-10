@@ -166,7 +166,7 @@
                         android:layout_marginBottom="15dp"
                         android:text="@string/edit_profile"
                         android:textSize="13sp"
-                        onThrottleClick="@{() -> fragment.onClickProfileEdit(myProfileViewModel.myProfileState.myProfileItem)}"
+                        onThrottleClick="@{() -> fragment.navigateToProfileEditPage(myProfileViewModel.myProfileState.myProfileItem)}"
                         app:layout_constraintTop_toBottomOf="@+id/tv_userIntroduce"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"

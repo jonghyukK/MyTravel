@@ -16,14 +16,14 @@ import org.kjh.mytravel.utils.onThrottleClick
  * Description:
  */
 class MapSearchPlaceListAdapter(
-    private val onClickPlace: (MapQueryItem) -> Unit
+    private val onClickQueryItem: (MapQueryItem) -> Unit
 ) : ListAdapter<MapQueryItem, MapSearchPlaceListAdapter.MapSearchPlaceViewHolder>(MapQueryItem.diffCallback) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) =
         MapSearchPlaceViewHolder(
             VhBsSearchPlaceBinding.inflate(
                 LayoutInflater.from(parent.context), parent, false
-            ), onClickPlace
+            ), onClickQueryItem
         )
 
     override fun onBindViewHolder(holder: MapSearchPlaceViewHolder, position: Int) {
@@ -31,15 +31,15 @@ class MapSearchPlaceListAdapter(
     }
 
     class MapSearchPlaceViewHolder(
-        val binding     : VhBsSearchPlaceBinding,
-        val onClickPlace: (MapQueryItem) -> Unit
+        val binding         : VhBsSearchPlaceBinding,
+        val onClickQueryItem: (MapQueryItem) -> Unit
     ): RecyclerView.ViewHolder(binding.root) {
 
         fun bind(item: MapQueryItem) {
             binding.mapQueryItem = item
 
             itemView.onThrottleClick {
-                onClickPlace(item)
+                onClickQueryItem(item)
             }
         }
     }

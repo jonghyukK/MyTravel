@@ -14,10 +14,11 @@ class PlaceDayLogFragment
     private val viewModel: PlaceViewModel by viewModels({ requireParentFragment() })
 
     private val placeDayLogListAdapter by lazy {
-        PlaceDayLogListAdapter { item -> onClickUserInfo(item.email) }
+        PlaceDayLogListAdapter(
+            onClickUser = { user -> navigateToUserPage(user.email) })
     }
 
-    private fun onClickUserInfo(email: String) {
+    private fun navigateToUserPage(email: String) {
         navigateWithAction(NavGraphDirections.actionGlobalUserFragment(email))
     }
 

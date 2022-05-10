@@ -13,15 +13,15 @@ import org.kjh.mytravel.utils.onThrottleClick
  * Description:
  */
 class PlaceRankingViewHolder(
-    val binding: VhPlaceRankingItemBinding,
-    val onClickPlaceItem: (PlaceWithRanking) -> Unit
+    val binding           : VhPlaceRankingItemBinding,
+    val onClickRankingItem: (PlaceWithRanking) -> Unit
 ): RecyclerView.ViewHolder(binding.root) {
 
     fun bind(item: PlaceWithRanking) {
         binding.placeRanking = item
 
         itemView.onThrottleClick {
-            onClickPlaceItem(item)
+            onClickRankingItem(item)
         }
     }
 }

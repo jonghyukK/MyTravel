@@ -47,14 +47,14 @@ class PlacesBySubCityFragment :
     private lateinit var bsBehavior: BottomSheetBehavior<View>
 
     private val placeListByCityNameAdapter by lazy {
-        PlacesBySubCityListAdapter { placeName -> onClickPlaceItem(placeName) }
+        PlacesBySubCityListAdapter(onClickPlaceItem = ::navigateToPlaceDetailPage)
     }
 
-    private fun onClickPlaceItem(placeName: String) {
+    private fun navigateToPlaceDetailPage(placeName: String) {
         navigateWithAction(NavGraphDirections.actionGlobalPlacePagerFragment(placeName))
     }
 
-    fun onClickShowMap() {
+    fun scrollToTopWithBottomSheetCollapse() {
         bsBehavior.state = STATE_COLLAPSED
         binding.bsPlaceList.rvPlaceListBySubCityName.layoutManager?.scrollToPosition(0)
     }

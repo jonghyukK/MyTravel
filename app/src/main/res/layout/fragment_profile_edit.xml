@@ -44,7 +44,7 @@
             android:text="@string/edit"
             android:textColor="@color/white"
             android:gravity="center"
-            onThrottleClick="@{fragment::onClickProfileImgEdit}"
+            onThrottleClick="@{fragment::startCropImageActivity}"
             app:layout_constraintTop_toBottomOf="@+id/siv_profileImg"
             app:layout_constraintStart_toStartOf="@+id/siv_profileImg"
             app:layout_constraintEnd_toEndOf="@+id/siv_profileImg"/>
