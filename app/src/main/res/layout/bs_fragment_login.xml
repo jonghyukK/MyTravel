@@ -94,7 +94,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintBottom_toTopOf="@+id/btn_login"
-            app:textWithVisible="@{viewModel.uiState.loginError}"
+            app:textWithVisible="@{viewModel.uiState.apiResultError}"
             android:layout_marginTop="15dp"
             android:textSize="13sp"
             android:textColor="#ff0000"/>
@@ -108,7 +108,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             android:enabled="@{viewModel.enableLogin}"
-            onThrottleClick="@{viewModel::makeRequestLogin}"
+            onThrottleClick="@{viewModel::requestLogin}"
             android:text="@string/login"/>
 
         <ProgressBar

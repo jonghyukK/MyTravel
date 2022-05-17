@@ -105,7 +105,7 @@
                 android:layout_height="wrap_content"
                 android:inputType="text"
                 android:text="@={viewModel.nickName}"
-                android:tag="nickName"
+                android:tag="nickname"
                 app:onFocusLost="@{tilNickName}"
                 android:hint="@string/nickName"/>
         </com.google.android.material.textfield.TextInputLayout>
@@ -117,7 +117,7 @@
             android:layout_marginTop="20dp"
             android:textSize="13sp"
             android:textColor="#ff0000"
-            app:textWithVisible="@{viewModel.uiState.networkError}"
+            app:textWithVisible="@{viewModel.uiState.apiResultError}"
             app:layout_constraintTop_toBottomOf="@+id/til_nickName"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"/>
@@ -131,7 +131,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             android:enabled="@{viewModel.enableSignUp}"
-            onThrottleClick="@{viewModel::makeRequestSignUp}"
+            onThrottleClick="@{viewModel::requestSignUp}"
             android:text="@string/do_sign_up"/>
 
         <ProgressBar
