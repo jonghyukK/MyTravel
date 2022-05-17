@@ -2,7 +2,6 @@ package org.kjh.mytravel.ui
 
 import android.os.Bundle
 import android.widget.Toast
-import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
 import androidx.databinding.DataBindingUtil
@@ -17,7 +16,7 @@ import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import org.kjh.mytravel.R
 import org.kjh.mytravel.databinding.ActivityMainBinding
-import org.kjh.mytravel.ui.features.profile.MyProfileViewModel
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
@@ -25,17 +24,17 @@ class MainActivity : AppCompatActivity() {
     private lateinit var binding       : ActivityMainBinding
     private lateinit var navController : NavController
 
-    private val myProfileViewModel: MyProfileViewModel by viewModels()
+    @Inject
+    lateinit var globalErrorHandler: GlobalErrorHandler
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(this, R.layout.activity_main)
 
         initBottomNavViewWithNavigation()
-        sharedViewModelObserve()
+        observeGlobalErrorEvent()
     }
 
-    // Set Up NavController with BottomNavigationView.
     private fun initBottomNavViewWithNavigation() {
         val navHostFragment = supportFragmentManager.findFragmentById(
             R.id.nav_host_fragment
@@ -52,12 +51,12 @@ class MainActivity : AppCompatActivity() {
         binding.bnvBottomNav.setupWithNavController(navController)
     }
 
-    // Collecting Shared API Error. (추후 각 화면별 에러 처리 필요).
-    private fun sharedViewModelObserve() {
+    // (추후 각 화면별 에러 처리 필요).
+    private fun observeGlobalErrorEvent() {
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
-                myProfileViewModel.isError.collect {
-                    Toast.makeText(this@MainActivity, it.res, Toast.LENGTH_SHORT).show()
+                globalErrorHandler.errorEvent.collect {
+                    Toast.makeText(this@MainActivity, it, Toast.LENGTH_SHORT).show()
                 }
             }
         }
