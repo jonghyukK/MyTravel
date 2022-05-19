@@ -56,10 +56,3 @@ fun PostEntity.mapToPresenter() =
         isBookmarked,
         imageUrl
     )
-
-fun List<Post>.updateBookmarkStateWithPosts(bookmarks: List<Bookmark>) =
-    this.map { post ->
-        post.copy(
-            isBookmarked = bookmarks.find { it.placeName == post.placeName } != null
-        )
-    }

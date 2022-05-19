@@ -13,7 +13,6 @@ import androidx.navigation.fragment.findNavController
 import org.kjh.mytravel.NavGraphDirections
 import org.kjh.mytravel.model.Bookmark
 import org.kjh.mytravel.model.Post
-import org.kjh.mytravel.ui.base.BaseFragment
 import org.kjh.mytravel.ui.common.OnThrottleClickListener
 import org.kjh.mytravel.ui.common.OnThrottleMenuItemClickListener
 
@@ -61,14 +60,26 @@ fun Toolbar.onThrottleMenuItemClick(action: (MenuItem) -> Unit) {
     setOnMenuItemClickListener(menuClickListener)
 }
 
-fun Fragment.navigatePlaceDetailByPlaceName(placeName: String) {
+fun Fragment.navigateToPlaceDetail(placeName: String) {
     val action = NavGraphDirections.actionGlobalPlacePagerFragment(placeName)
-    navigateWithAction(action)
+    navigateTo(action)
 }
 
-fun Fragment.navigateWithAction(action: NavDirections) {
+fun Fragment.navigateTo(action: NavDirections) {
     findNavController().navigate(action)
 }
+
+inline fun <reified T> List<*>?.avoidUncheckedWarnAndCast(): List<T> =
+    this?.filterIsInstance<T>() ?: emptyList()
+
+fun List<Post>.updateBookmarkStateWithPosts(bookmarks: List<Bookmark>) = this.map { post ->
+    post.copy(
+        isBookmarked = bookmarks.containPlace(post.placeName)
+    )
+}
+
+fun List<Bookmark>.containPlace(placeName: String) =
+    this.find { it.placeName == placeName } != null
 
 
 

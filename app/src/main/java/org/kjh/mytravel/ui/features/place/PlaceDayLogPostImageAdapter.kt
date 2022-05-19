@@ -4,6 +4,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import org.kjh.mytravel.databinding.VhRectImageBinding
+import org.kjh.mytravel.utils.onThrottleClick
 
 /**
  * MyTravel
@@ -16,7 +17,21 @@ import org.kjh.mytravel.databinding.VhRectImageBinding
 class PlaceDayLogPostImageAdapter(
     private val images: List<String>,
     private val onClickImg: () -> Unit,
-): RecyclerView.Adapter<PlaceDayLogPostImageViewHolder>() {
+): RecyclerView.Adapter<PlaceDayLogPostImageAdapter.PlaceDayLogPostImageViewHolder>() {
+
+    class PlaceDayLogPostImageViewHolder(
+        val binding   : VhRectImageBinding,
+        val onClickImg: () -> Unit
+    ): RecyclerView.ViewHolder(binding.root) {
+
+        fun bind(imgResource: String) {
+            binding.postImage = imgResource
+
+            itemView.onThrottleClick {
+                onClickImg()
+            }
+        }
+    }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) =
         PlaceDayLogPostImageViewHolder(

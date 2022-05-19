@@ -7,28 +7,30 @@ import org.kjh.mytravel.NavGraphDirections
 import org.kjh.mytravel.R
 import org.kjh.mytravel.databinding.FragmentPlaceDayLogBinding
 import org.kjh.mytravel.ui.base.BaseFragment
-import org.kjh.mytravel.utils.navigateWithAction
+import org.kjh.mytravel.utils.navigateTo
 
 class PlaceDayLogFragment
     : BaseFragment<FragmentPlaceDayLogBinding>(R.layout.fragment_place_day_log) {
 
     private val viewModel: PlaceViewModel by viewModels({ requireParentFragment() })
     private val placeDayLogListAdapter by lazy {
-        PlaceDayLogListAdapter(onClickUser = ::navigateUserByEmail)
+        PlaceDayLogListAdapter(
+            onClickUser = { post -> navigateUserByEmail(post.email) }
+        )
     }
 
     private fun navigateUserByEmail(email: String) {
-        navigateWithAction(NavGraphDirections.actionGlobalUserFragment(email))
+        navigateTo(NavGraphDirections.actionGlobalUserFragment(email))
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding.viewModel = viewModel
 
-        initView()
+        initDayLogRecyclerView()
     }
 
-    private fun initView() {
+    private fun initDayLogRecyclerView() {
         binding.rvPlaceDayLogList.apply {
             setHasFixedSize(true)
             adapter = placeDayLogListAdapter

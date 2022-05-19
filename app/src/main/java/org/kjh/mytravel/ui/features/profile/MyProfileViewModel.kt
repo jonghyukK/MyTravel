@@ -2,16 +2,24 @@ package org.kjh.mytravel.ui.features.profile
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.orhanobut.logger.Logger
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import org.kjh.domain.entity.ApiResult
 import org.kjh.domain.repository.LoginPreferencesRepository
 import org.kjh.domain.usecase.GetLoginPreferenceUseCase
 import org.kjh.domain.usecase.GetUserUseCase
 import org.kjh.domain.usecase.UpdateBookmarkUseCase
-import org.kjh.mytravel.model.*
-import org.kjh.mytravel.ui.common.ErrorMsg
+import org.kjh.mytravel.model.Bookmark
+import org.kjh.mytravel.model.Post
+import org.kjh.mytravel.model.User
+import org.kjh.mytravel.model.mapToPresenter
+import org.kjh.mytravel.ui.GlobalErrorHandler
+import org.kjh.mytravel.utils.updateBookmarkStateWithPosts
 import javax.inject.Inject
 
 /**
@@ -22,32 +30,29 @@ import javax.inject.Inject
  * Description:
  */
 
-
-data class MyProfileUiState(
-    val myProfileItem   : User? = null,
-    val myPostItems     : List<Post> = emptyList(),
-    val myBookmarkItems : List<Bookmark> = emptyList()
-)
-
 @HiltViewModel
 class MyProfileViewModel @Inject constructor(
     private val getLoginPreferenceUseCase : GetLoginPreferenceUseCase,
     private val loginPreferencesRepository: LoginPreferencesRepository,
     private val getUserUseCase            : GetUserUseCase,
     private val updateBookmarkUseCase     : UpdateBookmarkUseCase,
+    private val globalErrorHandler        : GlobalErrorHandler
 ): ViewModel() {
+
+    data class MyProfileState(
+        val myProfileItem   : User? = null,
+        val myPostItems     : List<Post> = emptyList(),
+        val myBookmarkItems : List<Bookmark> = emptyList()
+    )
 
     private val _isLoading = MutableStateFlow(false)
     val isLoading = _isLoading.asStateFlow()
 
-    private val _myProfileState = MutableStateFlow(MyProfileUiState())
+    private val _myProfileState = MutableStateFlow(MyProfileState())
     val myProfileState = _myProfileState.asStateFlow()
 
     private val _isLoggedIn = MutableStateFlow(true)
     val isLoggedIn = _isLoggedIn.asStateFlow()
-
-    private val _isError: MutableSharedFlow<ErrorMsg> = MutableSharedFlow()
-    val isError = _isError.asSharedFlow()
 
     private fun showLoading() { _isLoading.value = true }
     private fun hideLoading() { _isLoading.value = false }
@@ -63,16 +68,15 @@ class MyProfileViewModel @Inject constructor(
                     _isLoggedIn.value = it.isLoggedIn
 
                     if (it.isLoggedIn) {
-                        getMyProfile()
+                        fetchMyProfile()
                     } else {
-                        _myProfileState.value = MyProfileUiState()
+                        _myProfileState.value = MyProfileState()
                     }
                 }
         }
     }
 
-    // API - My Profile.
-    private fun getMyProfile() {
+    private fun fetchMyProfile() {
         viewModelScope.launch {
             getUserUseCase.getMyProfile(getLoginPreferenceUseCase().email)
                 .collect { apiResult ->
@@ -83,7 +87,7 @@ class MyProfileViewModel @Inject constructor(
                             hideLoading()
                             val result = apiResult.data.mapToPresenter()
 
-                            _myProfileState.value = MyProfileUiState(
+                            _myProfileState.value = MyProfileState(
                                 myProfileItem   = result,
                                 myPostItems     = result.posts,
                                 myBookmarkItems = result.bookMarks
@@ -92,14 +96,16 @@ class MyProfileViewModel @Inject constructor(
 
                         is ApiResult.Error -> {
                             hideLoading()
-                            _isError.emit(ErrorMsg.ERROR_MY_PROFILE)
+                            Logger.e(apiResult.throwable.localizedMessage!!)
+
+                            val errorMsg = "occur Error [Fetch My Profile API]"
+                            globalErrorHandler.sendError(errorMsg)
                         }
                     }
                 }
         }
     }
 
-    // API - Update Bookmark State of Post.
     fun updateBookmark(postId: Int, placeName: String) {
         viewModelScope.launch {
             updateBookmarkUseCase(
@@ -125,7 +131,10 @@ class MyProfileViewModel @Inject constructor(
 
                     is ApiResult.Error -> {
                         hideLoading()
-                        _isError.emit(ErrorMsg.ERROR_UPDATE_BOOKMARK)
+                        Logger.e(apiResult.throwable.localizedMessage!!)
+
+                        val errorMsg = "occur Error [Update Bookmark API]"
+                        globalErrorHandler.sendError(errorMsg)
                     }
                 }
             }

@@ -11,12 +11,6 @@
         <variable
             name="viewModel"
             type="org.kjh.mytravel.ui.features.home.HomeViewModel" />
-        <variable
-            name="placeRankingListAdapter"
-            type="org.kjh.mytravel.ui.features.home.ranking.PlaceRankingListAdapter" />
-        <variable
-            name="latestPostListAdapter"
-            type="org.kjh.mytravel.ui.features.home.latest.LatestPostPagingDataAdapter" />
     </data>
 
     <androidx.coordinatorlayout.widget.CoordinatorLayout
@@ -30,9 +24,8 @@
             android:layout_width="match_parent"
             android:layout_height="400dp"
             android:fitsSystemWindows="true"
-            toolbar="@{tbHomeToolbar}"
-            collapsingToolbar="@{ctlHomeCollapsingToolbar}"
-            android:background="@color/white">
+            android:background="@color/white"
+            bindOffsetChangedListener="@{viewModel.updateStateCollapsedState}">
 
             <com.google.android.material.appbar.CollapsingToolbarLayout
                 android:id="@+id/ctl_homeCollapsingToolbar"
@@ -41,18 +34,18 @@
                 android:fitsSystemWindows="true"
                 app:layout_scrollFlags="scroll|exitUntilCollapsed"
                 app:scrimAnimationDuration="0"
-                app:titleEnabled="false">
+                app:titleEnabled="false"
+                app:statusBarScrim="@{viewModel.isAppBarCollapsed() ? @color/white : @android:color/transparent}">
 
                 <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/rv_homeBannerList"
+                    android:id="@+id/homeBannerRecyclerView"
                     android:layout_width="match_parent"
                     android:layout_height="400dp"
                     android:orientation="horizontal"
                     android:fitsSystemWindows="true"
                     app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                     addOnScrollListener="@{viewModel.homeBannersUiState.toData().size()}"
-                    bindHomeBannerItems="@{viewModel.homeBannersUiState}"
-                    errorCallback="@{viewModel.initHomeBannersUiState}"
+                    bindItems="@{viewModel.homeBannersUiState.toData()}"
                     app:layout_collapseMode="parallax"
                     app:layout_collapseParallaxMultiplier="0.7" />
 
@@ -62,20 +55,15 @@
                     android:layout_height="?attr/actionBarSize"
                     app:title="@string/app_name"
                     app:layout_collapseMode="pin"
-                    />
+                    app:titleTextColor="@{viewModel.isAppBarCollapsed() ? @color/black : @color/white}"
+                    android:background="@{viewModel.isAppBarCollapsed() ? @color/white : @android:color/transparent}"/>
             </com.google.android.material.appbar.CollapsingToolbarLayout>
         </com.google.android.material.appbar.AppBarLayout>
 
         <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/rv_homeRecyclerView"
+            android:id="@+id/homeConcatRecyclerView"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            bindPlaceRankingItems="@{viewModel.homeRankingsUiState}"
-            bindLatestPostItems="@{viewModel.latestPostsPagingData}"
-            errorCallback="@{viewModel.initPlaceRankingsUiState}"
-            placeRankingListAdapter="@{placeRankingListAdapter}"
-            latestPostListAdapter="@{latestPostListAdapter}"
-            scope="@{viewModel.scope}"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior" />
     </androidx.coordinatorlayout.widget.CoordinatorLayout>

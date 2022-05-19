@@ -14,7 +14,9 @@ import org.kjh.mytravel.utils.dpToPx
  *
  * Description:
  */
-class UserPostsGridItemDecoration(val ctx: Context): RecyclerView.ItemDecoration() {
+class UserPostsGridItemDecoration(
+    private val ctx: Context
+): RecyclerView.ItemDecoration() {
     override fun getItemOffsets(
         outRect: Rect,
         view: View,
