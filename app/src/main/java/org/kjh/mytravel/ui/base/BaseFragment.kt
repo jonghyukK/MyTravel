@@ -39,7 +39,7 @@ abstract class BaseFragment<B: ViewDataBinding>(
         _binding = null
     }
 
-    fun showError(errorMsg: String) {
-        Toast.makeText(requireContext(), errorMsg, Toast.LENGTH_SHORT).show()
+    fun showToast(msg: String) {
+        Toast.makeText(requireContext(), msg, Toast.LENGTH_SHORT).show()
     }
 }

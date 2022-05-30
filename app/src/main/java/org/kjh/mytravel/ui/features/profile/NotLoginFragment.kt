@@ -6,13 +6,11 @@ import androidx.activity.addCallback
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavOptions
 import androidx.navigation.fragment.findNavController
-import com.orhanobut.logger.Logger
 import org.kjh.mytravel.R
 import org.kjh.mytravel.databinding.FragmentNotLoginBinding
 import org.kjh.mytravel.ui.base.BaseFragment
-import org.kjh.mytravel.ui.features.profile.login.LoginFragment
-import org.kjh.mytravel.ui.features.profile.signup.SignUpFragment
-import org.kjh.mytravel.utils.onThrottleClick
+import org.kjh.mytravel.ui.features.login.LoginFragment
+import org.kjh.mytravel.ui.features.signup.SignUpFragment
 
 class NotLoginFragment
     : BaseFragment<FragmentNotLoginBinding>(R.layout.fragment_not_login) {

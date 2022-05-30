@@ -28,8 +28,7 @@
             android:text="@string/desc_share_travel_to_friend_after_login_or_signup"
             android:textColor="#7732ff"
             android:textSize="15sp"
-            android:textStyle="bold"
-            />
+            android:textStyle="bold" />
 
         <ImageView
             android:id="@+id/iv_photoIcon"

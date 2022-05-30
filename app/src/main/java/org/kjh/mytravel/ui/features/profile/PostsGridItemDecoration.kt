@@ -1,4 +1,4 @@
-package org.kjh.mytravel.ui.features.user
+package org.kjh.mytravel.ui.features.profile
 
 import android.content.Context
 import android.graphics.Rect
@@ -9,12 +9,12 @@ import org.kjh.mytravel.utils.dpToPx
 
 /**
  * MyTravel
- * Class: UserPostsGridItemDecoration
+ * Class: ProfilePostsGrildItemDecoration
  * Created by jonghyukkang on 2022/04/28.
  *
  * Description:
  */
-class UserPostsGridItemDecoration(
+class PostsGridItemDecoration(
     private val ctx: Context
 ): RecyclerView.ItemDecoration() {
     override fun getItemOffsets(
