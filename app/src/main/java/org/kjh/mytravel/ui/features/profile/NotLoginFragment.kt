@@ -1,7 +1,9 @@
 package org.kjh.mytravel.ui.features.profile
 
+import android.content.Context
 import android.os.Bundle
 import android.view.View
+import androidx.activity.OnBackPressedCallback
 import androidx.activity.addCallback
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavOptions
@@ -15,21 +17,27 @@ import org.kjh.mytravel.ui.features.signup.SignUpFragment
 class NotLoginFragment
     : BaseFragment<FragmentNotLoginBinding>(R.layout.fragment_not_login) {
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
+    private lateinit var backPressedCallback: OnBackPressedCallback
 
-        requireActivity().onBackPressedDispatcher.addCallback(this) {
-            val navOptions =
-                NavOptions.Builder()
-                    .setLaunchSingleTop(true)
-                    .setRestoreState(true)
-                    .setPopUpTo(
-                        findNavController().graph.findStartDestination().id,
-                        inclusive = false,
-                        saveState = true
-                    ).build()
-            findNavController().navigate(R.id.home, null, navOptions)
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+
+        backPressedCallback = object: OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                val navOptions =
+                    NavOptions.Builder()
+                        .setLaunchSingleTop(true)
+                        .setRestoreState(true)
+                        .setPopUpTo(
+                            findNavController().graph.findStartDestination().id,
+                            inclusive = false,
+                            saveState = true
+                        ).build()
+                findNavController().navigate(R.id.home, null, navOptions)
+            }
         }
+
+        requireActivity().onBackPressedDispatcher.addCallback(this, backPressedCallback)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -53,5 +61,10 @@ class NotLoginFragment
 
     fun showLoginPage() {
         LoginFragment().show(childFragmentManager, LoginFragment.TAG)
+    }
+
+    override fun onDetach() {
+        super.onDetach()
+        backPressedCallback.remove()
     }
 }

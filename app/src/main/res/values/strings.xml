@@ -27,6 +27,9 @@
     <string name="add_location">위치 추가</string>
     <string name="show_map">지도 보기</string>
     <string name="cancel">취소</string>
+    <string name="retry">다시 시도</string>
+    <string name="daylog">데이로그</string>
+    <string name="info">정보</string>
     <string name="search_address_and_name">주소 및 명칭 검색</string>
     <string name="apply_current_place">현재 위치 적용</string>
     <string name="input_content_your_experience">해당 장소에서의 경험을 적어주세요.</string>
@@ -34,6 +37,8 @@
     <string name="desc_share_travel_to_friend_after_login_or_signup">로그인/회원가입 후 \n멋진 나의 여행지를 친구들에게 공유해 주세요!</string>
     <string name="desc_nothing_bookmark">북마크된 장소가 없습니다.</string>
     <string name="desc_do_bookmark_you_wish">관심있는 장소를 북마크하면 이 곳에서 모아볼 수 있습니다.</string>
+    <string name="desc_empty_my_posts">등록된 여행지가 없습니다.\n이번 주말, 여행을 떠나보시는 건 어떨까요?</string>
+    <string name="desc_empty_user_posts">등록된 여행지가 없습니다.</string>
 
     <string name="error_home_banner_api">배너 정보를 불러올 수 없습니다.</string>
     <string name="error_home_ranking_api">장소 랭킹 정보를 불러올 수 없습니다.</string>

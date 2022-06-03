@@ -3,9 +3,7 @@ package org.kjh.mytravel.ui.features.profile.edit
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
-import org.kjh.domain.entity.ApiResult
-import org.kjh.domain.usecase.GetLoginPreferenceUseCase
-import org.kjh.domain.usecase.UpdateProfileUseCase
+import com.orhanobut.logger.Logger
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
@@ -13,10 +11,13 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
-import org.kjh.mytravel.ui.common.UiState
+import org.kjh.domain.entity.ApiResult
+import org.kjh.domain.usecase.GetLoginPreferenceUseCase
+import org.kjh.domain.usecase.UpdateProfileUseCase
 import org.kjh.mytravel.model.User
 import org.kjh.mytravel.model.mapToPresenter
-import org.kjh.mytravel.ui.common.ErrorMsg
+import org.kjh.mytravel.ui.GlobalErrorHandler
+import org.kjh.mytravel.ui.common.UiState
 
 /**
  * MyTravel
@@ -29,10 +30,55 @@ import org.kjh.mytravel.ui.common.ErrorMsg
 class ProfileEditViewModel @AssistedInject constructor(
     private val updateProfileUseCase     : UpdateProfileUseCase,
     private val getLoginPreferenceUseCase: GetLoginPreferenceUseCase,
+    private val globalErrorHandler       : GlobalErrorHandler,
     @Assisted("initProfileImg") private val initProfileImg: String?,
-    @Assisted("initNickName"  ) private val initNickName: String,
-    @Assisted("initIntroduce" ) private val initIntroduce: String?,
+    @Assisted("initNickName"  ) private val initNickName  : String,
+    @Assisted("initIntroduce" ) private val initIntroduce : String?,
 ): ViewModel() {
+
+    val inputNickName  = MutableStateFlow(initNickName)
+    val inputIntroduce = MutableStateFlow(initIntroduce)
+
+    private val _profileImg: MutableStateFlow<String?> = MutableStateFlow(initProfileImg)
+    val profileImg = _profileImg.asStateFlow()
+
+    private val _profileUpdateState: MutableStateFlow<UiState<User>> = MutableStateFlow(UiState.Init)
+    val profileUpdateState = _profileUpdateState.asStateFlow()
+
+    private val _isProfileImgModified = MutableStateFlow(false)
+
+    fun requestUpdateProfile() {
+        viewModelScope.launch {
+            updateProfileUseCase(
+                profileImg = if (_isProfileImgModified.value) _profileImg.value else null,
+                email      = getLoginPreferenceUseCase().email,
+                nickName   = inputNickName.value,
+                introduce  = inputIntroduce.value
+            ).collect { apiResult ->
+                when (apiResult) {
+                    is ApiResult.Loading -> _profileUpdateState.value = UiState.Loading
+
+                    is ApiResult.Success -> {
+                        val result = apiResult.data.mapToPresenter()
+                        _profileUpdateState.value = UiState.Success(result)
+                    }
+
+                    is ApiResult.Error -> {
+                        Logger.e(apiResult.throwable.localizedMessage!!)
+
+                        val errorMsg = "occur Error [Update Profile API]"
+                        globalErrorHandler.sendError(errorMsg)
+                        _profileUpdateState.value = UiState.Error(Throwable(errorMsg))
+                    }
+                }
+            }
+        }
+    }
+
+    fun updateProfileImg(uri: String) {
+        _profileImg.value = uri
+        _isProfileImgModified.value = true
+    }
 
     @AssistedFactory
     interface ProfileEditAssistedFactory {
@@ -53,54 +99,5 @@ class ProfileEditViewModel @AssistedInject constructor(
             override fun <T : ViewModel> create(modelClass: Class<T>) =
                 assistedFactory.create(initProfileImg, initNickName, initIntroduce) as T
         }
-    }
-
-    private val _profileImg: MutableStateFlow<String?> = MutableStateFlow(initProfileImg)
-    val profileImg = _profileImg.asStateFlow()
-
-    private val _isProfileImgModified = MutableStateFlow(false)
-
-    private val _profileUpdateState: MutableStateFlow<UiState<User>> = MutableStateFlow(UiState.Init)
-    val profileUpdateState = _profileUpdateState.asStateFlow()
-
-    val inputNickName  = MutableStateFlow(initNickName)
-    val inputIntroduce = MutableStateFlow(initIntroduce)
-
-
-    // API - Update My Profile.
-    fun makeUpdateUserInfo() {
-        val profileImg = if (_isProfileImgModified.value) _profileImg.value else null
-        val nickName  = inputNickName.value
-        val introduce = inputIntroduce.value
-
-        viewModelScope.launch {
-            updateProfileUseCase(
-                profileImg = profileImg,
-                email      = getLoginPreferenceUseCase().email,
-                nickName   = nickName,
-                introduce  = introduce
-            ).collect { apiResult ->
-                when (apiResult) {
-                    is ApiResult.Loading ->
-                        _profileUpdateState.value = UiState.Loading
-
-                    is ApiResult.Success ->
-                        _profileUpdateState.value = UiState.Success(apiResult.data.mapToPresenter())
-
-                    is ApiResult.Error -> {
-                        _profileUpdateState.value = UiState.Error(ErrorMsg.ERROR_MY_PROFILE_UPDATE)
-                    }
-                }
-            }
-        }
-    }
-
-    fun updateProfileImg(uri: String) {
-        _profileImg.value = uri
-        _isProfileImgModified.value = true
-    }
-
-    fun shownErrorToast() {
-        _profileUpdateState.value = UiState.Init
     }
 }

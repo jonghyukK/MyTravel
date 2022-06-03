@@ -17,22 +17,8 @@ import org.kjh.mytravel.utils.onThrottleClick
  */
 
 class PlacesBySubCityPostListAdapter(
-    private val onClickPostItem: (Post) -> Unit
+    private val onClickPostItem: () -> Unit
 ) : ListAdapter<Post, PlacesBySubCityPostListAdapter.PlacesBySubCityPostViewHolder>(Post.diffCallback) {
-
-    class PlacesBySubCityPostViewHolder(
-        private val binding        : VhPlaceByCityNameItemBinding,
-        private val onClickPostItem: (Post) -> Unit
-    ): RecyclerView.ViewHolder(binding.root) {
-
-        fun bind(item: Post) {
-            binding.postItem = item
-
-            itemView.onThrottleClick {
-                onClickPostItem(item)
-            }
-        }
-    }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) =
         PlacesBySubCityPostViewHolder(
@@ -43,5 +29,21 @@ class PlacesBySubCityPostListAdapter(
 
     override fun onBindViewHolder(holder: PlacesBySubCityPostViewHolder, position: Int) {
         holder.bind(getItem(position))
+    }
+
+    class PlacesBySubCityPostViewHolder(
+        private val binding        : VhPlaceByCityNameItemBinding,
+        private val onClickPostItem: () -> Unit
+    ): RecyclerView.ViewHolder(binding.root) {
+
+        init {
+            itemView.onThrottleClick {
+                onClickPostItem()
+            }
+        }
+
+        fun bind(item: Post) {
+            binding.postItem = item
+        }
     }
 }

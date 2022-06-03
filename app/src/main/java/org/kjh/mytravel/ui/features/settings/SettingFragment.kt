@@ -27,25 +27,19 @@ class SettingFragment : BaseFragment<FragmentSettingBinding>(R.layout.fragment_s
         super.onViewCreated(view, savedInstanceState)
         binding.viewModel = viewModel
 
-        initToolbarWithNavigation()
-        observeStateForLoginInfo()
-    }
-
-    private fun initToolbarWithNavigation() {
         binding.tbSettingToolbar.setupWithNavController(findNavController())
+        subscribeUi()
     }
 
-    private fun observeStateForLoginInfo() {
+    private fun subscribeUi() {
         viewModel.loginInfoPreferencesFlow
             .flowWithLifecycle(viewLifecycleOwner.lifecycle, Lifecycle.State.STARTED)
-            .onEach(::handleStateForLogout)
+            .onEach { loginInfo ->
+                if (!loginInfo.isLoggedIn) {
+                    navigateHomeWhenSuccessLogOut()
+                }
+            }
             .launchIn(viewLifecycleOwner.lifecycleScope)
-    }
-
-    private fun handleStateForLogout(loginInfo: LoginInfoPreferences) {
-        if (!loginInfo.isLoggedIn) {
-            navigateHomeWhenSuccessLogOut()
-        }
     }
 
     private fun navigateHomeWhenSuccessLogOut() {

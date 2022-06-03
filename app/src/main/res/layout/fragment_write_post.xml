@@ -6,10 +6,10 @@
     <data>
         <variable
             name="uploadViewModel"
-            type="org.kjh.mytravel.ui.features.profile.upload.UploadViewModel" />
+            type="org.kjh.mytravel.ui.features.upload.UploadViewModel" />
         <variable
             name="fragment"
-            type="org.kjh.mytravel.ui.features.profile.upload.WritePostFragment" />
+            type="org.kjh.mytravel.ui.features.upload.WritePostFragment" />
     </data>
 
     <ScrollView
@@ -21,7 +21,7 @@
             android:id="@+id/cl_writePostContainer"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            tools:context=".ui.features.profile.upload.WritePostFragment">
+            tools:context=".ui.features.upload.WritePostFragment">
 
             <EditText
                 android:id="@+id/et_content"
@@ -81,7 +81,7 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/tb_writePostToolbar"
-                bindMediaStoreItems="@{uploadViewModel.uploadItemState.selectedItems}"/>
+                bindItems="@{uploadViewModel.uploadItemState.selectedItems}"/>
 
             <ProgressBar
                 android:id="@+id/pb_loading"

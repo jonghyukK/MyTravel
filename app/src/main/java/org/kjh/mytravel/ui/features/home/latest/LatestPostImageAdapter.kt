@@ -4,6 +4,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import org.kjh.mytravel.databinding.VhRectImageBinding
+import org.kjh.mytravel.utils.onThrottleClick
 
 /**
  * MyTravel
@@ -14,9 +15,16 @@ import org.kjh.mytravel.databinding.VhRectImageBinding
  */
 
 class LatestPostImageAdapter(
-    private val images    : List<String>,
     private val onClickImg: () -> Unit,
-): RecyclerView.Adapter<LatestPostImageViewHolder>() {
+): RecyclerView.Adapter<LatestPostImageAdapter.LatestPostImageViewHolder>() {
+
+    private val postImages = mutableListOf<String>()
+
+    fun setItems(items: List<String>) {
+        postImages.clear()
+        postImages.addAll(items)
+        notifyDataSetChanged()
+    }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) =
         LatestPostImageViewHolder(
@@ -26,8 +34,22 @@ class LatestPostImageAdapter(
         )
 
     override fun onBindViewHolder(holder: LatestPostImageViewHolder, position: Int) {
-        holder.bind(images[position])
+        holder.bind(postImages[position])
     }
 
-    override fun getItemCount() = images.size
+    override fun getItemCount() = postImages.size
+
+    class LatestPostImageViewHolder(
+        val binding   : VhRectImageBinding,
+        val onClickImg: () -> Unit
+    ): RecyclerView.ViewHolder(binding.root) {
+
+        init {
+            itemView.onThrottleClick { onClickImg() }
+        }
+
+        fun bind(imgResource: String) {
+            binding.postImage = imgResource
+        }
+    }
 }

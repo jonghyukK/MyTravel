@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.orhanobut.logger.Logger
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.collect
@@ -14,10 +15,7 @@ import org.kjh.domain.repository.LoginPreferencesRepository
 import org.kjh.domain.usecase.GetLoginPreferenceUseCase
 import org.kjh.domain.usecase.GetUserUseCase
 import org.kjh.domain.usecase.UpdateBookmarkUseCase
-import org.kjh.mytravel.model.Bookmark
-import org.kjh.mytravel.model.Post
-import org.kjh.mytravel.model.User
-import org.kjh.mytravel.model.mapToPresenter
+import org.kjh.mytravel.model.*
 import org.kjh.mytravel.ui.GlobalErrorHandler
 import org.kjh.mytravel.utils.updateBookmarkStateWithPosts
 import javax.inject.Inject
@@ -51,8 +49,8 @@ class MyProfileViewModel @Inject constructor(
     private val _myProfileState = MutableStateFlow(MyProfileState())
     val myProfileState = _myProfileState.asStateFlow()
 
-    private val _isLoggedIn = MutableStateFlow(true)
-    val isLoggedIn = _isLoggedIn.asStateFlow()
+    private val _isNotLogIn: MutableStateFlow<Boolean?> = MutableStateFlow(null)
+    val isNotLogIn = _isNotLogIn.asStateFlow()
 
     private fun showLoading() { _isLoading.value = true }
     private fun hideLoading() { _isLoading.value = false }
@@ -65,7 +63,7 @@ class MyProfileViewModel @Inject constructor(
         viewModelScope.launch {
             loginPreferencesRepository.loginInfoPreferencesFlow
                 .collect {
-                    _isLoggedIn.value = it.isLoggedIn
+                    _isNotLogIn.value = !it.isLoggedIn
 
                     if (it.isLoggedIn) {
                         fetchMyProfile()

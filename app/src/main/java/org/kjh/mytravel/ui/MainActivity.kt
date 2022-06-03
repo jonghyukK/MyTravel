@@ -31,11 +31,11 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(this, R.layout.activity_main)
 
-        initBottomNavViewWithNavigation()
-        observeGlobalErrorEvent()
+        initView()
+        subscribeGlobalErrorEvent()
     }
 
-    private fun initBottomNavViewWithNavigation() {
+    private fun initView() {
         val navHostFragment = supportFragmentManager.findFragmentById(
             R.id.nav_host_fragment
         ) as NavHostFragment
@@ -52,7 +52,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     // (추후 각 화면별 에러 처리 필요).
-    private fun observeGlobalErrorEvent() {
+    private fun subscribeGlobalErrorEvent() {
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 globalErrorHandler.errorEvent.collect {

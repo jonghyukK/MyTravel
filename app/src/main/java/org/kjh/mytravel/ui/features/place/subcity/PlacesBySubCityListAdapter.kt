@@ -6,6 +6,7 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import org.kjh.mytravel.databinding.VhPlacesBySubCityRowBinding
 import org.kjh.mytravel.model.Place
+import org.kjh.mytravel.utils.navigateToPlaceDetail
 import org.kjh.mytravel.utils.onThrottleClick
 
 /**
@@ -16,37 +17,8 @@ import org.kjh.mytravel.utils.onThrottleClick
  * Description:
  */
 
-class PlacesBySubCityListAdapter(
-    private val onClickPlaceItem: (String) -> Unit
-) : ListAdapter<Place, PlacesBySubCityListAdapter.PlacesBySubCityViewHolder>(Place.diffCallback) {
-
-    class PlacesBySubCityViewHolder(
-        private val binding         : VhPlacesBySubCityRowBinding,
-        private val onClickPlaceItem: (String) -> Unit
-    ): RecyclerView.ViewHolder(binding.root) {
-
-        private val postListAdapter = PlacesBySubCityPostListAdapter {
-            onClickPlaceItem(it.placeName)
-        }
-
-        init {
-            binding.rvPostList.apply {
-                adapter = postListAdapter
-                setHasFixedSize(true)
-                addItemDecoration(PlacesBySubCityPostItemDecoration())
-            }
-        }
-
-        fun bind(item: Place) {
-            binding.placeItem = item
-            postListAdapter.submitList(item.posts)
-
-            itemView.onThrottleClick {
-                onClickPlaceItem(item.placeName)
-            }
-        }
-    }
-
+class PlacesBySubCityListAdapter
+    : ListAdapter<Place, PlacesBySubCityListAdapter.PlacesBySubCityViewHolder>(Place.diffCallback) {
 
     override fun onCreateViewHolder(
         parent: ViewGroup,
@@ -54,10 +26,39 @@ class PlacesBySubCityListAdapter(
     ) = PlacesBySubCityViewHolder(
         VhPlacesBySubCityRowBinding.inflate(
             LayoutInflater.from(parent.context), parent, false
-        ), onClickPlaceItem
+        )
     )
 
     override fun onBindViewHolder(holder: PlacesBySubCityViewHolder, position: Int) {
         holder.bind(getItem(position))
+    }
+
+    class PlacesBySubCityViewHolder(
+        private val binding : VhPlacesBySubCityRowBinding
+    ): RecyclerView.ViewHolder(binding.root) {
+        private val postListAdapter = PlacesBySubCityPostListAdapter {
+            binding.placeItem?.let { place ->
+                binding.root.navigateToPlaceDetail(place.placeName)
+            }
+        }
+
+        init {
+            binding.rvPostList.apply {
+                setHasFixedSize(true)
+                addItemDecoration(PlacesBySubCityPostItemDecoration())
+                adapter = postListAdapter
+            }
+
+            itemView.onThrottleClick { view ->
+                binding.placeItem?.let { place ->
+                    view.navigateToPlaceDetail(place.placeName)
+                }
+            }
+        }
+
+        fun bind(item: Place) {
+            binding.placeItem = item
+            postListAdapter.submitList(item.posts)
+        }
     }
 }

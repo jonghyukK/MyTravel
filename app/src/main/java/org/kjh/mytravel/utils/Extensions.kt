@@ -9,6 +9,7 @@ import android.view.View
 import androidx.appcompat.widget.Toolbar
 import androidx.fragment.app.Fragment
 import androidx.navigation.NavDirections
+import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
 import org.kjh.mytravel.NavGraphDirections
 import org.kjh.mytravel.model.Bookmark
@@ -66,6 +67,15 @@ fun Fragment.navigateToPlaceDetail(placeName: String) {
 }
 
 fun Fragment.navigateTo(action: NavDirections) {
+    findNavController().navigate(action)
+}
+
+fun View.navigateToPlaceDetail(placeName: String) {
+    val action = NavGraphDirections.actionGlobalPlacePagerFragment(placeName)
+    navigateTo(action)
+}
+
+fun View.navigateTo(action: NavDirections) {
     findNavController().navigate(action)
 }
 

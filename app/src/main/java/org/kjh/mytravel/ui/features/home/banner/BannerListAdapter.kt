@@ -3,8 +3,12 @@ package org.kjh.mytravel.ui.features.home.banner
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.ListAdapter
+import androidx.recyclerview.widget.RecyclerView
 import org.kjh.mytravel.databinding.VhHomeBannerItemBinding
 import org.kjh.mytravel.model.Banner
+import org.kjh.mytravel.ui.features.home.HomeFragmentDirections
+import org.kjh.mytravel.utils.navigateTo
+import org.kjh.mytravel.utils.onThrottleClick
 
 /**
  * MyTravel
@@ -14,9 +18,8 @@ import org.kjh.mytravel.model.Banner
  * Description:
  */
 
-class BannerListAdapter(
-    private val onClickBanner: (String) -> Unit
-) : ListAdapter<Banner, BannerViewHolder>(Banner.diffCallback) {
+class BannerListAdapter
+    : ListAdapter<Banner, BannerListAdapter.BannerViewHolder>(Banner.diffCallback) {
 
     init {
         setHasStableIds(true)
@@ -26,7 +29,7 @@ class BannerListAdapter(
         BannerViewHolder(
             VhHomeBannerItemBinding.inflate(
                 LayoutInflater.from(parent.context), parent, false
-            ), onClickBanner
+            )
         )
 
     override fun onBindViewHolder(holder: BannerViewHolder, position: Int) {
@@ -38,5 +41,23 @@ class BannerListAdapter(
     override fun getItemId(position: Int): Long {
         val expandedItems = currentList + currentList
         return expandedItems[position].bannerId.toLong()
+    }
+
+    class BannerViewHolder(
+        private val binding : VhHomeBannerItemBinding
+    ) : RecyclerView.ViewHolder(binding.root) {
+
+        init {
+            itemView.onThrottleClick { view ->
+                binding.bannerItem?.bannerTopic?.let { bannerTopic ->
+                    val direction = HomeFragmentDirections.actionToPlacesBySubCity(bannerTopic)
+                    view.navigateTo(direction)
+                }
+            }
+        }
+
+        fun bind(item: Banner) {
+            binding.bannerItem = item
+        }
     }
 }

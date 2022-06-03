@@ -38,6 +38,11 @@ class BookmarkRepositoryImpl @Inject constructor(
         emit(ApiResult.Loading)
 
         val response = bookmarkRemoteDataSource.updateMyBookmarks(myEmail, postId, placeName)
+
+        if (!response.result) {
+            throw Exception(response.errorMsg)
+        }
+
         emit(ResponseMapper.responseToBookMark(ApiResult.Success(response.data)))
     }.catch {
         emit(ResponseMapper.responseToBookMark(ApiResult.Error(it)))

@@ -8,8 +8,7 @@ import org.kjh.mytravel.R
 import org.kjh.mytravel.databinding.FragmentBookMarkBinding
 import org.kjh.mytravel.model.Bookmark
 import org.kjh.mytravel.ui.base.BaseFragment
-import org.kjh.mytravel.ui.features.profile.MyProfileViewModel
-import org.kjh.mytravel.utils.navigatePlaceDetailByPlaceName
+import org.kjh.mytravel.ui.features.profile.my.MyProfileViewModel
 
 @AndroidEntryPoint
 class BookMarkFragment
@@ -17,10 +16,7 @@ class BookMarkFragment
 
     private val myProfileViewModel: MyProfileViewModel by activityViewModels()
     private val bookMarkListAdapter by lazy {
-        BookmarkListAdapter(
-            onClickPost     = ::navigatePlaceDetailByPlaceName,
-            onClickBookmark = ::requestBookmarkStateUpdate
-        )
+        BookmarkListAdapter(onClickBookmark = ::requestBookmarkStateUpdate)
     }
 
     private fun requestBookmarkStateUpdate(item: Bookmark) {
@@ -31,11 +27,7 @@ class BookMarkFragment
         super.onViewCreated(view, savedInstanceState)
         binding.myProfileViewModel = myProfileViewModel
 
-        initView()
-    }
-
-    private fun initView() {
-        binding.rvBookMarkList.apply {
+        binding.bookmarksRecyclerView.apply {
             setHasFixedSize(true)
             adapter = bookMarkListAdapter
         }

@@ -24,13 +24,15 @@ class LatestPostPagingLoadStateAdapter(
     override fun onCreateViewHolder(parent: ViewGroup, loadState: LoadState) =
         LatestPostPagingLoadStateViewHolder(
             VhLatestPostsPagingLoadStateBinding.inflate(
-                LayoutInflater.from(parent.context), parent, false), retry)
+                LayoutInflater.from(parent.context), parent, false
+            ), retry
+        )
 
     override fun onBindViewHolder(
         holder: LatestPostPagingLoadStateViewHolder,
         loadState: LoadState
     ) {
-     holder.bind(loadState)
+        holder.bind(loadState)
     }
 
     class LatestPostPagingLoadStateViewHolder(
@@ -38,11 +40,13 @@ class LatestPostPagingLoadStateAdapter(
         private val retry  : () -> Unit
     ): RecyclerView.ViewHolder(binding.root) {
 
-        fun bind(state: LoadState) {
+        init {
             binding.btnRetry.setOnClickListener {
                 retry()
             }
+        }
 
+        fun bind(state: LoadState) {
             binding.isLoading = state is LoadState.Loading
             binding.isError   = state is LoadState.Error
 

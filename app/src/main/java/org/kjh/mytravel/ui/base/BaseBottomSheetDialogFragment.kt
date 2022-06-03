@@ -47,11 +47,11 @@ abstract class BaseBottomSheetDialogFragment<B: ViewDataBinding>(
         }
 
         view?.post {
-            val parent = view!!.parent as View
+            val parent = requireView().parent as View
             val params = parent.layoutParams as CoordinatorLayout.LayoutParams
             val behavior = params.behavior
             val bottomSheetBehavior = behavior as BottomSheetBehavior<*>?
-            bottomSheetBehavior!!.peekHeight = view!!.measuredHeight
+            bottomSheetBehavior!!.peekHeight = requireView().measuredHeight
             parent.setBackgroundColor(Color.TRANSPARENT)
         }
     }

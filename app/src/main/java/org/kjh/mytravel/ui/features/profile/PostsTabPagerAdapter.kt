@@ -6,8 +6,6 @@ import org.kjh.mytravel.ui.features.profile.my.ProfileFragment
 import org.kjh.mytravel.ui.features.profile.my.ProfilePostsFragment
 import org.kjh.mytravel.ui.features.profile.user.UserFragment
 import org.kjh.mytravel.ui.features.profile.user.UserPostsFragment
-import org.kjh.mytravel.ui.features.profile.user.UserPostsFragment.Companion.TYPE_GRID
-import org.kjh.mytravel.ui.features.profile.user.UserPostsFragment.Companion.TYPE_LINEAR
 
 /**
  * MyTravel
@@ -16,37 +14,32 @@ import org.kjh.mytravel.ui.features.profile.user.UserPostsFragment.Companion.TYP
  *
  * Description:
  */
+
+const val POSTS_GRID_PAGE_INDEX = 0
+const val POSTS_LINEAR_PAGE_INDEX = 1
+
 class PostsTabPagerAdapter(
     val fragment: Fragment
 ): FragmentStateAdapter(fragment) {
 
+    private val profileTabCreators: Map<Int, () -> Fragment> = mapOf(
+        POSTS_GRID_PAGE_INDEX to { ProfilePostsFragment.newInstance(POSTS_GRID_PAGE_INDEX) },
+        POSTS_LINEAR_PAGE_INDEX to { ProfilePostsFragment.newInstance(POSTS_LINEAR_PAGE_INDEX) }
+    )
+
+    private val userTabCreators: Map<Int, () -> Fragment> = mapOf(
+        POSTS_GRID_PAGE_INDEX to { UserPostsFragment.newInstance(POSTS_GRID_PAGE_INDEX) },
+        POSTS_LINEAR_PAGE_INDEX to { UserPostsFragment.newInstance(POSTS_LINEAR_PAGE_INDEX) }
+    )
+
     override fun getItemCount() = 2
 
-    override fun createFragment(position: Int): Fragment {
-        val userTabFragmentList = listOf(
-            UserPostsFragment.newInstance(TYPE_GRID),
-            UserPostsFragment.newInstance(TYPE_LINEAR)
-        )
-
-        val profileTabFragmentList = listOf(
-            ProfilePostsFragment.newInstance(ProfilePostsFragment.TYPE_GRID),
-            ProfilePostsFragment.newInstance(ProfilePostsFragment.TYPE_LINEAR)
-        )
-
-        return when (getFragmentType(fragment)) {
-            is FragmentType.User -> userTabFragmentList[position]
-            is FragmentType.Profile -> profileTabFragmentList[position]
+    override fun createFragment(position: Int): Fragment =
+        when (fragment) {
+            is ProfileFragment -> profileTabCreators[position]?.invoke()
+                ?: throw IndexOutOfBoundsException()
+            is UserFragment -> userTabCreators[position]?.invoke()
+                ?: throw IndexOutOfBoundsException()
+            else -> throw Exception()
         }
-    }
-
-    private fun getFragmentType(fragment: Fragment) = when (fragment) {
-        is UserFragment -> FragmentType.User
-        is ProfileFragment -> FragmentType.Profile
-        else -> throw Exception("Wrong Fragment in This Adapter.")
-    }
-
-    sealed class FragmentType {
-        object Profile: FragmentType()
-        object User   : FragmentType()
-    }
 }

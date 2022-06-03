@@ -18,6 +18,8 @@ import org.kjh.mytravel.R
 import org.kjh.mytravel.databinding.FragmentUserBinding
 import org.kjh.mytravel.ui.base.BaseFragment
 import org.kjh.mytravel.ui.common.UiState
+import org.kjh.mytravel.ui.features.profile.POSTS_GRID_PAGE_INDEX
+import org.kjh.mytravel.ui.features.profile.POSTS_LINEAR_PAGE_INDEX
 import org.kjh.mytravel.ui.features.profile.PostsTabPagerAdapter
 import org.kjh.mytravel.ui.features.profile.my.MyProfileViewModel
 import javax.inject.Inject
@@ -28,9 +30,8 @@ class UserFragment
 
     @Inject
     lateinit var userViewModelFactory: UserViewModel.UserNameAssistedFactory
-
-    private val myProfileViewModel: MyProfileViewModel by activityViewModels()
     private val args: UserFragmentArgs by navArgs()
+    private val myProfileViewModel: MyProfileViewModel by activityViewModels()
     private val viewModel: UserViewModel by viewModels {
         UserViewModel.provideFactory(userViewModelFactory, args.userEmail)
     }
@@ -41,27 +42,27 @@ class UserFragment
         binding.fragment  = this
 
         initView()
-        observe()
+        subscribeUi()
     }
 
     private fun initView() {
-        // init ToolBar Navigation.
         binding.tbUserToolbar.setupWithNavController(findNavController())
 
-        // init ViewPager with Tab Layout.
-        binding.postsViewPager.apply {
+        val tabLayout = binding.postsTabLayout
+        val viewPager = binding.postsViewPager.apply {
             adapter = PostsTabPagerAdapter(this@UserFragment)
             isUserInputEnabled = false
         }
-        TabLayoutMediator(binding.postsTabLayout, binding.postsViewPager) { tab, position ->
+
+        TabLayoutMediator(tabLayout, viewPager) { tab, position ->
             when (position) {
-                TAB_GRID -> tab.setIcon(R.drawable.ic_grid_view)
-                TAB_VERTICAL -> tab.setIcon(R.drawable.ic_linear_view)
+                POSTS_GRID_PAGE_INDEX -> tab.setIcon(R.drawable.ic_grid_view)
+                POSTS_LINEAR_PAGE_INDEX -> tab.setIcon(R.drawable.ic_linear_view)
             }
         }.attach()
     }
 
-    private fun observe() {
+    private fun subscribeUi() {
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 launch {
@@ -80,10 +81,5 @@ class UserFragment
                 }
             }
         }
-    }
-
-    companion object {
-        const val TAB_GRID = 0
-        const val TAB_VERTICAL = 1
     }
 }

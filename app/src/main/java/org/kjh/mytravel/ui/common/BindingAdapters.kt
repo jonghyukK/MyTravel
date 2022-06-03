@@ -4,45 +4,31 @@ import android.graphics.Color
 import android.net.Uri
 import android.view.View
 import android.widget.ImageView
-import android.widget.ProgressBar
 import android.widget.TextView
-import android.widget.Toast
 import androidx.appcompat.widget.Toolbar
 import androidx.core.view.get
 import androidx.core.view.isVisible
 import androidx.databinding.BindingAdapter
-import androidx.paging.PagingData
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.google.android.material.appbar.AppBarLayout
-import com.google.android.material.appbar.CollapsingToolbarLayout
-import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.collectLatest
-import kotlinx.coroutines.launch
 import org.kjh.mytravel.R
 import org.kjh.mytravel.model.*
 import org.kjh.mytravel.ui.features.bookmark.BookmarkListAdapter
 import org.kjh.mytravel.ui.features.home.banner.BannerListAdapter
-import org.kjh.mytravel.ui.features.home.latest.LatestPostPagingDataAdapter
-import org.kjh.mytravel.ui.features.home.ranking.PlaceRankingListAdapter
-import org.kjh.mytravel.ui.features.place.PlaceDayLogListAdapter
-import org.kjh.mytravel.ui.features.profile.MyPostListAdapter
-import org.kjh.mytravel.ui.features.profile.upload.MapSearchPlaceListAdapter
-import org.kjh.mytravel.ui.features.profile.upload.MediaStoreImageListAdapter
-import org.kjh.mytravel.ui.features.profile.upload.SelectedPhotoListAdapter
-import org.kjh.mytravel.ui.features.profile.upload.WritePostImagesAdapter
-import org.kjh.mytravel.ui.features.user.UserPostListAdapter
-import org.kjh.mytravel.ui.features.profile.InputValidator
-import org.kjh.mytravel.ui.features.profile.InputValidator.INPUT_TYPE_EMAIl
-import org.kjh.mytravel.ui.features.profile.InputValidator.INPUT_TYPE_PW
-import org.kjh.mytravel.ui.features.profile.InputValidator.isValidateEmail
-import org.kjh.mytravel.ui.features.profile.InputValidator.isValidateNickName
-import org.kjh.mytravel.ui.features.profile.InputValidator.isValidatePw
+import org.kjh.mytravel.ui.features.place.detail.PlaceDayLogListAdapter
+import org.kjh.mytravel.ui.features.place.subcity.PlacesBySubCityListAdapter
+import org.kjh.mytravel.utils.InputValidator
+import org.kjh.mytravel.ui.features.profile.PostMultipleViewAdapter
+import org.kjh.mytravel.ui.features.upload.MapSearchPlaceListAdapter
+import org.kjh.mytravel.ui.features.upload.MediaStoreImageListAdapter
+import org.kjh.mytravel.ui.features.upload.SelectedPhotoListAdapter
+import org.kjh.mytravel.ui.features.upload.WritePostImagesAdapter
+//import org.kjh.mytravel.ui.features.profile.user.UserPostListAdapter
+import org.kjh.mytravel.utils.avoidUncheckedWarnAndCast
 
 /**
  * MyTravel
@@ -62,118 +48,59 @@ object BindingAdapters {
     }
 
     @JvmStatic
-    @BindingAdapter("bindHomeBannerItems", "errorCallback")
-    fun RecyclerView.bindHomeBannerItems(
-        uiState         : UiState<List<Banner>>,
-        initStateAction : () -> Unit
-    ) {
-        when (uiState) {
-            is UiState.Success -> (adapter as? BannerListAdapter)?.submitList(uiState.data)
-            is UiState.Error   -> {
-                Toast.makeText(context, uiState.errorMsg.res, Toast.LENGTH_SHORT).show()
-                initStateAction()
+    @BindingAdapter("bindOffsetChangedListener")
+    fun bindOffsetChangedListener(view: AppBarLayout, callback: ((Boolean) -> Unit)?) {
+        var scrollRange = -1
+
+        view.addOnOffsetChangedListener(
+            AppBarLayout.OnOffsetChangedListener { appBarLayout, verticalOffset ->
+                if (scrollRange == -1) {
+                    scrollRange = appBarLayout.totalScrollRange
+                }
+
+                callback?.let {
+                    it(scrollRange + verticalOffset == 0)
+                }
             }
-        }
-    }
-
-    @JvmStatic
-    @BindingAdapter("bindPlaceRankingItems", "placeRankingListAdapter", "errorCallback")
-    fun RecyclerView.bindHomeRankingItems(
-        placeRankingUiState    : UiState<List<PlaceWithRanking>>,
-        placeRankingListAdapter: PlaceRankingListAdapter?,
-        initStateAction        : () -> Unit
-    ) {
-        when (placeRankingUiState) {
-            is UiState.Success -> placeRankingListAdapter?.submitList(placeRankingUiState.data)
-            is UiState.Error   -> {
-                Toast.makeText(context, placeRankingUiState.errorMsg.res, Toast.LENGTH_SHORT).show()
-                initStateAction()
-            }
-        }
-    }
-
-    @JvmStatic
-    @BindingAdapter(value = ["bindLatestPostItems", "latestPostListAdapter", "scope"], requireAll = true)
-    fun RecyclerView.bindLatestPostItems(
-        pagingData   : Flow<PagingData<Post>>,
-        adapter      : LatestPostPagingDataAdapter?,
-        scope        : CoroutineScope
-    ) {
-        scope.launch {
-            pagingData.collectLatest {
-                adapter?.submitData(it)
-            }
-        }
-    }
-
-    @JvmStatic
-    @BindingAdapter("bindPostItems")
-    fun RecyclerView.bindPostItems(items: List<Post>? = emptyList()) {
-        val adapter = this.adapter
-
-        adapter?.let {
-            when (adapter) {
-                is MyPostListAdapter      -> adapter.submitList(items)
-                is PlaceDayLogListAdapter -> adapter.submitList(items)
-            }
-        }
-    }
-
-    @JvmStatic
-    @BindingAdapter("bindMediaStoreItems")
-    fun RecyclerView.bindMediaStoreItems(items: List<MediaStoreImage>? = emptyList()) {
-        val adapter = this.adapter
-
-        adapter?.let {
-            when (adapter) {
-                is MediaStoreImageListAdapter -> adapter.submitList(items)
-                is SelectedPhotoListAdapter   -> adapter.submitList(items)
-                is WritePostImagesAdapter     -> adapter.submitList(items)
-            }
-        }
-    }
-
-    @JvmStatic
-    @BindingAdapter("bindMapSearchItems")
-    fun RecyclerView.bindMapSearchItems(uiState: UiState<List<MapQueryItem>>) {
-        val adapter = this.adapter
-
-        adapter?.let {
-            when (uiState) {
-                is UiState.Success -> (adapter as MapSearchPlaceListAdapter).submitList(uiState.data)
-                is UiState.Error   ->
-                    Toast.makeText(context, uiState.errorMsg.res, Toast.LENGTH_SHORT).show()
-            }
-        }
-    }
-
-    @JvmStatic
-    @BindingAdapter("bindPostItems", "bookmarks")
-    fun RecyclerView.bindPostItemsWithBookmarkState(
-        items    : List<Post>?,
-        bookmarks: List<Bookmark>?
-    ) {
-        val postItems = items?.updateBookmarkStateWithPosts(bookmarks ?: emptyList())
-            ?: emptyList()
-
-        val adapter = this.adapter
-
-        adapter?.let {
-            (adapter as UserPostListAdapter).submitList(postItems)
-        }
+        )
     }
 
     @JvmStatic
     @BindingAdapter("bindItems")
-    fun RecyclerView.bindBookmarkItems(items: List<Bookmark>? = listOf()) {
+    fun RecyclerView.bindItems(items: List<*>?) {
         val adapter = this.adapter
 
         adapter?.let {
-            (adapter as BookmarkListAdapter).submitList(items)
+            when (adapter) {
+                is PostMultipleViewAdapter ->
+                    adapter.submitList(items.avoidUncheckedWarnAndCast<Post>())
+
+                is PlaceDayLogListAdapter ->
+                    adapter.submitList(items.avoidUncheckedWarnAndCast<Post>())
+
+                is MediaStoreImageListAdapter ->
+                    adapter.submitList(items.avoidUncheckedWarnAndCast<MediaStoreImage>())
+
+                is SelectedPhotoListAdapter ->
+                    adapter.submitList(items.avoidUncheckedWarnAndCast<MediaStoreImage>())
+
+                is WritePostImagesAdapter ->
+                    adapter.submitList(items.avoidUncheckedWarnAndCast<MediaStoreImage>())
+
+                is BookmarkListAdapter ->
+                    adapter.submitList(items.avoidUncheckedWarnAndCast<Bookmark>())
+
+                is MapSearchPlaceListAdapter ->
+                    adapter.submitList(items.avoidUncheckedWarnAndCast<MapQueryItem>())
+
+                is BannerListAdapter ->
+                    adapter.submitList(items.avoidUncheckedWarnAndCast<Banner>())
+
+                is PlacesBySubCityListAdapter ->
+                    adapter.submitList(items.avoidUncheckedWarnAndCast<Place>())
+            }
         }
     }
-
-
 
     @JvmStatic
     @BindingAdapter("addOnScrollListener")
@@ -199,33 +126,6 @@ object BindingAdapters {
     }
 
     @JvmStatic
-    @BindingAdapter("toolbar", "collapsingToolbar")
-    fun bindAddOnOffsetChangedListener(
-        appbarLayout     : AppBarLayout,
-        toolbar          : MaterialToolbar,
-        collapsingToolBar: CollapsingToolbarLayout
-    ) {
-        var scrollRange = -1
-
-        appbarLayout.addOnOffsetChangedListener(
-            AppBarLayout.OnOffsetChangedListener { appBarLayout, verticalOffset ->
-                if (scrollRange == -1) {
-                    scrollRange = appBarLayout.totalScrollRange
-                }
-
-                val isCollapsed    = scrollRange + verticalOffset == 0
-                val titleColor     = if (isCollapsed) Color.BLACK else Color.WHITE
-                val bgColor        = if (isCollapsed) Color.WHITE else Color.TRANSPARENT
-                val statusBarScrim = if (isCollapsed) Color.WHITE else Color.TRANSPARENT
-
-                toolbar.setTitleTextColor(titleColor)
-                toolbar.setBackgroundColor(bgColor)
-                collapsingToolBar.setStatusBarScrimColor(statusBarScrim)
-            }
-        )
-    }
-
-    @JvmStatic
     @BindingAdapter("isVisibleMenu")
     fun bindShowMenu(view: Toolbar, isVisible: Boolean) {
         view.menu[0].isVisible = isVisible
@@ -233,20 +133,17 @@ object BindingAdapters {
 
     @JvmStatic
     @BindingAdapter("app:isVisible")
-    fun bindVisible(view: ProgressBar, isVisible: Boolean) {
+    fun bindVisible(view: View, isVisible: Boolean) {
         view.isVisible = isVisible
     }
 
 
     @JvmStatic
-    @BindingAdapter(value = ["app:bookmarkList", "app:placeName"], requireAll = true)
+    @BindingAdapter("isBookmarked")
     fun bindToolbarMenuIconWithBookmark(
-        view      : Toolbar,
-        items     : List<Bookmark>?,
-        placeName : String
+        view        : Toolbar,
+        isBookmarked: Boolean
     ) {
-        val isBookmarked = items?.isBookmarkedPlace(placeName) ?: false
-
         val bookmarkIcon = if (isBookmarked) R.drawable.ic_rank else R.drawable.ic_bookmark
         view.menu[0].setIcon(bookmarkIcon)
     }
@@ -259,23 +156,17 @@ object BindingAdapters {
 
     @JvmStatic
     @BindingAdapter("app:onFocusLost")
-    fun TextInputEditText.onFocusLost(v: TextInputLayout) {
+    fun TextInputEditText.onFocusLost(view: TextInputLayout) {
         setOnFocusChangeListener { _, hasFocus ->
             if (hasFocus) {
-                v.error          = null
-                v.isErrorEnabled = false
+                view.error          = null
+                view.isErrorEnabled = false
             } else {
-                val inputText = this.text.toString()
-                v.error = when (this.tag) {
-                    INPUT_TYPE_EMAIl -> isValidateEmail(inputText).errorMsg
-                    INPUT_TYPE_PW    -> isValidatePw(inputText).errorMsg
-                    else -> isValidateNickName(inputText).errorMsg
-                }
-                v.isErrorEnabled = when (this.tag) {
-                    INPUT_TYPE_EMAIl -> isValidateEmail(inputText) != InputValidator.EMAIL.VALIDATE
-                    INPUT_TYPE_PW    -> isValidatePw(inputText) != InputValidator.PW.VALIDATE
-                    else -> isValidateNickName(inputText) != InputValidator.NICKNAME.VALIDATE
-                }
+                val inputText = text.toString()
+                val errorMsgOrNull = InputValidator.getErrorMsgOrNull(this.tag.toString(), inputText)
+
+                view.error = errorMsgOrNull
+                view.isErrorEnabled = errorMsgOrNull != null
             }
         }
     }
@@ -315,3 +206,4 @@ object BindingAdapters {
             .into(view)
     }
 }
+

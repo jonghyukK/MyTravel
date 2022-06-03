@@ -6,14 +6,14 @@
     <data>
         <variable
             name="viewModel"
-            type="org.kjh.mytravel.ui.features.place.PlaceViewModel" />
+            type="org.kjh.mytravel.ui.features.place.detail.PlaceViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/white"
-        tools:context=".ui.features.place.PlaceInfoFragment">
+        tools:context=".ui.features.place.detail.PlaceInfoFragment">
 
         <TextView
             android:id="@+id/tv_addressDesc"

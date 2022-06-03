@@ -19,20 +19,6 @@ class PostsLinearImageAdapter(
     private val onClickPostImg: () -> Unit
 ) : RecyclerView.Adapter<PostsLinearImageAdapter.PostLinearInnerViewHolder>() {
 
-    class PostLinearInnerViewHolder(
-        private val binding: VhRectImageFullSquareBinding,
-        private val onClickPostImg: () -> Unit
-    ): RecyclerView.ViewHolder(binding.root) {
-
-        fun bind(url: String) {
-            binding.imageUrl = url
-
-            itemView.onThrottleClick {
-                onClickPostImg()
-            }
-        }
-    }
-
     private val postImages = mutableListOf<String>()
 
     fun setItems(items: List<String>) {
@@ -53,4 +39,18 @@ class PostsLinearImageAdapter(
     }
 
     override fun getItemCount() = postImages.size
+
+    class PostLinearInnerViewHolder(
+        private val binding: VhRectImageFullSquareBinding,
+        private val onClickPostImg: () -> Unit
+    ): RecyclerView.ViewHolder(binding.root) {
+
+        init {
+            itemView.onThrottleClick { onClickPostImg() }
+        }
+
+        fun bind(url: String) {
+            binding.imageUrl = url
+        }
+    }
 }

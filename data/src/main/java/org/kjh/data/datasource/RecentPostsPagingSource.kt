@@ -3,8 +3,10 @@ package org.kjh.data.datasource
 import android.util.Log
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
+import kotlinx.coroutines.delay
 import org.kjh.data.model.mapToDomain
 import org.kjh.domain.entity.PostEntity
+import kotlin.random.Random
 
 /**
  * MyTravel
@@ -35,6 +37,10 @@ class RecentPostsPagingSource(
                 itemCount       : ${postItems.size}
                 nextKey         : $nextKey
             """.trimIndent())
+
+//            if (Random.nextFloat() < 0.5) {
+//                throw Exception("Latest Post Paging Error ...")
+//            }
 
             return LoadResult.Page(
                 data = postItems.map { it.mapToDomain() },

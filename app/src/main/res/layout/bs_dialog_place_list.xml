@@ -2,6 +2,12 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
+    <data>
+        <variable
+            name="viewModel"
+            type="org.kjh.mytravel.ui.features.place.subcity.PlacesBySubCityViewModel" />
+    </data>
+
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/cl_bsContainer"
         android:layout_width="match_parent"
@@ -23,7 +29,8 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-            android:orientation="vertical"/>
+            android:orientation="vertical"
+            bindItems="@{viewModel.uiState.placeBySubCityItems}"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

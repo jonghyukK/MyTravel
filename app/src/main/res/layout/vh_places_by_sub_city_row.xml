@@ -75,7 +75,7 @@
             android:nestedScrollingEnabled="false"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             android:orientation="horizontal"
-            tools:listitem="@layout/vh_place_by_city_name_item"/>
+            tools:listitem="@layout/vh_place_by_city_name_item" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

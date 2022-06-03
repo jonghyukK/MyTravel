@@ -20,91 +20,134 @@
             android:id="@+id/tb_profileEditToolbar"
             android:layout_width="0dp"
             android:layout_height="?attr/actionBarSize"
-            app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"/>
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
-        <com.google.android.material.imageview.ShapeableImageView
-            android:id="@+id/siv_profileImg"
-            android:layout_width="130dp"
-            android:layout_height="130dp"
-            android:scaleType="centerCrop"
-            android:layout_marginTop="70dp"
-            app:imgUrl="@{viewModel.profileImg}"
-            app:shapeAppearanceOverlay="@style/circle"
+        <ScrollView
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:fillViewport="true"
             app:layout_constraintTop_toBottomOf="@+id/tb_profileEditToolbar"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent" />
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toTopOf="@+id/bottomGuideLine">
 
-        <TextView
-            android:id="@+id/tv_profileEdit"
-            android:layout_width="0dp"
-            android:layout_height="30dp"
-            android:background="#999999"
-            android:text="@string/edit"
-            android:textColor="@color/white"
-            android:gravity="center"
-            onThrottleClick="@{fragment::startCropImageActivity}"
-            app:layout_constraintTop_toBottomOf="@+id/siv_profileImg"
-            app:layout_constraintStart_toStartOf="@+id/siv_profileImg"
-            app:layout_constraintEnd_toEndOf="@+id/siv_profileImg"/>
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
 
-        <TextView
-            android:id="@+id/tv_nickName"
+                <com.google.android.material.imageview.ShapeableImageView
+                    android:id="@+id/siv_profileImg"
+                    style="@style/CircleProfileImg"
+                    android:layout_width="130dp"
+                    android:layout_height="130dp"
+                    app:imgUrl="@{viewModel.profileImg}"
+                    app:layout_constraintTop_toBottomOf="@+id/topGuideLine"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent" />
+
+                <TextView
+                    android:id="@+id/tv_profileEdit"
+                    android:layout_width="0dp"
+                    android:layout_height="30dp"
+                    android:background="#999999"
+                    android:text="@string/edit"
+                    android:textColor="@color/white"
+                    android:gravity="center"
+                    onThrottleClick="@{fragment::startCropImageActivity}"
+                    app:layout_constraintTop_toBottomOf="@+id/siv_profileImg"
+                    app:layout_constraintStart_toStartOf="@+id/siv_profileImg"
+                    app:layout_constraintEnd_toEndOf="@+id/siv_profileImg"/>
+
+                <TextView
+                    android:id="@+id/tv_nickName"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/nickName"
+                    android:layout_marginTop="20dp"
+                    app:layout_constraintTop_toBottomOf="@+id/tv_profileEdit"
+                    app:layout_constraintStart_toStartOf="@id/leftGuideLine"/>
+
+                <EditText
+                    android:id="@+id/et_nickNameEdit"
+                    android:layout_width="0dp"
+                    android:layout_height="50dp"
+                    android:layout_marginTop="15dp"
+                    android:text="@={viewModel.inputNickName}"
+                    app:layout_constraintTop_toBottomOf="@+id/tv_nickName"
+                    app:layout_constraintStart_toStartOf="@id/leftGuideLine"
+                    app:layout_constraintEnd_toEndOf="@id/rightGuideLine"/>
+
+                <TextView
+                    android:id="@+id/tv_introduce"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintTop_toBottomOf="@+id/et_nickNameEdit"
+                    app:layout_constraintStart_toStartOf="@id/leftGuideLine"
+                    android:layout_marginTop="20dp"
+                    android:text="@string/introduce"/>
+
+                <EditText
+                    android:id="@+id/et_introduceEdit"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="15dp"
+                    android:text="@={viewModel.inputIntroduce}"
+                    app:layout_constraintTop_toBottomOf="@+id/tv_introduce"
+                    app:layout_constraintStart_toStartOf="@id/leftGuideLine"
+                    app:layout_constraintEnd_toEndOf="@id/rightGuideLine"/>
+
+                <androidx.constraintlayout.widget.Guideline
+                    android:id="@+id/topGuideLine"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    app:layout_constraintGuide_begin="60dp"/>
+
+                <androidx.constraintlayout.widget.Guideline
+                    android:id="@+id/leftGuideLine"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    app:layout_constraintGuide_begin="20dp"/>
+
+                <androidx.constraintlayout.widget.Guideline
+                    android:id="@+id/rightGuideLine"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    app:layout_constraintGuide_end="20dp"/>
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </ScrollView>
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/bottomGuideLine"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/nickName"
-            android:layout_marginTop="20dp"
-            android:layout_marginStart="20dp"
-            app:layout_constraintTop_toBottomOf="@+id/tv_profileEdit"
-            app:layout_constraintStart_toStartOf="parent"/>
-
-        <EditText
-            android:id="@+id/et_nickNameEdit"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_end="60dp" />
+        <Button
+            android:id="@+id/btn_cancel"
             android:layout_width="0dp"
-            android:layout_height="50dp"
-            android:layout_marginStart="20dp"
-            android:layout_marginEnd="20dp"
-            android:layout_marginTop="15dp"
-            android:text="@={viewModel.inputNickName}"
-            app:layout_constraintTop_toBottomOf="@+id/tv_nickName"
+            android:layout_height="60dp"
+            android:text="@string/cancel"
+            android:backgroundTint="#777777"
+            onThrottleClick="@{() -> fragment.cancelProfileEdit()}"
+            app:layout_constraintTop_toBottomOf="@+id/bottomGuideLine"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"/>
-
-        <TextView
-            android:id="@+id/tv_introduce"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:layout_constraintTop_toBottomOf="@+id/et_nickNameEdit"
-            app:layout_constraintStart_toStartOf="parent"
-            android:layout_marginStart="20dp"
-            android:layout_marginTop="20dp"
-            android:text="@string/introduce"/>
-
-        <EditText
-            android:id="@+id/et_introduceEdit"
-            android:layout_width="0dp"
-            android:layout_height="50dp"
-            android:layout_marginStart="20dp"
-            android:layout_marginEnd="20dp"
-            android:layout_marginTop="15dp"
-            android:text="@={viewModel.inputIntroduce}"
-            app:layout_constraintTop_toBottomOf="@+id/tv_introduce"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"/>
-
+            app:layout_constraintEnd_toStartOf="@+id/btn_save"
+            app:layout_constraintBottom_toBottomOf="parent"/>
         <Button
             android:id="@+id/btn_save"
             android:layout_width="0dp"
-            android:layout_height="50dp"
-            android:layout_marginStart="30dp"
-            android:layout_marginEnd="30dp"
-            android:layout_marginTop="25dp"
-            onThrottleClick="@{viewModel::makeUpdateUserInfo}"
-            app:layout_constraintStart_toStartOf="parent"
+            android:layout_height="60dp"
+            android:text="@string/save"
+            onThrottleClick="@{viewModel::requestUpdateProfile}"
+            app:layout_constraintTop_toBottomOf="@+id/bottomGuideLine"
+            app:layout_constraintStart_toEndOf="@+id/btn_cancel"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/et_introduceEdit"
-            android:text="@string/save"/>
+            app:layout_constraintBottom_toBottomOf="parent" />
 
         <ProgressBar
             android:id="@+id/pb_loading"
@@ -115,5 +158,6 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"/>
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

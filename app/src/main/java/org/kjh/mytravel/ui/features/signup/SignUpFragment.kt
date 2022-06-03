@@ -33,20 +33,18 @@ class SignUpFragment
         binding.fragment  = this
         binding.viewModel = viewModel
 
-        observeStateForSignUp()
+        subscribeSignUpState()
     }
 
-    private fun observeStateForSignUp() {
+    private fun subscribeSignUpState() {
         viewModel.uiState
             .flowWithLifecycle(viewLifecycleOwner.lifecycle, Lifecycle.State.STARTED)
-            .onEach(::handleSignUpSuccess)
+            .onEach { state ->
+                if (state.isRegistered) {
+                    (parentFragment as NotLoginFragment).navigateHomeWhenSuccessLoginOrSignUp()
+                }
+            }
             .launchIn(viewLifecycleOwner.lifecycleScope)
-    }
-
-    private fun handleSignUpSuccess(state: SignUpViewModel.SignUpUiState) {
-        if (state.isRegistered) {
-            (parentFragment as NotLoginFragment).navigateHomeWhenSuccessLoginOrSignUp()
-        }
     }
 
     override fun onDestroyView() {

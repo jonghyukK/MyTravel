@@ -49,38 +49,33 @@ class LoginViewModel @Inject constructor(
                 pw    = pw.value.toString()
             ).collect { apiResult ->
                 when (apiResult) {
-                    is ApiResult.Loading -> handleLoading()
+                    is ApiResult.Loading -> _uiState.value = LoginUiState(isLoading = true)
 
-                    is ApiResult.Success -> handleSuccess(apiResult.data.mapToPresenter())
+                    is ApiResult.Success -> {
+                        val result = apiResult.data.mapToPresenter()
 
-                    is ApiResult.Error -> handleError(apiResult.throwable)
+                        _uiState.update {
+                            it.copy(
+                                isLoading = false,
+                                isLoggedIn = result.isSuccess,
+                                apiResultError = result.loginErrorMsg
+                            )
+                        }
+                    }
+
+                    is ApiResult.Error -> {
+                        Logger.e("${apiResult.throwable.message}")
+
+                        _uiState.update {
+                            it.copy(
+                                isLoading = false,
+                                isLoggedIn = false,
+                                apiResultError = "occur Error [request Login API]"
+                            )
+                        }
+                    }
                 }
             }
-        }
-    }
-
-    private fun handleLoading() {
-        _uiState.value = LoginUiState(isLoading = true)
-    }
-
-    private fun handleSuccess(result: Login) {
-        _uiState.update {
-            it.copy(
-                isLoading = false,
-                isLoggedIn = result.isSuccess,
-                apiResultError = result.loginErrorMsg
-            )
-        }
-    }
-
-    private fun handleError(throwable: Throwable) {
-        Logger.e("${throwable.message}")
-        _uiState.update {
-            it.copy(
-                isLoading = false,
-                isLoggedIn = false,
-                apiResultError = "occur Error [request Login API]"
-            )
         }
     }
 }

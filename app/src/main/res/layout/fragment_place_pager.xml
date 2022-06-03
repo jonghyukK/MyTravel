@@ -6,10 +6,7 @@
     <data>
         <variable
             name="viewModel"
-            type="org.kjh.mytravel.ui.features.place.PlaceViewModel" />
-        <variable
-            name="myProfileViewModel"
-            type="org.kjh.mytravel.ui.features.profile.MyProfileViewModel" />
+            type="org.kjh.mytravel.ui.features.place.detail.PlaceViewModel" />
         <variable
             name="placeName"
             type="String" />
@@ -19,28 +16,28 @@
         android:id="@+id/placeCoordinatorContainer"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/white"
-        android:fitsSystemWindows="true">
+        android:background="@color/white">
 
         <com.google.android.material.appbar.AppBarLayout
             android:id="@+id/abl"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@color/white"
-            app:elevation="0dp">
+            app:elevation="0dp"
+            bindOffsetChangedListener="@{viewModel.updateCollapsedState}">
 
             <com.google.android.material.appbar.CollapsingToolbarLayout
                 android:id="@+id/ctl"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:layout_scrollFlags="scroll|exitUntilCollapsed|snap">
+                app:layout_scrollFlags="scroll|exitUntilCollapsed|snap"
+                app:title="@{viewModel.uiState.isAppBarCollapsed ? placeName : ``}">
 
                 <androidx.appcompat.widget.Toolbar
                     android:id="@+id/tb_placePagerToolbar"
                     android:layout_width="match_parent"
                     android:layout_height="?attr/actionBarSize"
-                    app:bookmarkList="@{myProfileViewModel.myProfileState.myBookmarkItems}"
-                    app:placeName="@{placeName}"
+                    isBookmarked="@{viewModel.uiState.bookmarked}"
                     app:layout_collapseMode="pin" />
 
                 <androidx.constraintlayout.widget.ConstraintLayout
@@ -88,7 +85,6 @@
                         android:textSize="16sp"
                         android:textColor="#666666"/>
                 </androidx.constraintlayout.widget.ConstraintLayout>
-
             </com.google.android.material.appbar.CollapsingToolbarLayout>
 
             <com.google.android.material.tabs.TabLayout

@@ -6,10 +6,10 @@
     <data>
         <variable
             name="viewModel"
-            type="org.kjh.mytravel.ui.features.profile.upload.MapSearchViewModel" />
+            type="org.kjh.mytravel.ui.features.upload.MapSearchViewModel" />
         <variable
             name="fragment"
-            type="org.kjh.mytravel.ui.features.profile.upload.MapSearchFragment" />
+            type="org.kjh.mytravel.ui.features.upload.MapSearchFragment" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -55,7 +55,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             android:orientation="vertical"
-            bindMapSearchItems="@{viewModel.uiState}" />
+            bindItems="@{viewModel.uiState.toData()}" />
 
         <ProgressBar
             android:id="@+id/pb_loading"

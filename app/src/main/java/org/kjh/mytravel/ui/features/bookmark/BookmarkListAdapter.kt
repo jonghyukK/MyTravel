@@ -6,6 +6,8 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import org.kjh.mytravel.databinding.VhBookmarkPostItemBinding
 import org.kjh.mytravel.model.Bookmark
+import org.kjh.mytravel.utils.navigateToPlaceDetail
+import org.kjh.mytravel.utils.onThrottleClick
 
 /**
  * MyTravel
@@ -15,18 +17,41 @@ import org.kjh.mytravel.model.Bookmark
  * Description:
  */
 class BookmarkListAdapter(
-    private val onClickPost    : (String) -> Unit,
     private val onClickBookmark: (Bookmark) -> Unit
-): ListAdapter<Bookmark, BookmarkItemViewHolder>(Bookmark.diffCallback) {
+): ListAdapter<Bookmark, BookmarkListAdapter.BookmarkItemViewHolder>(Bookmark.diffCallback) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) =
         BookmarkItemViewHolder(
             VhBookmarkPostItemBinding.inflate(
                 LayoutInflater.from(parent.context), parent, false
-            ), onClickPost, onClickBookmark
+            ), onClickBookmark
         )
 
     override fun onBindViewHolder(holder: BookmarkItemViewHolder, position: Int) {
         holder.bind(getItem(position))
+    }
+
+    class BookmarkItemViewHolder(
+        private val binding        : VhBookmarkPostItemBinding,
+        private val onClickBookmark: (Bookmark) -> Unit
+    ): RecyclerView.ViewHolder(binding.root) {
+
+        init {
+            itemView.onThrottleClick { view ->
+                binding.bookmarkItem?.let { bookmark ->
+                    view.navigateToPlaceDetail(bookmark.placeName)
+                }
+            }
+
+            binding.ivBookmark.onThrottleClick { view ->
+                binding.bookmarkItem?.let { bookmark ->
+                    onClickBookmark(bookmark)
+                }
+            }
+        }
+
+        fun bind(item: Bookmark) {
+            binding.bookmarkItem = item
+        }
     }
 }

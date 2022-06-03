@@ -56,38 +56,32 @@ class SignUpViewModel @Inject constructor(
                 nickName  = nickName.value.toString()
             ).collect { apiResult ->
                 when (apiResult) {
-                    is ApiResult.Loading -> handleLoading()
+                    is ApiResult.Loading -> _uiState.value = SignUpUiState(isLoading = true)
 
-                    is ApiResult.Success -> handleSuccess(apiResult.data.mapToPresenter())
+                    is ApiResult.Success -> {
+                        val result = apiResult.data.mapToPresenter()
 
-                    is ApiResult.Error -> handleError(apiResult.throwable)
+                        _uiState.update {
+                            it.copy(
+                                isLoading = false,
+                                isRegistered = result.isSuccess,
+                                apiResultError = result.signUpErrorMsg,
+                            )
+                        }
+                    }
+
+                    is ApiResult.Error -> {
+                        Logger.e("${apiResult.throwable.message}")
+                        _uiState.update {
+                            it.copy(
+                                isLoading = false,
+                                isRegistered = false,
+                                apiResultError = "occur Error [request Login API]"
+                            )
+                        }
+                    }
                 }
             }
-        }
-    }
-
-    private fun handleLoading() {
-        _uiState.value = SignUpUiState(isLoading = true)
-    }
-
-    private fun handleSuccess(result: SignUp) {
-        _uiState.update {
-            it.copy(
-                isLoading = false,
-                isRegistered = result.isSuccess,
-                apiResultError = result.signUpErrorMsg,
-            )
-        }
-    }
-
-    private fun handleError(error: Throwable) {
-        Logger.e("${error.message}")
-        _uiState.update {
-            it.copy(
-                isLoading = false,
-                isRegistered = false,
-                apiResultError = "occur Error [request Login API]"
-            )
         }
     }
 }

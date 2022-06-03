@@ -9,21 +9,20 @@ import org.kjh.mytravel.R
 import org.kjh.mytravel.databinding.FragmentProfilePostsBinding
 import org.kjh.mytravel.model.Post
 import org.kjh.mytravel.ui.base.BaseFragment
+import org.kjh.mytravel.ui.features.profile.POSTS_GRID_PAGE_INDEX
 import org.kjh.mytravel.ui.features.profile.PostMultipleViewAdapter
 import org.kjh.mytravel.ui.features.profile.PostsGridItemDecoration
-import org.kjh.mytravel.utils.navigateToPlaceDetail
+import org.kjh.mytravel.ui.features.profile.ViewType
 
 
 class ProfilePostsFragment
     : BaseFragment<FragmentProfilePostsBinding>(R.layout.fragment_profile_posts) {
 
-    private var viewType = TYPE_GRID
-
+    private var viewType: ViewType = ViewType.Grid
     private val myProfileViewModel: MyProfileViewModel by activityViewModels()
     private val postMultipleViewAdapter by lazy {
         PostMultipleViewAdapter(
             viewType        = viewType,
-            onClickPost     = { post -> navigateToPlaceDetail(post.placeName)},
             onClickBookmark = ::requestUpdateBookmark
         )
     }
@@ -35,7 +34,11 @@ class ProfilePostsFragment
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
-            viewType = it.getInt(VIEW_TYPE)
+            viewType = if (it.getInt(VIEW_TYPE) == POSTS_GRID_PAGE_INDEX) {
+                ViewType.Grid
+            } else {
+                ViewType.Linear
+            }
         }
     }
 
@@ -43,25 +46,22 @@ class ProfilePostsFragment
         super.onViewCreated(view, savedInstanceState)
         binding.viewModel = myProfileViewModel
 
-        binding.gridPostsRecyclerView.apply {
+        binding.postRecyclerView.apply {
             setHasFixedSize(true)
             itemAnimator = null
+            adapter = postMultipleViewAdapter
 
-            if (viewType == TYPE_GRID) {
+            if (viewType is ViewType.Grid) {
                 layoutManager = GridLayoutManager(requireContext(), 2)
                 addItemDecoration(PostsGridItemDecoration(requireContext()))
             } else {
                 layoutManager = LinearLayoutManager(requireContext())
             }
-
-            adapter = postMultipleViewAdapter
         }
     }
 
     companion object {
         private const val VIEW_TYPE = "viewType"
-        const val TYPE_GRID     = 0
-        const val TYPE_LINEAR   = 1
 
         @JvmStatic
         fun newInstance(viewType: Int) =

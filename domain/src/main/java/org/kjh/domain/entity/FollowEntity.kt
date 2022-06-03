@@ -8,6 +8,6 @@ package org.kjh.domain.entity
  * Description:
  */
 data class FollowEntity(
-    val myProfile: UserEntity,
+    val myProfile    : UserEntity,
     val targetProfile: UserEntity
 )

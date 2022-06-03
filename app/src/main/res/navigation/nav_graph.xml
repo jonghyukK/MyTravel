@@ -12,6 +12,7 @@
     <action
         android:id="@+id/action_global_placePagerFragment"
         app:destination="@id/placePagerFragment"
+        app:restoreState="true"
         app:enterAnim="@anim/scale_up"
         app:exitAnim="@anim/scale_up_over"
         app:popEnterAnim="@anim/scale_down"
@@ -27,7 +28,7 @@
 
     <fragment
         android:id="@+id/userFragment"
-        android:name="org.kjh.mytravel.ui.features.user.UserFragment"
+        android:name="org.kjh.mytravel.ui.features.profile.user.UserFragment"
         tools:layout="@layout/fragment_user">
         <argument
             android:name="userEmail"
@@ -36,7 +37,7 @@
 
     <fragment
         android:id="@+id/placePagerFragment"
-        android:name="org.kjh.mytravel.ui.features.place.PlacePagerFragment"
+        android:name="org.kjh.mytravel.ui.features.place.detail.PlacePagerFragment"
         tools:layout="@layout/fragment_place_pager">
         <argument
             android:name="placeName"

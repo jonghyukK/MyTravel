@@ -67,50 +67,46 @@ class HomeViewModel @Inject constructor(
     private fun fetchHomeBanners() {
         viewModelScope.launch {
             getHomeBannersUseCase()
-                .collect(::handleFetchBannersResult)
-        }
-    }
+                .collect { apiResult ->
+                    when (apiResult) {
+                        is ApiResult.Loading ->
+                            _homeBannersUiState.value = UiState.Loading
 
-    private fun handleFetchBannersResult(apiResult: ApiResult<List<BannerEntity>>) {
-        when (apiResult) {
-            is ApiResult.Loading ->
-                _homeBannersUiState.value = UiState.Loading
+                        is ApiResult.Success -> {
+                            val data = apiResult.data.map { it.mapToPresenter() }
+                            _homeBannersUiState.value = UiState.Success(data)
+                        }
 
-            is ApiResult.Success -> {
-                val data = apiResult.data.map { it.mapToPresenter() }
-                _homeBannersUiState.value = UiState.Success(data)
-            }
-
-            is ApiResult.Error -> {
-                val errorMsg = "occur Error [Fetch Banners API]"
-                globalErrorHandler.sendError(errorMsg)
-                _homeBannersUiState.value = UiState.Error(Throwable(errorMsg))
-            }
+                        is ApiResult.Error -> {
+                            val errorMsg = "occur Error [Fetch Banners API]"
+                            globalErrorHandler.sendError(errorMsg)
+                            _homeBannersUiState.value = UiState.Error(Throwable(errorMsg))
+                        }
+                    }
+                }
         }
     }
 
     private fun fetchPlaceRankings() {
         viewModelScope.launch {
             getPlaceRankingUseCase()
-                .collect(::handleFetchPlaceRankingsResult)
-        }
-    }
+                .collect { apiResult ->
+                    when (apiResult) {
+                        is ApiResult.Loading ->
+                            _homeRankingsUiState.value = UiState.Loading
 
-    private fun handleFetchPlaceRankingsResult(apiResult: ApiResult<List<PlaceWithRankEntity>>) {
-        when (apiResult) {
-            is ApiResult.Loading ->
-                _homeRankingsUiState.value = UiState.Loading
+                        is ApiResult.Success -> {
+                            val data = apiResult.data.map { it.mapToPresenter() }
+                            _homeRankingsUiState.value = UiState.Success(data)
+                        }
 
-            is ApiResult.Success -> {
-                val data = apiResult.data.map { it.mapToPresenter() }
-                _homeRankingsUiState.value = UiState.Success(data)
-            }
-
-            is ApiResult.Error -> {
-                val errorMsg = "occur Error [Fetch Ranking API]"
-                globalErrorHandler.sendError(errorMsg)
-                _homeRankingsUiState.value = UiState.Error(Throwable(errorMsg))
-            }
+                        is ApiResult.Error -> {
+                            val errorMsg = "occur Error [Fetch Ranking API]"
+                            globalErrorHandler.sendError(errorMsg)
+                            _homeRankingsUiState.value = UiState.Error(Throwable(errorMsg))
+                        }
+                    }
+                }
         }
     }
 

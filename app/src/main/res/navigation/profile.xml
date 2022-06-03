@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/profileFragment"
-        android:name="org.kjh.mytravel.ui.features.profile.ProfileFragment"
+        android:name="org.kjh.mytravel.ui.features.profile.my.ProfileFragment"
         tools:layout="@layout/fragment_profile" >
 
         <argument
@@ -15,18 +15,18 @@
             android:defaultValue="true" />
 
         <action
-            android:id="@+id/action_profileFragment_to_selectPhotoFragment"
+            android:id="@+id/action_to_selectPhoto"
             app:destination="@id/nav_nested_upload" />
         <action
-            android:id="@+id/action_profileFragment_to_settingFragment"
+            android:id="@+id/action_to_setting"
             app:destination="@id/settingFragment" />
         <action
-            android:id="@+id/action_profileFragment_to_profileEditFragment"
+            android:id="@+id/action_to_profileEdit"
             app:destination="@id/profileEditFragment"
             app:enterAnim="@anim/slide_in_up"
             app:exitAnim="@anim/fade_out"/>
         <action
-            android:id="@+id/action_profileFragment_to_notLoginFragment"
+            android:id="@+id/action_to_notLogin"
             app:destination="@id/notLoginFragment" />
     </fragment>
     <fragment
@@ -43,7 +43,7 @@
         app:startDestination="@id/selectPhotoFragment">
         <fragment
             android:id="@+id/selectPhotoFragment"
-            android:name="org.kjh.mytravel.ui.features.profile.upload.SelectPhotoFragment"
+            android:name="org.kjh.mytravel.ui.features.upload.SelectPhotoFragment"
             android:label="사진 선택"
             tools:layout="@layout/fragment_select_photo">
             <action
@@ -52,7 +52,7 @@
         </fragment>
         <fragment
             android:id="@+id/writePostFragment"
-            android:name="org.kjh.mytravel.ui.features.profile.upload.WritePostFragment"
+            android:name="org.kjh.mytravel.ui.features.upload.WritePostFragment"
             tools:layout="@layout/fragment_write_post" >
             <action
                 android:id="@+id/action_writePostFragment_to_mapFragment"
@@ -65,7 +65,7 @@
             app:popUpToInclusive="true"/>
         <fragment
             android:id="@+id/mapFragment"
-            android:name="org.kjh.mytravel.ui.features.profile.upload.MapFragment"
+            android:name="org.kjh.mytravel.ui.features.upload.MapFragment"
             android:label="위치 검색"
             tools:layout="@layout/fragment_map" >
             <action
@@ -74,12 +74,12 @@
         </fragment>
         <fragment
             android:id="@+id/mapSearchFragment"
-            android:name="org.kjh.mytravel.ui.features.profile.upload.MapSearchFragment"
+            android:name="org.kjh.mytravel.ui.features.upload.MapSearchFragment"
             tools:layout="@layout/bs_fragment_map_search" />
     </navigation>
     <fragment
         android:id="@+id/settingFragment"
-        android:name="org.kjh.mytravel.ui.features.profile.settings.SettingFragment"
+        android:name="org.kjh.mytravel.ui.features.settings.SettingFragment"
         android:label="설정"
         tools:layout="@layout/fragment_setting" />
     <fragment

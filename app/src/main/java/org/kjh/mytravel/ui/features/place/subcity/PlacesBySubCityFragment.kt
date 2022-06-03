@@ -37,15 +37,13 @@ class PlacesBySubCityFragment :
 
     private lateinit var naverMap: NaverMap
     private lateinit var bsBehavior: BottomSheetBehavior<View>
-    private val args: PlacesBySubCityFragmentArgs by navArgs()
 
+    private val args: PlacesBySubCityFragmentArgs by navArgs()
+    private val placeListByCityNameAdapter by lazy { PlacesBySubCityListAdapter() }
     private val viewModel: PlacesBySubCityViewModel by viewModels {
         PlacesBySubCityViewModel.provideFactory(subCityNameAssistedFactory, args.cityName)
     }
 
-    private val placeListByCityNameAdapter by lazy {
-        PlacesBySubCityListAdapter(onClickPlaceItem = ::navigateToPlaceDetail)
-    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -53,21 +51,15 @@ class PlacesBySubCityFragment :
         binding.subCityName = args.cityName
         binding.fragment    = this
 
-        initToolbarWithNavigation()
-        initNaverMapFragment()
-        initBottomSheetBehavior()
+        initView()
     }
 
-    private fun initToolbarWithNavigation() {
+    private fun initView() {
         binding.tbPlaceListByCityNameToolbar.setupWithNavController(findNavController())
-    }
 
-    private fun initNaverMapFragment() {
         val mapFragment = childFragmentManager.findFragmentById(R.id.map) as MapFragment
         mapFragment.getMapAsync(this)
-    }
 
-    private fun initBottomSheetBehavior() {
         bsBehavior = BottomSheetBehavior.from(binding.bottomSheet.root).apply {
             addBottomSheetCallback(object : BottomSheetBehavior.BottomSheetCallback() {
                 override fun onSlide(bottomSheet: View, slideOffset: Float) {}
@@ -91,11 +83,10 @@ class PlacesBySubCityFragment :
 
     override fun onMapReady(p0: NaverMap) {
         naverMap = p0
-
-        observePlacesItems()
+        subscribeUi()
     }
 
-    private fun observePlacesItems() {
+    private fun subscribeUi() {
         viewModel.uiState
             .flowWithLifecycle(viewLifecycleOwner.lifecycle, Lifecycle.State.STARTED)
             .onEach { uiState ->
