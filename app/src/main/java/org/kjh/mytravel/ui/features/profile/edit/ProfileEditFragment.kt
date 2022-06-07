@@ -18,10 +18,9 @@ import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import org.kjh.mytravel.R
 import org.kjh.mytravel.databinding.FragmentProfileEditBinding
-import org.kjh.mytravel.ui.common.UiState
-import org.kjh.mytravel.model.User
-import org.kjh.mytravel.ui.features.profile.my.MyProfileViewModel
 import org.kjh.mytravel.ui.base.BaseFragment
+import org.kjh.mytravel.ui.common.UiState
+import org.kjh.mytravel.ui.features.profile.my.MyProfileViewModel
 import javax.inject.Inject
 
 @AndroidEntryPoint

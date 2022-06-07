@@ -1,30 +1,23 @@
 package org.kjh.mytravel.ui.features.home
 
 import android.graphics.Color
-import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.WindowInsets
-import android.view.WindowInsetsController.APPEARANCE_LIGHT_STATUS_BARS
-import androidx.appcompat.view.ContextThemeWrapper
-import androidx.core.view.WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
-import androidx.databinding.DataBindingUtil
-import androidx.fragment.app.Fragment
+import androidx.core.view.WindowCompat
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.ConcatAdapter
 import androidx.recyclerview.widget.PagerSnapHelper
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import org.kjh.mytravel.R
 import org.kjh.mytravel.databinding.FragmentHomeBinding
-import org.kjh.mytravel.model.PlaceWithRanking
 import org.kjh.mytravel.ui.base.BaseFragment
 import org.kjh.mytravel.ui.common.UiState
 import org.kjh.mytravel.ui.features.home.banner.BannerItemDecoration
@@ -33,8 +26,6 @@ import org.kjh.mytravel.ui.features.home.latest.LatestPostPagingDataAdapter
 import org.kjh.mytravel.ui.features.home.latest.LatestPostPagingLoadStateAdapter
 import org.kjh.mytravel.ui.features.home.ranking.PlaceRankingHorizontalWrapAdapter
 import org.kjh.mytravel.ui.features.home.ranking.PlaceRankingListAdapter
-import org.kjh.mytravel.utils.navigateToPlaceDetail
-import org.kjh.mytravel.utils.navigateTo
 
 @AndroidEntryPoint
 class HomeFragment : BaseFragment<FragmentHomeBinding>(R.layout.fragment_home) {
@@ -114,7 +105,11 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(R.layout.fragment_home) {
     }
 
     override fun onDestroyView() {
-        requireActivity().window.statusBarColor = Color.WHITE
+        requireActivity().window.apply {
+            statusBarColor = Color.WHITE
+            WindowCompat.setDecorFitsSystemWindows(this, false)
+        }
+
         super.onDestroyView()
     }
 }

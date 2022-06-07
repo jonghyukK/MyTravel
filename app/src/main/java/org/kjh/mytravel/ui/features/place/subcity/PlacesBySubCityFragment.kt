@@ -44,7 +44,6 @@ class PlacesBySubCityFragment :
         PlacesBySubCityViewModel.provideFactory(subCityNameAssistedFactory, args.cityName)
     }
 
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding.viewModel   = viewModel

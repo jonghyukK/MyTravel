@@ -16,7 +16,7 @@
         android:id="@+id/cdl_profileContainer"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-
+        android:fitsSystemWindows="true"
         app:isVisible="@{myProfileViewModel.isNotLogIn() != null}">
 
         <com.google.android.material.appbar.AppBarLayout

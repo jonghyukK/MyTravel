@@ -23,17 +23,17 @@
             android:id="@+id/abl_homeAppBarLayout"
             android:layout_width="match_parent"
             android:layout_height="400dp"
-            android:fitsSystemWindows="true"
             android:background="@color/white"
+            android:fitsSystemWindows="true"
             bindOffsetChangedListener="@{viewModel.updateStateCollapsedState}">
 
             <com.google.android.material.appbar.CollapsingToolbarLayout
                 android:id="@+id/ctl_homeCollapsingToolbar"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:fitsSystemWindows="true"
                 app:layout_scrollFlags="scroll|exitUntilCollapsed"
                 app:scrimAnimationDuration="0"
+                android:fitsSystemWindows="true"
                 app:titleEnabled="false"
                 app:statusBarScrim="@{viewModel.isAppBarCollapsed() ? @color/white : @android:color/transparent}">
 
@@ -52,7 +52,8 @@
                 <com.google.android.material.appbar.MaterialToolbar
                     android:id="@+id/tb_homeToolbar"
                     android:layout_width="match_parent"
-                    android:layout_height="?attr/actionBarSize"
+                    android:layout_height="wrap_content"
+                    android:minHeight="?attr/actionBarSize"
                     app:title="@string/app_name"
                     app:layout_collapseMode="pin"
                     app:titleTextColor="@{viewModel.isAppBarCollapsed() ? @color/black : @color/white}"

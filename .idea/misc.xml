@@ -41,10 +41,11 @@
         <entry key="app/src/main/res/layout/fragment_place_info.xml" value="0.5231481481481481" />
         <entry key="app/src/main/res/layout/fragment_place_list_by_city_name.xml" value="0.1" />
         <entry key="app/src/main/res/layout/fragment_place_pager.xml" value="0.1" />
+        <entry key="app/src/main/res/layout/fragment_places_by_sub_city.xml" value="0.1" />
         <entry key="app/src/main/res/layout/fragment_posts_grid.xml" value="0.1" />
         <entry key="app/src/main/res/layout/fragment_posts_linear.xml" value="0.44752475247524753" />
-        <entry key="app/src/main/res/layout/fragment_profile.xml" value="0.25" />
-        <entry key="app/src/main/res/layout/fragment_profile_edit.xml" value="0.6432291666666666" />
+        <entry key="app/src/main/res/layout/fragment_profile.xml" value="0.24444444444444444" />
+        <entry key="app/src/main/res/layout/fragment_profile_edit.xml" value="0.21902017291066284" />
         <entry key="app/src/main/res/layout/fragment_select_bucket_bottom_sheet.xml" value="0.43425925925925923" />
         <entry key="app/src/main/res/layout/fragment_select_photo.xml" value="0.1" />
         <entry key="app/src/main/res/layout/fragment_setting.xml" value="0.28425925925925927" />
