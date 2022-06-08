@@ -1,6 +1,7 @@
-package org.kjh.mytravel.ui.features.upload
+package org.kjh.mytravel.ui.features.upload.select
 
 import android.net.Uri
+import android.text.method.TextKeyListener.clear
 import android.view.LayoutInflater
 import android.view.MotionEvent
 import android.view.ViewGroup
@@ -9,6 +10,9 @@ import androidx.recyclerview.selection.ItemDetailsLookup
 import androidx.recyclerview.selection.SelectionTracker
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
+import com.bumptech.glide.GlideBuilder
+import com.orhanobut.logger.Logger
 import org.kjh.mytravel.databinding.VhRectImageSmallBinding
 import org.kjh.mytravel.model.MediaStoreImage
 
@@ -20,12 +24,8 @@ import org.kjh.mytravel.model.MediaStoreImage
  * Description:
  */
 
-class MediaStoreImageListAdapter :
-    ListAdapter<MediaStoreImage, MediaStoreImageListAdapter.SelectPhotoViewHolder>(MediaStoreImage.diffCallback){
-
-    init {
-        setHasStableIds(true)
-    }
+class MediaStoreImageListAdapter
+    : ListAdapter<MediaStoreImage, MediaStoreImageListAdapter.SelectPhotoViewHolder>(MediaStoreImage.diffCallback){
 
     var tracker: SelectionTracker<Uri>? = null
 
@@ -40,10 +40,6 @@ class MediaStoreImageListAdapter :
         tracker?.let {
             holder.bind(item, it.isSelected(item.contentUri))
         }
-    }
-
-    override fun getItemId(position: Int): Long {
-        return getItem(position).id
     }
 
     inner class SelectPhotoViewHolder(

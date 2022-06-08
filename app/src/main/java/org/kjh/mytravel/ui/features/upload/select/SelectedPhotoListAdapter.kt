@@ -1,9 +1,12 @@
-package org.kjh.mytravel.ui.features.upload
+package org.kjh.mytravel.ui.features.upload.select
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
+import com.bumptech.glide.RequestManager
+import com.orhanobut.logger.Logger
 import org.kjh.mytravel.databinding.VhRectImageWithCloseBtnBinding
 import org.kjh.mytravel.model.MediaStoreImage
 import org.kjh.mytravel.utils.onThrottleClick
@@ -17,7 +20,7 @@ import org.kjh.mytravel.utils.onThrottleClick
  */
 class SelectedPhotoListAdapter(
     private val onDeleteImg: (MediaStoreImage) -> Unit
-) : ListAdapter<MediaStoreImage, SelectedPhotoViewHolder>(MediaStoreImage.diffCallback) {
+) : ListAdapter<MediaStoreImage, SelectedPhotoListAdapter.SelectedPhotoViewHolder>(MediaStoreImage.diffCallback) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) =
         SelectedPhotoViewHolder(
@@ -29,18 +32,22 @@ class SelectedPhotoListAdapter(
     override fun onBindViewHolder(holder: SelectedPhotoViewHolder, position: Int) {
         holder.bind(getItem(position))
     }
-}
 
-class SelectedPhotoViewHolder(
-    val binding: VhRectImageWithCloseBtnBinding,
-    private val onDeleteImg: (MediaStoreImage) -> Unit
-): RecyclerView.ViewHolder(binding.root) {
+    class SelectedPhotoViewHolder(
+        private val binding: VhRectImageWithCloseBtnBinding,
+        private val onDeleteImg: (MediaStoreImage) -> Unit
+    ): RecyclerView.ViewHolder(binding.root) {
 
-    fun bind(item: MediaStoreImage) {
-        binding.item = item
+        init {
+            binding.ivDeleteImg.onThrottleClick { view ->
+                binding.item?.let { item ->
+                    onDeleteImg(item)
+                }
+            }
+        }
 
-        binding.ivDeleteImg.onThrottleClick {
-            onDeleteImg(item)
+        fun bind(item: MediaStoreImage) {
+            binding.item = item
         }
     }
 }

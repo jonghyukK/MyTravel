@@ -1,23 +1,24 @@
-package org.kjh.mytravel.ui.features.upload
+package org.kjh.mytravel.ui.features.upload.select
 
 import android.net.Uri
 import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.lifecycleScope
-import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.navGraphViewModels
 import androidx.navigation.ui.setupWithNavController
 import androidx.recyclerview.selection.SelectionTracker
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import org.kjh.mytravel.R
 import org.kjh.mytravel.databinding.FragmentSelectPhotoBinding
 import org.kjh.mytravel.model.MediaStoreImage
 import org.kjh.mytravel.ui.base.BaseFragment
+import org.kjh.mytravel.ui.features.upload.UploadViewModel
 import org.kjh.mytravel.utils.navigateTo
 import org.kjh.mytravel.utils.onThrottleMenuItemClick
 
@@ -25,18 +26,15 @@ import org.kjh.mytravel.utils.onThrottleMenuItemClick
 class SelectPhotoFragment
     : BaseFragment<FragmentSelectPhotoBinding>(R.layout.fragment_select_photo) {
 
-    private lateinit var tracker: SelectionTracker<Uri>
     private val viewModel: SelectPhotoViewModel by viewModels()
-    private val uploadViewModel: UploadViewModel by navGraphViewModels(R.id.nav_nested_upload) {
-        defaultViewModelProviderFactory
-    }
-
+    private val uploadViewModel: UploadViewModel by navGraphViewModels(R.id.nav_nested_upload) { defaultViewModelProviderFactory }
     private val mediaStoreImagesAdapter by lazy { MediaStoreImageListAdapter() }
     private val selectedPhotoListAdapter by lazy {
         SelectedPhotoListAdapter {
             tracker.deselect(it.contentUri)
         }
     }
+    private lateinit var tracker: SelectionTracker<Uri>
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -44,7 +42,6 @@ class SelectPhotoFragment
         binding.uploadViewModel = uploadViewModel
 
         initView()
-        initTracker(savedInstanceState)
         subscribeUi()
     }
 
@@ -54,60 +51,42 @@ class SelectPhotoFragment
             inflateMenu(R.menu.menu_next)
             onThrottleMenuItemClick { menu ->
                 when (menu.itemId) {
-                    R.id.next -> navigateToWritePostPage()
+                    R.id.next -> navigateTo(SelectPhotoFragmentDirections.actionToWritePost())
                 }
             }
         }
 
-        binding.rvLocalImages.apply {
+        binding.mediaStoreImgRecyclerView.apply {
             adapter = mediaStoreImagesAdapter
             setHasFixedSize(true)
-            addItemDecoration(SelectPhotoGridLayoutItemDecor())
+            addItemDecoration(MediaStoreImagesGridDecoration())
+        }.also {
+            tracker = MediaStoreSelectionTracker(it) {
+                updateSelectedMediaStoreItems()
+            }.getTracker()
+
+            mediaStoreImagesAdapter.tracker = tracker
         }
 
-        binding.rvSelectedImages.apply {
+        binding.selectedImgRecyclerView.apply {
             adapter = selectedPhotoListAdapter
-            setHasFixedSize(true)
-        }
-    }
-
-    private fun initTracker(savedInstanceState: Bundle?) {
-        tracker = MediaStoreSelectionTracker(binding.rvLocalImages) { updateSelectedMediaStoreItems() }
-            .getTracker()
-
-        mediaStoreImagesAdapter.tracker = tracker
-
-        if (savedInstanceState != null) {
-            tracker.onRestoreInstanceState(savedInstanceState)
         }
     }
 
     private fun subscribeUi() {
-        viewLifecycleOwner.lifecycleScope.launch {
-            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                uploadViewModel.uploadItemState.collect { uploadItemState ->
-                    restoreSelectionTracker(uploadItemState.selectedItems)
-                }
+        uploadViewModel.uploadItemState
+            .flowWithLifecycle(viewLifecycleOwner.lifecycle, Lifecycle.State.STARTED)
+            .onEach { uploadItemState ->
+                setTrackerItemSelected(uploadItemState.selectedItems)
             }
-        }
+            .launchIn(viewLifecycleOwner.lifecycleScope)
     }
 
-    override fun onSaveInstanceState(outState: Bundle) {
-        super.onSaveInstanceState(outState)
-        if (::tracker.isInitialized)
-            tracker.onSaveInstanceState(outState)
-    }
-
-    private fun restoreSelectionTracker(selectedItems: List<MediaStoreImage>) {
+    private fun setTrackerItemSelected(selectedItems: List<MediaStoreImage>) {
         if (selectedItems.isNotEmpty() && tracker.selection.size() == 0) {
             val list = selectedItems.map { it.contentUri }
             tracker.setItemsSelected(list, true)
         }
-    }
-
-    private fun navigateToWritePostPage() {
-        navigateTo(
-            SelectPhotoFragmentDirections.actionSelectPhotoFragmentToWritePostFragment())
     }
 
     private fun updateSelectedMediaStoreItems() {

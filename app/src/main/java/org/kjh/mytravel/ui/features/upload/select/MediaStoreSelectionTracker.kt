@@ -1,4 +1,4 @@
-package org.kjh.mytravel.ui.features.upload
+package org.kjh.mytravel.ui.features.upload.select
 
 import android.net.Uri
 import android.view.MotionEvent
@@ -16,11 +16,11 @@ class MediaStoreSelectionTracker(
     val recyclerView: RecyclerView,
     val onChangedSelection: () -> Unit,
 ) {
-    private var builder: SelectionTracker.Builder<Uri> =
+    private val builder: SelectionTracker.Builder<Uri> =
         SelectionTracker.Builder(
             "select_photo",
             recyclerView,
-            RecyclerViewIdKeyProvider(recyclerView.adapter as MediaStoreImageListAdapter),
+            SelectPhotoIdKeyProvider(recyclerView.adapter as MediaStoreImageListAdapter),
             SelectPhotoDetailsLookup(recyclerView),
             StorageStrategy.createParcelableStorage(Uri::class.java)
         ).withSelectionPredicate(SelectionPredicates.createSelectAnything())
@@ -35,7 +35,7 @@ class MediaStoreSelectionTracker(
             })
         }
 
-    class RecyclerViewIdKeyProvider(
+    class SelectPhotoIdKeyProvider(
         private val adapter: MediaStoreImageListAdapter
     ) : ItemKeyProvider<Uri>(SCOPE_CACHED) {
 
@@ -52,10 +52,13 @@ class MediaStoreSelectionTracker(
 
         override fun getItemDetails(e: MotionEvent): ItemDetails<Uri>? {
             val view = recyclerView.findChildViewUnder(e.x, e.y)
+
             if (view != null) {
-                return (recyclerView.getChildViewHolder(view) as MediaStoreImageListAdapter.SelectPhotoViewHolder)
-                    .getItemDetails()
+                val holder = recyclerView.getChildViewHolder(view) as
+                        MediaStoreImageListAdapter.SelectPhotoViewHolder
+                return holder.getItemDetails()
             }
+
             return null
         }
     }

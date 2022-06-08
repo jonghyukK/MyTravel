@@ -24,8 +24,8 @@ import org.kjh.mytravel.ui.features.place.subcity.PlacesBySubCityListAdapter
 import org.kjh.mytravel.utils.InputValidator
 import org.kjh.mytravel.ui.features.profile.PostMultipleViewAdapter
 import org.kjh.mytravel.ui.features.upload.MapSearchPlaceListAdapter
-import org.kjh.mytravel.ui.features.upload.MediaStoreImageListAdapter
-import org.kjh.mytravel.ui.features.upload.SelectedPhotoListAdapter
+import org.kjh.mytravel.ui.features.upload.select.MediaStoreImageListAdapter
+import org.kjh.mytravel.ui.features.upload.select.SelectedPhotoListAdapter
 import org.kjh.mytravel.ui.features.upload.WritePostImagesAdapter
 //import org.kjh.mytravel.ui.features.profile.user.UserPostListAdapter
 import org.kjh.mytravel.utils.avoidUncheckedWarnAndCast
@@ -136,7 +136,6 @@ object BindingAdapters {
     fun bindVisible(view: View, isVisible: Boolean) {
         view.isVisible = isVisible
     }
-
 
     @JvmStatic
     @BindingAdapter("isBookmarked")

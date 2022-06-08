@@ -1,4 +1,4 @@
-package org.kjh.mytravel.ui.features.upload
+package org.kjh.mytravel.ui.features.upload.select
 
 import android.content.ContentUris
 import android.content.Context
@@ -31,7 +31,6 @@ class SelectPhotoViewModel @Inject constructor(
     }
 
     private suspend fun getMediaStoreImages(): List<MediaStoreImage> {
-
         val imageItems = mutableListOf<MediaStoreImage>()
 
         withContext(Dispatchers.IO) {
