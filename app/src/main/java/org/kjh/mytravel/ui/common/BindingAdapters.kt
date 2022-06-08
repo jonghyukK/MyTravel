@@ -1,5 +1,6 @@
 package org.kjh.mytravel.ui.common
 
+import android.animation.ObjectAnimator
 import android.graphics.Color
 import android.net.Uri
 import android.view.View
@@ -21,14 +22,14 @@ import org.kjh.mytravel.ui.features.bookmark.BookmarkListAdapter
 import org.kjh.mytravel.ui.features.home.banner.BannerListAdapter
 import org.kjh.mytravel.ui.features.place.detail.PlaceDayLogListAdapter
 import org.kjh.mytravel.ui.features.place.subcity.PlacesBySubCityListAdapter
-import org.kjh.mytravel.utils.InputValidator
 import org.kjh.mytravel.ui.features.profile.PostMultipleViewAdapter
 import org.kjh.mytravel.ui.features.upload.MapSearchPlaceListAdapter
+import org.kjh.mytravel.ui.features.upload.WritePostImagesAdapter
 import org.kjh.mytravel.ui.features.upload.select.MediaStoreImageListAdapter
 import org.kjh.mytravel.ui.features.upload.select.SelectedPhotoListAdapter
-import org.kjh.mytravel.ui.features.upload.WritePostImagesAdapter
-//import org.kjh.mytravel.ui.features.profile.user.UserPostListAdapter
+import org.kjh.mytravel.utils.InputValidator
 import org.kjh.mytravel.utils.avoidUncheckedWarnAndCast
+import org.kjh.mytravel.utils.dpToPx
 
 /**
  * MyTravel
@@ -39,6 +40,31 @@ import org.kjh.mytravel.utils.avoidUncheckedWarnAndCast
  */
 
 object BindingAdapters {
+
+    @JvmStatic
+    @BindingAdapter("isNotEmptySelectedItems", "isDoneAnimated", "setDoneAnimated")
+    fun bindAnimatorWithTranslationY(
+        view: RecyclerView,
+        isNotEmptySelectedItems: Boolean,
+        isDoneAnimated: Boolean,
+        setDoneAnimated: (Boolean) -> Unit
+    ) {
+        val translateRange =
+            if (isNotEmptySelectedItems)
+                90.dpToPx(view.context).toFloat()
+            else
+                0f
+
+        if (!isDoneAnimated) {
+            ObjectAnimator.ofFloat(view, "translationY", translateRange).apply {
+                duration = 180
+                start()
+            }
+        } else {
+            view.translationY = translateRange
+            setDoneAnimated(false)
+        }
+    }
 
     @JvmStatic
     @BindingAdapter("onThrottleClick")

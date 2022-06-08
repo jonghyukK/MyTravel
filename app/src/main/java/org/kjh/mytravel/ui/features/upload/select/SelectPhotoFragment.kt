@@ -70,6 +70,7 @@ class SelectPhotoFragment
 
         binding.selectedImgRecyclerView.apply {
             adapter = selectedPhotoListAdapter
+            addItemDecoration(SelectedPhotoItemsDecoration())
         }
     }
 
@@ -99,5 +100,10 @@ class SelectPhotoFragment
         }
 
         uploadViewModel.updateSelectedImages(selectedList)
+    }
+
+    override fun onDestroyView() {
+        viewModel.updateAnimatedState(true)
+        super.onDestroyView()
     }
 }

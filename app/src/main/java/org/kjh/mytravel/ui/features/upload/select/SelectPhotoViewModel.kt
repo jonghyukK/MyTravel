@@ -8,6 +8,8 @@ import androidx.lifecycle.liveData
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.withContext
 import org.kjh.mytravel.model.MediaStoreImage
 import javax.inject.Inject
@@ -28,6 +30,13 @@ class SelectPhotoViewModel @Inject constructor(
 
     val mediaStoreImages = liveData {
         emit(getMediaStoreImages())
+    }
+
+    private val _isDoneAnimated = MutableStateFlow(false)
+    val isDoneAnimated = _isDoneAnimated.asStateFlow()
+
+    val updateAnimatedState = fun(value: Boolean) {
+        _isDoneAnimated.value = value
     }
 
     private suspend fun getMediaStoreImages(): List<MediaStoreImage> {
