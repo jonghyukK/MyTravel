@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+        <variable
+            name="mapQueryItem"
+            type="org.kjh.mytravel.model.MapQueryItem" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/bg_ripple">
+
+        <ImageView
+            android:id="@+id/iv_locationIcon"
+            android:layout_width="26dp"
+            android:layout_height="26dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginStart="15dp"
+            android:layout_marginBottom="10dp"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:src="@drawable/ic_pin"/>
+
+        <TextView
+            android:id="@+id/tv_placeName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="15dp"
+            android:text="@{mapQueryItem.placeName}"
+            android:textColor="@color/purple_500"
+            android:textSize="15sp"
+            app:layout_constraintVertical_chainStyle="packed"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/iv_locationIcon"
+            app:layout_constraintBottom_toTopOf="@+id/tv_placeAddress"/>
+
+        <TextView
+            android:id="@+id/tv_placeAddress"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="@{mapQueryItem.placeAddress}"
+            android:textSize="13sp"
+            android:layout_marginTop="4dp"
+            app:layout_constraintTop_toBottomOf="@+id/tv_placeName"
+            app:layout_constraintStart_toStartOf="@+id/tv_placeName"
+            app:layout_constraintBottom_toTopOf="@+id/tv_placeRoadAddress"/>
+
+        <TextView
+            android:id="@+id/tv_placeRoadAddress"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@{mapQueryItem.placeRoadAddress}"
+            android:textSize="13sp"
+            android:layout_marginTop="2dp"
+            app:layout_constraintTop_toBottomOf="@+id/tv_placeAddress"
+            app:layout_constraintStart_toStartOf="@+id/tv_placeName"
+            app:layout_constraintBottom_toBottomOf="parent"/>
+
+        <View
+            android:layout_width="0dp"
+            android:layout_height="1dp"
+            android:background="#eeeeee"
+            android:layout_marginTop="5dp"
+            app:layout_constraintStart_toStartOf="@+id/tv_placeName"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tv_placeRoadAddress"
+            app:layout_constraintBottom_toBottomOf="parent"/>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

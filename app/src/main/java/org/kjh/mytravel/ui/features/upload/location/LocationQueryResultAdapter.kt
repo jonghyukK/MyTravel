@@ -1,10 +1,10 @@
-package org.kjh.mytravel.ui.features.upload
+package org.kjh.mytravel.ui.features.upload.location
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import org.kjh.mytravel.databinding.VhBsSearchPlaceBinding
+import org.kjh.mytravel.databinding.VhSearchLocationItemBinding
 import org.kjh.mytravel.model.MapQueryItem
 import org.kjh.mytravel.utils.onThrottleClick
 
@@ -15,13 +15,13 @@ import org.kjh.mytravel.utils.onThrottleClick
  *
  * Description:
  */
-class MapSearchPlaceListAdapter(
+class LocationQueryResultAdapter(
     private val onClickQueryItem: (MapQueryItem) -> Unit
-) : ListAdapter<MapQueryItem, MapSearchPlaceListAdapter.MapSearchPlaceViewHolder>(MapQueryItem.diffCallback) {
+) : ListAdapter<MapQueryItem, LocationQueryResultAdapter.MapSearchPlaceViewHolder>(MapQueryItem.diffCallback) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) =
         MapSearchPlaceViewHolder(
-            VhBsSearchPlaceBinding.inflate(
+            VhSearchLocationItemBinding.inflate(
                 LayoutInflater.from(parent.context), parent, false
             ), onClickQueryItem
         )
@@ -31,7 +31,7 @@ class MapSearchPlaceListAdapter(
     }
 
     class MapSearchPlaceViewHolder(
-        val binding         : VhBsSearchPlaceBinding,
+        val binding         : VhSearchLocationItemBinding,
         val onClickQueryItem: (MapQueryItem) -> Unit
     ): RecyclerView.ViewHolder(binding.root) {
 

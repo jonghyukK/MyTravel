@@ -1,4 +1,4 @@
-package org.kjh.mytravel.ui.features.upload
+package org.kjh.mytravel.ui.features.upload.location
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -7,7 +7,6 @@ import com.orhanobut.logger.Logger
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import org.kjh.domain.entity.ApiResult
 import org.kjh.domain.usecase.SearchMapUseCase
@@ -25,7 +24,7 @@ import javax.inject.Inject
  */
 
 @HiltViewModel
-class MapSearchViewModel @Inject constructor(
+class LocationSearchViewModel @Inject constructor(
     private val searchMapUseCase: SearchMapUseCase
 ): ViewModel() {
     private val _uiState: MutableStateFlow<UiState<List<MapQueryItem>>> = MutableStateFlow(UiState.Init)

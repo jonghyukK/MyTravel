@@ -6,7 +6,6 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import org.kjh.mytravel.databinding.VhRectImageBigBinding
 import org.kjh.mytravel.model.MediaStoreImage
-import org.kjh.mytravel.utils.dpToPx
 
 /**
  * MyTravel
@@ -16,8 +15,8 @@ import org.kjh.mytravel.utils.dpToPx
  * Description:
  */
 
-class WritePostImagesAdapter
-    : ListAdapter<MediaStoreImage, WritePostImagesAdapter.TempImagesViewHolder>(MediaStoreImage.diffCallback){
+class UploadTempImagesAdapter
+    : ListAdapter<MediaStoreImage, UploadTempImagesAdapter.TempImagesViewHolder>(MediaStoreImage.diffCallback){
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) =
         TempImagesViewHolder(
@@ -35,10 +34,6 @@ class WritePostImagesAdapter
 
         fun bind(item: MediaStoreImage) {
             binding.item = item
-
-            val displayWidth: Int = itemView.resources.displayMetrics.widthPixels
-            binding.clRectImgContainer.layoutParams.width =
-                displayWidth - 16.dpToPx(itemView.resources.displayMetrics) * 4
         }
     }
 }

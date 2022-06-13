@@ -1,4 +1,4 @@
-package org.kjh.mytravel.ui.features.upload
+package org.kjh.mytravel.ui.features.upload.location
 
 import android.os.Bundle
 import android.view.View
@@ -9,26 +9,25 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import org.kjh.mytravel.R
-import org.kjh.mytravel.databinding.BsFragmentMapSearchBinding
+import org.kjh.mytravel.databinding.BsFragmentLocationSearchBinding
 import org.kjh.mytravel.model.MapQueryItem
 import org.kjh.mytravel.ui.base.BaseBottomSheetDialogFragment
 import org.kjh.mytravel.ui.common.UiState
 
 @AndroidEntryPoint
-class MapSearchFragment
-    : BaseBottomSheetDialogFragment<BsFragmentMapSearchBinding>(R.layout.bs_fragment_map_search) {
+class LocationSearchFragment
+    : BaseBottomSheetDialogFragment<BsFragmentLocationSearchBinding>(R.layout.bs_fragment_location_search) {
 
-    private val viewModel   : MapSearchViewModel by viewModels()
-    private val mapViewModel: MapViewModel by viewModels({ requireParentFragment() })
-    private val mapSearchPlaceListAdapter by lazy {
-        MapSearchPlaceListAdapter(onClickQueryItem = ::dismissAfterSetMapQueryItem)
+    private val viewModel   : LocationSearchViewModel by viewModels()
+    private val locationViewModel: LocationViewModel by viewModels({ requireParentFragment() })
+    private val locationQueryResultAdapter by lazy {
+        LocationQueryResultAdapter(onClickQueryItem = ::dismissAfterSetMapQueryItem)
     }
 
     private fun dismissAfterSetMapQueryItem(item: MapQueryItem) {
-        mapViewModel.setTempPlaceItem(item)
+        locationViewModel.setTempPlaceItem(item)
         dismiss()
     }
 
@@ -42,12 +41,12 @@ class MapSearchFragment
     }
 
     private fun initView() {
-        binding.rvSearchList.apply {
+        binding.rvQueryResultRecyclerView.apply {
             setHasFixedSize(true)
-            adapter = mapSearchPlaceListAdapter
+            adapter = locationQueryResultAdapter
         }
 
-        binding.etSearch.setOnEditorActionListener { _, actionId, _ ->
+        binding.etMapQuery.setOnEditorActionListener { _, actionId, _ ->
             if (actionId == EditorInfo.IME_ACTION_SEARCH)
                 viewModel.requestSearchPlaceByQuery()
             false
@@ -70,9 +69,9 @@ class MapSearchFragment
     }
 
     companion object {
-        const val TAG = "MapSearchFragment"
+        const val TAG = "LocationSearchFragment"
 
         @JvmStatic
-        fun newInstance() = MapSearchFragment()
+        fun newInstance() = LocationSearchFragment()
     }
 }

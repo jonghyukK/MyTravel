@@ -30,7 +30,7 @@ import javax.inject.Inject
 data class UploadItemState(
     val selectedItems: List<MediaStoreImage> = listOf(),
     val placeItem    : MapQueryItem? = null,
-    val content      : String? = "",
+    val content      : String = "",
 )
 
 @HiltViewModel
@@ -44,17 +44,21 @@ class UploadViewModel @Inject constructor(
     private val _uploadState: MutableStateFlow<UiState<User>> = MutableStateFlow(UiState.Init)
     val uploadState = _uploadState.asStateFlow()
 
-    val content = MutableLiveData<String>()
-
     fun updateSelectedImages(items: List<MediaStoreImage>) {
         _uploadItemState.update {
             it.copy(selectedItems = items)
         }
     }
 
-    fun updatePlaceItem(item: MapQueryItem) {
+    fun updatePlaceItem(item: MapQueryItem?) {
         _uploadItemState.update {
             it.copy(placeItem = item)
+        }
+    }
+
+    fun updateContent(content: String) {
+        _uploadItemState.update {
+            it.copy(content = content)
         }
     }
 
@@ -65,7 +69,7 @@ class UploadViewModel @Inject constructor(
     fun requestUploadPost() {
         val imgPathList = _uploadItemState.value.selectedItems.map { it.realPath }
         val placeInfo   = _uploadItemState.value.placeItem
-        val content     = content.value.toString()
+        val content     = _uploadItemState.value.content
 
         if (imgPathList.isEmpty() || placeInfo == null || content.isBlank()) {
             _uploadState.value = UiState.Error(Throwable("필수 입력 정보를 확인해 주세요."))

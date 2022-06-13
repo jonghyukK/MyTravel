@@ -1,4 +1,4 @@
-package org.kjh.mytravel.ui.features.upload
+package org.kjh.mytravel.ui.features.upload.location
 
 import androidx.lifecycle.ViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -16,7 +16,7 @@ import javax.inject.Inject
  */
 
 @HiltViewModel
-class MapViewModel @Inject constructor(): ViewModel() {
+class LocationViewModel @Inject constructor(): ViewModel() {
     private val _selectedLocationItem: MutableStateFlow<MapQueryItem?> = MutableStateFlow(null)
     val selectedLocationItem = _selectedLocationItem.asStateFlow()
 

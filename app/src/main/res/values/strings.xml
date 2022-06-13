@@ -30,9 +30,15 @@
     <string name="retry">다시 시도</string>
     <string name="daylog">데이로그</string>
     <string name="info">정보</string>
+    <string name="input_content_hint">내용 입력..</string>
+    <string name="input_content">내용 입력</string>
+    <string name="input_complete">입력 완료</string>
     <string name="search_address_and_name">주소 및 명칭 검색</string>
+    <string name="search_address_hint">주소 혹은 장소 명칭 입력</string>
     <string name="apply_current_place">현재 위치 적용</string>
+    <string name="search_empty">검색 결과가 없습니다. \n주소 혹은 장소 명칭을 확인해 주세요.</string>
     <string name="input_content_your_experience">해당 장소에서의 경험을 적어주세요.</string>
+    <string name="input_place">장소를 추가해 주세요.</string>
     <string name="title_place_ranking_best_7">이번 주 가장 핫한 장소 BEST 7</string>
     <string name="desc_share_travel_to_friend_after_login_or_signup">로그인/회원가입 후 \n멋진 나의 여행지를 친구들에게 공유해 주세요!</string>
     <string name="desc_nothing_bookmark">북마크된 장소가 없습니다.</string>

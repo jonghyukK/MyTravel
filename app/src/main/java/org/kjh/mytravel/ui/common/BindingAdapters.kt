@@ -23,8 +23,8 @@ import org.kjh.mytravel.ui.features.home.banner.BannerListAdapter
 import org.kjh.mytravel.ui.features.place.detail.PlaceDayLogListAdapter
 import org.kjh.mytravel.ui.features.place.subcity.PlacesBySubCityListAdapter
 import org.kjh.mytravel.ui.features.profile.PostMultipleViewAdapter
-import org.kjh.mytravel.ui.features.upload.MapSearchPlaceListAdapter
-import org.kjh.mytravel.ui.features.upload.WritePostImagesAdapter
+import org.kjh.mytravel.ui.features.upload.location.LocationQueryResultAdapter
+import org.kjh.mytravel.ui.features.upload.UploadTempImagesAdapter
 import org.kjh.mytravel.ui.features.upload.select.MediaStoreImageListAdapter
 import org.kjh.mytravel.ui.features.upload.select.SelectedPhotoListAdapter
 import org.kjh.mytravel.utils.InputValidator
@@ -40,6 +40,23 @@ import org.kjh.mytravel.utils.dpToPx
  */
 
 object BindingAdapters {
+
+    @JvmStatic
+    @BindingAdapter("contentText")
+    fun bindConvertedPlaceAddress(view: TextView, content: String) {
+        view.text = content.ifBlank { view.resources.getString(R.string.input_content_your_experience)}
+    }
+
+    @JvmStatic
+    @BindingAdapter("convertPlaceAddress")
+    fun bindConvertedPlaceAddress(view: TextView, mapQueryItem: MapQueryItem?) {
+        view.text = mapQueryItem?.let {
+            val placeName = it.placeName
+            val (cityName, subCityName) = it.placeAddress.split(" ")
+
+            "$placeName | $cityName, $subCityName"
+        } ?: view.resources.getString(R.string.input_place)
+    }
 
     @JvmStatic
     @BindingAdapter("isNotEmptySelectedItems", "isDoneAnimated", "setDoneAnimated")
@@ -110,13 +127,13 @@ object BindingAdapters {
                 is SelectedPhotoListAdapter ->
                     adapter.submitList(items.avoidUncheckedWarnAndCast<MediaStoreImage>())
 
-                is WritePostImagesAdapter ->
+                is UploadTempImagesAdapter ->
                     adapter.submitList(items.avoidUncheckedWarnAndCast<MediaStoreImage>())
 
                 is BookmarkListAdapter ->
                     adapter.submitList(items.avoidUncheckedWarnAndCast<Bookmark>())
 
-                is MapSearchPlaceListAdapter ->
+                is LocationQueryResultAdapter ->
                     adapter.submitList(items.avoidUncheckedWarnAndCast<MapQueryItem>())
 
                 is BannerListAdapter ->
