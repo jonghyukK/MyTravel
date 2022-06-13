@@ -1,5 +1,7 @@
 package org.kjh.data.datasource
 
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import org.kjh.data.api.ApiService
 import org.kjh.data.model.base.BaseApiModel
 import org.kjh.data.model.BookmarkModel
@@ -30,12 +32,16 @@ class BookmarkRemoteDataSourceImpl @Inject constructor(
 
     override suspend fun fetchMyBookmarks(
         myEmail: String
-    ) = apiService.fetchMyBookmarks(myEmail)
+    ) = withContext(Dispatchers.IO) {
+        apiService.fetchMyBookmarks(myEmail)
+    }
 
     override suspend fun updateMyBookmarks(
         myEmail  : String,
         postId   : Int,
         placeName: String
-    ) = apiService.updateMyBookmarks(myEmail, postId, placeName)
+    ) = withContext(Dispatchers.IO) {
+        apiService.updateMyBookmarks(myEmail, postId, placeName)
+    }
 
 }

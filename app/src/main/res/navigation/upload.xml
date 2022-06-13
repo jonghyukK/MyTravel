@@ -26,6 +26,7 @@
     <fragment
         android:id="@+id/uploadPostFragment"
         android:name="org.kjh.mytravel.ui.features.upload.UploadPostFragment"
+        android:label="내용 채우기"
         tools:layout="@layout/fragment_upload_post">
         <action
             android:id="@+id/action_to_locationFragment"

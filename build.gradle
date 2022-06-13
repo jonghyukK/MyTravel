@@ -17,6 +17,7 @@ buildscript {
         navermap_version = '3.13.0'
         image_cropper_version = '3.3.5'
         hilt_version = '2.41'
+        work_version = '2.7.1'
     }
     repositories {
         google()

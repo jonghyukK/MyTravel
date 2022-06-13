@@ -1,5 +1,8 @@
 package org.kjh.data.datasource
 
+import android.util.Log
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import org.kjh.data.api.ApiService
 import org.kjh.data.model.FollowModel
 import org.kjh.data.model.UserModel
@@ -41,10 +44,14 @@ class UserRemoteDataSourceImpl @Inject constructor(
     private val apiService: ApiService
 ): UserRemoteDataSource {
     override suspend fun fetchMyProfile(myEmail: String)
-    = apiService.fetchUser(myEmail)
+    = withContext(Dispatchers.IO) {
+        apiService.fetchUser(myEmail)
+    }
 
     override suspend fun fetchUser(myEmail: String, targetEmail: String?)
-    = apiService.fetchUser(myEmail, targetEmail)
+    = withContext(Dispatchers.IO) {
+        apiService.fetchUser(myEmail, targetEmail)
+    }
 
     override suspend fun updateMyProfile(
         profileUrl: String?,
@@ -52,14 +59,18 @@ class UserRemoteDataSourceImpl @Inject constructor(
         nickName  : String,
         introduce : String?
     ): BaseApiModel<UserModel>
-    = apiService.updateMyProfile(
+    = withContext(Dispatchers.IO) {
+        apiService.updateMyProfile(
             file      = FileUtils.makeFormDataForUpload(profileUrl),
             email     = email,
             nickName  = nickName,
             introduce = introduce)
+    }
 
     override suspend fun updateFollowState(
         myEmail    : String,
         targetEmail: String
-    ) = apiService.updateFollowState(myEmail, targetEmail)
+    ) = withContext(Dispatchers.IO) {
+        apiService.updateFollowState(myEmail, targetEmail)
+    }
 }

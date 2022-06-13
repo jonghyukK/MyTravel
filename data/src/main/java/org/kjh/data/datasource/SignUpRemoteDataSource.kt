@@ -1,5 +1,7 @@
 package org.kjh.data.datasource
 
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import org.kjh.data.api.ApiService
 import org.kjh.data.model.SignUpModel
 import org.kjh.data.model.base.BaseApiModel
@@ -31,5 +33,7 @@ class SignUpDataSourceImpl @Inject constructor(
         email   : String,
         pw      : String,
         nickName: String
-    ) = apiService.createUser(email, pw, nickName)
+    ) = withContext(Dispatchers.IO) {
+        apiService.createUser(email, pw, nickName)
+    }
 }

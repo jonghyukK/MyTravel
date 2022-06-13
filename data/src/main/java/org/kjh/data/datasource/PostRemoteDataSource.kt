@@ -1,5 +1,7 @@
 package org.kjh.data.datasource
 
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import org.kjh.data.api.ApiService
 import org.kjh.data.model.PostModel
 import org.kjh.data.model.UserModel
@@ -46,7 +48,8 @@ class PostRemoteDataSourceImpl @Inject constructor(
         placeRoadAddress: String,
         x           : String,
         y           : String
-    ) = apiService.uploadPost(
+    ) = withContext(Dispatchers.IO) {
+        apiService.uploadPost(
             x            = x,
             y            = y,
             file         = FileUtils.makeFormDataListForUpload(file),
@@ -56,10 +59,13 @@ class PostRemoteDataSourceImpl @Inject constructor(
             placeAddress = placeAddress,
             placeRoadAddress = placeRoadAddress
         )
+    }
 
 
     override suspend fun fetchLatestPosts(
         page: Int,
         size: Int
-    ) = apiService.fetchLatestPosts(page, size)
+    ) = withContext(Dispatchers.IO) {
+        apiService.fetchLatestPosts(page, size)
+    }
 }
