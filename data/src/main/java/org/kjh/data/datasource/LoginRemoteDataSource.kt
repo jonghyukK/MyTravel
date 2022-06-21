@@ -1,6 +1,6 @@
 package org.kjh.data.datasource
 
-import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.withContext
 import org.kjh.data.api.ApiService
 import org.kjh.data.model.LoginModel
@@ -24,11 +24,12 @@ interface LoginRemoteDataSource {
 }
 
 class LoginDataSourceImpl @Inject constructor(
-    private val apiService: ApiService
+    private val apiService: ApiService,
+    private val ioDispatcher: CoroutineDispatcher
 ): LoginRemoteDataSource {
 
     override suspend fun requestLogin(email: String, pw: String)
-    = withContext(Dispatchers.IO) {
+    = withContext(ioDispatcher) {
         apiService.requestLogin(email, pw)
     }
 }

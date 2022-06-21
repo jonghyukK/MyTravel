@@ -1,5 +1,6 @@
 package org.kjh.data.datasource
 
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import org.kjh.data.api.KakaoApiService
@@ -21,11 +22,12 @@ interface MapRemoteDataSource {
 }
 
 class MapRemoteDataSourceImpl @Inject constructor(
-    private val kakaoApiService: KakaoApiService
+    private val kakaoApiService: KakaoApiService,
+    private val ioDispatcher: CoroutineDispatcher
 ): MapRemoteDataSource {
 
     override suspend fun searchPlace(query: String) =
-        withContext(Dispatchers.IO) {
+        withContext(ioDispatcher) {
             kakaoApiService.getPlaceInfo(KAKAO_API_KEY, query)
         }
 }

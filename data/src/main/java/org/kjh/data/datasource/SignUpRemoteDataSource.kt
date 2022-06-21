@@ -1,5 +1,6 @@
 package org.kjh.data.datasource
 
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import org.kjh.data.api.ApiService
@@ -26,14 +27,15 @@ interface SignUpRemoteDataSource {
 }
 
 class SignUpDataSourceImpl @Inject constructor(
-    private val apiService: ApiService
+    private val apiService: ApiService,
+    private val ioDispatcher: CoroutineDispatcher
 ): SignUpRemoteDataSource {
 
     override suspend fun requestSignUp(
         email   : String,
         pw      : String,
         nickName: String
-    ) = withContext(Dispatchers.IO) {
+    ) = withContext(ioDispatcher) {
         apiService.createUser(email, pw, nickName)
     }
 }

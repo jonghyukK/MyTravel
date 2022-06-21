@@ -1,6 +1,7 @@
 package org.kjh.data.datasource
 
 import android.util.Log
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import org.kjh.data.api.ApiService
@@ -41,15 +42,16 @@ interface UserRemoteDataSource {
 }
 
 class UserRemoteDataSourceImpl @Inject constructor(
-    private val apiService: ApiService
+    private val apiService: ApiService,
+    private val ioDispatcher: CoroutineDispatcher
 ): UserRemoteDataSource {
     override suspend fun fetchMyProfile(myEmail: String)
-    = withContext(Dispatchers.IO) {
+    = withContext(ioDispatcher) {
         apiService.fetchUser(myEmail)
     }
 
     override suspend fun fetchUser(myEmail: String, targetEmail: String?)
-    = withContext(Dispatchers.IO) {
+    = withContext(ioDispatcher) {
         apiService.fetchUser(myEmail, targetEmail)
     }
 
@@ -59,7 +61,7 @@ class UserRemoteDataSourceImpl @Inject constructor(
         nickName  : String,
         introduce : String?
     ): BaseApiModel<UserModel>
-    = withContext(Dispatchers.IO) {
+    = withContext(ioDispatcher) {
         apiService.updateMyProfile(
             file      = FileUtils.makeFormDataForUpload(profileUrl),
             email     = email,
@@ -70,7 +72,7 @@ class UserRemoteDataSourceImpl @Inject constructor(
     override suspend fun updateFollowState(
         myEmail    : String,
         targetEmail: String
-    ) = withContext(Dispatchers.IO) {
+    ) = withContext(ioDispatcher) {
         apiService.updateFollowState(myEmail, targetEmail)
     }
 }

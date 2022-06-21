@@ -1,5 +1,6 @@
 package org.kjh.data.datasource
 
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import org.kjh.data.api.ApiService
@@ -32,26 +33,27 @@ interface PlaceRemoteDataSource {
 }
 
 class PlaceRemoteDataSourceImpl @Inject constructor(
-    private val apiService: ApiService
+    private val apiService: ApiService,
+    private val ioDispatcher: CoroutineDispatcher
 ): PlaceRemoteDataSource {
 
     override suspend fun fetchPlaceDetailByPlaceName(placeName: String)
-    = withContext(Dispatchers.IO) {
+    = withContext(ioDispatcher) {
         apiService.fetchPlaceDetailByPlaceName(placeName)
     }
 
     override suspend fun fetchPlaceRankings()
-    = withContext(Dispatchers.IO) {
+    = withContext(ioDispatcher) {
         apiService.fetchPlaceRankings()
     }
 
     override suspend fun fetchPlaceBanners()
-    = withContext(Dispatchers.IO) {
+    = withContext(ioDispatcher) {
         apiService.fetchPlaceBanners()
     }
 
     override suspend fun fetchPlacesBySubCityName(subCityName: String)
-    = withContext(Dispatchers.IO) {
+    = withContext(ioDispatcher) {
         apiService.fetchPlacesBySubCityName(subCityName)
     }
 }
