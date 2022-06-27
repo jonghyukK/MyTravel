@@ -1,7 +1,5 @@
 package org.kjh.mytravel.ui.features.bookmark
 
-import android.os.Bundle
-import android.view.View
 import androidx.fragment.app.activityViewModels
 import dagger.hilt.android.AndroidEntryPoint
 import org.kjh.mytravel.R
@@ -23,8 +21,7 @@ class BookMarkFragment
         myProfileViewModel.updateBookmark(item.postId, item.placeName)
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
+    override fun initView() {
         binding.myProfileViewModel = myProfileViewModel
 
         binding.bookmarksRecyclerView.apply {
@@ -32,4 +29,6 @@ class BookMarkFragment
             adapter = bookMarkListAdapter
         }
     }
+
+    override fun subscribeUi() {}
 }

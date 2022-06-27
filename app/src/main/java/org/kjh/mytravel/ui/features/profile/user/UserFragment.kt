@@ -1,7 +1,5 @@
 package org.kjh.mytravel.ui.features.profile.user
 
-import android.os.Bundle
-import android.view.View
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
@@ -12,7 +10,6 @@ import androidx.navigation.fragment.navArgs
 import androidx.navigation.ui.setupWithNavController
 import com.google.android.material.tabs.TabLayoutMediator
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import org.kjh.mytravel.R
 import org.kjh.mytravel.databinding.FragmentUserBinding
@@ -36,16 +33,10 @@ class UserFragment
         UserViewModel.provideFactory(userViewModelFactory, args.userEmail)
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
+    override fun initView() {
         binding.viewModel = viewModel
         binding.fragment  = this
 
-        initView()
-        subscribeUi()
-    }
-
-    private fun initView() {
         binding.tbUserToolbar.setupWithNavController(findNavController())
 
         val tabLayout = binding.postsTabLayout
@@ -62,7 +53,7 @@ class UserFragment
         }.attach()
     }
 
-    private fun subscribeUi() {
+    override fun subscribeUi() {
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 launch {

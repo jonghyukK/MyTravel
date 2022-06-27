@@ -1,7 +1,5 @@
 package org.kjh.mytravel.ui.features.settings
 
-import android.os.Bundle
-import android.view.View
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.flowWithLifecycle
@@ -22,15 +20,13 @@ class SettingFragment : BaseFragment<FragmentSettingBinding>(R.layout.fragment_s
 
     private val viewModel: SettingViewModel by viewModels()
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
+    override fun initView() {
         binding.viewModel = viewModel
 
         binding.tbSettingToolbar.setupWithNavController(findNavController())
-        subscribeUi()
     }
 
-    private fun subscribeUi() {
+    override fun subscribeUi() {
         viewModel.loginInfoPreferencesFlow
             .flowWithLifecycle(viewLifecycleOwner.lifecycle, Lifecycle.State.STARTED)
             .onEach { loginInfo ->

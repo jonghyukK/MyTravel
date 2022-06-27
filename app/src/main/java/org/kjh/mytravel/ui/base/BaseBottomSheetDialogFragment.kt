@@ -38,6 +38,16 @@ abstract class BaseBottomSheetDialogFragment<B: ViewDataBinding>(
         return binding.root
     }
 
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        initView()
+        subscribeUi()
+    }
+
+    abstract fun initView()
+    abstract fun subscribeUi()
+
     override fun onStart() {
         super.onStart()
 

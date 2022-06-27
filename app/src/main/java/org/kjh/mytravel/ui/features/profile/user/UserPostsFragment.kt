@@ -51,8 +51,7 @@ class UserPostsFragment
         }
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
+    override fun initView() {
         binding.viewModel = viewModel
 
         binding.postRecyclerView.apply {
@@ -68,6 +67,8 @@ class UserPostsFragment
             }
         }
     }
+
+    override fun subscribeUi() {}
 
     companion object {
         private const val VIEW_TYPE = "viewType"

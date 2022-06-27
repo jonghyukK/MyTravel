@@ -39,10 +39,11 @@ class NotLoginFragment
         requireActivity().onBackPressedDispatcher.addCallback(this, backPressedCallback)
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
+    override fun initView() {
         binding.fragment = this
     }
+
+    override fun subscribeUi() {}
 
     fun navigateHomeWhenSuccessLoginOrSignUp() {
         val navController = findNavController()

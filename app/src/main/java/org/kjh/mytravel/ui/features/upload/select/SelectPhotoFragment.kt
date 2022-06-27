@@ -1,8 +1,6 @@
 package org.kjh.mytravel.ui.features.upload.select
 
 import android.net.Uri
-import android.os.Bundle
-import android.view.View
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
@@ -36,16 +34,10 @@ class SelectPhotoFragment
         }
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
+    override fun initView() {
         binding.viewModel       = viewModel
         binding.uploadViewModel = uploadViewModel
 
-        initView()
-        subscribeUi()
-    }
-
-    private fun initView() {
         binding.tbSelectPhotoToolbar.apply {
             setupWithNavController(findNavController())
             inflateMenu(R.menu.menu_next)
@@ -74,7 +66,7 @@ class SelectPhotoFragment
         }
     }
 
-    private fun subscribeUi() {
+    override fun subscribeUi() {
         uploadViewModel.uploadItem
             .flowWithLifecycle(viewLifecycleOwner.lifecycle, Lifecycle.State.STARTED)
             .onEach { uploadItem ->

@@ -1,7 +1,5 @@
 package org.kjh.mytravel.ui.features.upload.location
 
-import android.os.Bundle
-import android.view.View
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
@@ -18,38 +16,27 @@ import org.kjh.mytravel.R
 import org.kjh.mytravel.databinding.FragmentLocationBinding
 import org.kjh.mytravel.model.MapQueryItem
 import org.kjh.mytravel.ui.base.BaseFragment
+import org.kjh.mytravel.ui.base.BaseMapFragment
 import org.kjh.mytravel.ui.features.upload.UploadViewModel
 
 @AndroidEntryPoint
 class LocationFragment :
-    BaseFragment<FragmentLocationBinding>(R.layout.fragment_location),
-    OnMapReadyCallback
+    BaseMapFragment<FragmentLocationBinding>(R.layout.fragment_location)
 {
     private val viewModel      : LocationViewModel by viewModels()
     private val uploadViewModel: UploadViewModel by activityViewModels()
-    private lateinit var naverMap: NaverMap
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
+    override fun initView() {
         binding.viewModel = viewModel
         binding.fragment = this
 
-        initView()
-    }
-
-    private fun initView() {
         binding.tbLocationToolbar.setupWithNavController(findNavController())
 
         val mapFragment = childFragmentManager.findFragmentById(R.id.map) as MapFragment
         mapFragment.getMapAsync(this)
     }
 
-    override fun onMapReady(p0: NaverMap) {
-        naverMap = p0
-        subscribeUi()
-    }
-
-    private fun subscribeUi() {
+    override fun subscribeUi() {
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 launch {
@@ -62,7 +49,7 @@ class LocationFragment :
 
                 launch {
                     viewModel.selectedLocationItem.collect { mapQueryItem ->
-                        if (mapQueryItem != null && ::naverMap.isInitialized) {
+                        mapQueryItem?.let {
                             makeMarkerWithCameraMove(mapQueryItem)
                         }
                     }

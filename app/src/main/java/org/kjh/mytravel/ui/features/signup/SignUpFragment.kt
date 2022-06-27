@@ -1,7 +1,5 @@
 package org.kjh.mytravel.ui.features.signup
 
-import android.os.Bundle
-import android.view.View
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.flowWithLifecycle
@@ -28,15 +26,12 @@ class SignUpFragment
 
     private val viewModel: SignUpViewModel by viewModels()
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
+    override fun initView() {
         binding.fragment  = this
         binding.viewModel = viewModel
-
-        subscribeSignUpState()
     }
 
-    private fun subscribeSignUpState() {
+    override fun subscribeUi() {
         viewModel.uiState
             .flowWithLifecycle(viewLifecycleOwner.lifecycle, Lifecycle.State.STARTED)
             .onEach { state ->

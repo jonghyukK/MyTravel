@@ -1,10 +1,10 @@
 package org.kjh.mytravel.ui.features.place.detail
 
-import android.os.Bundle
-import android.view.View
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.*
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.flowWithLifecycle
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.navigation.ui.setupWithNavController
@@ -14,8 +14,8 @@ import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import org.kjh.mytravel.R
 import org.kjh.mytravel.databinding.FragmentPlacePagerBinding
-import org.kjh.mytravel.ui.features.profile.my.MyProfileViewModel
 import org.kjh.mytravel.ui.base.BaseFragment
+import org.kjh.mytravel.ui.features.profile.my.MyProfileViewModel
 import org.kjh.mytravel.utils.containPlace
 import org.kjh.mytravel.utils.onThrottleMenuItemClick
 import javax.inject.Inject
@@ -33,16 +33,10 @@ class PlacePagerFragment
         PlaceViewModel.provideFactory(placeViewModelFactory, args.placeName)
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
+    override fun initView() {
         binding.viewModel = viewModel
         binding.placeName = args.placeName
 
-        initView()
-        subscribeUi()
-    }
-
-    private fun initView() {
         binding.tbPlacePagerToolbar.apply {
             setupWithNavController(findNavController())
             inflateMenu(R.menu.menu_bookmark)
@@ -64,6 +58,16 @@ class PlacePagerFragment
         }.attach()
     }
 
+    override fun subscribeUi() {
+        myProfileViewModel.myProfileState
+            .flowWithLifecycle(viewLifecycleOwner.lifecycle, Lifecycle.State.STARTED)
+            .onEach { uiState ->
+                val isBookmarked = uiState.myBookmarkItems.containPlace(args.placeName)
+                viewModel.updateBookmarkState(isBookmarked)
+            }
+            .launchIn(viewLifecycleOwner.lifecycleScope)
+    }
+
     private fun requestUpdateBookmark() {
         viewModel.uiState.value.placeItem?.let {
             myProfileViewModel.updateBookmark(it.posts[0].postId, it.placeName)
@@ -77,13 +81,5 @@ class PlacePagerFragment
             else -> null
         }
 
-    private fun subscribeUi() {
-        myProfileViewModel.myProfileState
-            .flowWithLifecycle(viewLifecycleOwner.lifecycle, Lifecycle.State.STARTED)
-            .onEach { uiState ->
-                val isBookmarked = uiState.myBookmarkItems.containPlace(args.placeName)
-                viewModel.updateBookmarkState(isBookmarked)
-            }
-            .launchIn(viewLifecycleOwner.lifecycleScope)
-    }
+
 }

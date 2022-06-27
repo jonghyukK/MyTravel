@@ -1,14 +1,10 @@
 package org.kjh.mytravel.ui.features.profile.my
 
-import android.os.Bundle
-import android.view.View
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.lifecycleScope
-import androidx.navigation.NavDirections
 import com.google.android.material.tabs.TabLayoutMediator
-import com.orhanobut.logger.Logger
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
@@ -29,16 +25,10 @@ class ProfileFragment
 
     private val myProfileViewModel: MyProfileViewModel by activityViewModels()
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
+    override fun initView() {
         binding.fragment = this
         binding.myProfileViewModel = myProfileViewModel
 
-        initView()
-        subscribeUi()
-    }
-
-    private fun initView() {
         binding.tbProfileToolbar.apply {
             inflateMenu(R.menu.menu_profile)
             onThrottleMenuItemClick { menuItem ->
@@ -63,7 +53,7 @@ class ProfileFragment
         }.attach()
     }
 
-    private fun subscribeUi() {
+    override fun subscribeUi() {
         myProfileViewModel.isNotLogIn
             .flowWithLifecycle(viewLifecycleOwner.lifecycle, Lifecycle.State.STARTED)
             .onEach { isNotLogin ->

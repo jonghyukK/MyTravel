@@ -1,11 +1,8 @@
 package org.kjh.mytravel.ui.features.upload.content
 
-import android.os.Bundle
-import android.view.View
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
-import androidx.navigation.navGraphViewModels
 import androidx.navigation.ui.setupWithNavController
 import org.kjh.mytravel.R
 import org.kjh.mytravel.databinding.FragmentContentInputBinding
@@ -18,14 +15,9 @@ class ContentInputFragment
 
     private val uploadViewModel : UploadViewModel by activityViewModels()
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
+    override fun initView() {
         binding.uploadViewModel = uploadViewModel
 
-        initView()
-    }
-
-    private fun initView() {
         binding.tbContentInputToolbar.apply {
             setupWithNavController(findNavController())
             inflateMenu(R.menu.menu_complete)
@@ -41,4 +33,6 @@ class ContentInputFragment
         uploadViewModel.updateContent(binding.etContent.text.toString())
         findNavController().popBackStack()
     }
+
+    override fun subscribeUi() {}
 }

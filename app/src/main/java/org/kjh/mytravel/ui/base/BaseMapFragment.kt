@@ -8,6 +8,8 @@ import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
 import androidx.fragment.app.Fragment
+import com.naver.maps.map.NaverMap
+import com.naver.maps.map.OnMapReadyCallback
 
 /**
  * MyTravel
@@ -16,10 +18,11 @@ import androidx.fragment.app.Fragment
  *
  * Description:
  */
-abstract class BaseFragment<B: ViewDataBinding>(
+abstract class BaseMapFragment<B: ViewDataBinding>(
     private val layoutId: Int
-): Fragment() {
+): Fragment(), OnMapReadyCallback {
 
+    lateinit var naverMap: NaverMap
     private var _binding: B? = null
     protected val binding get() = _binding!!
 
@@ -38,10 +41,15 @@ abstract class BaseFragment<B: ViewDataBinding>(
         super.onViewCreated(view, savedInstanceState)
 
         initView()
-        subscribeUi()
     }
 
     abstract fun initView()
+
+    override fun onMapReady(p0: NaverMap) {
+        naverMap = p0
+        subscribeUi()
+    }
+
     abstract fun subscribeUi()
 
     override fun onDestroyView() {

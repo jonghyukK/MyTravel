@@ -1,7 +1,5 @@
 package org.kjh.mytravel.ui.features.profile.edit
 
-import android.os.Bundle
-import android.view.View
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
@@ -47,20 +45,14 @@ class ProfileEditFragment
         }
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
+    override fun initView() {
         binding.viewModel = viewModel
         binding.fragment  = this
 
-        initView()
-        subscribeUi()
-    }
-
-    private fun initView() {
         binding.tbProfileEditToolbar.setupWithNavController(findNavController())
     }
 
-    private fun subscribeUi() {
+    override fun subscribeUi() {
         viewModel.profileUpdateState
             .flowWithLifecycle(viewLifecycleOwner.lifecycle, Lifecycle.State.STARTED)
             .onEach { state ->

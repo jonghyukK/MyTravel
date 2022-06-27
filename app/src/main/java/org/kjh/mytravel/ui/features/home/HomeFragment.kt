@@ -51,16 +51,10 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(R.layout.fragment_home) {
         return super.onCreateView(inflater, container, savedInstanceState)
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
+    override fun initView() {
         binding.viewModel = viewModel
         binding.fragment  = this
 
-        initView()
-        subscribeUi()
-    }
-
-    private fun initView() {
         binding.homeBannerRecyclerView.apply {
             setHasFixedSize(true)
             adapter = bannerListAdapter
@@ -74,7 +68,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(R.layout.fragment_home) {
         }
     }
 
-    private fun subscribeUi() {
+    override fun subscribeUi() {
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 launch {

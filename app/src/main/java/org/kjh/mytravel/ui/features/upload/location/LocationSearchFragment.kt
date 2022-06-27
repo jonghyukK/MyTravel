@@ -1,7 +1,5 @@
 package org.kjh.mytravel.ui.features.upload.location
 
-import android.os.Bundle
-import android.view.View
 import android.view.inputmethod.EditorInfo
 import android.widget.Toast
 import androidx.fragment.app.viewModels
@@ -31,16 +29,10 @@ class LocationSearchFragment
         dismiss()
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
+    override fun initView() {
         binding.viewModel = viewModel
         binding.fragment  = this
 
-        initView()
-        subscribeUi()
-    }
-
-    private fun initView() {
         binding.rvQueryResultRecyclerView.apply {
             setHasFixedSize(true)
             adapter = locationQueryResultAdapter
@@ -53,7 +45,7 @@ class LocationSearchFragment
         }
     }
 
-    private fun subscribeUi() {
+    override fun subscribeUi() {
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.uiState.collect { state ->

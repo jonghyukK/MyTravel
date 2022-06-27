@@ -1,6 +1,5 @@
 package org.kjh.mytravel.ui.features.place.subcity
 
-import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
@@ -10,9 +9,12 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.navigation.ui.setupWithNavController
 import com.google.android.material.bottomsheet.BottomSheetBehavior
-import com.google.android.material.bottomsheet.BottomSheetBehavior.*
+import com.google.android.material.bottomsheet.BottomSheetBehavior.STATE_COLLAPSED
+import com.google.android.material.bottomsheet.BottomSheetBehavior.STATE_EXPANDED
 import com.naver.maps.geometry.LatLng
-import com.naver.maps.map.*
+import com.naver.maps.map.CameraAnimation
+import com.naver.maps.map.CameraUpdate
+import com.naver.maps.map.MapFragment
 import com.naver.maps.map.overlay.Marker
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.launchIn
@@ -20,8 +22,7 @@ import kotlinx.coroutines.flow.onEach
 import org.kjh.mytravel.R
 import org.kjh.mytravel.databinding.FragmentPlacesBySubCityBinding
 import org.kjh.mytravel.model.Place
-import org.kjh.mytravel.ui.base.BaseFragment
-import org.kjh.mytravel.utils.navigateToPlaceDetail
+import org.kjh.mytravel.ui.base.BaseMapFragment
 import org.kjh.mytravel.utils.statusBarHeight
 import javax.inject.Inject
 
@@ -29,13 +30,11 @@ import javax.inject.Inject
 
 @AndroidEntryPoint
 class PlacesBySubCityFragment :
-    BaseFragment<FragmentPlacesBySubCityBinding>(R.layout.fragment_places_by_sub_city),
-    OnMapReadyCallback
+    BaseMapFragment<FragmentPlacesBySubCityBinding>(R.layout.fragment_places_by_sub_city)
 {
     @Inject
     lateinit var subCityNameAssistedFactory: PlacesBySubCityViewModel.SubCityNameAssistedFactory
 
-    private lateinit var naverMap: NaverMap
     private lateinit var bsBehavior: BottomSheetBehavior<View>
 
     private val args: PlacesBySubCityFragmentArgs by navArgs()
@@ -44,16 +43,11 @@ class PlacesBySubCityFragment :
         PlacesBySubCityViewModel.provideFactory(subCityNameAssistedFactory, args.cityName)
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
+    override fun initView() {
         binding.viewModel   = viewModel
         binding.subCityName = args.cityName
         binding.fragment    = this
 
-        initView()
-    }
-
-    private fun initView() {
         binding.tbPlaceListByCityNameToolbar.setupWithNavController(findNavController())
 
         val mapFragment = childFragmentManager.findFragmentById(R.id.map) as MapFragment
@@ -80,16 +74,11 @@ class PlacesBySubCityFragment :
         binding.bottomSheet.rvPlaceListBySubCityName.adapter = placeListByCityNameAdapter
     }
 
-    override fun onMapReady(p0: NaverMap) {
-        naverMap = p0
-        subscribeUi()
-    }
-
-    private fun subscribeUi() {
+    override fun subscribeUi() {
         viewModel.uiState
             .flowWithLifecycle(viewLifecycleOwner.lifecycle, Lifecycle.State.STARTED)
             .onEach { uiState ->
-                if (uiState.placeBySubCityItems.isNotEmpty() && ::naverMap.isInitialized) {
+                if (uiState.placeBySubCityItems.isNotEmpty()) {
                     makeMarkerWithCameraMove(uiState.placeBySubCityItems)
                 }
             }

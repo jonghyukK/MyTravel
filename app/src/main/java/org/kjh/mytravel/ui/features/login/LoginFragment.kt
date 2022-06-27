@@ -1,7 +1,5 @@
 package org.kjh.mytravel.ui.features.login
 
-import android.os.Bundle
-import android.view.View
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.flowWithLifecycle
@@ -20,15 +18,12 @@ class LoginFragment
 
     private val viewModel: LoginViewModel by viewModels()
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
+    override fun initView() {
         binding.fragment  = this
         binding.viewModel = viewModel
-
-        subscribeLoginState()
     }
 
-    private fun subscribeLoginState() {
+    override fun subscribeUi() {
         viewModel.uiState
             .flowWithLifecycle(viewLifecycleOwner.lifecycle, Lifecycle.State.STARTED)
             .onEach { state ->
