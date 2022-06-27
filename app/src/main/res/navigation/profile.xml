@@ -5,6 +5,7 @@
     android:id="@+id/profile"
     app:startDestination="@+id/profileFragment">
 
+    <!-- Profile Fragment -->
     <fragment
         android:id="@+id/profileFragment"
         android:name="org.kjh.mytravel.ui.features.profile.my.ProfileFragment"
@@ -29,6 +30,8 @@
             android:id="@+id/action_to_notLogin"
             app:destination="@id/notLoginFragment" />
     </fragment>
+
+    <!-- NotLogin Fragment -->
     <fragment
         android:id="@+id/notLoginFragment"
         android:name="org.kjh.mytravel.ui.features.profile.NotLoginFragment"
@@ -37,15 +40,22 @@
         <argument
             android:name="showBnv"
             android:defaultValue="true" />
+        <action
+            android:id="@+id/action_to_login"
+            app:destination="@id/loginFragment" />
+        <action
+            android:id="@+id/action_to_signUp"
+            app:destination="@id/signUpFragment" />
     </fragment>
 
-    <include app:graph="@navigation/upload" />
-
+    <!-- Setting Fragment -->
     <fragment
         android:id="@+id/settingFragment"
         android:name="org.kjh.mytravel.ui.features.settings.SettingFragment"
         android:label="설정"
-        tools:layout="@layout/fragment_setting" />
+        tools:layout="@layout/fragment_setting"/>
+
+    <!-- ProfileEdit Fragment -->
     <fragment
         android:id="@+id/profileEditFragment"
         android:name="org.kjh.mytravel.ui.features.profile.edit.ProfileEditFragment"
@@ -64,6 +74,24 @@
             app:argType="string"
             app:nullable="true"/>
     </fragment>
+
+    <include app:graph="@navigation/upload" />
+
+    <!-- Login BottomSheetDialogFragment -->
+    <dialog
+        android:id="@+id/loginFragment"
+        android:name="org.kjh.mytravel.ui.features.login.LoginFragment"
+        android:label="LoginFragment"
+        tools:layout="@layout/bs_fragment_login">
+
+    </dialog>
+
+    <!-- SignUp BottomSheetDialogFragment -->
+    <dialog
+        android:id="@+id/signUpFragment"
+        android:name="org.kjh.mytravel.ui.features.signup.SignUpFragment"
+        android:label="SignUpFragment"
+        tools:layout="@layout/bs_fragment_sign_up"/>
 
 
 </navigation>

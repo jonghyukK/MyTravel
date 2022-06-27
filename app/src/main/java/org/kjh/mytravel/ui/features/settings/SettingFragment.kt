@@ -12,7 +12,6 @@ import androidx.navigation.ui.setupWithNavController
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
-import org.kjh.domain.entity.LoginInfoPreferences
 import org.kjh.mytravel.R
 import org.kjh.mytravel.databinding.FragmentSettingBinding
 import org.kjh.mytravel.ui.base.BaseFragment

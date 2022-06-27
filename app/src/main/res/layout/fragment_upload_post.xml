@@ -98,7 +98,7 @@
                             app:layout_constraintTop_toBottomOf="@+id/tv_nickName"
                             app:layout_constraintBottom_toBottomOf="@+id/siv_profileImg"
                             onThrottleClick="@{fragment::navigateToLocationPage}"
-                            convertPlaceAddress="@{uploadViewModel.uploadItemState.placeItem}"/>
+                            convertPlaceAddress="@{uploadViewModel.uploadItem.placeItem}"/>
 
                         <androidx.recyclerview.widget.RecyclerView
                             android:id="@+id/rv_selectedImages"
@@ -110,7 +110,7 @@
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toBottomOf="@+id/siv_profileImg"
-                            bindItems="@{uploadViewModel.uploadItemState.selectedItems}"/>
+                            bindItems="@{uploadViewModel.uploadItem.selectedImageItems}"/>
 
                         <TextView
                             android:id="@+id/tv_inputContent"
@@ -123,7 +123,7 @@
                             android:textColor="@color/purple_500"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toBottomOf="@+id/rv_selectedImages"
-                            contentText="@{uploadViewModel.uploadItemState.content}"
+                            contentText="@{uploadViewModel.uploadItem.content}"
                             onThrottleClick="@{fragment::navigateToContentInputPage}"/>
                     </androidx.constraintlayout.widget.ConstraintLayout>
                 </androidx.cardview.widget.CardView>

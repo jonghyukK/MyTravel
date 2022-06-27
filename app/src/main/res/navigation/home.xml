@@ -5,6 +5,7 @@
     android:id="@+id/home"
     app:startDestination="@+id/homeFragment">
 
+    <!-- Home Fragment -->
     <fragment
         android:id="@+id/homeFragment"
         android:name="org.kjh.mytravel.ui.features.home.HomeFragment"
@@ -21,6 +22,8 @@
             android:name="showBnv"
             android:defaultValue="true" />
     </fragment>
+
+    <!-- PlacesBySubCity Fragment -->
     <fragment
         android:id="@+id/placesBySubCityFragment"
         android:name="org.kjh.mytravel.ui.features.place.subcity.PlacesBySubCityFragment"
@@ -30,4 +33,5 @@
             android:name="cityName"
             app:argType="string" />
     </fragment>
+
 </navigation>

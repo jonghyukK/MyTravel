@@ -1,12 +1,11 @@
 package org.kjh.mytravel.ui.features.upload
 
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.orhanobut.logger.Logger
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import org.kjh.domain.entity.ApiResult
@@ -16,6 +15,7 @@ import org.kjh.mytravel.model.MapQueryItem
 import org.kjh.mytravel.model.MediaStoreImage
 import org.kjh.mytravel.model.User
 import org.kjh.mytravel.model.mapToPresenter
+import org.kjh.mytravel.ui.GlobalErrorHandler
 import org.kjh.mytravel.ui.common.UiState
 import javax.inject.Inject
 
@@ -27,54 +27,30 @@ import javax.inject.Inject
  * Description:
  */
 
-data class UploadItemState(
-    val selectedItems: List<MediaStoreImage> = listOf(),
+data class UploadItem(
+    val selectedImageItems: List<MediaStoreImage> = listOf(),
     val placeItem    : MapQueryItem? = null,
     val content      : String = "",
 )
+
+fun UploadItem.isFulfillEachItems(): Boolean =
+    selectedImageItems.isNotEmpty() && placeItem != null && content.isNotBlank()
 
 @HiltViewModel
 class UploadViewModel @Inject constructor(
     private val uploadPostUseCase        : UploadPostUseCase,
     private val getLoginPreferenceUseCase: GetLoginPreferenceUseCase
 ): ViewModel() {
-    private val _uploadItemState = MutableStateFlow(UploadItemState())
-    val uploadItemState = _uploadItemState.asStateFlow()
+    private val _uploadItem = MutableStateFlow(UploadItem())
+    val uploadItem = _uploadItem.asStateFlow()
 
     private val _uploadState: MutableStateFlow<UiState<User>> = MutableStateFlow(UiState.Init)
     val uploadState = _uploadState.asStateFlow()
 
-    fun updateSelectedImages(items: List<MediaStoreImage>) {
-        _uploadItemState.update {
-            it.copy(selectedItems = items)
-        }
-    }
-
-    fun updatePlaceItem(item: MapQueryItem?) {
-        _uploadItemState.update {
-            it.copy(placeItem = item)
-        }
-    }
-
-    fun updateContent(content: String) {
-        _uploadItemState.update {
-            it.copy(content = content)
-        }
-    }
-
-    fun initUploadState() {
-        _uploadState.value = UiState.Init
-    }
-
     fun requestUploadPost() {
-        val imgPathList = _uploadItemState.value.selectedItems.map { it.realPath }
-        val placeInfo   = _uploadItemState.value.placeItem
-        val content     = _uploadItemState.value.content
-
-        if (imgPathList.isEmpty() || placeInfo == null || content.isBlank()) {
-            _uploadState.value = UiState.Error(Throwable("필수 입력 정보를 확인해 주세요."))
-            return
-        }
+        val imgPathList = _uploadItem.value.selectedImageItems.map { it.realPath }
+        val placeInfo   = _uploadItem.value.placeItem!!
+        val content     = _uploadItem.value.content
 
         viewModelScope.launch {
             uploadPostUseCase(
@@ -95,9 +71,39 @@ class UploadViewModel @Inject constructor(
                         _uploadState.value = UiState.Success(apiResult.data.mapToPresenter())
 
                     is ApiResult.Error ->
-                        _uploadState.value = UiState.Error(Throwable("occur Error [Upload API]"))
+                        _uploadState.value = UiState.Error(Throwable("occur Error [ Upload API ]"))
                 }
             }
         }
     }
+
+    fun updateSelectedImages(items: List<MediaStoreImage>) {
+        _uploadItem.update {
+            it.copy(selectedImageItems = items)
+        }
+    }
+
+    fun updatePlaceItem(item: MapQueryItem?) {
+        _uploadItem.update {
+            it.copy(placeItem = item)
+        }
+    }
+
+    fun updateContent(content: String) {
+        _uploadItem.update {
+            it.copy(content = content)
+        }
+    }
+
+    fun clearUploadItem() {
+        _uploadItem.value = UploadItem()
+    }
+
+    fun initUploadState() {
+        _uploadState.value = UiState.Init
+    }
+
+    fun isReadyUploadData() = _uploadItem.value.isFulfillEachItems()
+
+
 }

@@ -6,7 +6,9 @@ import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.NavDirections
 import com.google.android.material.tabs.TabLayoutMediator
+import com.orhanobut.logger.Logger
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
@@ -73,8 +75,7 @@ class ProfileFragment
     }
 
     fun navigateToProfileEditPage(myProfileItem: User) {
-        navigateTo(
-            ProfileFragmentDirections.actionToProfileEdit(
+        navigateTo(ProfileFragmentDirections.actionToProfileEdit(
                 myProfileItem.profileImg, myProfileItem.nickName, myProfileItem.introduce
             )
         )

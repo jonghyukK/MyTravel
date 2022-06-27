@@ -2,6 +2,7 @@ package org.kjh.mytravel.ui.features.upload.content
 
 import android.os.Bundle
 import android.view.View
+import androidx.fragment.app.activityViewModels
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.navGraphViewModels
@@ -15,7 +16,7 @@ import org.kjh.mytravel.utils.onThrottleMenuItemClick
 class ContentInputFragment
     : BaseFragment<FragmentContentInputBinding>(R.layout.fragment_content_input) {
 
-    private val uploadViewModel : UploadViewModel by navGraphViewModels(R.id.nav_nested_upload) { defaultViewModelProviderFactory }
+    private val uploadViewModel : UploadViewModel by activityViewModels()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)

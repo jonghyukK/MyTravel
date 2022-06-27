@@ -18,7 +18,7 @@
         tools:layout="@layout/fragment_select_photo"
         android:label="사진 선택">
         <action
-            android:id="@+id/action_to_writePost"
+            android:id="@+id/action_to_uploadPost"
             app:destination="@id/uploadPostFragment" />
     </fragment>
 
@@ -29,7 +29,7 @@
         android:label="내용 채우기"
         tools:layout="@layout/fragment_upload_post">
         <action
-            android:id="@+id/action_to_locationFragment"
+            android:id="@+id/action_to_location"
             app:destination="@id/locationFragment" />
         <action
             android:id="@+id/action_to_contentInput"
@@ -43,15 +43,9 @@
         tools:layout="@layout/fragment_location"
         android:label="위치 검색">
         <action
-            android:id="@+id/action_mapFragment_to_mapSearchFragment"
+            android:id="@+id/action_to_location_search"
             app:destination="@id/locationSearchFragment" />
     </fragment>
-
-    <!-- LocationSearch Fragment -->
-    <fragment
-        android:id="@+id/locationSearchFragment"
-        android:name="org.kjh.mytravel.ui.features.upload.location.LocationSearchFragment"
-        tools:layout="@layout/bs_fragment_location_search" />
 
     <!-- ContentInput Fragment -->
     <fragment
@@ -59,4 +53,11 @@
         android:name="org.kjh.mytravel.ui.features.upload.content.ContentInputFragment"
         android:label="@string/input_content"
         tools:layout="@layout/fragment_content_input"/>
+
+    <!-- LocationSearch Fragment -->
+    <dialog
+        android:id="@+id/locationSearchFragment"
+        android:name="org.kjh.mytravel.ui.features.upload.location.LocationSearchFragment"
+        android:label="LocationSearchFragment"
+        tools:layout="@layout/bs_fragment_location_search"/>
 </navigation>

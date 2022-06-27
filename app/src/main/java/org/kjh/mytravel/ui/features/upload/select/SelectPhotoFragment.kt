@@ -3,12 +3,12 @@ package org.kjh.mytravel.ui.features.upload.select
 import android.net.Uri
 import android.os.Bundle
 import android.view.View
+import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
-import androidx.navigation.navGraphViewModels
 import androidx.navigation.ui.setupWithNavController
 import androidx.recyclerview.selection.SelectionTracker
 import dagger.hilt.android.AndroidEntryPoint
@@ -26,15 +26,15 @@ import org.kjh.mytravel.utils.onThrottleMenuItemClick
 class SelectPhotoFragment
     : BaseFragment<FragmentSelectPhotoBinding>(R.layout.fragment_select_photo) {
 
+    private lateinit var tracker: SelectionTracker<Uri>
     private val viewModel: SelectPhotoViewModel by viewModels()
-    private val uploadViewModel: UploadViewModel by navGraphViewModels(R.id.nav_nested_upload) { defaultViewModelProviderFactory }
+    private val uploadViewModel: UploadViewModel by activityViewModels()
     private val mediaStoreImagesAdapter by lazy { MediaStoreImageListAdapter() }
     private val selectedPhotoListAdapter by lazy {
         SelectedPhotoListAdapter {
             tracker.deselect(it.contentUri)
         }
     }
-    private lateinit var tracker: SelectionTracker<Uri>
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -51,7 +51,7 @@ class SelectPhotoFragment
             inflateMenu(R.menu.menu_next)
             onThrottleMenuItemClick { menu ->
                 when (menu.itemId) {
-                    R.id.next -> navigateTo(SelectPhotoFragmentDirections.actionToWritePost())
+                    R.id.next -> navigateTo(SelectPhotoFragmentDirections.actionToUploadPost())
                 }
             }
         }
@@ -75,10 +75,10 @@ class SelectPhotoFragment
     }
 
     private fun subscribeUi() {
-        uploadViewModel.uploadItemState
+        uploadViewModel.uploadItem
             .flowWithLifecycle(viewLifecycleOwner.lifecycle, Lifecycle.State.STARTED)
-            .onEach { uploadItemState ->
-                setTrackerItemSelected(uploadItemState.selectedItems)
+            .onEach { uploadItem ->
+                setTrackerItemSelected(uploadItem.selectedImageItems)
             }
             .launchIn(viewLifecycleOwner.lifecycleScope)
     }
@@ -105,5 +105,10 @@ class SelectPhotoFragment
     override fun onDestroyView() {
         viewModel.updateAnimatedState(true)
         super.onDestroyView()
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        uploadViewModel.clearUploadItem()
     }
 }

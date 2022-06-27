@@ -27,7 +27,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            isVisibleMenu="@{uploadViewModel.uploadItemState.selectedItems.size() != 0}"/>
+            isVisibleMenu="@{uploadViewModel.uploadItem.selectedImageItems.size() != 0}"/>
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/selectedImgRecyclerView"
@@ -42,7 +42,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             tools:listitem="@layout/vh_rect_image_with_close_btn"
-            bindItems="@{uploadViewModel.uploadItemState.selectedItems}"/>
+            bindItems="@{uploadViewModel.uploadItem.selectedImageItems}"/>
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/mediaStoreImgRecyclerView"
@@ -54,7 +54,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/tb_selectPhotoToolbar"
-            isNotEmptySelectedItems="@{uploadViewModel.uploadItemState.selectedItems.size > 0}"
+            isNotEmptySelectedItems="@{uploadViewModel.uploadItem.selectedImageItems.size > 0}"
             isDoneAnimated="@{viewModel.isDoneAnimated()}"
             setDoneAnimated="@{viewModel.updateAnimatedState}"
             bindItems="@{viewModel.mediaStoreImages}" />

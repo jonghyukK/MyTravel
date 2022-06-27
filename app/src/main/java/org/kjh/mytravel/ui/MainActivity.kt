@@ -1,47 +1,44 @@
 package org.kjh.mytravel.ui
 
-import android.os.Bundle
-import android.widget.Toast
-import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.*
-import androidx.databinding.DataBindingUtil
+import androidx.activity.viewModels
+import androidx.core.view.isVisible
 import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupWithNavController
+import com.orhanobut.logger.Logger
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.*
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import org.kjh.mytravel.R
 import org.kjh.mytravel.databinding.ActivityMainBinding
-import javax.inject.Inject
+import org.kjh.mytravel.model.User
+import org.kjh.mytravel.ui.base.BaseActivity
+import org.kjh.mytravel.ui.common.UiState
+import org.kjh.mytravel.ui.features.home.HomeViewModel
+import org.kjh.mytravel.ui.features.profile.my.MyProfileViewModel
+import org.kjh.mytravel.ui.features.upload.UploadViewModel
+import org.kjh.mytravel.utils.NotificationUtils
 
 @AndroidEntryPoint
-class MainActivity : AppCompatActivity() {
+class MainActivity : BaseActivity<ActivityMainBinding>(R.layout.activity_main) {
 
-    private lateinit var binding       : ActivityMainBinding
-    private lateinit var navController : NavController
+    private val homeViewModel      : HomeViewModel by viewModels()
+    private val uploadViewModel    : UploadViewModel by viewModels()
+    private val myProfileViewModel : MyProfileViewModel by viewModels()
 
-    @Inject
-    lateinit var globalErrorHandler: GlobalErrorHandler
+    private var uploadHandleJob: Job? = null
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        binding = DataBindingUtil.setContentView(this, R.layout.activity_main)
-
-        initView()
-        subscribeGlobalErrorEvent()
-    }
-
-    private fun initView() {
+    override fun initView() {
         val navHostFragment = supportFragmentManager.findFragmentById(
             R.id.nav_host_fragment
         ) as NavHostFragment
 
-        navController = navHostFragment.navController.apply {
-            // whether Show or Hide BottomNavigationView.
+        val navController = navHostFragment.navController.apply {
             addOnDestinationChangedListener { _, _, arguments ->
                 binding.bnvBottomNav.isVisible =
                     arguments?.getBoolean("showBnv", false) == true
@@ -51,14 +48,64 @@ class MainActivity : AppCompatActivity() {
         binding.bnvBottomNav.setupWithNavController(navController)
     }
 
-    // (추후 각 화면별 에러 처리 필요).
-    private fun subscribeGlobalErrorEvent() {
-        lifecycleScope.launch {
-            repeatOnLifecycle(Lifecycle.State.STARTED) {
-                globalErrorHandler.errorEvent.collect {
-                    Toast.makeText(this@MainActivity, it, Toast.LENGTH_SHORT).show()
+    override fun subscribeUi() {
+        uploadViewModel.uploadState
+            .flowWithLifecycle(lifecycle, Lifecycle.State.STARTED)
+            .onEach { uploadState ->
+                if (uploadState !is UiState.Init && uploadHandleJob == null)
+                    addUploadHandleJobIfUploadRequested()
+            }
+            .launchIn(lifecycleScope)
+    }
+
+    private fun addUploadHandleJobIfUploadRequested() {
+        uploadHandleJob = MainScope().launch {
+            uploadViewModel.uploadState.collect { uploadState ->
+                when (uploadState) {
+                    is UiState.Loading -> makeNotificationForUploadStart()
+                    is UiState.Success -> handleUploadSuccess(uploadState.data)
+                    is UiState.Error -> handleUploadFailed()
                 }
             }
         }
+    }
+
+    private fun handleUploadSuccess(newProfileItem: User) {
+        updateNotificationWhenUploadSuccessOrFailed(getString(R.string.upload_success))
+        updateMyProfileItem(newProfileItem)
+        refreshHomeLatestPosts()
+        initUploadStateAfterUpload()
+        cancelAndClearUploadJob()
+    }
+
+    private fun handleUploadFailed() {
+        updateNotificationWhenUploadSuccessOrFailed(getString(R.string.upload_failed))
+        initUploadStateAfterUpload()
+        cancelAndClearUploadJob()
+    }
+
+    private fun makeNotificationForUploadStart() {
+        NotificationUtils.makeUploadNotification(this@MainActivity)
+    }
+
+    private fun updateNotificationWhenUploadSuccessOrFailed(resultMsg: String) {
+        NotificationUtils.updateUploadNotification(this@MainActivity, resultMsg)
+    }
+
+    private fun updateMyProfileItem(newProfileItem: User) {
+        myProfileViewModel.updateMyProfile(newProfileItem)
+    }
+
+    private fun refreshHomeLatestPosts() {
+        homeViewModel.refreshLatestPosts(true)
+    }
+
+    private fun initUploadStateAfterUpload() {
+        uploadViewModel.initUploadState()
+    }
+
+    private fun cancelAndClearUploadJob() {
+        uploadHandleJob?.cancel()
+        uploadHandleJob = null
     }
 }

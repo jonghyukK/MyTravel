@@ -2,12 +2,12 @@ package org.kjh.mytravel.ui.features.upload.location
 
 import android.os.Bundle
 import android.view.View
+import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
-import androidx.navigation.navGraphViewModels
 import androidx.navigation.ui.setupWithNavController
 import com.naver.maps.geometry.LatLng
 import com.naver.maps.map.*
@@ -25,9 +25,8 @@ class LocationFragment :
     BaseFragment<FragmentLocationBinding>(R.layout.fragment_location),
     OnMapReadyCallback
 {
-    private val viewModel: LocationViewModel by viewModels()
-    private val uploadViewModel: UploadViewModel
-            by navGraphViewModels(R.id.nav_nested_upload) { defaultViewModelProviderFactory }
+    private val viewModel      : LocationViewModel by viewModels()
+    private val uploadViewModel: UploadViewModel by activityViewModels()
     private lateinit var naverMap: NaverMap
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -54,8 +53,8 @@ class LocationFragment :
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 launch {
-                    uploadViewModel.uploadItemState.collect { uploadItemState ->
-                        uploadItemState.placeItem?.let {
+                    uploadViewModel.uploadItem.collect { uploadItem ->
+                        uploadItem.placeItem?.let {
                             makeMarkerWithCameraMove(it)
                         }
                     }
