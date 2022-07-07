@@ -20,7 +20,7 @@ import org.kjh.mytravel.R
 import org.kjh.mytravel.model.*
 import org.kjh.mytravel.ui.features.bookmark.BookmarkListAdapter
 import org.kjh.mytravel.ui.features.home.banner.BannerListAdapter
-import org.kjh.mytravel.ui.features.place.detail.PlaceDayLogListAdapter
+import org.kjh.mytravel.ui.features.place.infowithdaylog.PlaceDayLogListAdapter
 import org.kjh.mytravel.ui.features.place.subcity.PlacesBySubCityListAdapter
 import org.kjh.mytravel.ui.features.profile.PostMultipleViewAdapter
 import org.kjh.mytravel.ui.features.upload.location.LocationQueryResultAdapter

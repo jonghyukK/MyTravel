@@ -1,4 +1,4 @@
-package org.kjh.mytravel.ui.features.place.detail
+package org.kjh.mytravel.ui.features.place.infowithdaylog
 
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
@@ -13,7 +13,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import org.kjh.mytravel.R
-import org.kjh.mytravel.databinding.FragmentPlacePagerBinding
+import org.kjh.mytravel.databinding.FragmentPlaceInfoWithDaylogBinding
 import org.kjh.mytravel.ui.base.BaseFragment
 import org.kjh.mytravel.ui.features.profile.my.MyProfileViewModel
 import org.kjh.mytravel.utils.containPlace
@@ -21,16 +21,16 @@ import org.kjh.mytravel.utils.onThrottleMenuItemClick
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class PlacePagerFragment
-    : BaseFragment<FragmentPlacePagerBinding>(R.layout.fragment_place_pager) {
+class PlaceInfoWithDayLogFragment
+    : BaseFragment<FragmentPlaceInfoWithDaylogBinding>(R.layout.fragment_place_info_with_daylog) {
 
     @Inject
-    lateinit var placeViewModelFactory: PlaceViewModel.PlaceNameAssistedFactory
+    lateinit var placeInfoWithDayLogViewModelFactory: PlaceInfoWithDayLogViewModel.PlaceNameAssistedFactory
 
-    private val args: PlacePagerFragmentArgs by navArgs()
+    private val args: PlaceInfoWithDayLogFragmentArgs by navArgs()
     private val myProfileViewModel: MyProfileViewModel by activityViewModels()
-    private val viewModel by viewModels<PlaceViewModel> {
-        PlaceViewModel.provideFactory(placeViewModelFactory, args.placeName)
+    private val viewModel by viewModels<PlaceInfoWithDayLogViewModel> {
+        PlaceInfoWithDayLogViewModel.provideFactory(placeInfoWithDayLogViewModelFactory, args.placeName)
     }
 
     override fun initView() {
@@ -49,7 +49,7 @@ class PlacePagerFragment
 
         val tabLayout = binding.tlTabLayout
         val viewPager = binding.pager.apply {
-            adapter = PlacePagerAdapter(this@PlacePagerFragment)
+            adapter = PlacePagerAdapter(this@PlaceInfoWithDayLogFragment)
             isUserInputEnabled = false
         }
 
@@ -59,7 +59,7 @@ class PlacePagerFragment
     }
 
     override fun subscribeUi() {
-        myProfileViewModel.myProfileState
+        myProfileViewModel.myProfileUiState
             .flowWithLifecycle(viewLifecycleOwner.lifecycle, Lifecycle.State.STARTED)
             .onEach { uiState ->
                 val isBookmarked = uiState.myBookmarkItems.containPlace(args.placeName)
@@ -80,6 +80,4 @@ class PlacePagerFragment
             PLACE_INFO_PAGE_INDEX -> getString(R.string.info)
             else -> null
         }
-
-
 }

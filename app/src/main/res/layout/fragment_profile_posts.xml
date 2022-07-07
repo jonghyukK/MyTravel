@@ -23,14 +23,14 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
-            bindItems="@{viewModel.myProfileState.myPostItems}"
-            app:isVisible="@{!viewModel.myProfileState.myPostItems.empty}"/>
+            bindItems="@{viewModel.myProfileUiState.myPostItems}"
+            app:isVisible="@{!viewModel.myProfileUiState.myPostItems.empty}"/>
 
         <androidx.constraintlayout.widget.Group
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             app:constraint_referenced_ids="iv_emptyIcon, tv_emptyDesc1"
-            app:isVisible="@{viewModel.myProfileState.myPostItems.empty}" />
+            app:isVisible="@{viewModel.myProfileUiState.myPostItems.empty}" />
 
         <ImageView
             android:id="@+id/iv_emptyIcon"

@@ -6,7 +6,8 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import org.kjh.mytravel.databinding.VhPlacesBySubCityRowBinding
 import org.kjh.mytravel.model.Place
-import org.kjh.mytravel.utils.navigateToPlaceDetail
+import org.kjh.mytravel.utils.navigateToDayLogDetail
+import org.kjh.mytravel.utils.navigateToPlaceInfoWithDayLog
 import org.kjh.mytravel.utils.onThrottleClick
 
 /**
@@ -36,10 +37,8 @@ class PlacesBySubCityListAdapter
     class PlacesBySubCityViewHolder(
         private val binding : VhPlacesBySubCityRowBinding
     ): RecyclerView.ViewHolder(binding.root) {
-        private val postListAdapter = PlacesBySubCityPostListAdapter {
-            binding.placeItem?.let { place ->
-                binding.root.navigateToPlaceDetail(place.placeName)
-            }
+        private val postListAdapter = PlacesBySubCityPostListAdapter { post ->
+            binding.root.navigateToDayLogDetail(post.placeName, post.postId)
         }
 
         init {
@@ -51,7 +50,7 @@ class PlacesBySubCityListAdapter
 
             itemView.onThrottleClick { view ->
                 binding.placeItem?.let { place ->
-                    view.navigateToPlaceDetail(place.placeName)
+                    view.navigateToPlaceInfoWithDayLog(place.placeName)
                 }
             }
         }

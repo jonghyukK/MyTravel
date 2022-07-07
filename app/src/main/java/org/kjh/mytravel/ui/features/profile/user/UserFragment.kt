@@ -57,7 +57,7 @@ class UserFragment
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 launch {
-                    myProfileViewModel.myProfileState.collect { state ->
+                    myProfileViewModel.myProfileUiState.collect { state ->
                         viewModel.updatePostsWithBookmark(state.myBookmarkItems)
                     }
                 }

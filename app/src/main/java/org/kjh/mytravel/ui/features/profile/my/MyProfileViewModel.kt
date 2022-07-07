@@ -4,10 +4,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.orhanobut.logger.Logger
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import org.kjh.domain.entity.ApiResult
@@ -37,7 +35,7 @@ class MyProfileViewModel @Inject constructor(
     private val globalErrorHandler        : GlobalErrorHandler
 ): ViewModel() {
 
-    data class MyProfileState(
+    data class MyProfileUiState(
         val myProfileItem   : User? = null,
         val myPostItems     : List<Post> = emptyList(),
         val myBookmarkItems : List<Bookmark> = emptyList()
@@ -46,8 +44,8 @@ class MyProfileViewModel @Inject constructor(
     private val _isLoading = MutableStateFlow(false)
     val isLoading = _isLoading.asStateFlow()
 
-    private val _myProfileState = MutableStateFlow(MyProfileState())
-    val myProfileState = _myProfileState.asStateFlow()
+    private val _myProfileUiState = MutableStateFlow(MyProfileUiState())
+    val myProfileUiState = _myProfileUiState.asStateFlow()
 
     private val _isNotLogIn: MutableStateFlow<Boolean?> = MutableStateFlow(null)
     val isNotLogIn = _isNotLogIn.asStateFlow()
@@ -68,7 +66,7 @@ class MyProfileViewModel @Inject constructor(
                     if (it.isLoggedIn) {
                         fetchMyProfile()
                     } else {
-                        _myProfileState.value = MyProfileState()
+                        _myProfileUiState.value = MyProfileUiState()
                     }
                 }
         }
@@ -85,7 +83,7 @@ class MyProfileViewModel @Inject constructor(
                             hideLoading()
                             val result = apiResult.data.mapToPresenter()
 
-                            _myProfileState.value = MyProfileState(
+                            _myProfileUiState.value = MyProfileUiState(
                                 myProfileItem   = result,
                                 myPostItems     = result.posts,
                                 myBookmarkItems = result.bookMarks
@@ -119,7 +117,7 @@ class MyProfileViewModel @Inject constructor(
 
                         val bookmarks = apiResult.data.map { it.mapToPresenter() }
 
-                        _myProfileState.update { profileState ->
+                        _myProfileUiState.update { profileState ->
                             profileState.copy(
                                 myBookmarkItems = bookmarks,
                                 myPostItems     = profileState.myPostItems.updateBookmarkStateWithPosts(bookmarks)
@@ -140,7 +138,7 @@ class MyProfileViewModel @Inject constructor(
     }
 
     fun updateMyProfile(profileItem: User) {
-        _myProfileState.update { profileState ->
+        _myProfileUiState.update { profileState ->
             profileState.copy(
                 myProfileItem   = profileItem,
                 myBookmarkItems = profileItem.bookMarks,

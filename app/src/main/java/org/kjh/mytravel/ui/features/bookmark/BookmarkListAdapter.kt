@@ -6,7 +6,7 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import org.kjh.mytravel.databinding.VhBookmarkPostItemBinding
 import org.kjh.mytravel.model.Bookmark
-import org.kjh.mytravel.utils.navigateToPlaceDetail
+import org.kjh.mytravel.utils.navigateToDayLogDetail
 import org.kjh.mytravel.utils.onThrottleClick
 
 /**
@@ -39,7 +39,7 @@ class BookmarkListAdapter(
         init {
             itemView.onThrottleClick { view ->
                 binding.bookmarkItem?.let { bookmark ->
-                    view.navigateToPlaceDetail(bookmark.placeName)
+                    view.navigateToDayLogDetail(bookmark.placeName)
                 }
             }
 

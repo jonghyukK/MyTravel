@@ -17,6 +17,7 @@ import org.kjh.mytravel.utils.dpToPx
 class PostsGridItemDecoration(
     private val ctx: Context
 ): RecyclerView.ItemDecoration() {
+
     override fun getItemOffsets(
         outRect: Rect,
         view: View,
@@ -39,5 +40,7 @@ class PostsGridItemDecoration(
                 outRect.left = 1.dpToPx(ctx)
             }
         }
+
+        outRect.bottom = 2.dpToPx(ctx)
     }
 }

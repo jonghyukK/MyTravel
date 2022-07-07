@@ -4,7 +4,6 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
-
         <variable
             name="fragment"
             type="org.kjh.mytravel.ui.features.home.HomeFragment" />
@@ -16,8 +15,7 @@
     <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:id="@+id/cl_homeCoordinatorLayout"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:fitsSystemWindows="true">
+        android:layout_height="match_parent">
 
         <com.google.android.material.appbar.AppBarLayout
             android:id="@+id/abl_homeAppBarLayout"
@@ -31,9 +29,9 @@
                 android:id="@+id/ctl_homeCollapsingToolbar"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:fitsSystemWindows="true"
                 app:layout_scrollFlags="scroll|exitUntilCollapsed"
                 app:scrimAnimationDuration="0"
-                android:fitsSystemWindows="true"
                 app:titleEnabled="false"
                 app:statusBarScrim="@{viewModel.isAppBarCollapsed() ? @color/white : @android:color/transparent}">
 
@@ -41,8 +39,8 @@
                     android:id="@+id/homeBannerRecyclerView"
                     android:layout_width="match_parent"
                     android:layout_height="400dp"
-                    android:orientation="horizontal"
                     android:fitsSystemWindows="true"
+                    android:orientation="horizontal"
                     app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                     addOnScrollListener="@{viewModel.homeBannersUiState.toData().size()}"
                     bindItems="@{viewModel.homeBannersUiState.toData()}"

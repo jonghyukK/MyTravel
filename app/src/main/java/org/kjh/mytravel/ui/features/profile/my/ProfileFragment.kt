@@ -21,7 +21,7 @@ import org.kjh.mytravel.utils.onThrottleMenuItemClick
 
 @AndroidEntryPoint
 class ProfileFragment
-    :BaseFragment<FragmentProfileBinding>(R.layout.fragment_profile) {
+    : BaseFragment<FragmentProfileBinding>(R.layout.fragment_profile) {
 
     private val myProfileViewModel: MyProfileViewModel by activityViewModels()
 

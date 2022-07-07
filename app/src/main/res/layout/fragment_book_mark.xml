@@ -22,7 +22,6 @@
             android:id="@+id/tb_bookmarkToolbar"
             android:layout_width="0dp"
             android:layout_height="?attr/actionBarSize"
-            android:fitsSystemWindows="true"
             app:title="@string/bookmark"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -72,7 +71,7 @@
             android:id="@+id/group_bookmarkEmpty"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:isVisible="@{myProfileViewModel.myProfileState.myBookmarkItems.size == 0}"
+            app:isVisible="@{myProfileViewModel.myProfileUiState.myBookmarkItems.size == 0}"
             app:constraint_referenced_ids="iv_bookmark, tv_nothing_bookmark_desc1, tv_do_bookmark" />
 
         <androidx.recyclerview.widget.RecyclerView
@@ -85,7 +84,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
             app:spanCount="3"
-            bindItems="@{myProfileViewModel.myProfileState.myBookmarkItems}"/>
+            bindItems="@{myProfileViewModel.myProfileUiState.myBookmarkItems}"/>
 
         <ProgressBar
             android:id="@+id/pb_loading"

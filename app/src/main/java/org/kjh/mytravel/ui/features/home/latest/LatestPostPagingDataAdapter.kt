@@ -9,7 +9,7 @@ import androidx.recyclerview.widget.RecyclerView
 import org.kjh.mytravel.databinding.VhPlaceRecentItemBinding
 import org.kjh.mytravel.model.Post
 import org.kjh.mytravel.ui.common.OnSnapPagerScrollListener
-import org.kjh.mytravel.utils.navigateToPlaceDetail
+import org.kjh.mytravel.utils.navigateToDayLogDetail
 import org.kjh.mytravel.utils.onThrottleClick
 
 /**
@@ -48,14 +48,14 @@ class LatestPostPagingDataAdapter
         private val snapHelper = PagerSnapHelper()
         private val imagesAdapter = LatestPostImageAdapter {
             binding.post?.let { post ->
-                binding.root.navigateToPlaceDetail(post.placeName)
+                binding.root.navigateToDayLogDetail(post.placeName)
             }
         }
 
         init {
             itemView.onThrottleClick { view ->
                 binding.post?.let { post ->
-                    view.navigateToPlaceDetail(post.placeName)
+                    view.navigateToDayLogDetail(post.placeName, post.postId)
                 }
             }
 

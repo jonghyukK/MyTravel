@@ -1,6 +1,7 @@
 package org.kjh.mytravel.ui.features.bookmark
 
 import androidx.fragment.app.activityViewModels
+import com.orhanobut.logger.Logger
 import dagger.hilt.android.AndroidEntryPoint
 import org.kjh.mytravel.R
 import org.kjh.mytravel.databinding.FragmentBookMarkBinding
@@ -17,10 +18,6 @@ class BookMarkFragment
         BookmarkListAdapter(onClickBookmark = ::requestBookmarkStateUpdate)
     }
 
-    private fun requestBookmarkStateUpdate(item: Bookmark) {
-        myProfileViewModel.updateBookmark(item.postId, item.placeName)
-    }
-
     override fun initView() {
         binding.myProfileViewModel = myProfileViewModel
 
@@ -31,4 +28,8 @@ class BookMarkFragment
     }
 
     override fun subscribeUi() {}
+
+    private fun requestBookmarkStateUpdate(item: Bookmark) {
+        myProfileViewModel.updateBookmark(item.postId, item.placeName)
+    }
 }

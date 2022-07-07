@@ -15,60 +15,65 @@
             type="org.kjh.mytravel.ui.features.place.subcity.PlacesBySubCityViewModel" />
     </data>
 
-    <androidx.coordinatorlayout.widget.CoordinatorLayout
-        android:id="@+id/cl_placeContainer"
+    <androidx.constraintlayout.motion.widget.MotionLayout
+        android:id="@+id/ml_placeBySubCityContainer"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:fitsSystemWindows="true">
-
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/container"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            tools:context=".ui.features.place.subcity.PlacesBySubCityFragment">
-
-            <com.google.android.material.appbar.MaterialToolbar
-                android:id="@+id/tb_placeListByCityNameToolbar"
-                android:layout_width="0dp"
-                android:layout_height="?attr/actionBarSize"
-                app:title="@{subCityName}"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"/>
-
-            <androidx.fragment.app.FragmentContainerView
-                android:id="@+id/map"
-                android:layout_width="0dp"
-                android:layout_height="350dp"
-                app:layout_collapseMode="parallax"
-                app:layout_collapseParallaxMultiplier="1.0"
-                app:layout_constraintTop_toBottomOf="@+id/tb_placeListByCityNameToolbar"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                android:name="com.naver.maps.map.MapFragment"/>
-        </androidx.constraintlayout.widget.ConstraintLayout>
-
-        <include
-            android:id="@+id/bottomSheet"
-            app:viewModel="@{viewModel}"
-            layout="@layout/bs_dialog_place_list" />
+        android:fitsSystemWindows="true"
+        app:layoutDescription="@xml/fragment_places_by_sub_city_xml_cl_placebysubcitycontainer_scene">
 
         <Button
             android:id="@+id/btn_showMap"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:visibility="gone"
             android:layout_marginBottom="30dp"
             android:text="@string/show_map"
-            app:isVisible="@{viewModel.uiState.expandedBehavior}"
-            onThrottleClick="@{fragment::scrollToTopWithBottomSheetCollapse}"
-            android:layout_gravity="bottom|center_horizontal"/>
+            onThrottleClick="@{fragment::scrollToTop}"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
 
         <ProgressBar
             android:id="@+id/pb_loading"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            app:isVisible="@{viewModel.uiState.loading}"/>
-    </androidx.coordinatorlayout.widget.CoordinatorLayout>
+            app:isVisible="@{viewModel.uiState.loading}"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <androidx.fragment.app.FragmentContainerView
+            android:id="@+id/map"
+            android:name="com.naver.maps.map.MapFragment"
+            android:layout_width="0dp"
+            android:layout_height="350dp"
+            app:layout_collapseMode="parallax"
+            app:layout_collapseParallaxMultiplier="1.0"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tb_placeListByCityNameToolbar" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rv_placeListBySubCityName"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:orientation="vertical"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/map"
+            android:background="@color/white"
+            bindItems="@{viewModel.uiState.placeBySubCityItems}" />
+
+        <com.google.android.material.appbar.MaterialToolbar
+            android:id="@+id/tb_placeListByCityNameToolbar"
+            android:layout_width="0dp"
+            android:layout_height="?attr/actionBarSize"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:title="@{subCityName}" />
+    </androidx.constraintlayout.motion.widget.MotionLayout>
 </layout>

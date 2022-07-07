@@ -81,6 +81,15 @@ class PlacesBySubCityViewModel @AssistedInject constructor(
         }
     }
 
+    fun updateMotionState(value: Boolean) {
+        Logger.e("$value")
+        _uiState.update {
+            it.copy(
+                isExpandedBehavior = value
+            )
+        }
+    }
+
     val updateBottomSheetState = fun(isExpanded: Boolean) {
         _uiState.update {
             it.copy(

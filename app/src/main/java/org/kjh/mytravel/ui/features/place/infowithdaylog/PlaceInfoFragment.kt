@@ -1,4 +1,4 @@
-package org.kjh.mytravel.ui.features.place.detail
+package org.kjh.mytravel.ui.features.place.infowithdaylog
 
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
@@ -12,15 +12,13 @@ import kotlinx.coroutines.flow.onEach
 import org.kjh.mytravel.R
 import org.kjh.mytravel.databinding.FragmentPlaceInfoBinding
 import org.kjh.mytravel.model.Place
-import org.kjh.mytravel.ui.base.BaseFragment
 import org.kjh.mytravel.ui.base.BaseMapFragment
 
 
 class PlaceInfoFragment
-    : BaseMapFragment<FragmentPlaceInfoBinding>(R.layout.fragment_place_info)
-{
+    : BaseMapFragment<FragmentPlaceInfoBinding>(R.layout.fragment_place_info) {
 
-    private val viewModel: PlaceViewModel by viewModels({ requireParentFragment() })
+    private val viewModel: PlaceInfoWithDayLogViewModel by viewModels({ requireParentFragment() })
     private lateinit var marker  : Marker
 
     override fun initView() {

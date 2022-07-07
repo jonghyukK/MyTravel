@@ -1,4 +1,4 @@
-package org.kjh.mytravel.ui.features.place.detail
+package org.kjh.mytravel.ui.features.place.infowithdaylog
 
 import androidx.fragment.app.Fragment
 import androidx.viewpager2.adapter.FragmentStateAdapter
@@ -16,12 +16,12 @@ const val PLACE_DAY_LOG_PAGE_INDEX = 0
 const val PLACE_INFO_PAGE_INDEX = 1
 
 class PlacePagerAdapter(
-    fragment: PlacePagerFragment
+    fragment: PlaceInfoWithDayLogFragment
 ) : FragmentStateAdapter(fragment) {
 
     private val placeTabCreators: Map<Int, () -> Fragment> = mapOf(
-        PLACE_DAY_LOG_PAGE_INDEX to { PlaceDayLogFragment.newInstance() },
-        PLACE_INFO_PAGE_INDEX to {PlaceInfoFragment.newInstance() }
+        PLACE_DAY_LOG_PAGE_INDEX to { PlaceDayLogListFragment.newInstance() },
+        PLACE_INFO_PAGE_INDEX to { PlaceInfoFragment.newInstance() }
     )
 
     override fun getItemCount(): Int = placeTabCreators.size

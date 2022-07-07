@@ -61,18 +61,28 @@ fun Toolbar.onThrottleMenuItemClick(action: (MenuItem) -> Unit) {
     setOnMenuItemClickListener(menuClickListener)
 }
 
-fun Fragment.navigateToPlaceDetail(placeName: String) {
-    val action = NavGraphDirections.actionGlobalPlacePagerFragment(placeName)
+fun Fragment.navigateToPlaceInfoWithDayLog(placeName: String) {
+    val action = NavGraphDirections.actionGlobalPlaceInfoWithDayLogFragment(placeName)
+    navigateTo(action)
+}
+
+fun View.navigateToPlaceInfoWithDayLog(placeName: String) {
+    val action = NavGraphDirections.actionGlobalPlaceInfoWithDayLogFragment(placeName)
+    navigateTo(action)
+}
+
+fun Fragment.navigateToDayLogDetail(placeName: String, postId: Int = -1) {
+    val action = NavGraphDirections.actionGlobalDayLogDetailFragment(placeName, postId)
+    navigateTo(action)
+}
+
+fun View.navigateToDayLogDetail(placeName: String, postId: Int = -1) {
+    val action = NavGraphDirections.actionGlobalDayLogDetailFragment(placeName, postId)
     navigateTo(action)
 }
 
 fun Fragment.navigateTo(action: NavDirections) {
     findNavController().navigate(action)
-}
-
-fun View.navigateToPlaceDetail(placeName: String) {
-    val action = NavGraphDirections.actionGlobalPlacePagerFragment(placeName)
-    navigateTo(action)
 }
 
 fun View.navigateTo(action: NavDirections) {

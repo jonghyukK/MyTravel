@@ -1,4 +1,4 @@
-package org.kjh.mytravel.ui.features.place.detail
+package org.kjh.mytravel.ui.features.place.infowithdaylog
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
@@ -9,7 +9,6 @@ import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import org.kjh.domain.entity.ApiResult
@@ -26,7 +25,7 @@ import org.kjh.mytravel.ui.GlobalErrorHandler
  * Description:
  */
 
-class PlaceViewModel @AssistedInject constructor(
+class PlaceInfoWithDayLogViewModel @AssistedInject constructor(
     private val getPlaceUseCase   : GetPlaceUseCase,
     private val globalErrorHandler: GlobalErrorHandler,
     @Assisted private val initPlaceName: String
@@ -93,7 +92,7 @@ class PlaceViewModel @AssistedInject constructor(
 
     @AssistedFactory
     interface PlaceNameAssistedFactory {
-        fun create(placeName: String): PlaceViewModel
+        fun create(placeName: String): PlaceInfoWithDayLogViewModel
     }
 
     companion object {

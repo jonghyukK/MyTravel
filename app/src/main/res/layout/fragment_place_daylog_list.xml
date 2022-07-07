@@ -6,27 +6,27 @@
     <data>
         <variable
             name="viewModel"
-            type="org.kjh.mytravel.ui.features.place.detail.PlaceViewModel" />
+            type="org.kjh.mytravel.ui.features.place.infowithdaylog.PlaceInfoWithDayLogViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/cl_placeDayLogContainer"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".ui.features.place.detail.PlaceInfoFragment">
+        tools:context=".ui.features.place.infowithdaylog.PlaceInfoFragment">
 
         <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/rv_placeDayLogList"
+            android:id="@+id/placeDayLogRecyclerView"
             android:layout_width="0dp"
             android:layout_height="0dp"
-            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-            android:orientation="vertical"
-            tools:listitem="@layout/vh_place_day_log_item"
-            bindItems="@{viewModel.uiState.placeItem.posts}"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"/>
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+            app:spanCount="2"
+            tools:listitem="@layout/vh_place_day_log_item"
+            bindItems="@{viewModel.uiState.placeItem.posts}"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

@@ -2,18 +2,15 @@ package org.kjh.mytravel.ui.features.profile
 
 import android.os.Parcelable
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
-import androidx.navigation.findNavController
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.PagerSnapHelper
 import androidx.recyclerview.widget.RecyclerView
-import org.kjh.mytravel.NavGraphDirections
 import org.kjh.mytravel.databinding.VhGridPostItemBinding
 import org.kjh.mytravel.databinding.VhLinearPostRowItemBinding
 import org.kjh.mytravel.model.Post
 import org.kjh.mytravel.ui.common.OnSnapPagerScrollListener
-import org.kjh.mytravel.utils.navigateToPlaceDetail
+import org.kjh.mytravel.utils.navigateToDayLogDetail
 import org.kjh.mytravel.utils.onThrottleClick
 
 /**
@@ -66,8 +63,8 @@ class PostMultipleViewAdapter(
 
         private val snapHelper =  PagerSnapHelper()
         private val imageAdapters = PostsLinearImageAdapter {
-            binding.postItem?.placeName?.let { placeName ->
-                binding.root.navigateToPlaceDetail(placeName)
+            binding.postItem?.let { post ->
+                binding.root.navigateToDayLogDetail(post.placeName, post.postId)
             }
         }
 
@@ -124,8 +121,8 @@ class PostMultipleViewAdapter(
 
         init {
             itemView.onThrottleClick { view ->
-                binding.postItem?.placeName?.let { placeName ->
-                    view.navigateToPlaceDetail(placeName)
+                binding.postItem?.let { post ->
+                    view.navigateToDayLogDetail(post.placeName, post.postId)
                 }
             }
 

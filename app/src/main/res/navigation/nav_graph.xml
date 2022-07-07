@@ -10,9 +10,8 @@
     <include app:graph="@navigation/home" />
 
     <action
-        android:id="@+id/action_global_placePagerFragment"
-        app:destination="@id/placePagerFragment"
-        app:restoreState="true"
+        android:id="@+id/action_global_placeInfoWithDayLogFragment"
+        app:destination="@id/placeInfoWithDayLogFragment"
         app:enterAnim="@anim/scale_up"
         app:exitAnim="@anim/scale_up_over"
         app:popEnterAnim="@anim/scale_down"
@@ -26,6 +25,14 @@
         app:popEnterAnim="@anim/scale_down"
         app:popExitAnim="@anim/fade_out" />
 
+    <action
+        android:id="@+id/action_global_dayLogDetailFragment"
+        app:destination="@id/dayLogDetailFragment"
+        app:enterAnim="@anim/scale_up"
+        app:exitAnim="@anim/scale_up_over"
+        app:popEnterAnim="@anim/scale_down"
+        app:popExitAnim="@anim/fade_out"/>
+
     <fragment
         android:id="@+id/userFragment"
         android:name="org.kjh.mytravel.ui.features.profile.user.UserFragment"
@@ -36,11 +43,24 @@
     </fragment>
 
     <fragment
-        android:id="@+id/placePagerFragment"
-        android:name="org.kjh.mytravel.ui.features.place.detail.PlacePagerFragment"
-        tools:layout="@layout/fragment_place_pager">
+        android:id="@+id/placeInfoWithDayLogFragment"
+        android:name="org.kjh.mytravel.ui.features.place.infowithdaylog.PlaceInfoWithDayLogFragment"
+        tools:layout="@layout/fragment_place_info_with_daylog">
         <argument
             android:name="placeName"
             app:argType="string" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/dayLogDetailFragment"
+        android:name="org.kjh.mytravel.ui.features.daylog.DayLogDetailFragment"
+        tools:layout="@layout/fragment_daylog_detail">
+        <argument
+            android:name="placeName"
+            app:argType="string" />
+        <argument
+            android:name="postId"
+            app:argType="integer"
+            android:defaultValue="-1"/>
     </fragment>
 </navigation>

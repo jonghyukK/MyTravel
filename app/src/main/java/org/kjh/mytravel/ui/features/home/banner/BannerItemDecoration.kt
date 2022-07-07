@@ -46,7 +46,7 @@ class BannerItemDecoration : RecyclerView.ItemDecoration() {
             val startX = parent.width - padding30 - textPaint.measureText(text)
             val startY = (result / 2) * dp + textPaint.measureText(text)
 
-            c.drawText(text, startX, 200f, textPaint)
+            c.drawText(text, startX, startY, textPaint)
         }
     }
 }
