@@ -36,7 +36,7 @@
         <entry key="app/src/main/res/layout/fragment_content_input.xml" value="0.5913129318854886" />
         <entry key="app/src/main/res/layout/fragment_daylog_detail.xml" value="0.35932872655478776" />
         <entry key="app/src/main/res/layout/fragment_detail.xml" value="0.15833333333333333" />
-        <entry key="app/src/main/res/layout/fragment_home.xml" value="0.593423019431988" />
+        <entry key="app/src/main/res/layout/fragment_home.xml" value="0.2722222222222222" />
         <entry key="app/src/main/res/layout/fragment_home2.xml" value="0.6425221469515373" />
         <entry key="app/src/main/res/layout/fragment_home_specific_city_list.xml" value="0.3089887640449438" />
         <entry key="app/src/main/res/layout/fragment_home_specific_city_pager.xml" value="0.25555555555555554" />
@@ -57,7 +57,7 @@
         <entry key="app/src/main/res/layout/fragment_places_by_sub_city.xml" value="0.45925925925925926" />
         <entry key="app/src/main/res/layout/fragment_posts_grid.xml" value="0.1" />
         <entry key="app/src/main/res/layout/fragment_posts_linear.xml" value="0.44752475247524753" />
-        <entry key="app/src/main/res/layout/fragment_profile.xml" value="0.6635897435897435" />
+        <entry key="app/src/main/res/layout/fragment_profile.xml" value="0.6739583333333333" />
         <entry key="app/src/main/res/layout/fragment_profile_edit.xml" value="0.21902017291066284" />
         <entry key="app/src/main/res/layout/fragment_select_bucket_bottom_sheet.xml" value="0.43425925925925923" />
         <entry key="app/src/main/res/layout/fragment_select_photo.xml" value="0.1" />
@@ -80,12 +80,15 @@
         <entry key="app/src/main/res/layout/layout_bookmark_empty.xml" value="0.7492307692307693" />
         <entry key="app/src/main/res/layout/layout_error_page.xml" value="0.1" />
         <entry key="app/src/main/res/layout/layout_profile_info.xml" value="0.3787037037037037" />
+        <entry key="app/src/main/res/layout/vh_banner_row.xml" value="0.26197916666666665" />
         <entry key="app/src/main/res/layout/vh_bookmark_post_item.xml" value="0.5018518518518519" />
         <entry key="app/src/main/res/layout/vh_bs_search_place.xml" value="0.44074074074074077" />
         <entry key="app/src/main/res/layout/vh_bs_select_bucket.xml" value="0.43425925925925923" />
         <entry key="app/src/main/res/layout/vh_grid_post_item.xml" value="0.36574074074074076" />
-        <entry key="app/src/main/res/layout/vh_home_banner_item.xml" value="0.23333333333333334" />
+        <entry key="app/src/main/res/layout/vh_home_banner_item.xml" value="0.44907407407407407" />
         <entry key="app/src/main/res/layout/vh_home_recent_recyclerview.xml" value="0.24351851851851852" />
+        <entry key="app/src/main/res/layout/vh_latest_daylog_container.xml" value="0.1" />
+        <entry key="app/src/main/res/layout/vh_latest_posts_header.xml" value="0.7020833333333333" />
         <entry key="app/src/main/res/layout/vh_latest_posts_paging_load_state.xml" value="0.68" />
         <entry key="app/src/main/res/layout/vh_linear_post_row_item.xml" value="0.5546296296296296" />
         <entry key="app/src/main/res/layout/vh_place_by_city_name_item.xml" value="0.9385416666666667" />
@@ -99,6 +102,7 @@
         <entry key="app/src/main/res/layout/vh_place_outer.xml" value="0.6375" />
         <entry key="app/src/main/res/layout/vh_place_ranking_item.xml" value="0.4675925925925926" />
         <entry key="app/src/main/res/layout/vh_place_ranking_row.xml" value="0.39814814814814814" />
+        <entry key="app/src/main/res/layout/vh_place_recent_item.xml" value="0.5592592592592592" />
         <entry key="app/src/main/res/layout/vh_places_by_sub_city_row.xml" value="0.15106580166821132" />
         <entry key="app/src/main/res/layout/vh_post_in_place_outer.xml" value="0.8804448563484708" />
         <entry key="app/src/main/res/layout/vh_post_item.xml" value="0.5185185185185185" />

@@ -1,11 +1,13 @@
 package org.kjh.mytravel.ui.features.home.banner
 
 import android.content.res.Resources
-import android.graphics.Canvas
-import android.graphics.Color
-import android.graphics.Paint
+import android.graphics.*
+import android.text.TextPaint
+import android.util.TypedValue
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.orhanobut.logger.Logger
+import org.kjh.mytravel.utils.statusBarHeight
 
 /**
  * MyTravel
@@ -15,12 +17,28 @@ import androidx.recyclerview.widget.RecyclerView
  * Description:
  */
 
+
 class BannerItemDecoration : RecyclerView.ItemDecoration() {
 
-    private val dp = Resources.getSystem().displayMetrics.density
+    private val density = Resources.getSystem().displayMetrics.density
+
+    // 아래 4변수로 Rect Size 조정, Text는 자동으로 Center.
+    private val rectLeftDistance   = 70.px()
+    private val rectRightDistance  = 20.px()
+    private val rectTopDistance    = 50.px()
+    private val rectBottomDistance = 20.px()
+
     private val textPaint = Paint().apply {
-        textSize = 18 * dp
-        color    = Color.WHITE
+        textSize  = 16 * density
+        color     = Color.WHITE
+        textAlign = Paint.Align.CENTER
+        isAntiAlias = true
+    }
+
+    private val bgPaint = Paint().apply {
+        style       = Paint.Style.FILL_AND_STROKE
+        color       = Color.parseColor("#55000000")
+        strokeCap   = Paint.Cap.ROUND
         isAntiAlias = true
     }
 
@@ -32,21 +50,32 @@ class BannerItemDecoration : RecyclerView.ItemDecoration() {
             (parent.layoutManager as LinearLayoutManager).findFirstVisibleItemPosition()
 
         if (currentChildPosition != RecyclerView.NO_POSITION) {
-            val text = "${(currentChildPosition % (itemTotalCount / 2)) + 1}/${itemTotalCount / 2}"
+            val currentPageIndex = (currentChildPosition % (itemTotalCount / 2)) + 1
+            val totalCount = itemTotalCount / 2
+            val text = "$currentPageIndex/$totalCount"
 
-            val padding20 = 20 * dp
-            val padding30 = 30 * dp
+            val rectLeftPoint   = parent.width - rectLeftDistance
+            val rectRightPoint  = parent.width - rectRightDistance
+            val rectTopPoint    = parent.height - rectTopDistance
+            val rectBottomPoint = parent.height - rectBottomDistance
 
-            val resourceId = parent.resources.getIdentifier("status_bar_height", "dimen", "android")
-            var result = 0
-            if (resourceId > 0) {
-                result = parent.resources.getDimensionPixelSize(resourceId)
-            }
+            val rectF = RectF(rectLeftPoint, rectTopPoint, rectRightPoint, rectBottomPoint)
 
-            val startX = parent.width - padding30 - textPaint.measureText(text)
-            val startY = (result / 2) * dp + textPaint.measureText(text)
+            // draw RoundRect.
+            c.drawRoundRect(rectF, 50f, 50f, bgPaint)
 
-            c.drawText(text, startX, startY, textPaint)
+            val bounds = Rect()
+            textPaint.getTextBounds(text, 0, text.length, bounds)
+
+            val textXDistance = rectRightDistance + ((rectLeftDistance - rectRightDistance) / 2)
+            val textYDistance = rectBottomDistance + ((rectTopDistance - rectBottomDistance) / 2) - (bounds.height() / 2)
+            val textXPoint = parent.width - textXDistance
+            val textYPoint = parent.height - textYDistance
+
+            // draw Text.
+            c.drawText(text, textXPoint, textYPoint, textPaint)
         }
     }
+
+    private fun Int.px() = this * density
 }

@@ -12,58 +12,47 @@
             type="org.kjh.mytravel.ui.features.home.HomeViewModel" />
     </data>
 
-    <androidx.coordinatorlayout.widget.CoordinatorLayout
-        android:id="@+id/cl_homeCoordinatorLayout"
+    <androidx.constraintlayout.motion.widget.MotionLayout
+        android:id="@+id/ml_homeContainer"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        app:layoutDescription="@xml/motion_scene_home_scrolling"
+        bindToolbar="@{tbHomeToolbar}"
+        motionProgress="@{viewModel.motionProgress}">
 
-        <com.google.android.material.appbar.AppBarLayout
-            android:id="@+id/abl_homeAppBarLayout"
-            android:layout_width="match_parent"
-            android:layout_height="400dp"
-            android:background="@color/white"
-            android:fitsSystemWindows="true"
-            bindOffsetChangedListener="@{viewModel.updateStateCollapsedState}">
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/homeBannerRecyclerView"
+            addOnScrollListener="@{viewModel.homeBannersUiState.toData().size()}"
+            bindItems="@{viewModel.homeBannersUiState.toData()}"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:minHeight="300dp"
+            android:orientation="horizontal"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            app:layout_constraintBottom_toTopOf="@id/homeConcatRecyclerView"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:listitem="@layout/vh_home_banner_item" />
 
-            <com.google.android.material.appbar.CollapsingToolbarLayout
-                android:id="@+id/ctl_homeCollapsingToolbar"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:fitsSystemWindows="true"
-                app:layout_scrollFlags="scroll|exitUntilCollapsed"
-                app:scrimAnimationDuration="0"
-                app:titleEnabled="false"
-                app:statusBarScrim="@{viewModel.isAppBarCollapsed() ? @color/white : @android:color/transparent}">
-
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/homeBannerRecyclerView"
-                    android:layout_width="match_parent"
-                    android:layout_height="400dp"
-                    android:fitsSystemWindows="true"
-                    android:orientation="horizontal"
-                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-                    addOnScrollListener="@{viewModel.homeBannersUiState.toData().size()}"
-                    bindItems="@{viewModel.homeBannersUiState.toData()}"
-                    app:layout_collapseMode="parallax"
-                    app:layout_collapseParallaxMultiplier="0.7" />
-
-                <com.google.android.material.appbar.MaterialToolbar
-                    android:id="@+id/tb_homeToolbar"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:minHeight="?attr/actionBarSize"
-                    app:title="@string/app_name"
-                    app:layout_collapseMode="pin"
-                    app:titleTextColor="@{viewModel.isAppBarCollapsed() ? @color/black : @color/white}"
-                    android:background="@{viewModel.isAppBarCollapsed() ? @color/white : @android:color/transparent}"/>
-            </com.google.android.material.appbar.CollapsingToolbarLayout>
-        </com.google.android.material.appbar.AppBarLayout>
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/tb_homeToolbar"
+            android:layout_width="0dp"
+            android:layout_height="?attr/actionBarSize"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:title="@string/app_name" />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/homeConcatRecyclerView"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:background="@color/white"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-            app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior" />
-    </androidx.coordinatorlayout.widget.CoordinatorLayout>
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/homeBannerRecyclerView" />
+    </androidx.constraintlayout.motion.widget.MotionLayout>
 </layout>

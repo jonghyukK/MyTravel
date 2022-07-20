@@ -6,9 +6,11 @@ import android.view.ViewGroup
 import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.PagerSnapHelper
 import androidx.recyclerview.widget.RecyclerView
+import org.kjh.mytravel.databinding.VhLinearPostRowItemBinding
 import org.kjh.mytravel.databinding.VhPlaceRecentItemBinding
 import org.kjh.mytravel.model.Post
 import org.kjh.mytravel.ui.common.OnSnapPagerScrollListener
+import org.kjh.mytravel.ui.features.profile.LineIndicatorDecoration
 import org.kjh.mytravel.utils.navigateToDayLogDetail
 import org.kjh.mytravel.utils.onThrottleClick
 
@@ -25,7 +27,7 @@ class LatestPostPagingDataAdapter
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) =
         LatestPostViewHolder(
-            VhPlaceRecentItemBinding.inflate(
+            VhLinearPostRowItemBinding.inflate(
                 LayoutInflater.from(parent.context), parent, false
             )
         )
@@ -34,34 +36,28 @@ class LatestPostPagingDataAdapter
         holder.bind(getItem(position)!!)
     }
 
-    override fun onViewRecycled(holder: LatestPostViewHolder) {
-        super.onViewRecycled(holder)
-
-        val key = holder.layoutPosition
-        childViewState[key] = holder.binding.rvRecentPlaceList.layoutManager?.onSaveInstanceState()
-    }
-
     inner class LatestPostViewHolder(
-        val binding: VhPlaceRecentItemBinding
+        val binding: VhLinearPostRowItemBinding
     ): RecyclerView.ViewHolder(binding.root) {
 
         private val snapHelper = PagerSnapHelper()
         private val imagesAdapter = LatestPostImageAdapter {
-            binding.post?.let { post ->
+            binding.postItem?.let { post ->
                 binding.root.navigateToDayLogDetail(post.placeName)
             }
         }
 
         init {
             itemView.onThrottleClick { view ->
-                binding.post?.let { post ->
+                binding.postItem?.let { post ->
                     view.navigateToDayLogDetail(post.placeName, post.postId)
                 }
             }
 
-            binding.rvRecentPlaceList.apply {
+            binding.postImgRecyclerView.apply {
                 setHasFixedSize(true)
                 adapter = imagesAdapter
+                addItemDecoration(LineIndicatorDecoration())
                 snapHelper.attachToRecyclerView(this)
                 addOnScrollListener(
                     OnSnapPagerScrollListener(
@@ -69,7 +65,7 @@ class LatestPostPagingDataAdapter
                         listener = object : OnSnapPagerScrollListener.OnChangeListener {
                             override fun onSnapped(position: Int) {
                                 childViewState[layoutPosition] =
-                                    binding.rvRecentPlaceList.layoutManager?.onSaveInstanceState()
+                                    binding.postImgRecyclerView.layoutManager?.onSaveInstanceState()
                             }
                         }
                     ))
@@ -77,7 +73,7 @@ class LatestPostPagingDataAdapter
         }
 
         fun bind(item: Post) {
-            binding.post = item
+            binding.postItem = item
 
             imagesAdapter.setItems(item.imageUrl)
             restorePosition()
@@ -88,9 +84,9 @@ class LatestPostPagingDataAdapter
             val state = childViewState[key]
 
             if (state != null) {
-                binding.rvRecentPlaceList.layoutManager?.onRestoreInstanceState(state)
+                binding.postImgRecyclerView.layoutManager?.onRestoreInstanceState(state)
             } else {
-                binding.rvRecentPlaceList.layoutManager?.scrollToPosition(0)
+                binding.postImgRecyclerView.layoutManager?.scrollToPosition(0)
             }
         }
     }

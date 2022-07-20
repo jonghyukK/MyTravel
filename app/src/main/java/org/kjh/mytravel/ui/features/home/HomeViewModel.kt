@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.paging.cachedIn
 import androidx.paging.map
+import com.orhanobut.logger.Logger
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -52,12 +53,12 @@ class HomeViewModel @Inject constructor(
     private val _refreshLatestPostsPagingData = MutableStateFlow(false)
     val refreshLatestPostsPagingData = _refreshLatestPostsPagingData.asStateFlow()
 
-    private val _isAppBarCollapsed = MutableStateFlow(false)
-    val isAppBarCollapsed = _isAppBarCollapsed.asStateFlow()
-
     val latestPostsPagingData = getRecentPostsUseCase()
         .map { pagingData -> pagingData.map { it.mapToPresenter() } }
         .cachedIn(viewModelScope)
+
+    private val _motionProgress: MutableStateFlow<Float> = MutableStateFlow(0f)
+    val motionProgress = _motionProgress.asStateFlow()
 
     init {
         fetchHomeBanners()
@@ -114,7 +115,7 @@ class HomeViewModel @Inject constructor(
         _refreshLatestPostsPagingData.value = value
     }
 
-    val updateStateCollapsedState = fun(isCollapsed: Boolean) {
-        _isAppBarCollapsed.value = isCollapsed
+    fun saveMotionProgress(value: Float) {
+        _motionProgress.value = value
     }
 }
