@@ -1,6 +1,5 @@
 package org.kjh.mytravel.ui.common
 
-import android.animation.ObjectAnimator
 import android.graphics.Color
 import android.net.Uri
 import android.view.View
@@ -10,7 +9,6 @@ import androidx.appcompat.widget.Toolbar
 import androidx.core.view.get
 import androidx.core.view.isVisible
 import androidx.databinding.BindingAdapter
-import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.google.android.material.appbar.AppBarLayout
@@ -23,13 +21,12 @@ import org.kjh.mytravel.ui.features.home.banner.BannerListAdapter
 import org.kjh.mytravel.ui.features.place.infowithdaylog.PlaceDayLogListAdapter
 import org.kjh.mytravel.ui.features.place.subcity.PlacesBySubCityListAdapter
 import org.kjh.mytravel.ui.features.profile.PostMultipleViewAdapter
-import org.kjh.mytravel.ui.features.upload.location.LocationQueryResultAdapter
 import org.kjh.mytravel.ui.features.upload.UploadTempImagesAdapter
+import org.kjh.mytravel.ui.features.upload.location.LocationQueryResultAdapter
 import org.kjh.mytravel.ui.features.upload.select.MediaStoreImageListAdapter
 import org.kjh.mytravel.ui.features.upload.select.SelectedPhotoListAdapter
 import org.kjh.mytravel.utils.InputValidator
 import org.kjh.mytravel.utils.avoidUncheckedWarnAndCast
-import org.kjh.mytravel.utils.dpToPx
 
 /**
  * MyTravel
@@ -40,48 +37,6 @@ import org.kjh.mytravel.utils.dpToPx
  */
 
 object BindingAdapters {
-
-    @JvmStatic
-    @BindingAdapter("contentText")
-    fun bindConvertedPlaceAddress(view: TextView, content: String) {
-        view.text = content.ifBlank { view.resources.getString(R.string.input_content_your_experience)}
-    }
-
-    @JvmStatic
-    @BindingAdapter("convertPlaceAddress")
-    fun bindConvertedPlaceAddress(view: TextView, mapQueryItem: MapQueryItem?) {
-        view.text = mapQueryItem?.let {
-            val placeName = it.placeName
-            val (cityName, subCityName) = it.placeAddress.split(" ")
-
-            "$placeName | $cityName, $subCityName"
-        } ?: view.resources.getString(R.string.input_place)
-    }
-
-    @JvmStatic
-    @BindingAdapter("isNotEmptySelectedItems", "isDoneAnimated", "setDoneAnimated")
-    fun bindAnimatorWithTranslationY(
-        view: RecyclerView,
-        isNotEmptySelectedItems: Boolean,
-        isDoneAnimated: Boolean,
-        setDoneAnimated: (Boolean) -> Unit
-    ) {
-        val translateRange =
-            if (isNotEmptySelectedItems)
-                90.dpToPx(view.context).toFloat()
-            else
-                0f
-
-        if (!isDoneAnimated) {
-            ObjectAnimator.ofFloat(view, "translationY", translateRange).apply {
-                duration = 180
-                start()
-            }
-        } else {
-            view.translationY = translateRange
-            setDoneAnimated(false)
-        }
-    }
 
     @JvmStatic
     @BindingAdapter("onThrottleClick")
@@ -146,29 +101,6 @@ object BindingAdapters {
     }
 
     @JvmStatic
-    @BindingAdapter("addOnScrollListener")
-    fun bindOnScrollListenerForHomeBanners(view: RecyclerView, bannerCount: Int) {
-        view.addOnScrollListener(object : RecyclerView.OnScrollListener() {
-            val lm = view.layoutManager as LinearLayoutManager
-
-            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
-                val firstItemVisible = lm.findFirstVisibleItemPosition()
-
-                if (bannerCount != 0) {
-                    if (firstItemVisible != 1 && (firstItemVisible % bannerCount == 1)) {
-                        lm.scrollToPosition(1)
-                    } else if (firstItemVisible == 0) {
-                        lm.scrollToPositionWithOffset(
-                            bannerCount,
-                            -view.computeHorizontalScrollOffset()
-                        )
-                    }
-                }
-            }
-        })
-    }
-
-    @JvmStatic
     @BindingAdapter("isVisibleMenu")
     fun bindShowMenu(view: Toolbar, isVisible: Boolean) {
         view.menu[0].isVisible = isVisible
@@ -219,17 +151,6 @@ object BindingAdapters {
         view.apply {
             text = value
             isVisible = value != null
-        }
-    }
-
-    @JvmStatic
-    @BindingAdapter("app:imgUri")
-    fun bindImageWithUri(view: ImageView, imgUri: Uri?) {
-        imgUri?.run {
-            Glide.with(view)
-                .load(imgUri)
-                .centerCrop()
-                .into(view)
         }
     }
 

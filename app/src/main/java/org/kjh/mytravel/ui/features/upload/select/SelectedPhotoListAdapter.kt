@@ -4,10 +4,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.bumptech.glide.Glide
-import com.bumptech.glide.RequestManager
-import com.orhanobut.logger.Logger
-import org.kjh.mytravel.databinding.VhRectImageWithCloseBtnBinding
+import org.kjh.mytravel.databinding.VhSelectedMediaStoreImgItemBinding
 import org.kjh.mytravel.model.MediaStoreImage
 import org.kjh.mytravel.utils.onThrottleClick
 
@@ -24,7 +21,7 @@ class SelectedPhotoListAdapter(
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) =
         SelectedPhotoViewHolder(
-            VhRectImageWithCloseBtnBinding.inflate(
+            VhSelectedMediaStoreImgItemBinding.inflate(
                 LayoutInflater.from(parent.context), parent, false
             ), onDeleteImg
         )
@@ -34,7 +31,7 @@ class SelectedPhotoListAdapter(
     }
 
     class SelectedPhotoViewHolder(
-        private val binding: VhRectImageWithCloseBtnBinding,
+        private val binding: VhSelectedMediaStoreImgItemBinding,
         private val onDeleteImg: (MediaStoreImage) -> Unit
     ): RecyclerView.ViewHolder(binding.root) {
 

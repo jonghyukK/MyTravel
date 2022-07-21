@@ -32,11 +32,11 @@ class SelectPhotoViewModel @Inject constructor(
         emit(getMediaStoreImages())
     }
 
-    private val _isDoneAnimated = MutableStateFlow(false)
-    val isDoneAnimated = _isDoneAnimated.asStateFlow()
+    private val _enableMotionAnim = MutableStateFlow(true)
+    val enableMotionAnim = _enableMotionAnim.asStateFlow()
 
-    val updateAnimatedState = fun(value: Boolean) {
-        _isDoneAnimated.value = value
+    val updateMotionAnimEnabled = fun(value: Boolean) {
+        _enableMotionAnim.value = value
     }
 
     private suspend fun getMediaStoreImages(): List<MediaStoreImage> {

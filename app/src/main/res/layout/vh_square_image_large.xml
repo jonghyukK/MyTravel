@@ -4,25 +4,26 @@
 
     <data>
         <variable
-            name="item"
-            type="org.kjh.mytravel.model.MediaStoreImage" />
+            name="imageUrl"
+            type="String" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/cl_rectImgContainer"
+        android:id="@+id/cl_squareImgContainer"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
         <ImageView
-            android:id="@+id/iv_img"
+            android:id="@+id/iv_image"
             android:layout_width="0dp"
             android:layout_height="0dp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBaseline_toBottomOf="parent"
+            android:scaleType="centerCrop"
+            app:imgUrl="@{imageUrl}"
             app:layout_constraintDimensionRatio="1:1"
-            app:imgUri="@{item.contentUri}" />
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"/>
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
-

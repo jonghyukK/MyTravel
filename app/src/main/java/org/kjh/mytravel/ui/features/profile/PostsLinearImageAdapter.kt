@@ -3,8 +3,7 @@ package org.kjh.mytravel.ui.features.profile
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.orhanobut.logger.Logger
-import org.kjh.mytravel.databinding.VhRectImageFullSquareBinding
+import org.kjh.mytravel.databinding.VhSquareImageLargeBinding
 import org.kjh.mytravel.utils.onThrottleClick
 
 /**
@@ -29,7 +28,7 @@ class PostsLinearImageAdapter(
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) =
         PostLinearInnerViewHolder(
-            VhRectImageFullSquareBinding.inflate(
+            VhSquareImageLargeBinding.inflate(
                 LayoutInflater.from(parent.context), parent, false
             ), onClickPostImg
         )
@@ -41,7 +40,7 @@ class PostsLinearImageAdapter(
     override fun getItemCount() = postImages.size
 
     class PostLinearInnerViewHolder(
-        private val binding: VhRectImageFullSquareBinding,
+        private val binding: VhSquareImageLargeBinding,
         private val onClickPostImg: () -> Unit
     ): RecyclerView.ViewHolder(binding.root) {
 

@@ -3,8 +3,7 @@ package org.kjh.mytravel.ui.features.home.latest
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import org.kjh.mytravel.databinding.VhRectImageBinding
-import org.kjh.mytravel.databinding.VhRectImageFullSquareBinding
+import org.kjh.mytravel.databinding.VhSquareImageLargeBinding
 import org.kjh.mytravel.utils.onThrottleClick
 
 /**
@@ -29,7 +28,7 @@ class LatestPostImageAdapter(
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) =
         LatestPostImageViewHolder(
-            VhRectImageFullSquareBinding.inflate(
+            VhSquareImageLargeBinding.inflate(
                 LayoutInflater.from(parent.context), parent, false
             ), onClickImg
         )
@@ -41,7 +40,7 @@ class LatestPostImageAdapter(
     override fun getItemCount() = postImages.size
 
     class LatestPostImageViewHolder(
-        val binding   : VhRectImageFullSquareBinding,
+        val binding   : VhSquareImageLargeBinding,
         val onClickImg: () -> Unit
     ): RecyclerView.ViewHolder(binding.root) {
 

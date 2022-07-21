@@ -1,7 +1,6 @@
 package org.kjh.mytravel.ui.features.upload.select
 
 import android.net.Uri
-import android.text.method.TextKeyListener.clear
 import android.view.LayoutInflater
 import android.view.MotionEvent
 import android.view.ViewGroup
@@ -10,10 +9,7 @@ import androidx.recyclerview.selection.ItemDetailsLookup
 import androidx.recyclerview.selection.SelectionTracker
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.bumptech.glide.Glide
-import com.bumptech.glide.GlideBuilder
-import com.orhanobut.logger.Logger
-import org.kjh.mytravel.databinding.VhRectImageSmallBinding
+import org.kjh.mytravel.databinding.VhSelectableMediaStoreImgItemBinding
 import org.kjh.mytravel.model.MediaStoreImage
 
 /**
@@ -31,7 +27,7 @@ class MediaStoreImageListAdapter
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) =
         SelectPhotoViewHolder(
-            VhRectImageSmallBinding.inflate(
+            VhSelectableMediaStoreImgItemBinding.inflate(
                 LayoutInflater.from(parent.context), parent, false)
         )
 
@@ -43,13 +39,13 @@ class MediaStoreImageListAdapter
     }
 
     inner class SelectPhotoViewHolder(
-        val binding: VhRectImageSmallBinding
+        val binding: VhSelectableMediaStoreImgItemBinding
     ): RecyclerView.ViewHolder(binding.root) {
 
         fun bind(item: MediaStoreImage, isActivated: Boolean = false) {
             binding.mediaStoreImage = item
 
-            binding.flSelectedBg.isActivated = isActivated
+            binding.flSelectedCover.isActivated = isActivated
             binding.ivChecked.isVisible = isActivated
         }
 

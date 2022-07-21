@@ -12,51 +12,53 @@
             type="org.kjh.mytravel.ui.features.upload.UploadViewModel" />
     </data>
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <androidx.constraintlayout.motion.widget.MotionLayout
         android:id="@+id/ctl_selectPhotoContainer"
+        showSelectedItems="@{uploadViewModel.uploadItem.selectedImageItems.size > 0}"
+        enableMotionAnim="@{viewModel.enableMotionAnim}"
+        updateMotionAnimEnabled="@{viewModel.updateMotionAnimEnabled}"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:fitsSystemWindows="true">
+        android:fitsSystemWindows="true"
+        app:layoutDescription="@xml/motion_scene_selected_photo_height">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/selectedImgRecyclerView"
+            bindItems="@{uploadViewModel.uploadItem.selectedImageItems}"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:clipToPadding="false"
+            android:orientation="horizontal"
+            android:paddingStart="5dp"
+            android:paddingEnd="5dp"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tb_selectPhotoToolbar"
+            tools:listitem="@layout/vh_selected_media_store_img_item" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/mediaStoreImgRecyclerView"
+            bindItems="@{viewModel.mediaStoreImages}"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tb_selectPhotoToolbar"
+            app:spanCount="3" />
 
         <com.google.android.material.appbar.MaterialToolbar
             android:id="@+id/tb_selectPhotoToolbar"
+            isVisibleMenu="@{uploadViewModel.uploadItem.selectedImageItems.size() != 0}"
             android:layout_width="0dp"
             android:layout_height="?attr/actionBarSize"
             android:background="@color/white"
             android:elevation="1dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            isVisibleMenu="@{uploadViewModel.uploadItem.selectedImageItems.size() != 0}"/>
+            app:layout_constraintTop_toTopOf="parent" />
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/selectedImgRecyclerView"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:paddingStart="5dp"
-            android:paddingEnd="5dp"
-            android:clipToPadding="false"
-            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-            app:layout_constraintTop_toBottomOf="@+id/tb_selectPhotoToolbar"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            tools:listitem="@layout/vh_rect_image_with_close_btn"
-            bindItems="@{uploadViewModel.uploadItem.selectedImageItems}"/>
-
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/mediaStoreImgRecyclerView"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
-            app:spanCount="3"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tb_selectPhotoToolbar"
-            isNotEmptySelectedItems="@{uploadViewModel.uploadItem.selectedImageItems.size > 0}"
-            isDoneAnimated="@{viewModel.isDoneAnimated()}"
-            setDoneAnimated="@{viewModel.updateAnimatedState}"
-            bindItems="@{viewModel.mediaStoreImages}" />
-    </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.constraintlayout.motion.widget.MotionLayout>
 </layout>

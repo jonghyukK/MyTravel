@@ -116,11 +116,6 @@ class DayLogDetailFragment
         }
     }
 
-    override fun onDestroyView() {
-        requireActivity().window.statusBarColor = Color.WHITE
-        super.onDestroyView()
-    }
-
     fun navigateToPlaceInfoWithDayLog() {
         navigateToPlaceInfoWithDayLog(args.placeName)
     }

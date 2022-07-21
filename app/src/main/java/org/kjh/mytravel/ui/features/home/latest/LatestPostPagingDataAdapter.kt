@@ -7,7 +7,6 @@ import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.PagerSnapHelper
 import androidx.recyclerview.widget.RecyclerView
 import org.kjh.mytravel.databinding.VhLinearPostRowItemBinding
-import org.kjh.mytravel.databinding.VhPlaceRecentItemBinding
 import org.kjh.mytravel.model.Post
 import org.kjh.mytravel.ui.common.OnSnapPagerScrollListener
 import org.kjh.mytravel.ui.features.profile.LineIndicatorDecoration

@@ -4,7 +4,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import org.kjh.mytravel.databinding.VhRectImageBigBinding
+import org.kjh.mytravel.databinding.VhSquareImageLargeBinding
 import org.kjh.mytravel.model.MediaStoreImage
 
 /**
@@ -20,7 +20,7 @@ class UploadTempImagesAdapter
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) =
         TempImagesViewHolder(
-            VhRectImageBigBinding.inflate(
+            VhSquareImageLargeBinding.inflate(
                 LayoutInflater.from(parent.context), parent, false)
         )
 
@@ -29,11 +29,11 @@ class UploadTempImagesAdapter
     }
 
     class TempImagesViewHolder(
-        val binding: VhRectImageBigBinding
+        val binding: VhSquareImageLargeBinding
     ): RecyclerView.ViewHolder(binding.root) {
 
         fun bind(item: MediaStoreImage) {
-            binding.item = item
+            binding.imageUrl = item.contentUri.toString()
         }
     }
 }

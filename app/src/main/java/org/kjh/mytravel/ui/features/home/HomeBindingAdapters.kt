@@ -4,6 +4,8 @@ import androidx.appcompat.widget.Toolbar
 import androidx.constraintlayout.motion.widget.MotionLayout
 import androidx.core.view.updatePadding
 import androidx.databinding.BindingAdapter
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import org.kjh.mytravel.utils.statusBarHeight
 
 /**
@@ -31,4 +33,26 @@ fun bindHomeMotionScrolling(motionLayout: MotionLayout, toolbar: Toolbar, progre
 
         this.progress = progress
     }
+}
+
+@BindingAdapter("addOnScrollListener")
+fun bindOnScrollListenerForHomeBanners(view: RecyclerView, bannerCount: Int) {
+    view.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+        val lm = view.layoutManager as LinearLayoutManager
+
+        override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+            val firstItemVisible = lm.findFirstVisibleItemPosition()
+
+            if (bannerCount != 0) {
+                if (firstItemVisible != 1 && (firstItemVisible % bannerCount == 1)) {
+                    lm.scrollToPosition(1)
+                } else if (firstItemVisible == 0) {
+                    lm.scrollToPositionWithOffset(
+                        bannerCount,
+                        -view.computeHorizontalScrollOffset()
+                    )
+                }
+            }
+        }
+    })
 }

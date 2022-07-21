@@ -95,7 +95,7 @@ class SelectPhotoFragment
     }
 
     override fun onDestroyView() {
-        viewModel.updateAnimatedState(true)
+        viewModel.updateMotionAnimEnabled(false)
         super.onDestroyView()
     }
 
