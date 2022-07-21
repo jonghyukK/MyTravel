@@ -37,7 +37,7 @@ fun bindSelectedItemsMotion(
     updateMotionAnimEnabled: (Boolean) -> Unit
 ) {
     val transitionId =
-        if (showSelectedItems) 
+        if (showSelectedItems)
             R.id.cs_selected_items_height_end
         else
             R.id.cs_selected_items_height_start
