@@ -6,6 +6,7 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import org.kjh.mytravel.databinding.VhPlaceByCityNameItemBinding
 import org.kjh.mytravel.model.Post
+import org.kjh.mytravel.utils.navigateToDayLogDetail
 import org.kjh.mytravel.utils.onThrottleClick
 
 /**
@@ -16,30 +17,38 @@ import org.kjh.mytravel.utils.onThrottleClick
  * Description:
  */
 
-class PlacesBySubCityPostListAdapter(
-    private val onClickPostItem: (Post) -> Unit
-) : ListAdapter<Post, PlacesBySubCityPostListAdapter.PlacesBySubCityPostViewHolder>(Post.diffCallback) {
+class PlacesBySubCityPostListAdapter
+    : RecyclerView.Adapter<PlacesBySubCityPostListAdapter.PlacesBySubCityPostViewHolder>() {
+
+    private val postItems = mutableListOf<Post>()
+
+    fun setPostItems(items: List<Post>) {
+        postItems.clear()
+        postItems.addAll(items)
+        notifyDataSetChanged()
+    }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) =
         PlacesBySubCityPostViewHolder(
             VhPlaceByCityNameItemBinding.inflate(
                 LayoutInflater.from(parent.context), parent, false
-            ), onClickPostItem
+            )
         )
 
     override fun onBindViewHolder(holder: PlacesBySubCityPostViewHolder, position: Int) {
-        holder.bind(getItem(position))
+        holder.bind(postItems[position])
     }
 
+    override fun getItemCount() = postItems.size
+
     class PlacesBySubCityPostViewHolder(
-        private val binding        : VhPlaceByCityNameItemBinding,
-        private val onClickPostItem: (Post) -> Unit
+        private val binding : VhPlaceByCityNameItemBinding
     ): RecyclerView.ViewHolder(binding.root) {
 
         init {
-            itemView.onThrottleClick {
+            itemView.onThrottleClick { view ->
                 binding.postItem?.let { post ->
-                    onClickPostItem(post)
+                    view.navigateToDayLogDetail(post.placeName, post.postId)
                 }
             }
         }

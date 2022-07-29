@@ -27,8 +27,8 @@ abstract class BaseMapFragment<B: ViewDataBinding>(
     protected val binding get() = _binding!!
 
     override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
+        inflater          : LayoutInflater,
+        container         : ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         _binding = DataBindingUtil.inflate(inflater, layoutId, container, false)
@@ -47,10 +47,14 @@ abstract class BaseMapFragment<B: ViewDataBinding>(
 
     override fun onMapReady(p0: NaverMap) {
         naverMap = p0
+        naverMap.setOnMapClickListener { _, _ -> naverMapClickEvent() }
+
         subscribeUi()
     }
 
     abstract fun subscribeUi()
+
+    abstract fun naverMapClickEvent()
 
     override fun onDestroyView() {
         super.onDestroyView()

@@ -4,6 +4,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import org.kjh.mytravel.R
 import org.kjh.mytravel.databinding.VhPlacesBySubCityRowBinding
 import org.kjh.mytravel.model.Place
 import org.kjh.mytravel.utils.navigateToDayLogDetail
@@ -21,13 +22,11 @@ import org.kjh.mytravel.utils.onThrottleClick
 class PlacesBySubCityListAdapter
     : ListAdapter<Place, PlacesBySubCityListAdapter.PlacesBySubCityViewHolder>(Place.diffCallback) {
 
-    override fun onCreateViewHolder(
-        parent: ViewGroup,
-        viewType: Int
-    ) = PlacesBySubCityViewHolder(
-        VhPlacesBySubCityRowBinding.inflate(
-            LayoutInflater.from(parent.context), parent, false
-        )
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) =
+        PlacesBySubCityViewHolder(
+            VhPlacesBySubCityRowBinding.inflate(
+                LayoutInflater.from(parent.context), parent, false
+            )
     )
 
     override fun onBindViewHolder(holder: PlacesBySubCityViewHolder, position: Int) {
@@ -37,12 +36,10 @@ class PlacesBySubCityListAdapter
     class PlacesBySubCityViewHolder(
         private val binding : VhPlacesBySubCityRowBinding
     ): RecyclerView.ViewHolder(binding.root) {
-        private val postListAdapter = PlacesBySubCityPostListAdapter { post ->
-            binding.root.navigateToDayLogDetail(post.placeName, post.postId)
-        }
+        private val postListAdapter = PlacesBySubCityPostListAdapter()
 
         init {
-            binding.rvPostList.apply {
+            binding.postImgRecyclerView.apply {
                 setHasFixedSize(true)
                 addItemDecoration(PlacesBySubCityPostItemDecoration())
                 adapter = postListAdapter
@@ -57,7 +54,6 @@ class PlacesBySubCityListAdapter
 
         fun bind(item: Place) {
             binding.placeItem = item
-            postListAdapter.submitList(item.posts)
         }
     }
 }

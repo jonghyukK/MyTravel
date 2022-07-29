@@ -3,21 +3,25 @@ package org.kjh.mytravel.ui.features.place.subcity
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
+import com.google.android.material.bottomsheet.BottomSheetBehavior.STATE_COLLAPSED
+import com.naver.maps.map.CameraUpdate
+import com.naver.maps.map.overlay.Marker
 import com.orhanobut.logger.Logger
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.channels.BufferOverflow
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import org.kjh.domain.entity.ApiResult
 import org.kjh.domain.usecase.GetPlacesBySubCityNameUseCase
+import org.kjh.mytravel.di.IoDispatcher
 import org.kjh.mytravel.model.Place
 import org.kjh.mytravel.model.mapToPresenter
 import org.kjh.mytravel.ui.GlobalErrorHandler
-import org.kjh.mytravel.ui.common.UiState
 
 /**
  * MyTravel
@@ -27,21 +31,38 @@ import org.kjh.mytravel.ui.common.UiState
  * Description:
  */
 
+data class PlaceWithMarker(
+    val placeItem  : Place,
+    val placeMarker: Marker
+)
+
+data class PlacesBySubCityUiState(
+    val isLoading : Boolean = false,
+    val placeItems : List<Place> = listOf(),
+    val placeWithMarkerMap : Map<String, PlaceWithMarker> = mapOf()
+)
+
+
+
 class PlacesBySubCityViewModel @AssistedInject constructor(
     private val getPlacesBySubCityNameUseCase: GetPlacesBySubCityNameUseCase,
     private val globalErrorHandler: GlobalErrorHandler,
     @Assisted private val initSubCityName: String
 ): ViewModel() {
 
-    data class PlacesBySubCityUiState(
-        val isLoading              : Boolean = false,
-        val placeBySubCityItems    : List<Place> = listOf(),
-        val isExpandedBehavior     : Boolean = false,
-        val isInitializedCameraMove : Boolean = false
-    )
-
     private val _uiState: MutableStateFlow<PlacesBySubCityUiState> = MutableStateFlow(PlacesBySubCityUiState())
-    val uiState : StateFlow<PlacesBySubCityUiState> = _uiState
+    val uiState = _uiState.asStateFlow()
+
+    private val _selectedPlaceMap: MutableStateFlow<PlaceWithMarker?> = MutableStateFlow(null)
+    val selectedPlaceMap = _selectedPlaceMap.asStateFlow()
+
+    private val _cameraMoveEvent: MutableStateFlow<CameraUpdate?> = MutableStateFlow(null)
+    val cameraMoveEvent = _cameraMoveEvent.asStateFlow()
+
+    private val _bottomSheetState = MutableStateFlow(STATE_COLLAPSED)
+    val bottomSheetState = _bottomSheetState.asStateFlow()
+
+    private var currentPlaceKey = ""
 
     init {
         fetchPlacesBySubCity()
@@ -57,12 +78,20 @@ class PlacesBySubCityViewModel @AssistedInject constructor(
                         }
 
                         is ApiResult.Success -> {
-                            val result = apiResult.data.map { it.mapToPresenter() }
+                            val placeItems = apiResult.data.map { it.mapToPresenter() }
+
+                            val placeWithMarkerMap =
+                                NaverMapUtils.makePlaceMapWithMarker(placeItems) { key -> updateSelectedPlaceMap(key) }
+                            val camera =
+                                NaverMapUtils.makeCameraMoveForCenterInRange(placeItems)
+
+                            _cameraMoveEvent.value = camera
 
                             _uiState.update {
                                 it.copy(
                                     isLoading = false,
-                                    placeBySubCityItems = result
+                                    placeItems = placeItems,
+                                    placeWithMarkerMap = placeWithMarkerMap
                                 )
                             }
                         }
@@ -81,27 +110,39 @@ class PlacesBySubCityViewModel @AssistedInject constructor(
         }
     }
 
-    fun updateMotionState(value: Boolean) {
-        Logger.e("$value")
-        _uiState.update {
-            it.copy(
-                isExpandedBehavior = value
-            )
+    fun updateSelectedPlaceMap(marker: Marker?) {
+        val mapItem = _uiState.value.placeWithMarkerMap
+
+        if (currentPlaceKey.isNotEmpty() && currentPlaceKey != marker?.captionText ) {
+            clearPrevSelectedMarker()
+        }
+
+        currentPlaceKey = marker?.captionText ?: ""
+        _selectedPlaceMap.value = marker?.let {
+            mapItem[currentPlaceKey]
+        }
+        _cameraMoveEvent.value = marker?.let {
+            NaverMapUtils.makeCameraMoveForOneMarker(mapItem[currentPlaceKey]!!.placeItem)
         }
     }
 
-    val updateBottomSheetState = fun(isExpanded: Boolean) {
+    private fun clearPrevSelectedMarker() {
+        val clearedMarker = _uiState.value.placeWithMarkerMap.toMutableMap().apply {
+            this[currentPlaceKey] = this[currentPlaceKey]!!.copy(
+                placeMarker = NaverMapUtils.getMarkerWithUnSelected(this[currentPlaceKey]!!.placeMarker))
+        }
+
         _uiState.update {
-            it.copy(
-                isExpandedBehavior = isExpanded
-            )
+            it.copy(placeWithMarkerMap = clearedMarker)
         }
     }
 
-    fun initializedCameraMove() {
-        _uiState.update {
-            it.copy(isInitializedCameraMove = true)
-        }
+    val updateBottomSheetState = fun(state: Int) {
+        _bottomSheetState.value = state
+    }
+
+    fun removeCameraEvent() {
+        _cameraMoveEvent.value = null
     }
 
     @AssistedFactory

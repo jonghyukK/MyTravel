@@ -42,6 +42,13 @@ class FullLineIndicatorDecoration: RecyclerView.ItemDecoration() {
     override fun onDrawOver(c: Canvas, parent: RecyclerView, state: RecyclerView.State) {
         super.onDrawOver(c, parent, state)
 
+        val lm = parent.layoutManager as LinearLayoutManager
+        val activePosition = lm.findFirstVisibleItemPosition()
+
+        if (activePosition == DiffUtil.DiffResult.NO_POSITION) {
+            return
+        }
+
         val itemCount = parent.adapter?.itemCount ?: 0
 
         val totalLength   = parent.width.toFloat()
@@ -49,13 +56,6 @@ class FullLineIndicatorDecoration: RecyclerView.ItemDecoration() {
 
         // draw Inactive Indicators..
         drawInactiveIndicators(c, indicatorPosY, totalLength)
-
-        val lm = parent.layoutManager as LinearLayoutManager
-        val activePosition = lm.findFirstVisibleItemPosition()
-
-        if (activePosition == DiffUtil.DiffResult.NO_POSITION) {
-            return
-        }
 
         val activeChild = lm.findViewByPosition(activePosition)
         val left = activeChild?.left ?: -1

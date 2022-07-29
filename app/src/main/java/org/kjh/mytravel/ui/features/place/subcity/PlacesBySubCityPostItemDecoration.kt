@@ -3,6 +3,7 @@ package org.kjh.mytravel.ui.features.place.subcity
 import android.content.res.Resources
 import android.graphics.Rect
 import android.view.View
+import androidx.core.view.updateLayoutParams
 import androidx.recyclerview.widget.RecyclerView
 import org.kjh.mytravel.utils.dpToPx
 
@@ -27,6 +28,10 @@ class PlacesBySubCityPostItemDecoration: RecyclerView.ItemDecoration() {
 
         val viewPosition = parent.getChildAdapterPosition(view)
 
+        view.updateLayoutParams {
+            this.width = parent.width / 3
+        }
+
         val isFirst = viewPosition == 0
         val isLast = viewPosition == state.itemCount - 1
 
@@ -44,5 +49,7 @@ class PlacesBySubCityPostItemDecoration: RecyclerView.ItemDecoration() {
                 outRect.right = 5.dpToPx(dm)
             }
         }
+
+        outRect.top = 10.dpToPx(dm)
     }
 }

@@ -81,4 +81,6 @@ class LocationFragment :
         uploadViewModel.updatePlaceItem(item)
         findNavController().popBackStack()
     }
+
+    override fun naverMapClickEvent() {}
 }

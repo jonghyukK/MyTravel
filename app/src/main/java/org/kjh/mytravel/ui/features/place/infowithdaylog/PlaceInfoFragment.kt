@@ -69,6 +69,8 @@ class PlaceInfoFragment
         marker.map = null
     }
 
+    override fun naverMapClickEvent() {}
+
     companion object {
         @JvmStatic
         fun newInstance() = PlaceInfoFragment()
