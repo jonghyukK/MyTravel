@@ -10,17 +10,13 @@ import com.orhanobut.logger.Logger
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.channels.BufferOverflow
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import org.kjh.domain.entity.ApiResult
 import org.kjh.domain.usecase.GetPlacesBySubCityNameUseCase
-import org.kjh.mytravel.di.IoDispatcher
-import org.kjh.mytravel.model.Place
-import org.kjh.mytravel.model.mapToPresenter
+import org.kjh.mytravel.model.*
 import org.kjh.mytravel.ui.GlobalErrorHandler
 
 /**
@@ -31,18 +27,12 @@ import org.kjh.mytravel.ui.GlobalErrorHandler
  * Description:
  */
 
-data class PlaceWithMarker(
-    val placeItem  : Place,
-    val placeMarker: Marker
-)
 
 data class PlacesBySubCityUiState(
     val isLoading : Boolean = false,
     val placeItems : List<Place> = listOf(),
     val placeWithMarkerMap : Map<String, PlaceWithMarker> = mapOf()
 )
-
-
 
 class PlacesBySubCityViewModel @AssistedInject constructor(
     private val getPlacesBySubCityNameUseCase: GetPlacesBySubCityNameUseCase,
@@ -80,18 +70,13 @@ class PlacesBySubCityViewModel @AssistedInject constructor(
                         is ApiResult.Success -> {
                             val placeItems = apiResult.data.map { it.mapToPresenter() }
 
-                            val placeWithMarkerMap =
-                                NaverMapUtils.makePlaceMapWithMarker(placeItems) { key -> updateSelectedPlaceMap(key) }
-                            val camera =
-                                NaverMapUtils.makeCameraMoveForCenterInRange(placeItems)
-
-                            _cameraMoveEvent.value = camera
+                            _cameraMoveEvent.value = placeItems.cameraCenterInPlaces()
 
                             _uiState.update {
                                 it.copy(
                                     isLoading = false,
                                     placeItems = placeItems,
-                                    placeWithMarkerMap = placeWithMarkerMap
+                                    placeWithMarkerMap = placeItems.withMarkerToMap(::updateSelectedPlaceMap)
                                 )
                             }
                         }
@@ -122,7 +107,7 @@ class PlacesBySubCityViewModel @AssistedInject constructor(
             mapItem[currentPlaceKey]
         }
         _cameraMoveEvent.value = marker?.let {
-            NaverMapUtils.makeCameraMoveForOneMarker(mapItem[currentPlaceKey]!!.placeItem)
+            mapItem[currentPlaceKey]!!.placeItem.cameraMove()
         }
     }
 

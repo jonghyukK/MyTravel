@@ -3,6 +3,8 @@ package org.kjh.mytravel.ui.features.place.infowithdaylog
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
+import com.naver.maps.map.CameraAnimation
+import com.naver.maps.map.CameraUpdate
 import com.orhanobut.logger.Logger
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
@@ -13,9 +15,9 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import org.kjh.domain.entity.ApiResult
 import org.kjh.domain.usecase.GetPlaceUseCase
-import org.kjh.mytravel.model.Place
-import org.kjh.mytravel.model.mapToPresenter
+import org.kjh.mytravel.model.*
 import org.kjh.mytravel.ui.GlobalErrorHandler
+import org.kjh.mytravel.ui.features.place.subcity.NaverMapUtils
 
 /**
  * MyTravel
@@ -35,7 +37,9 @@ class PlaceInfoWithDayLogViewModel @AssistedInject constructor(
         val isLoading        : Boolean = false,
         val placeItem        : Place? = null,
         val isBookmarked     : Boolean = false,
-        val isAppBarCollapsed: Boolean = false
+        val isAppBarCollapsed: Boolean = false,
+        val markerItem       : PlaceWithMarker? = null,
+        val cameraMoveEvent  : CameraUpdate? = null
     )
 
     private val _uiState = MutableStateFlow(PlaceUiState())
@@ -61,12 +65,14 @@ class PlaceInfoWithDayLogViewModel @AssistedInject constructor(
                         }
 
                         is ApiResult.Success -> {
-                            val result = apiResult.data.mapToPresenter()
+                            val placeItem = apiResult.data.mapToPresenter()
 
                             _uiState.update {
                                 it.copy(
                                     isLoading = false,
-                                    placeItem = result
+                                    placeItem = placeItem,
+                                    markerItem = placeItem.withMarker(),
+                                    cameraMoveEvent = placeItem.cameraMove(CameraAnimation.None)
                                 )
                             }
                         }
@@ -88,6 +94,19 @@ class PlaceInfoWithDayLogViewModel @AssistedInject constructor(
 
     fun updateBookmarkState(isBookmarked: Boolean) = _uiState.update {
         it.copy(isBookmarked = isBookmarked)
+    }
+
+    fun clearMarkerAndCameraMoveEvent() {
+        val mapClearedMarker = _uiState.value.markerItem?.let {
+            it.copy(placeMarker = it.placeMarker.apply { map = null })
+        }
+
+        _uiState.update {
+            it.copy(
+                markerItem      = mapClearedMarker,
+                cameraMoveEvent = null
+            )
+        }
     }
 
     @AssistedFactory

@@ -17,6 +17,7 @@ import org.kjh.mytravel.databinding.FragmentLocationBinding
 import org.kjh.mytravel.model.MapQueryItem
 import org.kjh.mytravel.ui.base.BaseFragment
 import org.kjh.mytravel.ui.base.BaseMapFragment
+import org.kjh.mytravel.ui.features.place.subcity.NaverMapUtils
 import org.kjh.mytravel.ui.features.upload.UploadViewModel
 
 @AndroidEntryPoint
@@ -59,18 +60,18 @@ class LocationFragment :
     }
 
     private fun makeMarkerWithCameraMove(placeItem: MapQueryItem) {
-        val cameraUpdate = CameraUpdate.scrollTo(
-            LatLng(
-                placeItem.y.toDouble(),
-                placeItem.x.toDouble())
-        ).animate(CameraAnimation.Easing)
+        NaverMapUtils.getCameraUpdateObject(
+            placeItem.x.toDouble(),
+            placeItem.y.toDouble()
+        ).also {
+            naverMap.moveCamera(it)
+        }
 
-        naverMap.moveCamera(cameraUpdate)
-
-        val marker = Marker()
-        marker.position = LatLng(placeItem.y.toDouble(), placeItem.x.toDouble())
-        marker.captionText = placeItem.placeName
-        marker.map = naverMap
+        NaverMapUtils.makeMarker(
+            placeItem.x.toDouble(),
+            placeItem.y.toDouble(),
+            placeItem.placeName
+        ).map = naverMap
     }
 
     fun showMapSearchPage() {

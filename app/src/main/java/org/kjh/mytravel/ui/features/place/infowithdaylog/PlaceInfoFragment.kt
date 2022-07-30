@@ -7,6 +7,7 @@ import androidx.lifecycle.lifecycleScope
 import com.naver.maps.geometry.LatLng
 import com.naver.maps.map.*
 import com.naver.maps.map.overlay.Marker
+import com.orhanobut.logger.Logger
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import org.kjh.mytravel.R
@@ -19,7 +20,6 @@ class PlaceInfoFragment
     : BaseMapFragment<FragmentPlaceInfoBinding>(R.layout.fragment_place_info) {
 
     private val viewModel: PlaceInfoWithDayLogViewModel by viewModels({ requireParentFragment() })
-    private lateinit var marker  : Marker
 
     override fun initView() {
         binding.viewModel = viewModel
@@ -30,43 +30,22 @@ class PlaceInfoFragment
 
     override fun subscribeUi() {
         viewModel.uiState
-            .flowWithLifecycle(viewLifecycleOwner.lifecycle, Lifecycle.State.STARTED)
+            .flowWithLifecycle(viewLifecycleOwner.lifecycle, Lifecycle.State.RESUMED)
             .onEach { uiState ->
-                uiState.placeItem?.let {
-                    if (!::marker.isInitialized) {
-                        makeMarkerWithCameraMove(uiState.placeItem)
-                    }
+                uiState.markerItem?.let {
+                    it.placeMarker.map = naverMap
+                }
+
+                uiState.cameraMoveEvent?.let {
+                    naverMap.moveCamera(it)
                 }
             }
             .launchIn(viewLifecycleOwner.lifecycleScope)
     }
 
-    private fun makeMarkerWithCameraMove(placeItem: Place) {
-        val cameraUpdate = CameraUpdate.scrollTo(
-            LatLng(
-                placeItem.y.toDouble(),
-                placeItem.x.toDouble())
-        ).animate(CameraAnimation.Easing)
-
-        naverMap.moveCamera(cameraUpdate)
-
-        marker = Marker().apply {
-            position = LatLng(placeItem.y.toDouble(), placeItem.x.toDouble())
-            captionText = placeItem.placeName
-        }
-        marker.map = naverMap
-    }
-
-    override fun onResume() {
-        super.onResume()
-        if (::marker.isInitialized && marker.map == null) {
-            marker.map = naverMap
-        }
-    }
-
     override fun onPause() {
         super.onPause()
-        marker.map = null
+        viewModel.clearMarkerAndCameraMoveEvent()
     }
 
     override fun naverMapClickEvent() {}

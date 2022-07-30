@@ -19,8 +19,8 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import org.kjh.mytravel.R
 import org.kjh.mytravel.databinding.FragmentPlacesBySubCityBinding
+import org.kjh.mytravel.model.PlaceWithMarker
 import org.kjh.mytravel.ui.base.BaseMapFragment
-import org.kjh.mytravel.utils.navigateToDayLogDetail
 import org.kjh.mytravel.utils.navigationHeight
 import org.kjh.mytravel.utils.statusBarHeight
 import javax.inject.Inject

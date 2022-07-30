@@ -6,7 +6,6 @@ import com.naver.maps.map.CameraAnimation
 import com.naver.maps.map.CameraUpdate
 import com.naver.maps.map.overlay.Marker
 import com.naver.maps.map.overlay.Overlay
-import org.kjh.mytravel.model.Place
 
 /**
  * MyTravel
@@ -15,68 +14,47 @@ import org.kjh.mytravel.model.Place
  *
  * Description:
  */
+
 object NaverMapUtils {
 
-    fun makeCameraMoveForCenterInRange(placeItems: List<Place>): CameraUpdate {
-        val rightMost = placeItems.maxOf { place -> place.x }.toDouble()
-        val leftMost = placeItems.minOf { place -> place.x }.toDouble()
-        val centerOfHorizontal = (rightMost + leftMost) / 2
+    fun getMarkerWithUnSelected(marker: Marker) = marker.apply { iconTintColor = Color.BLUE }
 
-        val topMost = placeItems.minOf { it.y }.toDouble()
-        val bottomMost = placeItems.maxOf { it.y }.toDouble()
-        val centerOfVertical = (topMost + bottomMost) / 2
+    fun getMarkerWithSelected(marker: Marker) = marker.apply { iconTintColor = Color.RED }
 
-        return CameraUpdate.scrollAndZoomTo(
-            LatLng(
-                centerOfVertical,
-                centerOfHorizontal,
-            ), 9.0
-        ).animate(CameraAnimation.None)
+    fun getCameraUpdateObject(
+        x   : Double,
+        y   : Double,
+        zoom: Double? = null,
+        anim: CameraAnimation = CameraAnimation.Easing
+    ): CameraUpdate {
+        val latLngItem = LatLng(y, x)
+
+        return if (zoom != null) {
+            CameraUpdate.scrollAndZoomTo(latLngItem, zoom).animate(anim)
+        } else {
+            CameraUpdate.scrollTo(latLngItem).animate(anim)
+        }
     }
 
-    fun makeCameraMoveForOneMarker(placeItem: Place): CameraUpdate {
-        return CameraUpdate.scrollTo(
-            LatLng(
-                placeItem.y.toDouble(),
-                placeItem.x.toDouble()
-            )
-        ).animate(CameraAnimation.Easing)
-    }
-
-    fun makePlaceMapWithMarker(
-        placeItems         : List<Place>,
-        markerClickCallback: (Marker) -> Unit
-    ): MutableMap<String, PlaceWithMarker> {
-        val placeMarkerMap = mutableMapOf<String, PlaceWithMarker>()
-
-        val markerClickListener = Overlay.OnClickListener { overlay ->
-            val marker = getMarkerWithSelected(overlay as Marker)
-            markerClickCallback(marker)
-            true
+    fun makeMarker(
+        x           : Double,
+        y           : Double,
+        captionTitle: String,
+        callback    : ((Marker) -> Unit)? = null
+    ): Marker =
+        Marker().apply {
+            position        = LatLng(y, x)
+            captionText     = captionTitle
+            iconTintColor   = Color.BLUE
+            onClickListener = makeMarkerClickListener(callback)
         }
 
-        placeItems.map { place ->
-            val key    = place.placeName
-            val marker = Marker().apply {
-                position        = LatLng(place.y.toDouble(), place.x.toDouble())
-                captionText     = place.placeName
-                onClickListener = markerClickListener
-                iconTintColor   = Color.BLUE
-            }
-
-            placeMarkerMap[key] = PlaceWithMarker(place, marker)
-        }
-
-        return placeMarkerMap
-    }
-
-    fun getMarkerWithSelected(marker: Marker) =
-        marker.apply {
-            iconTintColor = Color.RED
-        }
-
-    fun getMarkerWithUnSelected(marker: Marker) =
-        marker.apply {
-            iconTintColor = Color.BLUE
+    private fun makeMarkerClickListener(callback: ((Marker) -> Unit)? = null) =
+        Overlay.OnClickListener { overlay ->
+            callback?.let {
+                val selectedMarker = getMarkerWithSelected(overlay as Marker)
+                callback(selectedMarker)
+                true
+            } ?: false
         }
 }
