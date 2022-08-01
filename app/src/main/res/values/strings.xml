@@ -6,6 +6,7 @@
     <string name="bnv_tab_name_home">Home</string>
     <string name="bnv_tab_name_bookmark">Bookmark</string>
     <string name="bnv_tab_name_profile">Profile</string>
+    <string name="confirm">확인</string>
     <string name="post">게시물</string>
     <string name="follower">팔로워</string>
     <string name="following">팔로잉</string>
@@ -49,6 +50,10 @@
     <string name="desc_do_bookmark_you_wish">관심있는 장소를 북마크하면 이 곳에서 모아볼 수 있습니다.</string>
     <string name="desc_empty_my_posts">등록된 여행지가 없습니다.\n이번 주말, 여행을 떠나보시는 건 어떨까요?</string>
     <string name="desc_empty_user_posts">등록된 여행지가 없습니다.</string>
+    <string name="perm_title_first">업로드 관련 필수 권한 요청</string>
+    <string name="perm_title_retry">권한 재요청</string>
+    <string name="perm_msg_first">앱의 사진 업로드를 위한 다음의 권한을 허용해야 업로드 기능을 사용할 수 있습니다.</string>
+    <string name="perm_msg_retry">해당 권한은 오직 사진 업로드 기능만을 위한 것입니다. \n[설정] -> [권한]에서 \'저장\' 권한을 허용해 주세요.</string>
 
     <string name="error_home_banner_api">배너 정보를 불러올 수 없습니다.</string>
     <string name="error_home_ranking_api">장소 랭킹 정보를 불러올 수 없습니다.</string>
