@@ -50,6 +50,9 @@ class MyProfileViewModel @Inject constructor(
     private val _isNotLogIn: MutableStateFlow<Boolean?> = MutableStateFlow(null)
     val isNotLogIn = _isNotLogIn.asStateFlow()
 
+    private val _motionProgress = MutableStateFlow(0f)
+    val motionProgress = _motionProgress.asStateFlow()
+
     private fun showLoading() { _isLoading.value = true }
     private fun hideLoading() { _isLoading.value = false }
 
@@ -145,5 +148,9 @@ class MyProfileViewModel @Inject constructor(
                 myPostItems     = profileItem.posts
             )
         }
+    }
+
+    fun saveMotionProgress(value: Float) {
+        _motionProgress.value = value
     }
 }

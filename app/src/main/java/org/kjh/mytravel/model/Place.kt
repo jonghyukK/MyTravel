@@ -1,15 +1,11 @@
 package org.kjh.mytravel.model
 
-import android.graphics.Camera
-import android.graphics.Color
 import androidx.recyclerview.widget.DiffUtil
-import com.naver.maps.geometry.LatLng
 import com.naver.maps.map.CameraAnimation
 import com.naver.maps.map.CameraUpdate
 import com.naver.maps.map.overlay.Marker
-import com.naver.maps.map.overlay.Overlay
 import org.kjh.domain.entity.PlaceEntity
-import org.kjh.mytravel.ui.features.place.subcity.NaverMapUtils
+import org.kjh.mytravel.utils.NaverMapUtils
 
 /**
  * MyTravel

@@ -1,9 +1,6 @@
 package org.kjh.mytravel.ui.features.profile.my
 
-import android.os.Build
-import android.view.WindowInsets
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.core.view.updatePadding
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.flowWithLifecycle
@@ -46,18 +43,6 @@ class ProfileFragment
     override fun initView() {
         binding.fragment = this
         binding.myProfileViewModel = myProfileViewModel
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-            binding.cdlProfileContainer.setOnApplyWindowInsetsListener { v, insets ->
-                val sysWindow = insets.getInsets(WindowInsets.Type.statusBars())
-                binding.tbProfileToolbar.updatePadding(top = sysWindow.top)
-                binding.clProfileInfoContainer.updatePadding(top = sysWindow.top)
-                insets
-            }
-        } else {
-            binding.tbProfileToolbar.updatePadding(top = requireContext().statusBarHeight())
-            binding.clProfileInfoContainer.updatePadding(top = requireContext().statusBarHeight())
-        }
 
         binding.tbProfileToolbar.apply {
             inflateMenu(R.menu.menu_profile)
@@ -125,5 +110,10 @@ class ProfileFragment
                 myProfileItem.profileImg, myProfileItem.nickName, myProfileItem.introduce
             )
         )
+    }
+
+    override fun onDestroyView() {
+        myProfileViewModel.saveMotionProgress(binding.mlProfileContainer.progress)
+        super.onDestroyView()
     }
 }

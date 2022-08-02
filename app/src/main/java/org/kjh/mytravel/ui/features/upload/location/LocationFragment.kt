@@ -7,17 +7,14 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.setupWithNavController
-import com.naver.maps.geometry.LatLng
 import com.naver.maps.map.*
-import com.naver.maps.map.overlay.Marker
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import org.kjh.mytravel.R
 import org.kjh.mytravel.databinding.FragmentLocationBinding
 import org.kjh.mytravel.model.MapQueryItem
-import org.kjh.mytravel.ui.base.BaseFragment
 import org.kjh.mytravel.ui.base.BaseMapFragment
-import org.kjh.mytravel.ui.features.place.subcity.NaverMapUtils
+import org.kjh.mytravel.utils.NaverMapUtils
 import org.kjh.mytravel.ui.features.upload.UploadViewModel
 
 @AndroidEntryPoint

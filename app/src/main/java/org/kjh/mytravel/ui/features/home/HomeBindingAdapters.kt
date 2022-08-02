@@ -1,12 +1,8 @@
 package org.kjh.mytravel.ui.features.home
 
-import androidx.appcompat.widget.Toolbar
-import androidx.constraintlayout.motion.widget.MotionLayout
-import androidx.core.view.updatePadding
 import androidx.databinding.BindingAdapter
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import org.kjh.mytravel.utils.statusBarHeight
 
 /**
  * MyTravel
@@ -16,28 +12,6 @@ import org.kjh.mytravel.utils.statusBarHeight
  * Description:
  */
 
-
-@BindingAdapter("bindToolbar", "motionProgress")
-fun bindHomeMotionScrolling(
-    motionLayout: MotionLayout,
-    toolbar     : Toolbar,
-    progress    : Float
-) {
-    val toolbarHeight   = toolbar.layoutParams.height
-    val statusBarHeight = motionLayout.context.statusBarHeight()
-    val wholeToolbarHeight = toolbarHeight + statusBarHeight
-
-    with(motionLayout) {
-        constraintSetIds.map { id ->
-            updateState(id, getConstraintSet(id).apply {
-                constrainHeight(toolbar.id, wholeToolbarHeight)
-                toolbar.updatePadding(top = statusBarHeight)
-            })
-        }
-
-        this.progress = progress
-    }
-}
 
 @BindingAdapter("addOnScrollListener")
 fun bindOnScrollListenerForHomeBanners(view: RecyclerView, bannerCount: Int) {

@@ -18,6 +18,7 @@ import org.kjh.domain.entity.ApiResult
 import org.kjh.domain.usecase.GetPlacesBySubCityNameUseCase
 import org.kjh.mytravel.model.*
 import org.kjh.mytravel.ui.GlobalErrorHandler
+import org.kjh.mytravel.utils.NaverMapUtils
 
 /**
  * MyTravel
@@ -114,7 +115,7 @@ class PlacesBySubCityViewModel @AssistedInject constructor(
     private fun clearPrevSelectedMarker() {
         val clearedMarker = _uiState.value.placeWithMarkerMap.toMutableMap().apply {
             this[currentPlaceKey] = this[currentPlaceKey]!!.copy(
-                placeMarker = NaverMapUtils.getMarkerWithUnSelected(this[currentPlaceKey]!!.placeMarker))
+                placeMarker = NaverMapUtils.getInactiveMarker(this[currentPlaceKey]!!.placeMarker))
         }
 
         _uiState.update {

@@ -39,20 +39,29 @@ import org.kjh.mytravel.utils.statusBarHeight
 class HomeFragment : BaseFragment<FragmentHomeBinding>(R.layout.fragment_home) {
 
     private val viewModel: HomeViewModel by activityViewModels()
-    private val bannerListAdapter by lazy { BannerListAdapter() }
-    private val placeRankingListAdapter by lazy { PlaceRankingListAdapter() }
-    private val latestPostListAdapter by lazy { LatestPostPagingDataAdapter() }
+    private val bannerListAdapter by lazy {
+        BannerListAdapter()
+    }
+    private val placeRankingListAdapter by lazy {
+        PlaceRankingListAdapter()
+    }
+    private val latestPostListAdapter by lazy {
+        LatestPostPagingDataAdapter().apply {
+            withLoadStateFooter(
+                footer = LatestPostPagingLoadStateAdapter { this.retry() }
+            )
+        }
+    }
     private val homeConcatAdapter by lazy {
         ConcatAdapter(
             PlaceRankingHorizontalWrapAdapter(placeRankingListAdapter),
-            latestPostListAdapter.withLoadStateFooter(
-                footer = LatestPostPagingLoadStateAdapter { latestPostListAdapter.retry() }
-            ))
+            latestPostListAdapter
+        )
     }
 
     override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
+        inflater          : LayoutInflater,
+        container         : ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         requireActivity().window.statusBarColor = Color.TRANSPARENT

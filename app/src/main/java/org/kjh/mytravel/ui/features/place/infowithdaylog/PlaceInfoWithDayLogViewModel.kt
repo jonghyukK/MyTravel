@@ -17,7 +17,6 @@ import org.kjh.domain.entity.ApiResult
 import org.kjh.domain.usecase.GetPlaceUseCase
 import org.kjh.mytravel.model.*
 import org.kjh.mytravel.ui.GlobalErrorHandler
-import org.kjh.mytravel.ui.features.place.subcity.NaverMapUtils
 
 /**
  * MyTravel
