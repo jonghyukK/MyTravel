@@ -9,10 +9,13 @@ import dagger.hilt.android.AndroidEntryPoint
 import org.kjh.mytravel.R
 import org.kjh.mytravel.databinding.FragmentUploadPostBinding
 import org.kjh.mytravel.ui.base.BaseFragment
+import org.kjh.mytravel.ui.common.Dialogs
 import org.kjh.mytravel.ui.features.profile.LineIndicatorDecoration
 import org.kjh.mytravel.ui.features.profile.my.MyProfileViewModel
+import org.kjh.mytravel.utils.hasPermission
 import org.kjh.mytravel.utils.navigateTo
 import org.kjh.mytravel.utils.onThrottleMenuItemClick
+import org.kjh.mytravel.utils.startActivityToSystemSettings
 
 @AndroidEntryPoint
 class UploadPostFragment
@@ -26,7 +29,7 @@ class UploadPostFragment
     }
 
     override fun initView() {
-        binding.uploadViewModel = uploadViewModel
+        binding.uploadViewModel    = uploadViewModel
         binding.myProfileViewModel = myProfileViewModel
         binding.fragment = this
 
@@ -43,8 +46,7 @@ class UploadPostFragment
         binding.rvSelectedImages.apply {
             setHasFixedSize(true)
             adapter = uploadTempImagesAdapter
-            val snapHelper = PagerSnapHelper()
-            snapHelper.attachToRecyclerView(this)
+            PagerSnapHelper().attachToRecyclerView(this)
             addItemDecoration(LineIndicatorDecoration())
         }
     }
@@ -84,4 +86,27 @@ class UploadPostFragment
     }
 
     override fun subscribeUi() {}
+
+    override fun onResume() {
+        super.onResume()
+        checkPermissionWithAction()
+    }
+
+    private fun checkPermissionWithAction() {
+        if (hasPermission()) {
+            return
+        }
+
+        Dialogs.showDefaultDialog(
+            ctx   = requireContext(),
+            title = getString(R.string.perm_title_retry),
+            msg   = getString(R.string.perm_msg_retry),
+            negAction = {
+                findNavController().navigate(
+                    UploadPostFragmentDirections.actionGlobalProfileFragment()
+                )
+            },
+            posAction = { startActivityToSystemSettings() }
+        )
+    }
 }

@@ -16,9 +16,12 @@ import org.kjh.mytravel.R
 import org.kjh.mytravel.databinding.FragmentSelectPhotoBinding
 import org.kjh.mytravel.model.MediaStoreImage
 import org.kjh.mytravel.ui.base.BaseFragment
+import org.kjh.mytravel.ui.common.Dialogs
 import org.kjh.mytravel.ui.features.upload.UploadViewModel
+import org.kjh.mytravel.utils.hasPermission
 import org.kjh.mytravel.utils.navigateTo
 import org.kjh.mytravel.utils.onThrottleMenuItemClick
+import org.kjh.mytravel.utils.startActivityToSystemSettings
 
 @AndroidEntryPoint
 class SelectPhotoFragment
@@ -75,6 +78,21 @@ class SelectPhotoFragment
             .launchIn(viewLifecycleOwner.lifecycleScope)
     }
 
+    override fun onResume() {
+        super.onResume()
+        checkPermissionWithAction()
+    }
+
+    override fun onDestroyView() {
+        viewModel.updateMotionAnimEnabled(false)
+        super.onDestroyView()
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        uploadViewModel.clearUploadItem()
+    }
+
     private fun setTrackerItemSelected(selectedItems: List<MediaStoreImage>) {
         if (selectedItems.isNotEmpty() && tracker.selection.size() == 0) {
             val list = selectedItems.map { it.contentUri }
@@ -94,13 +112,17 @@ class SelectPhotoFragment
         uploadViewModel.updateSelectedImages(selectedList)
     }
 
-    override fun onDestroyView() {
-        viewModel.updateMotionAnimEnabled(false)
-        super.onDestroyView()
-    }
+    private fun checkPermissionWithAction() {
+        if (hasPermission()) {
+            return
+        }
 
-    override fun onDestroy() {
-        super.onDestroy()
-        uploadViewModel.clearUploadItem()
+        Dialogs.showDefaultDialog(
+            ctx   = requireContext(),
+            title = getString(R.string.perm_title_retry),
+            msg   = getString(R.string.perm_msg_retry),
+            negAction = { findNavController().popBackStack() },
+            posAction = { startActivityToSystemSettings() }
+        )
     }
 }

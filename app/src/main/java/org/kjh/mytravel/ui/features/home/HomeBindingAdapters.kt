@@ -18,7 +18,11 @@ import org.kjh.mytravel.utils.statusBarHeight
 
 
 @BindingAdapter("bindToolbar", "motionProgress")
-fun bindHomeMotionScrolling(motionLayout: MotionLayout, toolbar: Toolbar, progress: Float) {
+fun bindHomeMotionScrolling(
+    motionLayout: MotionLayout,
+    toolbar     : Toolbar,
+    progress    : Float
+) {
     val toolbarHeight   = toolbar.layoutParams.height
     val statusBarHeight = motionLayout.context.statusBarHeight()
     val wholeToolbarHeight = toolbarHeight + statusBarHeight

@@ -1,16 +1,22 @@
 package org.kjh.mytravel.utils
 
 import android.content.Context
+import android.content.Intent
+import android.content.pm.PackageManager.PERMISSION_GRANTED
+import android.net.Uri
+import android.provider.Settings
 import android.util.DisplayMetrics
 import android.util.Patterns
 import android.util.TypedValue
 import android.view.MenuItem
 import android.view.View
 import androidx.appcompat.widget.Toolbar
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.navigation.NavDirections
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
+import org.kjh.mytravel.BuildConfig
 import org.kjh.mytravel.NavGraphDirections
 import org.kjh.mytravel.model.Bookmark
 import org.kjh.mytravel.model.Post
@@ -100,6 +106,19 @@ fun List<Post>.updateBookmarkStateWithPosts(bookmarks: List<Bookmark>) = this.ma
 
 fun List<Bookmark>.containPlace(placeName: String) =
     this.find { it.placeName == placeName } != null
+
+fun Fragment.startActivityToSystemSettings() {
+    startActivity(Intent().apply {
+        action = Settings.ACTION_APPLICATION_DETAILS_SETTINGS
+        data   = Uri.fromParts("package", BuildConfig.APPLICATION_ID, null)
+        flags  = Intent.FLAG_ACTIVITY_NEW_TASK
+    })
+}
+
+fun Fragment.hasPermission(): Boolean =
+    ContextCompat.checkSelfPermission(
+        requireContext(), PERM_READ_EXTERNAL_STORAGE
+    ) == PERMISSION_GRANTED
 
 
 

@@ -1,38 +1,26 @@
 package org.kjh.mytravel.ui.features.profile.my
 
-import android.Manifest
-import android.content.Intent
-import android.content.Intent.FLAG_ACTIVITY_NEW_TASK
-import android.content.pm.PackageManager
-import android.content.pm.PackageManager.PERMISSION_GRANTED
-import android.net.Uri
 import android.os.Build
-import android.provider.Settings
 import android.view.WindowInsets
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.core.content.ContextCompat
 import androidx.core.view.updatePadding
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.lifecycleScope
-import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.tabs.TabLayoutMediator
-import com.orhanobut.logger.Logger
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
-import org.kjh.mytravel.BuildConfig
 import org.kjh.mytravel.R
 import org.kjh.mytravel.databinding.FragmentProfileBinding
 import org.kjh.mytravel.model.User
 import org.kjh.mytravel.ui.base.BaseFragment
+import org.kjh.mytravel.ui.common.Dialogs
 import org.kjh.mytravel.ui.features.profile.POSTS_GRID_PAGE_INDEX
 import org.kjh.mytravel.ui.features.profile.POSTS_LINEAR_PAGE_INDEX
 import org.kjh.mytravel.ui.features.profile.PostsTabPagerAdapter
-import org.kjh.mytravel.utils.navigateTo
-import org.kjh.mytravel.utils.onThrottleMenuItemClick
-import org.kjh.mytravel.utils.statusBarHeight
+import org.kjh.mytravel.utils.*
 
 
 @AndroidEntryPoint
@@ -46,7 +34,12 @@ class ProfileFragment
         if (isGranted) {
             navigateTo(ProfileFragmentDirections.actionToSelectPhoto())
         } else {
-            showDialogForPermission(false) { goToSystemSettingsForPermission() }
+            Dialogs.showDefaultDialog(
+                ctx   = requireContext(),
+                title = getString(R.string.perm_title_retry),
+                msg   = getString(R.string.perm_msg_retry),
+                posAction = { startActivityToSystemSettings() }
+            )
         }
     }
 
@@ -102,57 +95,29 @@ class ProfileFragment
     }
 
     private fun checkPermission() {
-        val hasPermission = ContextCompat.checkSelfPermission(
-            requireContext(),
-            Manifest.permission.READ_EXTERNAL_STORAGE
-        ) == PERMISSION_GRANTED
-
         when {
-            hasPermission -> navigateTo(ProfileFragmentDirections.actionToSelectPhoto())
+            hasPermission() -> navigateTo(ProfileFragmentDirections.actionToSelectPhoto())
 
-            shouldShowRequestPermissionRationale(Manifest.permission.READ_EXTERNAL_STORAGE) -> {
-                showDialogForPermission(false) { goToSystemSettingsForPermission() }
+            shouldShowRequestPermissionRationale(PERM_READ_EXTERNAL_STORAGE) -> {
+                Dialogs.showDefaultDialog(
+                    ctx   = requireContext(),
+                    title = getString(R.string.perm_title_retry),
+                    msg   = getString(R.string.perm_msg_retry),
+                    posAction = { startActivityToSystemSettings() }
+                )
             }
 
             else -> {
-                if (!hasPermission) {
-                    showDialogForPermission(true) {
-                        requestPermissionLauncher.launch(Manifest.permission.READ_EXTERNAL_STORAGE)
-                    }
+                if (!hasPermission()) {
+                    Dialogs.showDefaultDialog(
+                        ctx   = requireContext(),
+                        title = getString(R.string.perm_title_first),
+                        msg   = getString(R.string.perm_msg_first),
+                        posAction = { requestPermissionLauncher.launch(PERM_READ_EXTERNAL_STORAGE) }
+                    )
                 }
             }
         }
-    }
-
-    private fun showDialogForPermission(
-        isFirstRequest: Boolean,
-        positiveAction: () -> Unit
-    ) {
-        val title = if (isFirstRequest)
-            getString(R.string.perm_title_first)
-        else
-            getString(R.string.perm_title_retry)
-
-        val msg = if (isFirstRequest)
-            getString(R.string.perm_msg_first)
-        else
-            getString(R.string.perm_msg_retry)
-
-        MaterialAlertDialogBuilder(requireContext())
-            .setTitle(title)
-            .setMessage(msg)
-            .setCancelable(false)
-            .setNegativeButton(getString(R.string.cancel)) { _, _ -> }
-            .setPositiveButton(getString(R.string.confirm)) { _, _ -> positiveAction() }
-            .show()
-    }
-
-    private fun goToSystemSettingsForPermission() {
-        startActivity(Intent().apply {
-            action = Settings.ACTION_APPLICATION_DETAILS_SETTINGS
-            data   = Uri.fromParts("package", BuildConfig.APPLICATION_ID, null)
-            flags  = FLAG_ACTIVITY_NEW_TASK
-        })
     }
 
     fun navigateToProfileEditPage(myProfileItem: User) {
