@@ -23,7 +23,7 @@ import javax.inject.Inject
 
 @AndroidEntryPoint
 class UserFragment
-    : BaseFragment<FragmentUserBinding>(R.layout.fragment_user){
+    : BaseFragment<FragmentUserBinding>(R.layout.fragment_user) {
 
     @Inject
     lateinit var userViewModelFactory: UserViewModel.UserNameAssistedFactory
@@ -35,7 +35,6 @@ class UserFragment
 
     override fun initView() {
         binding.viewModel = viewModel
-        binding.fragment  = this
 
         binding.tbUserToolbar.setupWithNavController(findNavController())
 
@@ -72,5 +71,10 @@ class UserFragment
                 }
             }
         }
+    }
+
+    override fun onDestroyView() {
+        viewModel.saveMotionProgress(binding.mlUserContainer.progress)
+        super.onDestroyView()
     }
 }
