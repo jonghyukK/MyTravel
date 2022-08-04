@@ -51,10 +51,10 @@ class PlaceInfoWithDayLogViewModel @AssistedInject constructor(
     }
 
     init {
-        fetchPlaceDetailByPlaceName()
+        fetchPlaceByPlaceName()
     }
 
-    private fun fetchPlaceDetailByPlaceName() {
+    private fun fetchPlaceByPlaceName() {
         viewModelScope.launch {
             getPlaceUseCase(initPlaceName)
                 .collect { apiResult ->

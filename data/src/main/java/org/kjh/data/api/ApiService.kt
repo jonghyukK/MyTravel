@@ -76,9 +76,14 @@ interface ApiService {
      *  about Place.
      ***********************************************/
     @GET("place")
-    suspend fun fetchPlaceDetailByPlaceName(
-        @Query("placeName") placeName: String
+    suspend fun fetchPlaceByPlaceName(
+        @Query("placeName") placeName : String
     ): BaseApiModel<PlaceModel>
+
+    @GET("place/around")
+    suspend fun fetchPlaceByPlaceNameWithAround(
+        @Query("placeName") placeName: String
+    ): BaseApiModel<PlaceWithAroundModel>
 
     @GET("place/ranking")
     suspend fun fetchPlaceRankings()

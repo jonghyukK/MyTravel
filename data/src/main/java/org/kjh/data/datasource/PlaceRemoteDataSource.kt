@@ -7,6 +7,7 @@ import org.kjh.data.api.ApiService
 import org.kjh.data.model.BannerModel
 import org.kjh.data.model.base.BaseApiModel
 import org.kjh.data.model.PlaceModel
+import org.kjh.data.model.PlaceWithAroundModel
 import org.kjh.data.model.PlaceWithRankModel
 import javax.inject.Inject
 
@@ -19,8 +20,11 @@ import javax.inject.Inject
  */
 interface PlaceRemoteDataSource {
 
-    suspend fun fetchPlaceDetailByPlaceName(placeName: String)
+    suspend fun fetchPlaceByPlaceName(placeName: String)
     : BaseApiModel<PlaceModel>
+
+    suspend fun fetchPlaceByPlaceNameWithAround(placeName: String)
+    : BaseApiModel<PlaceWithAroundModel>
 
     suspend fun fetchPlaceRankings()
     : BaseApiModel<List<PlaceWithRankModel>>
@@ -37,9 +41,14 @@ class PlaceRemoteDataSourceImpl @Inject constructor(
     private val ioDispatcher: CoroutineDispatcher
 ): PlaceRemoteDataSource {
 
-    override suspend fun fetchPlaceDetailByPlaceName(placeName: String)
+    override suspend fun fetchPlaceByPlaceName(placeName: String)
     = withContext(ioDispatcher) {
-        apiService.fetchPlaceDetailByPlaceName(placeName)
+        apiService.fetchPlaceByPlaceName(placeName)
+    }
+
+    override suspend fun fetchPlaceByPlaceNameWithAround(placeName: String)
+    = withContext(ioDispatcher) {
+        apiService.fetchPlaceByPlaceNameWithAround(placeName)
     }
 
     override suspend fun fetchPlaceRankings()

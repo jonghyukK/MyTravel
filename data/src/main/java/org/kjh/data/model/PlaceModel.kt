@@ -11,16 +11,16 @@ import org.kjh.domain.entity.PlaceEntity
  */
 
 data class PlaceModel(
-    val placeId: String,
-    val cityName: String,
-    val subCityName: String,
-    val placeName: String,
-    val placeAddress: String,
+    val placeId         : String,
+    val cityName        : String,
+    val subCityName     : String,
+    val placeName       : String,
+    val placeAddress    : String,
     val placeRoadAddress: String,
-    val x: String,
-    val y: String,
-    val placeImg: String,
-    val posts : List<PostModel>
+    val x               : String,
+    val y               : String,
+    val placeImg        : String,
+    val posts           : List<PostModel>
 )
 
 fun PlaceModel.mapToDomain() =

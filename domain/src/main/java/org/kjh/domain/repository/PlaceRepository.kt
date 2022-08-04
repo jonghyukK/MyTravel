@@ -1,10 +1,7 @@
 package org.kjh.domain.repository
 
-import org.kjh.domain.entity.ApiResult
-import org.kjh.domain.entity.BannerEntity
-import org.kjh.domain.entity.PlaceEntity
-import org.kjh.domain.entity.PlaceWithRankEntity
 import kotlinx.coroutines.flow.Flow
+import org.kjh.domain.entity.*
 
 /**
  * MyTravel
@@ -14,9 +11,13 @@ import kotlinx.coroutines.flow.Flow
  * Description:
  */
 interface PlaceRepository {
-    suspend fun fetchPlaceDetailByPlaceName(
+    suspend fun fetchPlaceByPlaceName(
         placeName: String
     ): Flow<ApiResult<PlaceEntity>>
+
+    suspend fun fetchPlaceByPlaceNameWithAround(
+        placeName: String
+    ): Flow<ApiResult<PlaceWithAroundEntity>>
 
     suspend fun fetchPlaceRankings()
     : Flow<ApiResult<List<PlaceWithRankEntity>>>

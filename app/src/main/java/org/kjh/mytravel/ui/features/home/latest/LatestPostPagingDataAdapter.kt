@@ -6,10 +6,12 @@ import android.view.ViewGroup
 import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.PagerSnapHelper
 import androidx.recyclerview.widget.RecyclerView
+import org.kjh.mytravel.NavGraphDirections
 import org.kjh.mytravel.databinding.VhLinearPostRowItemBinding
 import org.kjh.mytravel.model.Post
 import org.kjh.mytravel.ui.common.OnSnapPagerScrollListener
 import org.kjh.mytravel.ui.features.profile.LineIndicatorDecoration
+import org.kjh.mytravel.utils.navigateTo
 import org.kjh.mytravel.utils.navigateToDayLogDetail
 import org.kjh.mytravel.utils.onThrottleClick
 
@@ -42,7 +44,7 @@ class LatestPostPagingDataAdapter
         private val snapHelper = PagerSnapHelper()
         private val imagesAdapter = LatestPostImageAdapter {
             binding.postItem?.let { post ->
-                binding.root.navigateToDayLogDetail(post.placeName)
+                binding.root.navigateToDayLogDetail(post.placeName, post.postId)
             }
         }
 
@@ -50,6 +52,18 @@ class LatestPostPagingDataAdapter
             itemView.onThrottleClick { view ->
                 binding.postItem?.let { post ->
                     view.navigateToDayLogDetail(post.placeName, post.postId)
+                }
+            }
+
+            binding.tvNickName.onThrottleClick { view ->
+                binding.postItem?.let { post ->
+                    view.navigateTo(NavGraphDirections.actionGlobalUserFragment(post.email))
+                }
+            }
+
+            binding.sivProfileImg.onThrottleClick { view ->
+                binding.postItem?.let { post ->
+                    view.navigateTo(NavGraphDirections.actionGlobalUserFragment(post.email))
                 }
             }
 

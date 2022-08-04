@@ -1,16 +1,13 @@
 package org.kjh.data.repository
 
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.flow
 import org.kjh.data.datasource.PlaceRemoteDataSource
 import org.kjh.data.mapper.ResponseMapper
-import org.kjh.domain.entity.ApiResult
-import org.kjh.domain.entity.BannerEntity
-import org.kjh.domain.entity.PlaceEntity
-import org.kjh.domain.entity.PlaceWithRankEntity
+import org.kjh.domain.entity.*
 import org.kjh.domain.repository.PlaceRepository
+import retrofit2.Response
 import javax.inject.Inject
 
 /**
@@ -24,15 +21,26 @@ class PlaceRepositoryImpl @Inject constructor(
     private val placeRemoteDataSource: PlaceRemoteDataSource
 ): PlaceRepository {
 
-    override suspend fun fetchPlaceDetailByPlaceName(
+    override suspend fun fetchPlaceByPlaceName(
         placeName: String
     ): Flow<ApiResult<PlaceEntity>> = flow {
         emit(ApiResult.Loading)
 
-        val response = placeRemoteDataSource.fetchPlaceDetailByPlaceName(placeName)
+        val response = placeRemoteDataSource.fetchPlaceByPlaceName(placeName)
         emit(ResponseMapper.responseToPlace(ApiResult.Success(response.data)))
     }.catch {
         emit(ResponseMapper.responseToPlace(ApiResult.Error(it)))
+    }
+
+    override suspend fun fetchPlaceByPlaceNameWithAround(
+        placeName: String
+    ): Flow<ApiResult<PlaceWithAroundEntity>> = flow {
+        emit(ApiResult.Loading)
+
+        val response = placeRemoteDataSource.fetchPlaceByPlaceNameWithAround(placeName)
+        emit(ResponseMapper.responseToPlaceWithAround(ApiResult.Success(response.data)))
+    }.catch {
+        emit(ResponseMapper.responseToPlaceWithAround(ApiResult.Error(it)))
     }
 
     override suspend fun fetchPlaceRankings()

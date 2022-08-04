@@ -4,14 +4,14 @@ import org.kjh.domain.repository.PlaceRepository
 
 /**
  * MyTravel
- * Class: GetPlaceUseCase
- * Created by jonghyukkang on 2022/01/28.
+ * Class: GetPlaceWithAroundUseCase
+ * Created by jonghyukkang on 2022/08/04.
  *
  * Description:
  */
-class GetPlaceUseCase(
+class GetPlaceWithAroundUseCase(
     private val placeRepository: PlaceRepository
 ) {
     suspend operator fun invoke(placeName: String) =
-        placeRepository.fetchPlaceByPlaceName(placeName)
+        placeRepository.fetchPlaceByPlaceNameWithAround(placeName)
 }

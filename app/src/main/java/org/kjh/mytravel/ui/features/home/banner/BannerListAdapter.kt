@@ -50,8 +50,8 @@ class BannerListAdapter
         init {
             itemView.onThrottleClick { view ->
                 binding.bannerItem?.bannerTopic?.let { bannerTopic ->
-                    val direction = HomeFragmentDirections.actionToPlacesBySubCity(bannerTopic)
-                    view.navigateTo(direction)
+                    view.navigateTo(
+                        HomeFragmentDirections.actionToPlacesBySubCity(bannerTopic))
                 }
             }
         }

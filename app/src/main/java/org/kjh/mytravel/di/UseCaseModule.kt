@@ -35,6 +35,11 @@ object UseCaseModule {
     ): GetPlaceUseCase = GetPlaceUseCase(placeRepository)
 
     @Provides
+    fun provideGetPlaceWithAroundUseCase(
+        placeRepository: PlaceRepository
+    ): GetPlaceWithAroundUseCase = GetPlaceWithAroundUseCase(placeRepository)
+
+    @Provides
     fun provideGetRecentPostsUseCase(
         postRepository: PostRepository
     ): GetRecentPostsUseCase = GetRecentPostsUseCase(postRepository)

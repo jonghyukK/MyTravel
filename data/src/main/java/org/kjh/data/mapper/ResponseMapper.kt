@@ -68,6 +68,17 @@ object ResponseMapper {
         }
     }
 
+    // PlaceWithAroundModel -> PlaceWithAroundEntity
+    fun responseToPlaceWithAround(
+        response: ApiResult<PlaceWithAroundModel>
+    ): ApiResult<PlaceWithAroundEntity> {
+        return when (response) {
+            is ApiResult.Success -> ApiResult.Success(response.data.mapToDomain())
+            is ApiResult.Error   -> ApiResult.Error(response.throwable)
+            is ApiResult.Loading -> ApiResult.Loading
+        }
+    }
+
     // List<PlaceModel> -> List<PlaceEntity>
     fun responseToPlaceList(
         response: ApiResult<List<PlaceModel>>
