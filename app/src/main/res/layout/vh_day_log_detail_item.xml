@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+        <variable
+            name="postItem"
+            type="org.kjh.mytravel.model.Post" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/cl_placeInfoContainer"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:background="?attr/selectableItemBackground"
+            android:clickable="true"
+            android:focusable="true"
+            android:paddingStart="15dp"
+            android:paddingEnd="15dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_right_arrow"
+                app:layout_constraintBottom_toBottomOf="@+id/tv_placeAddress"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/tv_placeName" />
+
+            <TextView
+                android:id="@+id/tv_placeAddress"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:text="@{postItem.cityName + `, ` + postItem.subCityName}"
+                android:textSize="13sp"
+                app:layout_constraintStart_toStartOf="@+id/tv_placeName"
+                app:layout_constraintTop_toBottomOf="@+id/tv_placeName" />
+
+            <TextView
+                android:id="@+id/tv_placeName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@{postItem.placeName}"
+                android:textColor="#333"
+                android:textSize="17sp"
+                android:textStyle="bold"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <TextView
+            android:id="@+id/tv_content"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingTop="25dp"
+            android:paddingBottom="25dp"
+            android:text="@{postItem.content}"
+            android:textColor="@color/black"
+            android:textSize="15sp"
+            app:layout_constraintStart_toEndOf="@+id/startGuideLine"
+            app:layout_constraintTop_toBottomOf="@+id/cl_placeInfoContainer" />
+
+        <TextView
+            android:id="@+id/tv_date"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingBottom="50dp"
+            android:text="@{postItem.createdDate}"
+            app:layout_constraintStart_toEndOf="@+id/startGuideLine"
+            app:layout_constraintTop_toBottomOf="@+id/tv_content" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/startGuideLine"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_begin="15dp" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

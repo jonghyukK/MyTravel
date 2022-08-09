@@ -23,8 +23,11 @@ interface PlaceRemoteDataSource {
     suspend fun fetchPlaceByPlaceName(placeName: String)
     : BaseApiModel<PlaceModel>
 
-    suspend fun fetchPlaceByPlaceNameWithAround(placeName: String)
-    : BaseApiModel<PlaceWithAroundModel>
+    suspend fun fetchPlaceByPlaceNameWithAround(
+        placeName: String,
+        page: Int,
+        size: Int
+    ): BaseApiModel<List<PlaceModel>>
 
     suspend fun fetchPlaceRankings()
     : BaseApiModel<List<PlaceWithRankModel>>
@@ -46,9 +49,12 @@ class PlaceRemoteDataSourceImpl @Inject constructor(
         apiService.fetchPlaceByPlaceName(placeName)
     }
 
-    override suspend fun fetchPlaceByPlaceNameWithAround(placeName: String)
-    = withContext(ioDispatcher) {
-        apiService.fetchPlaceByPlaceNameWithAround(placeName)
+    override suspend fun fetchPlaceByPlaceNameWithAround(
+        placeName: String,
+        page: Int,
+        size: Int
+    ) = withContext(ioDispatcher) {
+        apiService.fetchPlaceByPlaceNameWithAround(placeName, page, size)
     }
 
     override suspend fun fetchPlaceRankings()

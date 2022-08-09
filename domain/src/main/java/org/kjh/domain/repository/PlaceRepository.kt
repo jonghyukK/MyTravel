@@ -1,5 +1,6 @@
 package org.kjh.domain.repository
 
+import androidx.paging.PagingData
 import kotlinx.coroutines.flow.Flow
 import org.kjh.domain.entity.*
 
@@ -15,9 +16,9 @@ interface PlaceRepository {
         placeName: String
     ): Flow<ApiResult<PlaceEntity>>
 
-    suspend fun fetchPlaceByPlaceNameWithAround(
+    fun fetchPlaceByPlaceNameWithAround(
         placeName: String
-    ): Flow<ApiResult<PlaceWithAroundEntity>>
+    ): Flow<PagingData<PlaceEntity>>
 
     suspend fun fetchPlaceRankings()
     : Flow<ApiResult<List<PlaceWithRankEntity>>>

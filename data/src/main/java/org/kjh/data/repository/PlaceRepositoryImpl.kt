@@ -1,8 +1,12 @@
 package org.kjh.data.repository
 
+import androidx.paging.Pager
+import androidx.paging.PagingConfig
+import androidx.paging.PagingData
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.flow
+import org.kjh.data.datasource.AroundPlacesPagingSource
 import org.kjh.data.datasource.PlaceRemoteDataSource
 import org.kjh.data.mapper.ResponseMapper
 import org.kjh.domain.entity.*
@@ -32,15 +36,17 @@ class PlaceRepositoryImpl @Inject constructor(
         emit(ResponseMapper.responseToPlace(ApiResult.Error(it)))
     }
 
-    override suspend fun fetchPlaceByPlaceNameWithAround(
+    override fun fetchPlaceByPlaceNameWithAround(
         placeName: String
-    ): Flow<ApiResult<PlaceWithAroundEntity>> = flow {
-        emit(ApiResult.Loading)
-
-        val response = placeRemoteDataSource.fetchPlaceByPlaceNameWithAround(placeName)
-        emit(ResponseMapper.responseToPlaceWithAround(ApiResult.Success(response.data)))
-    }.catch {
-        emit(ResponseMapper.responseToPlaceWithAround(ApiResult.Error(it)))
+    ): Flow<PagingData<PlaceEntity>> {
+        return Pager(
+            config = PagingConfig(
+                pageSize = 2,
+                initialLoadSize = 2,
+                enablePlaceholders = false
+            ),
+            pagingSourceFactory = { AroundPlacesPagingSource(placeName, placeRemoteDataSource)}
+        ).flow
     }
 
     override suspend fun fetchPlaceRankings()

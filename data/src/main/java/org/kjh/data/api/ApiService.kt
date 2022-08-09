@@ -82,8 +82,10 @@ interface ApiService {
 
     @GET("place/around")
     suspend fun fetchPlaceByPlaceNameWithAround(
-        @Query("placeName") placeName: String
-    ): BaseApiModel<PlaceWithAroundModel>
+        @Query("placeName") placeName: String,
+        @Query("page") page: Int,
+        @Query("size") size: Int
+    ): BaseApiModel<List<PlaceModel>>
 
     @GET("place/ranking")
     suspend fun fetchPlaceRankings()

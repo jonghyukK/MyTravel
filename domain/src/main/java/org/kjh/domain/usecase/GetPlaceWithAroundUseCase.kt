@@ -12,6 +12,6 @@ import org.kjh.domain.repository.PlaceRepository
 class GetPlaceWithAroundUseCase(
     private val placeRepository: PlaceRepository
 ) {
-    suspend operator fun invoke(placeName: String) =
+    operator fun invoke(placeName: String) =
         placeRepository.fetchPlaceByPlaceNameWithAround(placeName)
 }
