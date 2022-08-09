@@ -13,17 +13,13 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.navigation.ui.setupWithNavController
 import androidx.recyclerview.widget.ConcatAdapter
-import androidx.recyclerview.widget.GridLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import org.kjh.mytravel.R
 import org.kjh.mytravel.databinding.FragmentDaylogDetailBinding
 import org.kjh.mytravel.ui.base.BaseFragment
-import org.kjh.mytravel.ui.features.daylog.around.AroundPlaceItemDecoration
 import org.kjh.mytravel.ui.features.daylog.around.AroundPlaceListAdapter
-import org.kjh.mytravel.ui.features.daylog.around.TYPE_AROUND_PLACE_ITEM
 import org.kjh.mytravel.ui.features.daylog.contents.DayLogDetailItemAdapter
 import org.kjh.mytravel.ui.features.daylog.images.DayLogDetailImagesInnerAdapter
 import org.kjh.mytravel.ui.features.daylog.images.DayLogDetailImagesOuterAdapter

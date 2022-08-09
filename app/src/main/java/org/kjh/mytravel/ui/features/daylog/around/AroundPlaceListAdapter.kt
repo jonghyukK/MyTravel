@@ -22,9 +22,6 @@ import org.kjh.mytravel.utils.onThrottleClick
  * Description:
  */
 
-const val TYPE_AROUND_PLACE_ITEM = 1
-const val TYPE_AROUND_PLACE_HEADER_ITEM = 2
-
 class AroundPlaceListAdapter
     : PagingDataAdapter<AroundPlaceUiModel, RecyclerView.ViewHolder>(UIMODEL_COMPARATOR) {
 
@@ -99,6 +96,9 @@ class AroundPlaceListAdapter
     }
 
     companion object {
+        const val TYPE_AROUND_PLACE_ITEM = 1
+        const val TYPE_AROUND_PLACE_HEADER_ITEM = 2
+
         private val UIMODEL_COMPARATOR = object : DiffUtil.ItemCallback<AroundPlaceUiModel>() {
             override fun areItemsTheSame(oldItem: AroundPlaceUiModel, newItem: AroundPlaceUiModel) =
                 (oldItem is AroundPlaceUiModel.PlaceItem && newItem is AroundPlaceUiModel.PlaceItem &&

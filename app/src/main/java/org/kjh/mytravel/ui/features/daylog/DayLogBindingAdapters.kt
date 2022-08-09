@@ -6,7 +6,7 @@ import androidx.recyclerview.widget.ConcatAdapter
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import org.kjh.mytravel.ui.features.daylog.around.AroundPlaceItemDecoration
-import org.kjh.mytravel.ui.features.daylog.around.TYPE_AROUND_PLACE_ITEM
+import org.kjh.mytravel.ui.features.daylog.around.AroundPlaceListAdapter.Companion.TYPE_AROUND_PLACE_ITEM
 
 /**
  * MyTravel

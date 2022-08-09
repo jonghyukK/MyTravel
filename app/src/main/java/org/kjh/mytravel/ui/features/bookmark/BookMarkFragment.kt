@@ -1,7 +1,6 @@
 package org.kjh.mytravel.ui.features.bookmark
 
 import androidx.fragment.app.activityViewModels
-import com.orhanobut.logger.Logger
 import dagger.hilt.android.AndroidEntryPoint
 import org.kjh.mytravel.R
 import org.kjh.mytravel.databinding.FragmentBookMarkBinding

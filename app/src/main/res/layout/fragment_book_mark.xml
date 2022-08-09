@@ -15,7 +15,6 @@
         android:id="@+id/cl_bookmarkContainer"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:fitsSystemWindows="true"
         android:background="@color/white">
 
         <com.google.android.material.appbar.MaterialToolbar
@@ -25,7 +24,8 @@
             app:title="@string/bookmark"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"/>
+            app:layout_constraintEnd_toEndOf="parent"
+            toolbarInsets="@{true}"/>
 
         <ImageView
             android:id="@+id/iv_bookmark"

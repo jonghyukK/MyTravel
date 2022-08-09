@@ -1,17 +1,25 @@
 package org.kjh.mytravel.ui.common
 
 import android.graphics.Color
-import android.net.Uri
+import android.os.Build
 import android.view.View
+import android.view.WindowInsets
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.widget.Toolbar
+import androidx.constraintlayout.motion.widget.MotionLayout
+import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.constraintlayout.widget.ConstraintSet
 import androidx.core.view.get
 import androidx.core.view.isVisible
+import androidx.core.view.updateLayoutParams
+import androidx.core.view.updatePadding
 import androidx.databinding.BindingAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.google.android.material.appbar.AppBarLayout
+import com.google.android.material.bottomsheet.BottomSheetBehavior
+import com.google.android.material.bottomsheet.BottomSheetBehavior.STATE_HIDDEN
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
 import org.kjh.mytravel.R
@@ -20,6 +28,7 @@ import org.kjh.mytravel.ui.features.bookmark.BookmarkListAdapter
 import org.kjh.mytravel.ui.features.home.banner.BannerListAdapter
 import org.kjh.mytravel.ui.features.place.infowithdaylog.PlaceDayLogListAdapter
 import org.kjh.mytravel.ui.features.place.subcity.PlacesBySubCityListAdapter
+import org.kjh.mytravel.ui.features.place.subcity.PlacesBySubCityPostListAdapter
 import org.kjh.mytravel.ui.features.profile.PostMultipleViewAdapter
 import org.kjh.mytravel.ui.features.upload.UploadTempImagesAdapter
 import org.kjh.mytravel.ui.features.upload.location.LocationQueryResultAdapter
@@ -27,6 +36,8 @@ import org.kjh.mytravel.ui.features.upload.select.MediaStoreImageListAdapter
 import org.kjh.mytravel.ui.features.upload.select.SelectedPhotoListAdapter
 import org.kjh.mytravel.utils.InputValidator
 import org.kjh.mytravel.utils.avoidUncheckedWarnAndCast
+import org.kjh.mytravel.utils.navigationHeight
+import org.kjh.mytravel.utils.statusBarHeight
 
 /**
  * MyTravel
@@ -37,6 +48,105 @@ import org.kjh.mytravel.utils.avoidUncheckedWarnAndCast
  */
 
 object BindingAdapters {
+
+    @JvmStatic
+    @BindingAdapter("fullscreenContainerInsetsWithToolbar")
+    fun bindInsetsForFullScreenContainerWithToolbar(
+        containerView: View,
+        toolbar      : Toolbar
+    ) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+            containerView.setOnApplyWindowInsetsListener { v, insets ->
+                val windowStatusBar = insets.getInsets(WindowInsets.Type.statusBars())
+                val windowNavBar    = insets.getInsets(WindowInsets.Type.navigationBars())
+
+                toolbar.updatePadding(top = windowStatusBar.top)
+                containerView.updatePadding(bottom = windowNavBar.bottom)
+                insets
+            }
+        } else {
+            toolbar.updatePadding(top = containerView.context.statusBarHeight())
+            containerView.updatePadding(bottom = containerView.context.navigationHeight())
+        }
+    }
+
+    @JvmStatic
+    @BindingAdapter("toolbarInsets")
+    fun Toolbar.bindInsetsForToolbar(value: Boolean) {
+        val toolbarHeight = layoutParams.height
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+            setOnApplyWindowInsetsListener { v, insets ->
+                val sysWindow = insets.getInsets(WindowInsets.Type.statusBars())
+
+                v.updateLayoutParams { height = toolbarHeight + sysWindow.top }
+                v.updatePadding(top = sysWindow.top)
+                insets
+            }
+        } else {
+            val statusBarHeight = context.statusBarHeight()
+
+            updateLayoutParams { height = toolbarHeight + statusBarHeight  }
+            updatePadding(top = statusBarHeight)
+        }
+    }
+
+
+    @JvmStatic
+    @BindingAdapter("toolbarInsets")
+    fun bindToolbarInsets(
+        motionLayout: MotionLayout,
+        toolbar     : Toolbar
+    ) {
+        val toolbarHeight   = toolbar.layoutParams.height
+        val statusBarHeight = motionLayout.context.statusBarHeight()
+        val wholeToolbarHeight = toolbarHeight + statusBarHeight
+
+        with(motionLayout) {
+            constraintSetIds.map { id ->
+                updateState(id, getConstraintSet(id).apply {
+                    constrainHeight(toolbar.id, wholeToolbarHeight)
+                    toolbar.updatePadding(top = statusBarHeight)
+                })
+            }
+        }
+    }
+
+    @JvmStatic
+    @BindingAdapter("motionProgress")
+    fun bindMotionProgress(view: MotionLayout, progress: Float) {
+        view.progress = progress
+    }
+
+    @JvmStatic
+    @BindingAdapter("bindPostItems")
+    fun bindPostItems(view: RecyclerView, items: List<Post>?) {
+        val adapter = view.adapter
+
+        (adapter as PlacesBySubCityPostListAdapter).setPostItems(items?: listOf())
+    }
+
+    @JvmStatic
+    @BindingAdapter("currentState", "stateCallback")
+    fun bindBottomSheetState(view: View, state: Int, stateCallback: (Int) -> Unit) {
+        val behavior = BottomSheetBehavior.from(view).apply {
+
+            addBottomSheetCallback(object: BottomSheetBehavior.BottomSheetCallback() {
+                override fun onSlide(bottomSheet: View, slideOffset: Float) {}
+                override fun onStateChanged(bottomSheet: View, newState: Int) {
+                    if (newState == BottomSheetBehavior.STATE_COLLAPSED
+                        || newState == BottomSheetBehavior.STATE_EXPANDED
+                        || newState == STATE_HIDDEN
+                    ) {
+                        stateCallback(newState)
+                    }
+                }
+            })
+        }
+
+        behavior.isHideable = state == STATE_HIDDEN
+        behavior.state = state
+    }
 
     @JvmStatic
     @BindingAdapter("onThrottleClick")
