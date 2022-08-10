@@ -46,7 +46,8 @@ class DayLogDetailViewModel @AssistedInject constructor(
     data class PlaceDetailUiState(
         val isLoading      : Boolean = false,
         val wholePostItems : List<SelectablePost> = listOf(),
-        val currentPostItem: Post? = null
+        val currentPostItem: Post? = null,
+        val isBookmark : Boolean = false
     )
 
     private val _uiState = MutableStateFlow(PlaceDetailUiState())
@@ -144,6 +145,12 @@ class DayLogDetailViewModel @AssistedInject constructor(
 
     val updateCollapsed = fun(value: Boolean) {
         _isCollapsed.value = value
+    }
+
+    fun updateBookmark(value: Boolean) {
+        _uiState.update {
+            it.copy(isBookmark = value)
+        }
     }
 
     @AssistedFactory

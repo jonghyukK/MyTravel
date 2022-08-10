@@ -5,6 +5,7 @@ import android.content.Context
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.preferencesDataStore
+import com.kakao.sdk.common.KakaoSdk
 import com.orhanobut.logger.AndroidLogAdapter
 import com.orhanobut.logger.Logger
 import dagger.hilt.android.HiltAndroidApp
@@ -24,5 +25,7 @@ class MyTravelApplication: Application() {
         super.onCreate()
 
         Logger.addLogAdapter(AndroidLogAdapter())
+
+        KakaoSdk.init(this, "94cd3aaf873248b465d6ffbc3868aea5")
     }
 }

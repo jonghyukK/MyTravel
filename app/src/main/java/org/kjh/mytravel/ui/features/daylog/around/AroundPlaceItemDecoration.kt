@@ -31,7 +31,11 @@ class AroundPlaceItemDecoration : RecyclerView.ItemDecoration() {
         val isLeftItem = viewPosition % spanCount == 0
         val isRightItem = viewPosition % spanCount == 1
 
-        if (viewPosition >= 3) {
+        if (viewPosition == 3) {
+            outRect.top = (DP * 25).toInt()
+        }
+
+        if (viewPosition >= 4) {
             when {
                 isLeftItem -> {
                     outRect.right = (DP * 1).toInt()

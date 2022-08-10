@@ -60,7 +60,10 @@
             app:argType="string" />
         <argument
             android:name="postId"
-            app:argType="integer"
-            android:defaultValue="-1"/>
+            android:defaultValue="-1"
+            app:argType="integer" />
+        <deepLink
+            android:id="@+id/deepLink"
+            app:uri="kakao94cd3aaf873248b465d6ffbc3868aea5://kakaolink?placeName={placeName}" />
     </fragment>
 </navigation>

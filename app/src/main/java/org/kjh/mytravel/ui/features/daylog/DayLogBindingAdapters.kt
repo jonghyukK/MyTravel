@@ -36,6 +36,7 @@ fun bindAdapterWithGridSpanSizeLayoutManager(rv: RecyclerView, concatAdapter: Co
     }
 
     rv.apply {
+        itemAnimator = null
         layoutManager = gridLayoutManager
         adapter       = concatAdapter
         addItemDecoration(AroundPlaceItemDecoration())
