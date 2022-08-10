@@ -3,6 +3,7 @@ package org.kjh.mytravel.ui.features.home
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.paging.cachedIn
+import androidx.paging.insertSeparators
 import androidx.paging.map
 import com.orhanobut.logger.Logger
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -20,6 +21,7 @@ import org.kjh.domain.usecase.GetPlaceRankingUseCase
 import org.kjh.domain.usecase.GetRecentPostsUseCase
 import org.kjh.mytravel.model.Banner
 import org.kjh.mytravel.model.PlaceWithRanking
+import org.kjh.mytravel.model.Post
 import org.kjh.mytravel.model.mapToPresenter
 import org.kjh.mytravel.ui.GlobalErrorHandler
 import org.kjh.mytravel.ui.common.UiState
@@ -32,6 +34,11 @@ import javax.inject.Inject
  *
  * Description:
  */
+
+sealed class LatestPostUiModel {
+    data class HeaderItem(val headerTitle: String) : LatestPostUiModel()
+    data class PostItem(val post: Post): LatestPostUiModel()
+}
 
 @HiltViewModel
 class HomeViewModel @Inject constructor(
@@ -54,7 +61,19 @@ class HomeViewModel @Inject constructor(
     val refreshLatestPostsPagingData = _refreshLatestPostsPagingData.asStateFlow()
 
     val latestPostsPagingData = getRecentPostsUseCase()
-        .map { pagingData -> pagingData.map { it.mapToPresenter() } }
+        .map { pagingData -> pagingData.map { LatestPostUiModel.PostItem(it.mapToPresenter()) }}
+        .map {
+            it.insertSeparators { before, after ->
+                if (after == null)
+                    return@insertSeparators null
+
+                if (before == null) {
+                    LatestPostUiModel.HeaderItem("최근 올라온 DayLog")
+                } else {
+                    null
+                }
+            }
+        }
         .cachedIn(viewModelScope)
 
     private val _motionProgress: MutableStateFlow<Float> = MutableStateFlow(0f)

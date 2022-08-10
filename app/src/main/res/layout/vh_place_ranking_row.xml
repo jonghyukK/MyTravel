@@ -5,27 +5,24 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="360dp"
+        android:layout_height="wrap_content"
         android:background="#f7f7f7">
 
-        <TextView
-            android:id="@+id/tv_placeRankingTitle"
-            style="@style/style_title"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/title_place_ranking_best_7"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toTopOf="@+id/rv_PlaceRankingListConcat"/>
+        <include
+            android:id="@+id/header"
+            layout="@layout/layout_home_section_header"
+            app:headerTitle="@{@string/title_place_ranking_best_7}"/>
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rv_PlaceRankingListConcat"
             android:layout_width="0dp"
             android:layout_height="284dp"
-            app:layout_constraintTop_toBottomOf="@+id/tv_placeRankingTitle"
+            app:layout_constraintTop_toBottomOf="@+id/header"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
             android:nestedScrollingEnabled="false"
+            android:layout_marginBottom="20dp"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             android:orientation="horizontal"
             tools:listitem="@layout/vh_place_ranking_item"/>

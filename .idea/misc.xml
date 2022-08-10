@@ -82,6 +82,7 @@
         <entry key="app/src/main/res/layout/item_recent_visit.xml" value="0.25" />
         <entry key="app/src/main/res/layout/layout_bookmark_empty.xml" value="0.7492307692307693" />
         <entry key="app/src/main/res/layout/layout_error_page.xml" value="0.1" />
+        <entry key="app/src/main/res/layout/layout_home_section_header.xml" value="0.5890625" />
         <entry key="app/src/main/res/layout/layout_profile_info.xml" value="0.1" />
         <entry key="app/src/main/res/layout/layout_user_profile_info.xml" value="0.6805555555555556" />
         <entry key="app/src/main/res/layout/vh_around_place_header_item.xml" value="0.42777777777777776" />

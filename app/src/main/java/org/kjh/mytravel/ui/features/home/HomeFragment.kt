@@ -1,24 +1,17 @@
 package org.kjh.mytravel.ui.features.home
 
 import android.graphics.Color
-import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.WindowInsets
-import androidx.constraintlayout.motion.widget.MotionLayout
-import androidx.constraintlayout.widget.ConstraintSet
 import androidx.core.view.*
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
-import androidx.navigation.fragment.findNavController
-import androidx.navigation.ui.setupWithNavController
 import androidx.recyclerview.widget.ConcatAdapter
 import androidx.recyclerview.widget.PagerSnapHelper
-import com.orhanobut.logger.Logger
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
@@ -32,8 +25,6 @@ import org.kjh.mytravel.ui.features.home.latest.LatestPostPagingDataAdapter
 import org.kjh.mytravel.ui.features.home.latest.LatestPostPagingLoadStateAdapter
 import org.kjh.mytravel.ui.features.home.ranking.PlaceRankingHorizontalWrapAdapter
 import org.kjh.mytravel.ui.features.home.ranking.PlaceRankingListAdapter
-import org.kjh.mytravel.utils.dpToPx
-import org.kjh.mytravel.utils.statusBarHeight
 
 @AndroidEntryPoint
 class HomeFragment : BaseFragment<FragmentHomeBinding>(R.layout.fragment_home) {

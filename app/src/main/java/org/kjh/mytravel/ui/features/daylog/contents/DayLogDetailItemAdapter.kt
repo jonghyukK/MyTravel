@@ -64,13 +64,13 @@ class DayLogDetailItemAdapter(
                 }
             }
 
-            binding.btnBookmark.onThrottleClick { view ->
+            binding.btnBookmark.onThrottleClick {
                 binding.postItem?.let { post ->
                     onClickBookmark(post)
                 }
             }
 
-            binding.btnShare.onThrottleClick { view ->
+            binding.btnShare.onThrottleClick {
                 binding.postItem?.let { post ->
                     onClickShare(post)
                 }
