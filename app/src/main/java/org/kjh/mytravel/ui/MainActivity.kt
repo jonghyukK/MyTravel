@@ -6,6 +6,7 @@ import androidx.core.view.isVisible
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupWithNavController
 import dagger.hilt.android.AndroidEntryPoint
@@ -43,7 +44,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>(R.layout.activity_main) {
         val navController = navHostFragment.navController.apply {
             addOnDestinationChangedListener { _, _, arguments ->
                 binding.bnvBottomNav.isVisible =
-                    arguments?.getBoolean("showBnv", false) == true
+                    arguments?.getBoolean(getString(R.string.key_show_bnv), false) == true
             }
         }
 
@@ -51,13 +52,22 @@ class MainActivity : BaseActivity<ActivityMainBinding>(R.layout.activity_main) {
     }
 
     override fun subscribeUi() {
-        uploadViewModel.uploadState
-            .flowWithLifecycle(lifecycle, Lifecycle.State.STARTED)
-            .onEach { uploadState ->
-                if (uploadState !is UiState.Init && uploadHandleJob == null)
-                    addUploadHandleJobIfUploadRequested()
+        lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED){
+                launch {
+                    homeViewModel.homeUiState.collect { homeUiState ->
+                        binding.bnvBottomNav.isVisible = !homeUiState.isLoading
+                    }
+                }
+
+                launch {
+                    uploadViewModel.uploadState.collect { uploadState ->
+                        if (uploadState !is UiState.Init && uploadHandleJob == null)
+                            addUploadHandleJobIfUploadRequested()
+                    }
+                }
             }
-            .launchIn(lifecycleScope)
+        }
     }
 
     private fun addUploadHandleJobIfUploadRequested() {

@@ -12,7 +12,7 @@
         tools:layout="@layout/fragment_book_mark">
 
         <argument
-            android:name="showBnv"
+            android:name="@string/key_show_bnv"
             android:defaultValue="true" />
     </fragment>
 </navigation>

@@ -5,16 +5,11 @@ import androidx.lifecycle.viewModelScope
 import androidx.paging.cachedIn
 import androidx.paging.insertSeparators
 import androidx.paging.map
-import com.orhanobut.logger.Logger
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.async
+import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import org.kjh.domain.entity.ApiResult
-import org.kjh.domain.entity.BannerEntity
-import org.kjh.domain.entity.PlaceWithRankEntity
 import org.kjh.domain.usecase.GetHomeBannersUseCase
 import org.kjh.domain.usecase.GetLoginPreferenceUseCase
 import org.kjh.domain.usecase.GetPlaceRankingUseCase
@@ -24,7 +19,6 @@ import org.kjh.mytravel.model.PlaceWithRanking
 import org.kjh.mytravel.model.Post
 import org.kjh.mytravel.model.mapToPresenter
 import org.kjh.mytravel.ui.GlobalErrorHandler
-import org.kjh.mytravel.ui.common.UiState
 import javax.inject.Inject
 
 /**
@@ -49,13 +43,15 @@ class HomeViewModel @Inject constructor(
     val globalErrorHandler: GlobalErrorHandler
 ): ViewModel() {
 
-    private val _homeBannersUiState: MutableStateFlow<UiState<List<Banner>>> =
-        MutableStateFlow(UiState.Loading)
-    val homeBannersUiState = _homeBannersUiState.asStateFlow()
+    data class HomeUiState(
+        val isLoading: Boolean = true,
+        val isCollapsed: Boolean = false,
+        val bannerItems : List<Banner> = listOf(),
+        val rankingItems: List<PlaceWithRanking> = listOf()
+    )
 
-    private val _homeRankingsUiState: MutableStateFlow<UiState<List<PlaceWithRanking>>> =
-        MutableStateFlow(UiState.Loading)
-    val homeRankingsUiState = _homeRankingsUiState.asStateFlow()
+    private val _homeUiState = MutableStateFlow(HomeUiState())
+    val homeUiState = _homeUiState.asStateFlow()
 
     private val _refreshLatestPostsPagingData = MutableStateFlow(false)
     val refreshLatestPostsPagingData = _refreshLatestPostsPagingData.asStateFlow()
@@ -76,57 +72,57 @@ class HomeViewModel @Inject constructor(
         }
         .cachedIn(viewModelScope)
 
-    private val _motionProgress: MutableStateFlow<Float> = MutableStateFlow(0f)
-    val motionProgress = _motionProgress.asStateFlow()
-
     init {
-        fetchHomeBanners()
-        fetchPlaceRankings()
+        fetchHomeBannerAndRankingItems()
     }
 
-    private fun fetchHomeBanners() {
+    private fun fetchHomeBannerAndRankingItems() {
         viewModelScope.launch {
-            getHomeBannersUseCase()
-                .collect { apiResult ->
-                    when (apiResult) {
-                        is ApiResult.Loading ->
-                            _homeBannersUiState.value = UiState.Loading
+            _homeUiState.update {
+                it.copy(
+                    isLoading = true
+                )
+            }
 
-                        is ApiResult.Success -> {
-                            val data = apiResult.data.map { it.mapToPresenter() }
-                            _homeBannersUiState.value = UiState.Success(data)
-                        }
+            val fetchBanner  = async { getHomeBannersUseCase() }
+            val fetchRanking = async { getPlaceRankingUseCase() }
 
-                        is ApiResult.Error -> {
-                            val errorMsg = "occur Error [Fetch Banners API]"
-                            globalErrorHandler.sendError(errorMsg)
-                            _homeBannersUiState.value = UiState.Error(Throwable(errorMsg))
-                        }
+            val bannerResult  = fetchBanner.await()
+            val rankingResult = fetchRanking.await()
+
+            combineTransform(bannerResult, rankingResult) { banner, ranking ->
+                val bannerItems = when (banner) {
+                    is ApiResult.Loading -> emptyList()
+                    is ApiResult.Success -> banner.data.map { it.mapToPresenter() }
+                    is ApiResult.Error -> {
+                        globalErrorHandler.sendError("occur Error [Fetch HomeBanner API]")
+                        emptyList()
                     }
                 }
-        }
-    }
 
-    private fun fetchPlaceRankings() {
-        viewModelScope.launch {
-            getPlaceRankingUseCase()
-                .collect { apiResult ->
-                    when (apiResult) {
-                        is ApiResult.Loading ->
-                            _homeRankingsUiState.value = UiState.Loading
-
-                        is ApiResult.Success -> {
-                            val data = apiResult.data.map { it.mapToPresenter() }
-                            _homeRankingsUiState.value = UiState.Success(data)
-                        }
-
-                        is ApiResult.Error -> {
-                            val errorMsg = "occur Error [Fetch Ranking API]"
-                            globalErrorHandler.sendError(errorMsg)
-                            _homeRankingsUiState.value = UiState.Error(Throwable(errorMsg))
-                        }
+                val rankingItems = when (ranking) {
+                    is ApiResult.Loading -> emptyList()
+                    is ApiResult.Success -> ranking.data.map { it.mapToPresenter() }
+                    is ApiResult.Error -> {
+                        globalErrorHandler.sendError("occur Error [Fetch Ranking API]")
+                        emptyList()
                     }
                 }
+
+                emit(HomeUiState(
+                    isLoading = false,
+                    bannerItems = bannerItems,
+                    rankingItems = rankingItems)
+                )
+            }.collect { uiState ->
+                _homeUiState.update {
+                    it.copy(
+                        isLoading = false,
+                        bannerItems = uiState.bannerItems,
+                        rankingItems = uiState.rankingItems
+                    )
+                }
+            }
         }
     }
 
@@ -134,7 +130,11 @@ class HomeViewModel @Inject constructor(
         _refreshLatestPostsPagingData.value = value
     }
 
-    fun saveMotionProgress(value: Float) {
-        _motionProgress.value = value
+    val updateCollapsed = fun(value: Boolean) {
+        _homeUiState.update {
+            it.copy(
+                isCollapsed = value
+            )
+        }
     }
 }

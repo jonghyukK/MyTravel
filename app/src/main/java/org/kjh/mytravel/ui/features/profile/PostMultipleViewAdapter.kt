@@ -9,6 +9,7 @@ import androidx.recyclerview.widget.RecyclerView
 import org.kjh.mytravel.databinding.VhGridPostItemBinding
 import org.kjh.mytravel.databinding.VhLinearPostRowItemBinding
 import org.kjh.mytravel.model.Post
+import org.kjh.mytravel.ui.common.OnNestedHorizontalTouchListener
 import org.kjh.mytravel.ui.common.OnSnapPagerScrollListener
 import org.kjh.mytravel.utils.navigateToDayLogDetail
 import org.kjh.mytravel.utils.onThrottleClick
@@ -74,6 +75,7 @@ class PostMultipleViewAdapter(
                 setHasFixedSize(true)
                 adapter = imageAdapters
                 addItemDecoration(LineIndicatorDecoration())
+                addOnItemTouchListener(OnNestedHorizontalTouchListener())
                 snapHelper.attachToRecyclerView(this)
                 addOnScrollListener(
                     OnSnapPagerScrollListener(

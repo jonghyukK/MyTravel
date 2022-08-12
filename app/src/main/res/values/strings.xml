@@ -1,8 +1,10 @@
 <resources>
     <string name="app_name">MyTravel</string>
+    <string name="key_show_bnv">showBnv</string>
 
     <string name="hello_blank_fragment">Hello blank fragment</string>
 
+    <!-- about Kakao -->
     <string name="kakao_base_url">https://developers.kakao.com</string>
     <string name="kakao_host">kakaolink</string>
     <string name="kakao_scheme">kakao94cd3aaf873248b465d6ffbc3868aea5</string>

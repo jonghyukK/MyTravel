@@ -19,7 +19,7 @@
             app:popExitAnim="@anim/fade_out"/>
 
         <argument
-            android:name="showBnv"
+            android:name="@string/key_show_bnv"
             android:defaultValue="true" />
     </fragment>
 

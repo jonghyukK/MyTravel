@@ -1,66 +1,58 @@
-package org.kjh.mytravel.ui.features.home.ranking
+package org.kjh.mytravel.ui.features.home.banner
 
 import android.os.Parcelable
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.PagerSnapHelper
 import androidx.recyclerview.widget.RecyclerView
-import org.kjh.mytravel.databinding.VhPlaceRankingRowBinding
+import org.kjh.mytravel.databinding.VhHomeBannerRowBinding
 import org.kjh.mytravel.ui.common.OnNestedHorizontalTouchListener
 import org.kjh.mytravel.ui.common.OnSnapPagerScrollListener
 
 /**
  * MyTravel
- * Class: HomeAdapter
- * Created by jonghyukkang on 2022/02/21.
+ * Class: BannerOuterAdapter
+ * Created by jonghyukkang on 2022/08/11.
  *
  * Description:
  */
-class PlaceRankingHorizontalWrapAdapter(
-    private val placeRankingAdapter: PlaceRankingListAdapter
-): RecyclerView.Adapter<PlaceRankingHorizontalWrapAdapter.PlaceRankingRowViewHolder>() {
-
+class BannerOuterAdapter(
+    private val bannerInnerAdapter : BannerListAdapter
+): RecyclerView.Adapter<BannerOuterAdapter.HomeBannersOuterViewHolder>() {
     private val childViewState = mutableMapOf<Int, Parcelable?>()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) =
-        PlaceRankingRowViewHolder(
-            VhPlaceRankingRowBinding.inflate(
+        HomeBannersOuterViewHolder(
+            VhHomeBannerRowBinding.inflate(
                 LayoutInflater.from(parent.context), parent, false
             )
         )
 
-    override fun onBindViewHolder(holder: PlaceRankingRowViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: HomeBannersOuterViewHolder, position: Int) {
         holder.bind()
-    }
-
-    override fun onViewRecycled(holder: PlaceRankingRowViewHolder) {
-        super.onViewRecycled(holder)
-
-        val key = holder.layoutPosition
-        childViewState[key] = holder.binding.rvPlaceRankingListConcat.layoutManager?.onSaveInstanceState()
     }
 
     override fun getItemCount() = 1
 
-    inner class PlaceRankingRowViewHolder(
-        val binding: VhPlaceRankingRowBinding
+    inner class HomeBannersOuterViewHolder(
+        val binding: VhHomeBannerRowBinding
     ): RecyclerView.ViewHolder(binding.root) {
         private val snapHelper = PagerSnapHelper()
 
         init {
-            binding.rvPlaceRankingListConcat.apply {
+            binding.bannerRecyclerView.apply {
                 setHasFixedSize(true)
+                adapter = bannerInnerAdapter
+                addItemDecoration(BannerItemDecoration())
                 snapHelper.attachToRecyclerView(this)
-                adapter = placeRankingAdapter
-                addItemDecoration(PlaceRankingItemDecoration(this.context, 20, 20, 0,0))
                 addOnItemTouchListener(OnNestedHorizontalTouchListener())
                 addOnScrollListener(
                     OnSnapPagerScrollListener(
                         snapHelper = snapHelper,
-                        listener = object : OnSnapPagerScrollListener.OnChangeListener {
+                        listener = object: OnSnapPagerScrollListener.OnChangeListener {
                             override fun onSnapped(position: Int) {
                                 childViewState[layoutPosition] =
-                                    binding.rvPlaceRankingListConcat.layoutManager?.onSaveInstanceState()
+                                    binding.bannerRecyclerView.layoutManager?.onSaveInstanceState()
                             }
                         }
                     )
@@ -77,11 +69,12 @@ class PlaceRankingHorizontalWrapAdapter(
             val state = childViewState[key]
 
             if (state != null) {
-                binding.rvPlaceRankingListConcat.layoutManager?.onRestoreInstanceState(state)
+                binding.bannerRecyclerView.layoutManager?.onRestoreInstanceState(state)
             } else {
-                binding.rvPlaceRankingListConcat.layoutManager?.scrollToPosition(0)
+                binding.bannerRecyclerView.layoutManager?.scrollToPosition(0)
             }
         }
     }
 }
+
 

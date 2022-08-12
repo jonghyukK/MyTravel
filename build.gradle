@@ -18,6 +18,8 @@ buildscript {
         image_cropper_version = '3.3.5'
         hilt_version = '2.42'
         work_version = '2.7.1'
+        kakao_sdk_version = '2.11.0'
+        skeleton_version = '1.4.5'
     }
     repositories {
         google()

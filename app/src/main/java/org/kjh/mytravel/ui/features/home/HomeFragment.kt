@@ -5,22 +5,24 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.view.*
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.ConcatAdapter
 import androidx.recyclerview.widget.PagerSnapHelper
+import com.orhanobut.logger.Logger
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import org.kjh.mytravel.R
 import org.kjh.mytravel.databinding.FragmentHomeBinding
+import org.kjh.mytravel.model.Banner
 import org.kjh.mytravel.ui.base.BaseFragment
 import org.kjh.mytravel.ui.common.UiState
 import org.kjh.mytravel.ui.features.home.banner.BannerItemDecoration
 import org.kjh.mytravel.ui.features.home.banner.BannerListAdapter
+import org.kjh.mytravel.ui.features.home.banner.BannerOuterAdapter
 import org.kjh.mytravel.ui.features.home.latest.LatestPostPagingDataAdapter
 import org.kjh.mytravel.ui.features.home.latest.LatestPostPagingLoadStateAdapter
 import org.kjh.mytravel.ui.features.home.ranking.PlaceRankingHorizontalWrapAdapter
@@ -30,12 +32,14 @@ import org.kjh.mytravel.ui.features.home.ranking.PlaceRankingListAdapter
 class HomeFragment : BaseFragment<FragmentHomeBinding>(R.layout.fragment_home) {
 
     private val viewModel: HomeViewModel by activityViewModels()
+
     private val bannerListAdapter by lazy {
         BannerListAdapter()
     }
     private val placeRankingListAdapter by lazy {
         PlaceRankingListAdapter()
     }
+
     private val latestPostListAdapter by lazy {
         LatestPostPagingDataAdapter().apply {
             withLoadStateFooter(
@@ -43,8 +47,10 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(R.layout.fragment_home) {
             )
         }
     }
+
     private val homeConcatAdapter by lazy {
         ConcatAdapter(
+            BannerOuterAdapter(bannerListAdapter),
             PlaceRankingHorizontalWrapAdapter(placeRankingListAdapter),
             latestPostListAdapter
         )
@@ -63,13 +69,6 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(R.layout.fragment_home) {
         binding.viewModel = viewModel
         binding.fragment  = this
 
-        binding.homeBannerRecyclerView.apply {
-            setHasFixedSize(true)
-            adapter = bannerListAdapter
-            addItemDecoration(BannerItemDecoration())
-            PagerSnapHelper().attachToRecyclerView(this)
-        }
-
         binding.homeConcatRecyclerView.apply {
             setHasFixedSize(true)
             adapter = homeConcatAdapter
@@ -79,11 +78,11 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(R.layout.fragment_home) {
     override fun subscribeUi() {
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+
                 launch {
-                    viewModel.homeRankingsUiState.collect { uiState ->
-                        if (uiState is UiState.Success) {
-                            placeRankingListAdapter.submitList(uiState.data)
-                        }
+                    viewModel.homeUiState.collect { uiState ->
+                        placeRankingListAdapter.submitList(uiState.rankingItems)
+                        bannerListAdapter.submitList(uiState.bannerItems)
                     }
                 }
 
@@ -104,10 +103,5 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(R.layout.fragment_home) {
                 }
             }
         }
-    }
-
-    override fun onDestroyView() {
-        viewModel.saveMotionProgress(binding.mlHomeContainer.progress)
-        super.onDestroyView()
     }
 }

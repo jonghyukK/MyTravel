@@ -102,7 +102,7 @@ class DayLogDetailViewModel @AssistedInject constructor(
                        }
 
                        is ApiResult.Error -> {
-                           val errorMsg = "occur Error [Fetch PlaceByPlaceName API"
+                           val errorMsg = "occur Error [Fetch PlaceByPlaceName API]"
                            globalErrorHandler.sendError(errorMsg)
                            _uiState.update {
                                it.copy(isLoading = false)

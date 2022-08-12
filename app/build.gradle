@@ -109,5 +109,9 @@ dependencies {
     // WorkManager
     implementation "androidx.work:work-runtime-ktx:$work_version"
 
-    implementation "com.kakao.sdk:v2-all:2.11.0" // 메시지(카카오톡 공유)
+    // Kakao SDK All
+    implementation "com.kakao.sdk:v2-all:$kakao_sdk_version"
+
+    // Skeleton Bones
+    implementation "com.github.EudyContreras:Skeleton-Bones:$skeleton_version"
 }

@@ -4,10 +4,9 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import org.kjh.mytravel.R
 import org.kjh.mytravel.databinding.VhPlacesBySubCityRowBinding
 import org.kjh.mytravel.model.Place
-import org.kjh.mytravel.utils.navigateToDayLogDetail
+import org.kjh.mytravel.ui.common.OnNestedHorizontalTouchListener
 import org.kjh.mytravel.utils.navigateToPlaceInfoWithDayLog
 import org.kjh.mytravel.utils.onThrottleClick
 
@@ -41,8 +40,9 @@ class PlacesBySubCityListAdapter
         init {
             binding.postImgRecyclerView.apply {
                 setHasFixedSize(true)
-                addItemDecoration(PlacesBySubCityPostItemDecoration())
                 adapter = postListAdapter
+                addItemDecoration(PlacesBySubCityPostItemDecoration())
+                addOnItemTouchListener(OnNestedHorizontalTouchListener())
             }
 
             itemView.onThrottleClick { view ->

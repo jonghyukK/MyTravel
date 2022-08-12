@@ -12,37 +12,30 @@
             type="org.kjh.mytravel.ui.features.home.HomeViewModel" />
     </data>
 
-    <androidx.constraintlayout.motion.widget.MotionLayout
+
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/ml_homeContainer"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        app:layoutDescription="@xml/motion_scene_home_scrolling"
-        toolbarInsets="@{tbHomeToolbar}"
-        motionProgress="@{viewModel.motionProgress}">
-
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/homeBannerRecyclerView"
-            addOnScrollListener="@{viewModel.homeBannersUiState.toData().size()}"
-            bindItems="@{viewModel.homeBannersUiState.toData()}"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:minHeight="300dp"
-            android:orientation="horizontal"
-            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-            app:layout_constraintBottom_toTopOf="@id/homeConcatRecyclerView"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            tools:listitem="@layout/vh_home_banner_item" />
-
-        <androidx.appcompat.widget.Toolbar
-            android:id="@+id/tb_homeToolbar"
-            android:layout_width="0dp"
-            android:layout_height="?attr/actionBarSize"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:title="@string/app_name" />
+        app:skeletonBackgroundColor="@{@color/white}"
+        app:skeletonAnimateRestoredBounds="@{true}"
+        app:skeletonAllowSavedState="@{true}"
+        app:skeletonBoneColor="@{@color/light_gray_pressed}"
+        app:skeletonBoneMaxThickness="@{@dimen/dp25}"
+        app:skeletonBoneMinThickness="@{@dimen/dp20}"
+        app:skeletonDissectLargeBones="@{false}"
+        app:skeletonEnabled="@{viewModel.homeUiState.loading}"
+        app:skeletonGenerateBones="@{true}"
+        app:skeletonShimmerRayColor="@{@color/shadow_black}"
+        app:skeletonShimmerRayCount="@{4}"
+        app:skeletonShimmerRayInterpolator="@{@android:interpolator/accelerate_quad}"
+        app:skeletonShimmerRaySharedInterpolator="@{true}"
+        app:skeletonShimmerRaySpeedMultiplier="@{1f}"
+        app:skeletonShimmerRayThickness="@{@dimen/dp120}"
+        app:skeletonShimmerRayTilt="@{-0.2f}"
+        app:skeletonTransitionDuration="@{200L}"
+        app:skeletonUseStateTransition="@{true}"
+        tools:background="@color/white">
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/homeConcatRecyclerView"
@@ -53,6 +46,22 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/homeBannerRecyclerView" />
-    </androidx.constraintlayout.motion.widget.MotionLayout>
+            app:layout_constraintTop_toTopOf="parent"
+            onScrollListenerWithToolbar="@{tbHomeToolbar}"
+            callback="@{viewModel.updateCollapsed}"/>
+
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/tb_homeToolbar"
+            android:layout_width="0dp"
+            android:layout_height="?attr/actionBarSize"
+            toolbarInsets="@{true}"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:background="@{viewModel.homeUiState.collapsed ? @color/white : @color/transparent}"
+            app:title="@{viewModel.homeUiState.collapsed ? @string/app_name : ``}" />
+
+        <include
+            layout="@layout/layout_home_shimmer"/>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

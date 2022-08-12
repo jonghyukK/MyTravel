@@ -53,7 +53,7 @@ fun bindOnScrollListenerForToolbarCollapsed(
         override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
             super.onScrolled(recyclerView, dx, dy)
 
-            val toolbarHeight = toolbar.height
+            val toolbarHeight = toolbar.layoutParams.height
             val scrollRange = rv.computeVerticalScrollOffset()
             val compareHeight = rv.getChildAt(0).height
 

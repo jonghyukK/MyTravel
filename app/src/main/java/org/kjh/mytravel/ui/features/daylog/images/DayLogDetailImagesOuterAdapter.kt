@@ -6,6 +6,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.PagerSnapHelper
 import androidx.recyclerview.widget.RecyclerView
 import org.kjh.mytravel.databinding.VhDayLogImagesRowBinding
+import org.kjh.mytravel.ui.common.OnNestedHorizontalTouchListener
 import org.kjh.mytravel.ui.common.OnSnapPagerScrollListener
 import org.kjh.mytravel.ui.features.daylog.FullLineIndicatorDecoration
 
@@ -58,6 +59,7 @@ class DayLogDetailImagesOuterAdapter(
                         }
                     )
                 )
+                addOnItemTouchListener(OnNestedHorizontalTouchListener())
             }
         }
 

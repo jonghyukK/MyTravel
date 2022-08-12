@@ -13,6 +13,7 @@ import org.kjh.mytravel.databinding.VhAroundPlaceHeaderItemBinding
 import org.kjh.mytravel.databinding.VhAroundPlaceItemBinding
 import org.kjh.mytravel.databinding.VhLinearPostRowItemBinding
 import org.kjh.mytravel.model.Post
+import org.kjh.mytravel.ui.common.OnNestedHorizontalTouchListener
 import org.kjh.mytravel.ui.common.OnSnapPagerScrollListener
 import org.kjh.mytravel.ui.features.daylog.AroundPlaceUiModel
 import org.kjh.mytravel.ui.features.home.LatestPostUiModel
@@ -109,6 +110,7 @@ class LatestPostPagingDataAdapter
                 adapter = imagesAdapter
                 addItemDecoration(LineIndicatorDecoration())
                 snapHelper.attachToRecyclerView(this)
+                addOnItemTouchListener(OnNestedHorizontalTouchListener())
                 addOnScrollListener(
                     OnSnapPagerScrollListener(
                         snapHelper = snapHelper,

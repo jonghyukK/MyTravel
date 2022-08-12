@@ -2,12 +2,8 @@ package org.kjh.mytravel.ui.features.home.banner
 
 import android.content.res.Resources
 import android.graphics.*
-import android.text.TextPaint
-import android.util.TypedValue
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.orhanobut.logger.Logger
-import org.kjh.mytravel.utils.statusBarHeight
 
 /**
  * MyTravel

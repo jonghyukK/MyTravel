@@ -3,6 +3,7 @@ package org.kjh.data.repository
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.flow
@@ -51,6 +52,7 @@ class PlaceRepositoryImpl @Inject constructor(
 
     override suspend fun fetchPlaceRankings()
     : Flow<ApiResult<List<PlaceWithRankEntity>>> = flow {
+        delay(1200)
         emit(ApiResult.Loading)
 
         val response = placeRemoteDataSource.fetchPlaceRankings()
