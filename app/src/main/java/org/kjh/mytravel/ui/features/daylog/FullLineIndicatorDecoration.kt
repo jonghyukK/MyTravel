@@ -1,15 +1,13 @@
 package org.kjh.mytravel.ui.features.daylog
 
-import android.content.res.Resources
 import android.graphics.Canvas
 import android.graphics.Color
 import android.graphics.Paint
-import android.graphics.Rect
-import android.view.View
 import android.view.animation.AccelerateDecelerateInterpolator
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import org.kjh.mytravel.ui.base.BaseItemDecoration
 
 /**
  * MyTravel
@@ -18,14 +16,13 @@ import androidx.recyclerview.widget.RecyclerView
  *
  * Description:
  */
-class FullLineIndicatorDecoration: RecyclerView.ItemDecoration() {
-    private val DP = Resources.getSystem().displayMetrics.density
+class FullLineIndicatorDecoration: BaseItemDecoration() {
 
     private val _colorActive = Color.BLACK
     private val _colorInactive = Color.LTGRAY
 
-    private val _indicatorHeight      = (DP * 5).toInt()
-    private val _indicatorStrokeWidth = DP * 5
+    private val _indicatorHeight      = 5.dpToPx().toInt()
+    private val _indicatorStrokeWidth = 5.dpToPx()
 
     private val _interpolator = AccelerateDecelerateInterpolator()
     private val _paint = Paint()
@@ -101,16 +98,5 @@ class FullLineIndicatorDecoration: RecyclerView.ItemDecoration() {
                 c.drawLine(0f, indicatorPosY, highlightStart + partialLength, indicatorPosY, _paint)
             }
         }
-    }
-
-    override fun getItemOffsets(
-        outRect: Rect,
-        view: View,
-        parent: RecyclerView,
-        state: RecyclerView.State
-    ) {
-        super.getItemOffsets(outRect, view, parent, state)
-
-//        outRect.bottom = _indicatorHeight
     }
 }

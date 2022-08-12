@@ -1,11 +1,10 @@
 package org.kjh.mytravel.ui.features.upload.select
 
-import android.content.res.Resources
 import android.graphics.Rect
 import android.view.View
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import org.kjh.mytravel.utils.dpToPx
+import org.kjh.mytravel.ui.base.BaseItemDecoration
 
 /**
  * MyTravel
@@ -15,9 +14,9 @@ import org.kjh.mytravel.utils.dpToPx
  * Description:
  */
 
-class MediaStoreImagesGridDecoration: RecyclerView.ItemDecoration() {
-
-    private val dm = Resources.getSystem().displayMetrics
+class MediaStoreImagesGridDecoration: BaseItemDecoration() {
+    
+    private val size1 = 1.dpToPx().toInt()
 
     override fun getItemOffsets(
         outRect: Rect,
@@ -34,14 +33,14 @@ class MediaStoreImagesGridDecoration: RecyclerView.ItemDecoration() {
         val isEdgeRight = viewPosition % spanCnt == (spanCnt - 1)
 
         when {
-            isEdgeLeft -> outRect.right = 1.dpToPx(dm)
-            isEdgeRight -> outRect.left = 1.dpToPx(dm)
+            isEdgeLeft -> outRect.right = size1
+            isEdgeRight -> outRect.left = size1
             else -> {
-                outRect.right = 1.dpToPx(dm) / 2
-                outRect.left = 1.dpToPx(dm) / 2
+                outRect.right = size1 / 2
+                outRect.left = size1 / 2
             }
         }
 
-        outRect.bottom = 1.dpToPx(dm)
+        outRect.bottom = size1
     }
 }

@@ -1,6 +1,5 @@
 package org.kjh.mytravel.ui.features.profile
 
-import android.content.res.Resources
 import android.graphics.Canvas
 import android.graphics.Color
 import android.graphics.Paint
@@ -10,7 +9,7 @@ import android.view.animation.AccelerateDecelerateInterpolator
 import androidx.recyclerview.widget.DiffUtil.DiffResult.NO_POSITION
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import org.kjh.mytravel.R
+import org.kjh.mytravel.ui.base.BaseItemDecoration
 import kotlin.math.max
 
 /**
@@ -20,17 +19,15 @@ import kotlin.math.max
  *
  * Description:
  */
-class LineIndicatorDecoration: RecyclerView.ItemDecoration() {
-
-    private val DP = Resources.getSystem().displayMetrics.density
+class LineIndicatorDecoration: BaseItemDecoration() {
 
     private val _colorActive = Color.BLACK
     private val _colorInactive = Color.GRAY
 
-    private val _indicatorHeight      = (DP * 32).toInt()
-    private val _indicatorStrokeWidth = DP * 5
-    private val _indicatorItemLength  = (DP * 16).toInt()
-    private val _indicatorItemPadding = (DP * 10).toInt()
+    private val _indicatorHeight      = 32.dpToPx().toInt()
+    private val _indicatorStrokeWidth = 5.dpToPx()
+    private val _indicatorItemLength  = 16.dpToPx().toInt()
+    private val _indicatorItemPadding = 10.dpToPx().toInt()
 
     private val _interpolator = AccelerateDecelerateInterpolator()
     private val _paint = Paint()

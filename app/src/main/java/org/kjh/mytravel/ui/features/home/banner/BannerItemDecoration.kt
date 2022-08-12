@@ -1,9 +1,9 @@
 package org.kjh.mytravel.ui.features.home.banner
 
-import android.content.res.Resources
 import android.graphics.*
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import org.kjh.mytravel.ui.base.BaseItemDecoration
 
 /**
  * MyTravel
@@ -14,18 +14,16 @@ import androidx.recyclerview.widget.RecyclerView
  */
 
 
-class BannerItemDecoration : RecyclerView.ItemDecoration() {
-
-    private val density = Resources.getSystem().displayMetrics.density
+class BannerItemDecoration : BaseItemDecoration() {
 
     // 아래 4변수로 Rect Size 조정, Text는 자동으로 Center.
-    private val rectLeftDistance   = 70.px()
-    private val rectRightDistance  = 20.px()
-    private val rectTopDistance    = 50.px()
-    private val rectBottomDistance = 20.px()
+    private val rectLeftDistance   = 70.dpToPx()
+    private val rectRightDistance  = 20.dpToPx()
+    private val rectTopDistance    = 50.dpToPx()
+    private val rectBottomDistance = 20.dpToPx()
 
     private val textPaint = Paint().apply {
-        textSize  = 16 * density
+        textSize  = 16.dpToPx()
         color     = Color.WHITE
         textAlign = Paint.Align.CENTER
         isAntiAlias = true
@@ -72,6 +70,4 @@ class BannerItemDecoration : RecyclerView.ItemDecoration() {
             c.drawText(text, textXPoint, textYPoint, textPaint)
         }
     }
-
-    private fun Int.px() = this * density
 }

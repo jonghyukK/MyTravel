@@ -1,11 +1,9 @@
 package org.kjh.mytravel.ui.features.upload.select
 
-import android.content.res.Resources
 import android.graphics.Rect
 import android.view.View
-import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import org.kjh.mytravel.utils.dpToPx
+import org.kjh.mytravel.ui.base.BaseItemDecoration
 
 /**
  * MyTravel
@@ -15,10 +13,10 @@ import org.kjh.mytravel.utils.dpToPx
  * Description:
  */
 
-class SelectedPhotoItemsDecoration: RecyclerView.ItemDecoration() {
-
-    private val dm = Resources.getSystem().displayMetrics
-
+class SelectedPhotoItemsDecoration: BaseItemDecoration() {
+    
+    private val size5 = 5.dpToPx().toInt()
+    
     override fun getItemOffsets(
         outRect: Rect,
         view: View,
@@ -27,9 +25,7 @@ class SelectedPhotoItemsDecoration: RecyclerView.ItemDecoration() {
     ) {
         super.getItemOffsets(outRect, view, parent, state)
 
-        val viewPosition = parent.getChildAdapterPosition(view)
-
-        outRect.top = 5.dpToPx(dm)
-        outRect.bottom = 5.dpToPx(dm)
+        outRect.top = size5
+        outRect.bottom = size5
     }
 }

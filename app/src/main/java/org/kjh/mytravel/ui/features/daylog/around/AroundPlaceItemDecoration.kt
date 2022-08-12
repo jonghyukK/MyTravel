@@ -1,10 +1,10 @@
 package org.kjh.mytravel.ui.features.daylog.around
 
-import android.content.res.Resources
 import android.graphics.Rect
 import android.view.View
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import org.kjh.mytravel.ui.base.BaseItemDecoration
 
 /**
  * MyTravel
@@ -13,8 +13,7 @@ import androidx.recyclerview.widget.RecyclerView
  *
  * Description:
  */
-class AroundPlaceItemDecoration : RecyclerView.ItemDecoration() {
-    private val DP = Resources.getSystem().displayMetrics.density
+class AroundPlaceItemDecoration : BaseItemDecoration() {
 
     override fun getItemOffsets(
         outRect: Rect,
@@ -32,21 +31,20 @@ class AroundPlaceItemDecoration : RecyclerView.ItemDecoration() {
         val isRightItem = viewPosition % spanCount == 1
 
         if (viewPosition == 3) {
-            outRect.top = (DP * 25).toInt()
+            outRect.top = 25.dpToPx().toInt()
         }
 
         if (viewPosition >= 4) {
             when {
                 isLeftItem -> {
-                    outRect.right = (DP * 1).toInt()
+                    outRect.right = 1.dpToPx().toInt()
                 }
                 isRightItem -> {
-                    outRect.left = (DP * 1).toInt()
+                    outRect.left = 1.dpToPx().toInt()
                 }
             }
 
-            outRect.bottom =  (DP * 4).toInt()
+            outRect.bottom =  4.dpToPx().toInt()
         }
-
     }
 }

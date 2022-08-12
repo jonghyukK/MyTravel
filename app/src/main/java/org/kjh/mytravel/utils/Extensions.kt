@@ -47,13 +47,6 @@ fun Context.navigationHeight(): Int {
     else 0
 }
 
-fun Int.dpToPx(ctx: Context) =
-    TypedValue.applyDimension(
-        TypedValue.COMPLEX_UNIT_DIP, this.toFloat(), ctx.resources.displayMetrics).toInt()
-
-
-fun Int.dpToPx(displayMetrics: DisplayMetrics): Int = (this * displayMetrics.density).toInt()
-
 fun String.isValidPattern(): Boolean =
     Patterns.EMAIL_ADDRESS.matcher(this).matches()
 

@@ -52,7 +52,7 @@ class PlaceRankingHorizontalWrapAdapter(
                 setHasFixedSize(true)
                 snapHelper.attachToRecyclerView(this)
                 adapter = placeRankingAdapter
-                addItemDecoration(PlaceRankingItemDecoration(this.context, 20, 20, 0,0))
+                addItemDecoration(PlaceRankingItemDecoration())
                 addOnItemTouchListener(OnNestedHorizontalTouchListener())
                 addOnScrollListener(
                     OnSnapPagerScrollListener(

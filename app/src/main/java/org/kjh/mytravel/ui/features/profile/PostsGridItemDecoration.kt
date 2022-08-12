@@ -1,11 +1,10 @@
 package org.kjh.mytravel.ui.features.profile
 
-import android.content.Context
 import android.graphics.Rect
 import android.view.View
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import org.kjh.mytravel.utils.dpToPx
+import org.kjh.mytravel.ui.base.BaseItemDecoration
 
 /**
  * MyTravel
@@ -14,9 +13,10 @@ import org.kjh.mytravel.utils.dpToPx
  *
  * Description:
  */
-class PostsGridItemDecoration(
-    private val ctx: Context
-): RecyclerView.ItemDecoration() {
+class PostsGridItemDecoration : BaseItemDecoration() {
+    
+    private val size1 = 1.dpToPx().toInt()
+    private val size2 = 2.dpToPx().toInt()
 
     override fun getItemOffsets(
         outRect: Rect,
@@ -34,13 +34,13 @@ class PostsGridItemDecoration(
 
         when {
             isEdgeLeft -> {
-                outRect.right = 1.dpToPx(ctx)
+                outRect.right = size1
             }
             isEdgeRight -> {
-                outRect.left = 1.dpToPx(ctx)
+                outRect.left = size1
             }
         }
 
-        outRect.bottom = 2.dpToPx(ctx)
+        outRect.bottom = size2
     }
 }

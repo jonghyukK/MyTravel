@@ -1,11 +1,10 @@
 package org.kjh.mytravel.ui.features.place.subcity
 
-import android.content.res.Resources
 import android.graphics.Rect
 import android.view.View
 import androidx.core.view.updateLayoutParams
 import androidx.recyclerview.widget.RecyclerView
-import org.kjh.mytravel.utils.dpToPx
+import org.kjh.mytravel.ui.base.BaseItemDecoration
 
 /**
  * MyTravel
@@ -15,9 +14,12 @@ import org.kjh.mytravel.utils.dpToPx
  * Description:
  */
 
-class PlacesBySubCityPostItemDecoration: RecyclerView.ItemDecoration() {
-    private val dm = Resources.getSystem().displayMetrics
-
+class PlacesBySubCityPostItemDecoration: BaseItemDecoration() {
+    
+    private val size20 = 20.dpToPx().toInt()
+    private val size10 = 10.dpToPx().toInt()
+    private val size5  = 5.dpToPx().toInt()
+    
     override fun getItemOffsets(
         outRect: Rect,
         view: View,
@@ -37,19 +39,19 @@ class PlacesBySubCityPostItemDecoration: RecyclerView.ItemDecoration() {
 
         when {
             isFirst -> {
-                outRect.left = 20.dpToPx(dm)
-                outRect.right = 5.dpToPx(dm)
+                outRect.left = size20
+                outRect.right = size5
             }
             isLast -> {
-                outRect.left = 5.dpToPx(dm)
-                outRect.right = 20.dpToPx(dm)
+                outRect.left = size5
+                outRect.right = size20
             }
             else -> {
-                outRect.left = 5.dpToPx(dm)
-                outRect.right = 5.dpToPx(dm)
+                outRect.left = size5
+                outRect.right = size5
             }
         }
 
-        outRect.top = 10.dpToPx(dm)
+        outRect.top = size10
     }
 }

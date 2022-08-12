@@ -1,9 +1,9 @@
 package org.kjh.mytravel.ui.features.daylog.profiles
 
-import android.content.res.Resources
 import android.graphics.Rect
 import android.view.View
 import androidx.recyclerview.widget.RecyclerView
+import org.kjh.mytravel.ui.base.BaseItemDecoration
 
 /**
  * MyTravel
@@ -12,12 +12,11 @@ import androidx.recyclerview.widget.RecyclerView
  *
  * Description:
  */
-class DayLogDetailUserProfileItemDecoration: RecyclerView.ItemDecoration() {
-    private val DP = Resources.getSystem().displayMetrics.density
+class DayLogDetailUserProfileItemDecoration: BaseItemDecoration() {
 
-    private val _int15 = (DP * 15).toInt()
-    private val _int20 = (DP * 20).toInt()
-    private val _int7 = (DP * 7).toInt()
+    private val size15 = 15.dpToPx().toInt()
+    private val size20 = 20.dpToPx().toInt()
+    private val size7 = 7.dpToPx().toInt()
 
     override fun getItemOffsets(
         outRect: Rect,
@@ -35,20 +34,20 @@ class DayLogDetailUserProfileItemDecoration: RecyclerView.ItemDecoration() {
 
         when {
             isFirstItem -> {
-                outRect.left = _int15
-                outRect.right = _int7
+                outRect.left = size15
+                outRect.right = size7
             }
             isLastItem -> {
-                outRect.right = _int15
-                outRect.left = _int7
+                outRect.right = size15
+                outRect.left = size7
             }
             else -> {
-                outRect.left = _int7
-                outRect.right = _int7
+                outRect.left = size7
+                outRect.right = size7
             }
         }
 
-        outRect.top = _int15
-        outRect.bottom = _int20
+        outRect.top = size15
+        outRect.bottom = size20
     }
 }
