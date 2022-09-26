@@ -5,7 +5,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import org.kjh.mytravel.databinding.VhHomeBannerItemBinding
-import org.kjh.mytravel.model.Banner
+import org.kjh.mytravel.model.BannerItemUiState
 import org.kjh.mytravel.ui.features.home.HomeFragmentDirections
 import org.kjh.mytravel.utils.navigateTo
 import org.kjh.mytravel.utils.onThrottleClick
@@ -19,7 +19,7 @@ import org.kjh.mytravel.utils.onThrottleClick
  */
 
 class BannerListAdapter
-    : ListAdapter<Banner, BannerListAdapter.BannerViewHolder>(Banner.diffCallback) {
+    : ListAdapter<BannerItemUiState, BannerListAdapter.BannerViewHolder>(BannerItemUiState.diffCallback) {
 
     init {
         setHasStableIds(true)
@@ -56,7 +56,7 @@ class BannerListAdapter
             }
         }
 
-        fun bind(item: Banner) {
+        fun bind(item: BannerItemUiState) {
             binding.bannerItem = item
         }
     }

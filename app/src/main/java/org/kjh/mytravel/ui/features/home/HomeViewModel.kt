@@ -2,23 +2,23 @@ package org.kjh.mytravel.ui.features.home
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import androidx.paging.cachedIn
-import androidx.paging.insertSeparators
-import androidx.paging.map
+import androidx.paging.*
+import com.orhanobut.logger.Logger
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
+import org.kjh.data.Event
+import org.kjh.data.EventHandler
+import org.kjh.data.model.BookmarkModel
 import org.kjh.domain.entity.ApiResult
 import org.kjh.domain.usecase.GetHomeBannersUseCase
-import org.kjh.domain.usecase.GetLoginPreferenceUseCase
+import org.kjh.domain.usecase.GetLatestPostUseCase
 import org.kjh.domain.usecase.GetPlaceRankingUseCase
-import org.kjh.domain.usecase.GetRecentPostsUseCase
-import org.kjh.mytravel.model.Banner
-import org.kjh.mytravel.model.PlaceWithRanking
-import org.kjh.mytravel.model.Post
+import org.kjh.mytravel.model.BannerItemUiState
+import org.kjh.mytravel.model.LatestPostItemUiState
+import org.kjh.mytravel.model.PlaceRankingItemUiState
 import org.kjh.mytravel.model.mapToPresenter
-import org.kjh.mytravel.ui.GlobalErrorHandler
+import org.kjh.mytravel.ui.common.UiState
 import javax.inject.Inject
 
 /**
@@ -29,112 +29,184 @@ import javax.inject.Inject
  * Description:
  */
 
-sealed class LatestPostUiModel {
-    data class HeaderItem(val headerTitle: String) : LatestPostUiModel()
-    data class PostItem(val post: Post): LatestPostUiModel()
-}
-
 @HiltViewModel
 class HomeViewModel @Inject constructor(
-    val getHomeBannersUseCase: GetHomeBannersUseCase,
-    val getRecentPostsUseCase: GetRecentPostsUseCase,
+    val getBannerUseCase      : GetHomeBannersUseCase,
     val getPlaceRankingUseCase: GetPlaceRankingUseCase,
-    val loginPreferenceUseCase: GetLoginPreferenceUseCase,
-    val globalErrorHandler: GlobalErrorHandler
+    val getLatestPostUseCase  : GetLatestPostUseCase,
+    val eventHandler          : EventHandler
 ): ViewModel() {
-
-    data class HomeUiState(
-        val isLoading: Boolean = true,
-        val isCollapsed: Boolean = false,
-        val bannerItems : List<Banner> = listOf(),
-        val rankingItems: List<PlaceWithRanking> = listOf()
-    )
 
     private val _homeUiState = MutableStateFlow(HomeUiState())
     val homeUiState = _homeUiState.asStateFlow()
 
-    private val _refreshLatestPostsPagingData = MutableStateFlow(false)
-    val refreshLatestPostsPagingData = _refreshLatestPostsPagingData.asStateFlow()
+    private val _bannersUiState: MutableStateFlow<UiState<List<BannerItemUiState>>> =
+        MutableStateFlow(UiState.Init)
+    val bannersUiState = _bannersUiState.asStateFlow()
 
-    val latestPostsPagingData = getRecentPostsUseCase()
-        .map { pagingData -> pagingData.map { LatestPostUiModel.PostItem(it.mapToPresenter()) }}
-        .map {
-            it.insertSeparators { before, after ->
-                if (after == null)
-                    return@insertSeparators null
+    private val _rankingsUiState: MutableStateFlow<UiState<List<PlaceRankingItemUiState>>> =
+        MutableStateFlow(UiState.Init)
+    val rankingsUiState = _rankingsUiState.asStateFlow()
 
-                if (before == null) {
-                    LatestPostUiModel.HeaderItem("최근 올라온 DayLog")
-                } else {
-                    null
-                }
-            }
-        }
-        .cachedIn(viewModelScope)
+    private val _latestPostsUiState: MutableStateFlow<PagingData<LatestPostUiState>?> =
+        MutableStateFlow(null)
+    val latestPostsUiState = _latestPostsUiState.asStateFlow()
 
-    init {
-        fetchHomeBannerAndRankingItems()
+    val accept: (Event) -> Unit = { action ->
+        viewModelScope.launch { eventHandler.emitEvent(action)}
     }
 
-    private fun fetchHomeBannerAndRankingItems() {
+    init {
+        fetchBanners()
+        fetchRankings()
+        fetchLatestPostPagingData()
+        handleEvent()
+    }
+
+    private fun fetchBanners() {
         viewModelScope.launch {
-            _homeUiState.update {
-                it.copy(
-                    isLoading = true
-                )
-            }
+            getBannerUseCase().collect { apiResult ->
+                when (apiResult) {
+                    is ApiResult.Loading ->
+                        _bannersUiState.value = UiState.Loading
 
-            val fetchBanner  = async { getHomeBannersUseCase() }
-            val fetchRanking = async { getPlaceRankingUseCase() }
+                    is ApiResult.Success ->
+                        _bannersUiState.value =
+                            UiState.Success(apiResult.data.map { it.mapToPresenter() })
 
-            val bannerResult  = fetchBanner.await()
-            val rankingResult = fetchRanking.await()
-
-            combineTransform(bannerResult, rankingResult) { banner, ranking ->
-                val bannerItems = when (banner) {
-                    is ApiResult.Loading -> emptyList()
-                    is ApiResult.Success -> banner.data.map { it.mapToPresenter() }
                     is ApiResult.Error -> {
-                        globalErrorHandler.sendError("occur Error [Fetch HomeBanner API]")
-                        emptyList()
+                        Logger.e("${apiResult.throwable.message}")
+                        _bannersUiState.value =
+                            UiState.Error(
+                                errorMsg = "occur Error [Fetch Banner API]",
+                                errorAction = { initBannerUiState() }
+                            )
                     }
-                }
-
-                val rankingItems = when (ranking) {
-                    is ApiResult.Loading -> emptyList()
-                    is ApiResult.Success -> ranking.data.map { it.mapToPresenter() }
-                    is ApiResult.Error -> {
-                        globalErrorHandler.sendError("occur Error [Fetch Ranking API]")
-                        emptyList()
-                    }
-                }
-
-                emit(HomeUiState(
-                    isLoading = false,
-                    bannerItems = bannerItems,
-                    rankingItems = rankingItems)
-                )
-            }.collect { uiState ->
-                _homeUiState.update {
-                    it.copy(
-                        isLoading = false,
-                        bannerItems = uiState.bannerItems,
-                        rankingItems = uiState.rankingItems
-                    )
                 }
             }
         }
+    }
+
+    private fun fetchRankings() {
+        viewModelScope.launch {
+            getPlaceRankingUseCase()
+                .collect { apiResult ->
+                    when (apiResult) {
+                        is ApiResult.Loading ->
+                            _rankingsUiState.value = UiState.Loading
+
+                        is ApiResult.Success ->
+                            _rankingsUiState.value =
+                                UiState.Success(apiResult.data.map { it.mapToPresenter() })
+
+                        is ApiResult.Error -> {
+                            Logger.e("${apiResult.throwable.message}")
+                            _rankingsUiState.value =
+                                UiState.Error(
+                                    errorMsg = "occur Error [Fetch Ranking API]",
+                                    errorAction = { initRankingUiState() }
+                                )
+                        }
+                    }
+                }
+        }
+    }
+
+    private fun fetchLatestPostPagingData() {
+        viewModelScope.launch {
+            getLatestPostUseCase().map { pagingData ->
+                pagingData.map { entity ->
+                    val item = entity.mapToPresenter(
+                        onBookmarkAction = { accept(Event.RequestUpdateBookmark(entity.placeName)) },
+                        onDeleteDayLogAction = { accept(Event.RequestDeleteDayLog(entity.postId)) }
+                    )
+                    LatestPostUiState.PagingItem(item)
+                }.insertSeparators { before, _ ->
+                    when (before) {
+                        null -> LatestPostUiState.HeaderItem
+                        else -> null
+                    }
+                }
+            }
+                .cachedIn(viewModelScope)
+                .collectLatest {
+                    _latestPostsUiState.value = it
+                }
+        }
+    }
+
+    private fun handleEvent() {
+        viewModelScope.launch {
+            eventHandler.event.collect { event ->
+                when (event) {
+                    is Event.LoginEvent,
+                    is Event.LogoutEvent -> refreshLatestPosts(true)
+
+                    is Event.DeleteDayLog -> filterDeletedDayLog(event.postId)
+
+                    is Event.UpdateBookmark -> updateDayLogBookmarked(event.bookmarks)
+                    else -> {}
+                }
+            }
+        }
+    }
+
+    private fun filterDeletedDayLog(deletedDayLogId: Int) {
+        _latestPostsUiState.getAndUpdate { pagingData ->
+            pagingData?.filter {
+                it is LatestPostUiState.PagingItem && it.item.postId != deletedDayLogId
+            }
+        }
+    }
+
+    private fun updateDayLogBookmarked(myBookmarks: List<BookmarkModel>) {
+        _latestPostsUiState.getAndUpdate { pagingData ->
+            pagingData?.map { currentUiState ->
+                if (currentUiState is LatestPostUiState.PagingItem) {
+                    val updatedBookmarkItem = currentUiState.item.copy(
+                        isBookmarked = myBookmarks.any { currentUiState.item.placeName == it.placeName }
+                    )
+
+                    currentUiState.copy(item = updatedBookmarkItem)
+                } else {
+                    currentUiState
+                }
+            }
+        }
+    }
+
+    fun refreshAll() {
+        fetchBanners()
+        fetchRankings()
+        refreshLatestPosts(true)
     }
 
     fun refreshLatestPosts(value: Boolean) {
-        _refreshLatestPostsPagingData.value = value
+        _homeUiState.update { it.copy(refreshLatestPosts = value) }
+    }
+
+    private fun initBannerUiState() {
+        _bannersUiState.value = UiState.Init
+    }
+
+    private fun initRankingUiState() {
+        _rankingsUiState.value = UiState.Init
     }
 
     val updateCollapsed = fun(value: Boolean) {
         _homeUiState.update {
-            it.copy(
-                isCollapsed = value
-            )
+            it.copy(hasScrolledForToolbar = value)
         }
     }
+}
+
+
+data class HomeUiState(
+    val hasScrolledForToolbar: Boolean = false,
+    val refreshLatestPosts   : Boolean = false
+)
+
+sealed class LatestPostUiState {
+    object HeaderItem: LatestPostUiState()
+    data class PagingItem(val item: LatestPostItemUiState): LatestPostUiState()
 }

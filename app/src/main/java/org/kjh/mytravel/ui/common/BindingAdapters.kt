@@ -172,6 +172,26 @@ object BindingAdapters {
     }
 
     @JvmStatic
+    @BindingAdapter("onScrollListenerWithToolbar", "callback")
+    fun RecyclerView.bindOnScrollListenerForToolbarCollapsed(
+        toolbar : Toolbar,
+        callback: (Boolean) -> Unit
+    ) {
+        clearOnScrollListeners()
+        addOnScrollListener(object: RecyclerView.OnScrollListener() {
+            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                super.onScrolled(recyclerView, dx, dy)
+
+                val toolbarHeight = toolbar.layoutParams.height
+                val scrollRange = computeVerticalScrollOffset()
+                val compareHeight = getChildAt(0).height
+
+                callback(scrollRange > compareHeight - toolbarHeight)
+            }
+        })
+    }
+
+    @JvmStatic
     @BindingAdapter("bindItems")
     fun RecyclerView.bindItems(items: List<*>?) {
         val adapter = this.adapter
@@ -200,7 +220,7 @@ object BindingAdapters {
                     adapter.submitList(items.avoidUncheckedWarnAndCast<MapQueryItem>())
 
                 is BannerListAdapter ->
-                    adapter.submitList(items.avoidUncheckedWarnAndCast<Banner>())
+                    adapter.submitList(items.avoidUncheckedWarnAndCast<BannerItemUiState>())
 
                 is PlacesBySubCityListAdapter ->
                     adapter.submitList(items.avoidUncheckedWarnAndCast<Place>())
@@ -216,7 +236,7 @@ object BindingAdapters {
 
     @JvmStatic
     @BindingAdapter("app:isVisible")
-    fun bindVisible(view: View, isVisible: Boolean) {
+    fun bindVisible(view: View, isVisible: Boolean = true) {
         view.isVisible = isVisible
     }
 

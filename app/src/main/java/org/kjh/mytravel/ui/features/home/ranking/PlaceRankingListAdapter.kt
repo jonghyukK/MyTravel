@@ -5,7 +5,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import org.kjh.mytravel.databinding.VhPlaceRankingItemBinding
-import org.kjh.mytravel.model.PlaceWithRanking
+import org.kjh.mytravel.model.PlaceRankingItemUiState
 import org.kjh.mytravel.utils.navigateToPlaceInfoWithDayLog
 import org.kjh.mytravel.utils.onThrottleClick
 
@@ -17,7 +17,7 @@ import org.kjh.mytravel.utils.onThrottleClick
  * Description:
  */
 class PlaceRankingListAdapter
-    : ListAdapter<PlaceWithRanking, PlaceRankingListAdapter.PlaceRankingViewHolder>(PlaceWithRanking.diffCallback) {
+    : ListAdapter<PlaceRankingItemUiState, PlaceRankingListAdapter.PlaceRankingViewHolder>(PlaceRankingItemUiState.diffCallback) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) =
         PlaceRankingViewHolder(
@@ -36,14 +36,14 @@ class PlaceRankingListAdapter
 
         init {
             itemView.onThrottleClick { view ->
-                binding.placeRanking?.place?.let { place ->
+                binding.rankingItem?.let { place ->
                     view.navigateToPlaceInfoWithDayLog(place.placeName)
                 }
             }
         }
 
-        fun bind(item: PlaceWithRanking) {
-            binding.placeRanking = item
+        fun bind(item: PlaceRankingItemUiState) {
+            binding.rankingItem = item
         }
     }
 }

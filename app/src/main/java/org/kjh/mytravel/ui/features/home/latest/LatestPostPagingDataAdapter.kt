@@ -8,15 +8,13 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.PagerSnapHelper
 import androidx.recyclerview.widget.RecyclerView
 import org.kjh.mytravel.NavGraphDirections
+import org.kjh.mytravel.R
 import org.kjh.mytravel.databinding.LayoutHomeSectionHeaderBinding
-import org.kjh.mytravel.databinding.VhAroundPlaceHeaderItemBinding
-import org.kjh.mytravel.databinding.VhAroundPlaceItemBinding
-import org.kjh.mytravel.databinding.VhLinearPostRowItemBinding
-import org.kjh.mytravel.model.Post
+import org.kjh.mytravel.databinding.VhLatestPostRowItemBinding
+import org.kjh.mytravel.model.LatestPostItemUiState
 import org.kjh.mytravel.ui.common.OnNestedHorizontalTouchListener
 import org.kjh.mytravel.ui.common.OnSnapPagerScrollListener
-import org.kjh.mytravel.ui.features.daylog.AroundPlaceUiModel
-import org.kjh.mytravel.ui.features.home.LatestPostUiModel
+import org.kjh.mytravel.ui.features.home.LatestPostUiState
 import org.kjh.mytravel.ui.features.profile.LineIndicatorDecoration
 import org.kjh.mytravel.utils.navigateTo
 import org.kjh.mytravel.utils.navigateToDayLogDetail
@@ -29,80 +27,95 @@ import org.kjh.mytravel.utils.onThrottleClick
  *
  * Description:
  */
-class LatestPostPagingDataAdapter
-    : PagingDataAdapter<LatestPostUiModel, RecyclerView.ViewHolder>(UIMODEL_COMPARATOR) {
+class LatestPostPagingDataAdapter(
+    private val onClickMenu : (LatestPostItemUiState) -> Unit
+) : PagingDataAdapter<LatestPostUiState, RecyclerView.ViewHolder>(UIMODEL_COMPARATOR) {
     private val childViewState = mutableMapOf<Int, Parcelable?>()
 
-    override fun getItemViewType(position: Int) =
-        when (getItem(position)) {
-            is LatestPostUiModel.HeaderItem -> TYPE_HEADER_ITEM
-            is LatestPostUiModel.PostItem   -> TYPE_POST_ITEM
-            null -> throw IllegalArgumentException("Not Found ViewHolder Type")
-        }
+    override fun getItemViewType(position: Int) = when (peek(position)) {
+        is LatestPostUiState.HeaderItem -> R.layout.layout_home_section_header
+        is LatestPostUiState.PagingItem -> R.layout.vh_latest_post_row_item
+        else -> throw IllegalStateException("Unknown view")
+    }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) =
-        when (viewType) {
-            TYPE_HEADER_ITEM -> LatestPostsHeaderItemViewHolder(
+    override fun onCreateViewHolder(
+        parent: ViewGroup,
+        viewType: Int
+    ) = when (viewType) {
+        R.layout.layout_home_section_header ->
+            HeaderViewHolder(
                 LayoutHomeSectionHeaderBinding.inflate(
                     LayoutInflater.from(parent.context), parent, false
                 )
             )
 
-            TYPE_POST_ITEM -> LatestPostViewHolder(
-                VhLinearPostRowItemBinding.inflate(
+        else -> LatestPostViewHolder(
+                VhLatestPostRowItemBinding.inflate(
                     LayoutInflater.from(parent.context), parent, false
                 )
             )
-            else -> throw IllegalArgumentException("Not Found ViewHolder Type $viewType")
-        }
+    }
 
-
-    override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
-        getItem(position)?.let { uiModel ->
-            when (uiModel) {
-                is LatestPostUiModel.PostItem -> (holder as LatestPostViewHolder).bind(uiModel.post)
-                is LatestPostUiModel.HeaderItem -> (holder as LatestPostsHeaderItemViewHolder).bind(uiModel.headerTitle)
-            }
+    override fun onBindViewHolder(
+        holder: RecyclerView.ViewHolder,
+        position: Int
+    ) {
+        val item = getItem(position)
+        if (item is LatestPostUiState.HeaderItem) {
+            (holder as HeaderViewHolder).bind("최근 올라온 여행지")
+        } else if (item is LatestPostUiState.PagingItem) {
+            (holder as LatestPostViewHolder).bind(item.item)
         }
     }
 
-    class LatestPostsHeaderItemViewHolder(
-        private val binding: LayoutHomeSectionHeaderBinding
+    class HeaderViewHolder(
+        val binding: LayoutHomeSectionHeaderBinding
     ): RecyclerView.ViewHolder(binding.root) {
 
-        fun bind(headerText: String) {
-            binding.headerTitle = headerText
+        fun bind(title: String) {
+            binding.headerTitle = title
         }
     }
+
 
     inner class LatestPostViewHolder(
-        val binding: VhLinearPostRowItemBinding
-    ): RecyclerView.ViewHolder(binding.root) {
+        val binding: VhLatestPostRowItemBinding
+    ) : RecyclerView.ViewHolder(binding.root) {
 
         private val snapHelper = PagerSnapHelper()
         private val imagesAdapter = LatestPostImageAdapter {
-            binding.postItem?.let { post ->
-                binding.root.navigateToDayLogDetail(post.placeName, post.postId)
+            binding.latestPostItem?.let { item ->
+                binding.root.navigateToDayLogDetail(item.placeName, item.postId)
             }
         }
 
         init {
             itemView.onThrottleClick { view ->
-                binding.postItem?.let { post ->
-                    view.navigateToDayLogDetail(post.placeName, post.postId)
+                binding.latestPostItem?.let { item ->
+                    view.navigateToDayLogDetail(item.placeName, item.postId)
                 }
             }
 
             binding.tvNickName.onThrottleClick { view ->
-                binding.postItem?.let { post ->
-                    view.navigateTo(NavGraphDirections.actionGlobalUserFragment(post.email))
+                binding.latestPostItem?.let { item ->
+                    view.navigateTo(NavGraphDirections.actionGlobalUserFragment(item.email))
                 }
             }
 
             binding.sivProfileImg.onThrottleClick { view ->
-                binding.postItem?.let { post ->
-                    view.navigateTo(NavGraphDirections.actionGlobalUserFragment(post.email))
+                binding.latestPostItem?.let { item ->
+                    view.navigateTo(NavGraphDirections.actionGlobalUserFragment(item.email))
                 }
+            }
+
+            binding.ivMore.onThrottleClick {
+                binding.latestPostItem?.let {
+                    onClickMenu(it)
+                }
+            }
+
+            binding.ivBookmark.onThrottleClick {
+                binding.latestPostItem?.onBookmark?.invoke()
             }
 
             binding.postImgRecyclerView.apply {
@@ -124,8 +137,8 @@ class LatestPostPagingDataAdapter
             }
         }
 
-        fun bind(item: Post) {
-            binding.postItem = item
+        fun bind(item: LatestPostItemUiState) {
+            binding.latestPostItem = item
 
             imagesAdapter.setItems(item.imageUrl)
             restorePosition()
@@ -144,18 +157,25 @@ class LatestPostPagingDataAdapter
     }
 
     companion object {
-        const val TYPE_HEADER_ITEM = 1
-        const val TYPE_POST_ITEM = 2
+        private val UIMODEL_COMPARATOR = object : DiffUtil.ItemCallback<LatestPostUiState>() {
+            override fun areItemsTheSame(
+                oldItem: LatestPostUiState,
+                newItem: LatestPostUiState
+            ): Boolean {
+                val isSameHeaderItem = oldItem is LatestPostUiState.HeaderItem
+                        && newItem is LatestPostUiState.HeaderItem
 
-        private val UIMODEL_COMPARATOR = object : DiffUtil.ItemCallback<LatestPostUiModel>() {
-            override fun areItemsTheSame(oldItem: LatestPostUiModel, newItem: LatestPostUiModel) =
-                (oldItem is LatestPostUiModel.PostItem && newItem is LatestPostUiModel.PostItem &&
-                        oldItem.post.postId == oldItem.post.postId) ||
-                        (oldItem is LatestPostUiModel.HeaderItem && newItem is LatestPostUiModel.HeaderItem &&
-                                oldItem.headerTitle == newItem.headerTitle)
+                val isSamePagingItem = oldItem is LatestPostUiState.PagingItem
+                        && newItem is LatestPostUiState.PagingItem
+                        && oldItem.item.postId == newItem.item.postId
 
-            override fun areContentsTheSame(oldItem: LatestPostUiModel, newItem: LatestPostUiModel) =
-                oldItem == newItem
+                return isSameHeaderItem || isSamePagingItem
+            }
+
+            override fun areContentsTheSame(
+                oldItem: LatestPostUiState,
+                newItem: LatestPostUiState
+            ) = oldItem == newItem
         }
     }
 }

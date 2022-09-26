@@ -10,6 +10,7 @@ import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
+import com.orhanobut.logger.Logger
 import org.kjh.mytravel.R
 
 /**
@@ -26,6 +27,8 @@ abstract class BaseBottomSheetDialogFragment<B: ViewDataBinding>(
 
     private var _binding: B? = null
     protected val binding get() = _binding!!
+
+    var isFullScreen: Boolean = true
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -51,18 +54,20 @@ abstract class BaseBottomSheetDialogFragment<B: ViewDataBinding>(
     override fun onStart() {
         super.onStart()
 
-        dialog?.let {
-            val bottomSheet = it.findViewById<View>(R.id.design_bottom_sheet)
-            bottomSheet.layoutParams.height = ViewGroup.LayoutParams.MATCH_PARENT
-        }
+        if (isFullScreen) {
+            dialog?.let {
+                val bottomSheet = it.findViewById<View>(R.id.design_bottom_sheet)
+                bottomSheet.layoutParams.height = ViewGroup.LayoutParams.MATCH_PARENT
+            }
 
-        view?.post {
-            val parent = requireView().parent as View
-            val params = parent.layoutParams as CoordinatorLayout.LayoutParams
-            val behavior = params.behavior
-            val bottomSheetBehavior = behavior as BottomSheetBehavior<*>?
-            bottomSheetBehavior!!.peekHeight = requireView().measuredHeight
-            parent.setBackgroundColor(Color.TRANSPARENT)
+            view?.post {
+                val parent = requireView().parent as View
+                val params = parent.layoutParams as CoordinatorLayout.LayoutParams
+                val behavior = params.behavior
+                val bottomSheetBehavior = behavior as BottomSheetBehavior<*>?
+                bottomSheetBehavior!!.peekHeight = requireView().measuredHeight
+                parent.setBackgroundColor(Color.WHITE)
+            }
         }
     }
 }

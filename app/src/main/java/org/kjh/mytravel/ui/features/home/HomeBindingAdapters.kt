@@ -1,11 +1,16 @@
 package org.kjh.mytravel.ui.features.home
 
+import android.widget.Toast
 import androidx.databinding.BindingAdapter
+import androidx.recyclerview.widget.ConcatAdapter
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.orhanobut.logger.Logger
-import org.kjh.mytravel.ui.features.home.banner.BannerListAdapter
-import org.kjh.mytravel.ui.features.home.banner.BannerOuterAdapter
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+import org.kjh.mytravel.model.BannerItemUiState
+import org.kjh.mytravel.model.PlaceRankingItemUiState
+import org.kjh.mytravel.ui.common.UiState
+import org.kjh.mytravel.ui.features.home.banner.BannerHorizontalWrapAdapter
+import org.kjh.mytravel.ui.features.home.ranking.PlaceRankingHorizontalWrapAdapter
 
 /**
  * MyTravel
@@ -37,4 +42,48 @@ fun bindOnScrollListenerForHomeBanners(view: RecyclerView, value: Boolean) {
             }
         }
     })
+}
+
+@BindingAdapter("refreshAction")
+fun SwipeRefreshLayout.bindOnRefreshListener(refreshAction: () -> Unit) {
+    setOnRefreshListener {
+        refreshAction()
+        isRefreshing = false
+    }
+}
+
+@BindingAdapter(
+    "bannersUiState",
+    "rankingsUiState"
+)
+fun RecyclerView.bindConcatAdapterToHomeRecyclerView(
+    bannersUiState  : UiState<List<BannerItemUiState>>,
+    rankingsUiState : UiState<List<PlaceRankingItemUiState>>,
+) {
+    adapter.let {
+        val adapters = (it as ConcatAdapter).adapters
+        adapters.forEach { childAdapter ->
+            when (childAdapter) {
+                is BannerHorizontalWrapAdapter -> when (bannersUiState) {
+                    is UiState.Init,
+                    is UiState.Loading -> {}
+                    is UiState.Success -> childAdapter.setBannerItems(bannersUiState.data)
+                    is UiState.Error -> {
+                        Toast.makeText(context, bannersUiState.errorMsg, Toast.LENGTH_SHORT).show()
+                        bannersUiState.errorAction?.invoke()
+                    }
+                }
+
+                is PlaceRankingHorizontalWrapAdapter -> when (rankingsUiState) {
+                    is UiState.Init,
+                    is UiState.Loading -> {}
+                    is UiState.Success -> childAdapter.setRankingItems(rankingsUiState.data)
+                    is UiState.Error -> {
+                        Toast.makeText(context, rankingsUiState.errorMsg, Toast.LENGTH_SHORT).show()
+                        rankingsUiState.errorAction?.invoke()
+                    }
+                }
+            }
+        }
+    }
 }

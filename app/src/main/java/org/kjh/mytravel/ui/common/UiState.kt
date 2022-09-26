@@ -13,7 +13,10 @@ package org.kjh.mytravel.ui.common
 sealed class UiState<out T: Any> {
     data class Success<out T: Any>(val data: T): UiState<T>()
 
-    data class Error(val exception: Throwable): UiState<Nothing>()
+    data class Error(
+        val errorMsg: String,
+        val errorAction: (() -> Unit)? = null
+    ): UiState<Nothing>()
 
     object Loading: UiState<Nothing>()
 
@@ -21,5 +24,5 @@ sealed class UiState<out T: Any> {
 
     fun toData(): T? = if(this is Success) this.data else null
     fun isLoading() = this is Loading
-    fun isError() = if (this is Error) this.exception.message else null
+    fun isError() = if (this is Error) this.errorMsg else null
 }

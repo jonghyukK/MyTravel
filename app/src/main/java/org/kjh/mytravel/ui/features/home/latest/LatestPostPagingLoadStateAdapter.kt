@@ -41,9 +41,7 @@ class LatestPostPagingLoadStateAdapter(
     ): RecyclerView.ViewHolder(binding.root) {
 
         init {
-            binding.btnRetry.setOnClickListener {
-                retry()
-            }
+            binding.btnRetry.setOnClickListener { retry() }
         }
 
         fun bind(state: LoadState) {
