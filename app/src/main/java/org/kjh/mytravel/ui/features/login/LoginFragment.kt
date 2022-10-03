@@ -27,7 +27,7 @@ class LoginFragment
         viewModel.uiState
             .flowWithLifecycle(viewLifecycleOwner.lifecycle, Lifecycle.State.STARTED)
             .onEach { state ->
-                if (state.isLoggedIn) {
+                if (state is LoginUiState.Success) {
                     (parentFragment as NotLoginFragment).handleNavigateAction()
                 }
             }

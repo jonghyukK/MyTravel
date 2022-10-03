@@ -1,6 +1,7 @@
 package org.kjh.mytravel.ui.features.login
 
 import androidx.lifecycle.*
+import com.orhanobut.logger.Logger
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
@@ -25,11 +26,10 @@ import javax.inject.Inject
 
 @HiltViewModel
 class LoginViewModel @Inject constructor(
-    private val makeLoginRequestUseCase: MakeLoginRequestUseCase,
-    private val eventHandler: EventHandler
+    private val makeLoginRequestUseCase: MakeLoginRequestUseCase
 ): ViewModel() {
 
-    private val _uiState: MutableStateFlow<LoginUiState> = MutableStateFlow(LoginUiState())
+    private val _uiState: MutableStateFlow<LoginUiState> = MutableStateFlow(LoginUiState.Init)
     val uiState: StateFlow<LoginUiState> = _uiState.asStateFlow()
 
     // Two-way Binding.
@@ -49,39 +49,16 @@ class LoginViewModel @Inject constructor(
             ).collect { apiResult ->
                 when (apiResult) {
                     is ApiResult.Loading ->
-                        _uiState.value = LoginUiState(isLoading = true)
+                        _uiState.value = LoginUiState.Loading
 
                     is ApiResult.Success ->
-                        _uiState.update {
-                            it.copy(
-                                isLoading = false,
-                                isLoggedIn = true,
-                                apiResultError = null
-                            )
-                        }
+                        _uiState.value = LoginUiState.Success
 
                     is ApiResult.Error -> {
-                        var errorMsg = apiResult.throwable.message
-                        when (errorMsg) {
-                            NOT_EXIST_EMAIL ->
-                                errorMsg = InputValidator.Email.ERROR_NOT_EXIST_EMAIL.errorMsg
-                            NOT_MATCH_PW ->
-                                errorMsg = InputValidator.Pw.ERROR_WRONG_PW.errorMsg
-                            else -> {
-                                errorMsg = null
-                                eventHandler.emitEvent(
-                                    Event.ApiError("occur Error [Request Login API]")
-                                )
-                            }
-                        }
+                        val errorMsg = apiResult.throwable.message ?: "Unknown Error"
+                        Logger.e(errorMsg)
 
-                        _uiState.update {
-                            it.copy(
-                                isLoading = false,
-                                isLoggedIn = false,
-                                apiResultError = errorMsg
-                            )
-                        }
+                        _uiState.value = LoginUiState.Failure(errorMsg)
                     }
                 }
             }
@@ -89,8 +66,12 @@ class LoginViewModel @Inject constructor(
     }
 }
 
-data class LoginUiState(
-    val isLoading      : Boolean = false,
-    val isLoggedIn     : Boolean = false,
-    val apiResultError : String? = null
-)
+sealed class LoginUiState {
+    object Init: LoginUiState()
+    object Loading: LoginUiState()
+    object Success: LoginUiState()
+    data class Failure(val errorMsg: String): LoginUiState()
+
+    fun isLoading() = this is Loading
+    fun isFailure() = if (this is Failure) this.errorMsg else null
+}

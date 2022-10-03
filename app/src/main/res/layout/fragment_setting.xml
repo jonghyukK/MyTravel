@@ -5,8 +5,8 @@
 
     <data>
         <variable
-            name="viewModel"
-            type="org.kjh.mytravel.ui.features.settings.SettingViewModel" />
+            name="myProfileViewModel"
+            type="org.kjh.mytravel.ui.features.profile.my.MyProfileViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -33,7 +33,7 @@
             app:layout_constraintTop_toBottomOf="@+id/tb_settingToolbar"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            onThrottleClick="@{viewModel::logout}"
+            onThrottleClick="@{myProfileViewModel::requestLogOut}"
             android:text="@string/logout"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>

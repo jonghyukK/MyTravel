@@ -1,6 +1,7 @@
 package org.kjh.mytravel.ui.features.signup
 
 import androidx.lifecycle.*
+import com.orhanobut.logger.Logger
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
@@ -26,11 +27,10 @@ import javax.inject.Inject
 
 @HiltViewModel
 class SignUpViewModel @Inject constructor(
-    private val makeSignUpRequestUseCase: MakeSignUpRequestUseCase,
-    private val eventHandler: EventHandler
+    private val makeSignUpRequestUseCase: MakeSignUpRequestUseCase
 ): ViewModel() {
 
-    private val _uiState: MutableStateFlow<SignUpUiState> = MutableStateFlow(SignUpUiState())
+    private val _uiState: MutableStateFlow<SignUpUiState> = MutableStateFlow(SignUpUiState.Init)
     val uiState: StateFlow<SignUpUiState> = _uiState.asStateFlow()
 
     // Two-way Binding.
@@ -54,37 +54,16 @@ class SignUpViewModel @Inject constructor(
             ).collect { apiResult ->
                 when (apiResult) {
                     is ApiResult.Loading ->
-                        _uiState.value = SignUpUiState(isLoading = true)
+                        _uiState.value = SignUpUiState.Loading
 
                     is ApiResult.Success ->
-                        _uiState.update {
-                            it.copy(
-                                isLoading = false,
-                                isRegistered = true,
-                                apiResultError = null
-                            )
-                        }
+                        _uiState.value = SignUpUiState.Success
 
                     is ApiResult.Error -> {
-                        var errorMsg = apiResult.throwable.message
-                        when (errorMsg) {
-                            EXIST_EMAIL ->
-                                errorMsg = InputValidator.Email.ERROR_EXIST_EMAIL.errorMsg
-                            else -> {
-                                errorMsg = null
-                                eventHandler.emitEvent(
-                                    Event.ApiError("occur Error [Request SignUp API]")
-                                )
-                            }
-                        }
+                        val errorMsg = apiResult.throwable.message ?: "Unknown Error"
+                        Logger.e(errorMsg)
 
-                        _uiState.update {
-                            it.copy(
-                                isLoading = false,
-                                isRegistered = false,
-                                apiResultError = errorMsg
-                            )
-                        }
+                        _uiState.value = SignUpUiState.Failure(errorMsg)
                     }
                 }
             }
@@ -92,8 +71,12 @@ class SignUpViewModel @Inject constructor(
     }
 }
 
-data class SignUpUiState(
-    val isLoading       : Boolean = false,
-    val isRegistered    : Boolean = false,
-    val apiResultError  : String? = null
-)
+sealed class SignUpUiState {
+    object Init: SignUpUiState()
+    object Loading: SignUpUiState()
+    object Success: SignUpUiState()
+    data class Failure(val errorMsg: String): SignUpUiState()
+
+    fun isLoading() = this is Loading
+    fun isFailure() = if (this is Failure) this.errorMsg else null
+}
