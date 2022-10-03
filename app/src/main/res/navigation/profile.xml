@@ -5,6 +5,9 @@
     android:id="@+id/profile"
     app:startDestination="@+id/profileFragment">
 
+    <!-- Upload Graph -->
+    <include app:graph="@navigation/upload" />
+
     <!-- Profile Fragment -->
     <fragment
         android:id="@+id/profileFragment"
@@ -26,26 +29,6 @@
             app:destination="@id/profileEditFragment"
             app:enterAnim="@anim/slide_in_up"
             app:exitAnim="@anim/fade_out"/>
-        <action
-            android:id="@+id/action_to_notLogin"
-            app:destination="@id/notLoginFragment" />
-    </fragment>
-
-    <!-- NotLogin Fragment -->
-    <fragment
-        android:id="@+id/notLoginFragment"
-        android:name="org.kjh.mytravel.ui.features.profile.NotLoginFragment"
-        tools:layout="@layout/fragment_not_login">
-
-        <argument
-            android:name="@string/key_show_bnv"
-            android:defaultValue="true" />
-        <action
-            android:id="@+id/action_to_login"
-            app:destination="@id/loginFragment" />
-        <action
-            android:id="@+id/action_to_signUp"
-            app:destination="@id/signUpFragment" />
     </fragment>
 
     <!-- Setting Fragment -->
@@ -60,38 +43,5 @@
         android:id="@+id/profileEditFragment"
         android:name="org.kjh.mytravel.ui.features.profile.edit.ProfileEditFragment"
         android:label="프로필 편집"
-        tools:layout="@layout/fragment_profile_edit" >
-
-        <argument
-            android:name="profileImg"
-            app:argType="string"
-            app:nullable="true"/>
-        <argument
-            android:name="nickName"
-            app:argType="string" />
-        <argument
-            android:name="introduce"
-            app:argType="string"
-            app:nullable="true"/>
-    </fragment>
-
-    <include app:graph="@navigation/upload" />
-
-    <!-- Login BottomSheetDialogFragment -->
-    <dialog
-        android:id="@+id/loginFragment"
-        android:name="org.kjh.mytravel.ui.features.login.LoginFragment"
-        android:label="LoginFragment"
-        tools:layout="@layout/bs_fragment_login">
-
-    </dialog>
-
-    <!-- SignUp BottomSheetDialogFragment -->
-    <dialog
-        android:id="@+id/signUpFragment"
-        android:name="org.kjh.mytravel.ui.features.signup.SignUpFragment"
-        android:label="SignUpFragment"
-        tools:layout="@layout/bs_fragment_sign_up"/>
-
-
+        tools:layout="@layout/fragment_profile_edit" />
 </navigation>

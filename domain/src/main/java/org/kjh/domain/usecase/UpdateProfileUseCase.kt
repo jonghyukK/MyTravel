@@ -9,13 +9,10 @@ import org.kjh.domain.repository.UserRepository
  *
  * Description:
  */
-class UpdateProfileUseCase(
-    private val userRepository: UserRepository
-){
+class UpdateProfileUseCase(private val userRepository: UserRepository) {
     suspend operator fun invoke(
         profileImg: String?,
-        email     : String,
         nickName  : String,
         introduce : String?
-    ) = userRepository.updateMyProfile(profileImg, email, nickName, introduce)
+    ) = userRepository.updateMyProfile(profileImg, nickName, introduce)
 }

@@ -43,7 +43,7 @@
                     style="@style/CircleProfileImg"
                     android:layout_width="130dp"
                     android:layout_height="130dp"
-                    app:imgUrl="@{viewModel.profileImg}"
+                    app:imgUrl="@{viewModel.uiState.tempImgUrl}"
                     app:layout_constraintTop_toBottomOf="@+id/topGuideLine"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintEnd_toEndOf="parent" />
@@ -75,7 +75,8 @@
                     android:layout_width="0dp"
                     android:layout_height="50dp"
                     android:layout_marginTop="15dp"
-                    android:text="@={viewModel.inputNickName}"
+                    android:text="@{viewModel.uiState.nickName}"
+                    onTextChanged="@{viewModel.updateNickName}"
                     app:layout_constraintTop_toBottomOf="@+id/tv_nickName"
                     app:layout_constraintStart_toStartOf="@id/leftGuideLine"
                     app:layout_constraintEnd_toEndOf="@id/rightGuideLine"/>
@@ -94,7 +95,8 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="15dp"
-                    android:text="@={viewModel.inputIntroduce}"
+                    android:text="@{viewModel.uiState.introduce}"
+                    onTextChanged="@{viewModel.updateIntroduce}"
                     app:layout_constraintTop_toBottomOf="@+id/tv_introduce"
                     app:layout_constraintStart_toStartOf="@id/leftGuideLine"
                     app:layout_constraintEnd_toEndOf="@id/rightGuideLine"/>
@@ -134,7 +136,7 @@
             android:layout_height="60dp"
             android:text="@string/cancel"
             android:backgroundTint="#777777"
-            onThrottleClick="@{() -> fragment.cancelProfileEdit()}"
+            onThrottleClick="@{fragment::cancelProfileEdit}"
             app:layout_constraintTop_toBottomOf="@+id/bottomGuideLine"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/btn_save"
