@@ -1,9 +1,6 @@
 package org.kjh.domain.usecase
 
-import kotlinx.coroutines.flow.map
-import org.kjh.domain.entity.ApiResult
-import org.kjh.domain.entity.LoginInfoPreferences
-import org.kjh.domain.repository.LoginRepository
+import org.kjh.domain.repository.UserRepository
 
 /**
  * MyTravel
@@ -13,17 +10,8 @@ import org.kjh.domain.repository.LoginRepository
  * Description:
  */
 class MakeLoginRequestUseCase(
-    private val loginRepository           : LoginRepository,
-    private val saveLogInPreferenceUseCase: SaveLogInPreferenceUseCase
+    private val userRepository: UserRepository
 ){
     suspend operator fun invoke(email: String, pw: String) =
-        loginRepository.requestLogin(email, pw)
-            .map {
-                if (it is ApiResult.Success && it.data.isSuccess) {
-                    saveLogInPreferenceUseCase(
-                        LoginInfoPreferences(email, true)
-                    )
-                }
-                it
-            }
+        userRepository.requestLogin(email, pw)
 }

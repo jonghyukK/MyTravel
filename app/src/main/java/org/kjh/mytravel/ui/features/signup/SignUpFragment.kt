@@ -36,7 +36,7 @@ class SignUpFragment
             .flowWithLifecycle(viewLifecycleOwner.lifecycle, Lifecycle.State.STARTED)
             .onEach { state ->
                 if (state.isRegistered) {
-                    (parentFragment as NotLoginFragment).navigateHomeWhenSuccessLoginOrSignUp()
+                    (parentFragment as NotLoginFragment).handleNavigateAction()
                 }
             }
             .launchIn(viewLifecycleOwner.lifecycleScope)

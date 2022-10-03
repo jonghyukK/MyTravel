@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/login_sign_up"
+    app:startDestination="@id/notLoginFragment">
+
+    <!-- NotLogin Fragment -->
+    <fragment
+        android:id="@+id/notLoginFragment"
+        android:name="org.kjh.mytravel.ui.features.profile.NotLoginFragment"
+        tools:layout="@layout/fragment_not_login">
+
+        <action
+            android:id="@+id/action_to_login"
+            app:destination="@id/loginFragment" />
+        <action
+            android:id="@+id/action_to_signUp"
+            app:destination="@id/signUpFragment" />
+    </fragment>
+
+    <!-- Login BottomSheetDialogFragment -->
+    <dialog
+        android:id="@+id/loginFragment"
+        android:name="org.kjh.mytravel.ui.features.login.LoginFragment"
+        android:label="LoginFragment"
+        tools:layout="@layout/bs_fragment_login"/>
+
+    <!-- SignUp BottomSheetDialogFragment -->
+    <dialog
+        android:id="@+id/signUpFragment"
+        android:name="org.kjh.mytravel.ui.features.signup.SignUpFragment"
+        android:label="SignUpFragment"
+        tools:layout="@layout/bs_fragment_sign_up"/>
+</navigation>

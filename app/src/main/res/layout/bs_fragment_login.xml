@@ -14,8 +14,8 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical"
         android:background="@color/white"
+        android:orientation="vertical"
         android:paddingStart="20dp"
         android:paddingEnd="20dp"
         app:layout_behavior="@string/bottom_sheet_behavior">
@@ -49,6 +49,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="30dp"
+            android:hint="@string/email_address"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/tv_loginText">
@@ -57,11 +58,11 @@
                 android:id="@+id/tie_email"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:textColor="@color/black"
                 android:inputType="textEmailAddress"
                 android:text="@={viewModel.email}"
                 android:tag="email"
-                app:onFocusLost="@{tilEmail}"
-                android:hint="@string/email_address"/>
+                app:onFocusLost="@{tilEmail}" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
@@ -70,7 +71,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
-            app:passwordToggleEnabled="true"
+            android:hint="@string/password"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/til_email">
@@ -80,10 +81,10 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:inputType="textPassword"
+                android:textColor="@color/black"
                 android:text="@={viewModel.pw}"
                 android:tag="pw"
-                app:onFocusLost="@{tilPw}"
-                android:hint="@string/password"/>
+                app:onFocusLost="@{tilPw}" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <TextView
