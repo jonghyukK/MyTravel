@@ -1,6 +1,6 @@
 package org.kjh.domain.usecase
 
-import org.kjh.domain.repository.BookmarkRepository
+import org.kjh.domain.repository.UserRepository
 
 /**
  * MyTravel
@@ -9,12 +9,7 @@ import org.kjh.domain.repository.BookmarkRepository
  *
  * Description:
  */
-class UpdateBookmarkUseCase(
-    private val bookmarkRepository: BookmarkRepository
-) {
-    suspend operator fun invoke(
-        myEmail  : String,
-        postId   : Int,
-        placeName: String
-    ) = bookmarkRepository.updateMyBookmarks(myEmail, postId, placeName)
+class UpdateBookmarkUseCase(private val userRepository: UserRepository) {
+    suspend operator fun invoke(placeName: String) =
+        userRepository.updateMyBookmarks(placeName)
 }

@@ -11,18 +11,15 @@ import org.kjh.domain.entity.BookmarkEntity
  * Description:
  */
 data class Bookmark(
-    val postId      : Int,
-    val email       : String,
-    val nickName    : String,
-    val content     : String?,
-    val cityName    : String,
-    val subCityName : String,
-    val placeName   : String,
-    val placeAddress: String,
-    val profileImg  : String?,
-    val createdDate : String,
-    val isBookmarked: Boolean,
-    val imageUrl    : List<String>
+    val cityName        : String,
+    val subCityName     : String,
+    val placeName       : String,
+    val placeAddress    : String,
+    val placeRoadAddress: String,
+    val x               : String,
+    val y               : String,
+    val placeImg        : String,
+    val isBookmarked    : Boolean
 ){
     companion object {
         val diffCallback = object : DiffUtil.ItemCallback<Bookmark>() {
@@ -30,7 +27,7 @@ data class Bookmark(
                 oldItem: Bookmark,
                 newItem: Bookmark
             ): Boolean =
-                oldItem.postId == newItem.postId
+                oldItem.placeName == newItem.placeName
 
             override fun areContentsTheSame(
                 oldItem: Bookmark,
@@ -43,18 +40,15 @@ data class Bookmark(
 
 fun BookmarkEntity.mapToPresenter() =
     Bookmark(
-        postId,
-        email,
-        nickName,
-        content,
         cityName,
         subCityName,
         placeName,
         placeAddress,
-        profileImg,
-        createdDate,
-        isBookmarked,
-        imageUrl
+        placeRoadAddress,
+        x,
+        y,
+        placeImg,
+        isBookmarked
     )
 
 fun List<Bookmark>.isBookmarkedPlace(placeName: String) =

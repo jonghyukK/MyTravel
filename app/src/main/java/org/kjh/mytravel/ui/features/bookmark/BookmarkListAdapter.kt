@@ -2,10 +2,10 @@ package org.kjh.mytravel.ui.features.bookmark
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import org.kjh.mytravel.databinding.VhBookmarkPostItemBinding
-import org.kjh.mytravel.model.Bookmark
+import org.kjh.mytravel.databinding.VhBookmarkDayLogItemBinding
 import org.kjh.mytravel.utils.navigateToDayLogDetail
 import org.kjh.mytravel.utils.onThrottleClick
 
@@ -16,42 +16,50 @@ import org.kjh.mytravel.utils.onThrottleClick
  *
  * Description:
  */
-class BookmarkListAdapter(
-    private val onClickBookmark: (Bookmark) -> Unit
-): ListAdapter<Bookmark, BookmarkListAdapter.BookmarkItemViewHolder>(Bookmark.diffCallback) {
+class BookmarkListAdapter
+    : ListAdapter<BookmarkItemUiState, BookmarkItemViewHolder>(UIMODEL_COMPARATOR) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) =
         BookmarkItemViewHolder(
-            VhBookmarkPostItemBinding.inflate(
+            VhBookmarkDayLogItemBinding.inflate(
                 LayoutInflater.from(parent.context), parent, false
-            ), onClickBookmark
+            )
         )
 
     override fun onBindViewHolder(holder: BookmarkItemViewHolder, position: Int) {
         holder.bind(getItem(position))
     }
 
-    class BookmarkItemViewHolder(
-        private val binding        : VhBookmarkPostItemBinding,
-        private val onClickBookmark: (Bookmark) -> Unit
-    ): RecyclerView.ViewHolder(binding.root) {
+    companion object {
+        private val UIMODEL_COMPARATOR =
+            object : DiffUtil.ItemCallback<BookmarkItemUiState>() {
+                override fun areItemsTheSame(
+                    oldItem: BookmarkItemUiState,
+                    newItem: BookmarkItemUiState
+                ) = oldItem.placeName == newItem.placeName
 
-        init {
-            itemView.onThrottleClick { view ->
-                binding.bookmarkItem?.let { bookmark ->
-                    view.navigateToDayLogDetail(bookmark.placeName)
-                }
+                override fun areContentsTheSame(
+                    oldItem: BookmarkItemUiState,
+                    newItem: BookmarkItemUiState
+                ) = oldItem == newItem
             }
+    }
+}
 
-            binding.ivBookmark.onThrottleClick { view ->
-                binding.bookmarkItem?.let { bookmark ->
-                    onClickBookmark(bookmark)
-                }
+
+class BookmarkItemViewHolder(
+    private val binding : VhBookmarkDayLogItemBinding
+): RecyclerView.ViewHolder(binding.root) {
+
+    init {
+        itemView.onThrottleClick { view ->
+            binding.bookmarkItem?.let { item ->
+                view.navigateToDayLogDetail(item.placeName)
             }
         }
+    }
 
-        fun bind(item: Bookmark) {
-            binding.bookmarkItem = item
-        }
+    fun bind(bookmarkItem: BookmarkItemUiState) {
+        binding.bookmarkItem = bookmarkItem
     }
 }

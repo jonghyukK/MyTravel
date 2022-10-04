@@ -10,32 +10,26 @@ import org.kjh.domain.entity.BookmarkEntity
  * Description:
  */
 data class BookmarkModel(
-    val postId      : Int,
-    val email       : String,
-    val nickName    : String,
-    val content     : String?,
-    val cityName    : String,
-    val subCityName : String,
-    val placeName   : String,
-    val placeAddress: String,
-    val profileImg  : String?,
-    val createdDate : String,
-    val isBookmarked: Boolean,
-    val imageUrl    : List<String>
+    val cityName        : String,
+    val subCityName     : String,
+    val placeName       : String,
+    val placeAddress    : String,
+    val placeRoadAddress: String,
+    val x               : String,
+    val y               : String,
+    val placeImg        : String,
+    val isBookmarked    : Boolean
 )
 
 fun BookmarkModel.mapToDomain() =
     BookmarkEntity(
-        postId,
-        email,
-        nickName,
-        content,
         cityName,
         subCityName,
         placeName,
         placeAddress,
-        profileImg,
-        createdDate,
-        isBookmarked,
-        imageUrl
+        placeRoadAddress,
+        x,
+        y,
+        placeImg,
+        isBookmarked
     )

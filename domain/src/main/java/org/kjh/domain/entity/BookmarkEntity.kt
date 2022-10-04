@@ -8,16 +8,13 @@ package org.kjh.domain.entity
  * Description:
  */
 data class BookmarkEntity(
-    val postId      : Int,
-    val email       : String,
-    val nickName    : String,
-    val content     : String?,
-    val cityName    : String,
-    val subCityName : String,
-    val placeName   : String,
-    val placeAddress: String,
-    val profileImg  : String?,
-    val createdDate : String,
-    val isBookmarked: Boolean,
-    val imageUrl    : List<String>
+    val cityName        : String,
+    val subCityName     : String,
+    val placeName       : String,
+    val placeAddress    : String,
+    val placeRoadAddress: String,
+    val x               : String,
+    val y               : String,
+    val placeImg        : String,
+    val isBookmarked    : Boolean
 )
