@@ -1,67 +1,47 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools">
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
-        <variable
-            name="fragment"
-            type="org.kjh.mytravel.ui.features.home.HomeFragment" />
         <variable
             name="viewModel"
             type="org.kjh.mytravel.ui.features.home.HomeViewModel" />
     </data>
 
-
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/ml_homeContainer"
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+        android:id="@+id/srl_swipeRefreshLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        app:skeletonBackgroundColor="@{@color/white}"
-        app:skeletonAnimateRestoredBounds="@{true}"
-        app:skeletonAllowSavedState="@{true}"
-        app:skeletonBoneColor="@{@color/light_gray_pressed}"
-        app:skeletonBoneMaxThickness="@{@dimen/dp25}"
-        app:skeletonBoneMinThickness="@{@dimen/dp20}"
-        app:skeletonDissectLargeBones="@{false}"
-        app:skeletonEnabled="@{viewModel.homeUiState.loading}"
-        app:skeletonGenerateBones="@{true}"
-        app:skeletonShimmerRayColor="@{@color/shadow_black}"
-        app:skeletonShimmerRayCount="@{4}"
-        app:skeletonShimmerRayInterpolator="@{@android:interpolator/accelerate_quad}"
-        app:skeletonShimmerRaySharedInterpolator="@{true}"
-        app:skeletonShimmerRaySpeedMultiplier="@{1f}"
-        app:skeletonShimmerRayThickness="@{@dimen/dp120}"
-        app:skeletonShimmerRayTilt="@{-0.2f}"
-        app:skeletonTransitionDuration="@{200L}"
-        app:skeletonUseStateTransition="@{true}"
-        tools:background="@color/white">
+        onSwipeRefreshAction="@{viewModel.refreshActionForAll}">
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/homeConcatRecyclerView"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:background="@color/white"
-            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            onScrollListenerWithToolbar="@{tbHomeToolbar}"
-            callback="@{viewModel.updateCollapsed}"/>
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/cl_homeContainer"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
 
-        <androidx.appcompat.widget.Toolbar
-            android:id="@+id/tb_homeToolbar"
-            android:layout_width="0dp"
-            android:layout_height="?attr/actionBarSize"
-            toolbarInsets="@{true}"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            android:background="@{viewModel.homeUiState.collapsed ? @color/white : @color/transparent}"
-            app:title="@{viewModel.homeUiState.collapsed ? @string/app_name : ``}" />
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/homeConcatRecyclerView"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:background="@color/white"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                onScrollAction="@{viewModel.updateCollapsed}" />
 
-        <include
-            layout="@layout/layout_home_shimmer"/>
-    </androidx.constraintlayout.widget.ConstraintLayout>
+            <androidx.appcompat.widget.Toolbar
+                android:id="@+id/tb_homeToolbar"
+                android:layout_width="0dp"
+                android:layout_height="?attr/actionBarSize"
+                toolbarInsets="@{true}"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                android:background="@{viewModel.homeUiState.hasScrolled ? @color/white : @color/transparent}"
+                app:title="@{viewModel.homeUiState.hasScrolled ? @string/app_name : ``}" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 </layout>

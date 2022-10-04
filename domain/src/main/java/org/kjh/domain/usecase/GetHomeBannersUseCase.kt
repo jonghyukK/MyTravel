@@ -9,8 +9,7 @@ import org.kjh.domain.repository.PlaceRepository
  *
  * Description:
  */
-class GetHomeBannersUseCase(
-    private val placeRepository: PlaceRepository
-){
+class GetHomeBannersUseCase(private val placeRepository: PlaceRepository) {
+
     suspend operator fun invoke() = placeRepository.fetchPlaceBanners()
 }

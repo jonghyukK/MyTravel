@@ -12,12 +12,13 @@ import org.kjh.data.EventHandler
 import org.kjh.data.model.BookmarkModel
 import org.kjh.domain.entity.ApiResult
 import org.kjh.domain.usecase.GetHomeBannersUseCase
-import org.kjh.domain.usecase.GetLatestPostUseCase
+import org.kjh.domain.usecase.GetLatestDayLogUseCase
 import org.kjh.domain.usecase.GetPlaceRankingUseCase
 import org.kjh.mytravel.model.BannerItemUiState
-import org.kjh.mytravel.model.LatestPostItemUiState
+import org.kjh.mytravel.model.LatestDayLogItemUiState
 import org.kjh.mytravel.model.PlaceRankingItemUiState
 import org.kjh.mytravel.model.mapToPresenter
+import org.kjh.mytravel.ui.common.PagingWithHeaderUiModel
 import org.kjh.mytravel.ui.common.UiState
 import javax.inject.Inject
 
@@ -33,7 +34,7 @@ import javax.inject.Inject
 class HomeViewModel @Inject constructor(
     val getBannerUseCase      : GetHomeBannersUseCase,
     val getPlaceRankingUseCase: GetPlaceRankingUseCase,
-    val getLatestPostUseCase  : GetLatestPostUseCase,
+    val getLatestDayLogUseCase: GetLatestDayLogUseCase,
     val eventHandler          : EventHandler
 ): ViewModel() {
 
@@ -48,18 +49,30 @@ class HomeViewModel @Inject constructor(
         MutableStateFlow(UiState.Init)
     val rankingsUiState = _rankingsUiState.asStateFlow()
 
-    private val _latestPostsUiState: MutableStateFlow<PagingData<LatestPostUiState>?> =
+    private val _latestDayLogsUiState: MutableStateFlow<PagingData<PagingWithHeaderUiModel<LatestDayLogItemUiState>>?> =
         MutableStateFlow(null)
-    val latestPostsUiState = _latestPostsUiState.asStateFlow()
+    val latestDayLogsUiState = _latestDayLogsUiState.asStateFlow()
 
-    val accept: (Event) -> Unit = { action ->
+    val sendEvent: (Event) -> Unit = { action ->
         viewModelScope.launch { eventHandler.emitEvent(action)}
+    }
+
+    val refreshActionForAll = fun() {
+        fetchBanners()
+        fetchRankings()
+        refreshLatestDayLogs(true)
+    }
+
+    val updateCollapsed = fun(value: Boolean) {
+        _homeUiState.update {
+            it.copy(hasScrolled = value)
+        }
     }
 
     init {
         fetchBanners()
         fetchRankings()
-        fetchLatestPostPagingData()
+        fetchLatestDayLogPagingData()
         handleEvent()
     }
 
@@ -71,13 +84,12 @@ class HomeViewModel @Inject constructor(
                         _bannersUiState.value = UiState.Loading
 
                     is ApiResult.Success ->
-                        _bannersUiState.value =
-                            UiState.Success(apiResult.data.map { it.mapToPresenter() })
+                        _bannersUiState.value = UiState.Success(
+                            apiResult.data.map { it.mapToPresenter() })
 
                     is ApiResult.Error -> {
                         Logger.e("${apiResult.throwable.message}")
-                        _bannersUiState.value =
-                            UiState.Error(
+                        _bannersUiState.value = UiState.Error(
                                 errorMsg = "occur Error [Fetch Banner API]",
                                 errorAction = { initBannerUiState() }
                             )
@@ -96,13 +108,12 @@ class HomeViewModel @Inject constructor(
                             _rankingsUiState.value = UiState.Loading
 
                         is ApiResult.Success ->
-                            _rankingsUiState.value =
-                                UiState.Success(apiResult.data.map { it.mapToPresenter() })
+                            _rankingsUiState.value = UiState.Success(
+                                apiResult.data.map { it.mapToPresenter() })
 
                         is ApiResult.Error -> {
                             Logger.e("${apiResult.throwable.message}")
-                            _rankingsUiState.value =
-                                UiState.Error(
+                            _rankingsUiState.value = UiState.Error(
                                     errorMsg = "occur Error [Fetch Ranking API]",
                                     errorAction = { initRankingUiState() }
                                 )
@@ -112,25 +123,29 @@ class HomeViewModel @Inject constructor(
         }
     }
 
-    private fun fetchLatestPostPagingData() {
+    private fun fetchLatestDayLogPagingData() {
         viewModelScope.launch {
-            getLatestPostUseCase().map { pagingData ->
-                pagingData.map { entity ->
-                    val item = entity.mapToPresenter(
-                        onBookmarkAction = { accept(Event.RequestUpdateBookmark(entity.placeName)) },
-                        onDeleteDayLogAction = { accept(Event.RequestDeleteDayLog(entity.postId)) }
-                    )
-                    LatestPostUiState.PagingItem(item)
-                }.insertSeparators { before, _ ->
-                    when (before) {
-                        null -> LatestPostUiState.HeaderItem
-                        else -> null
+            getLatestDayLogUseCase()
+                .map { pagingData ->
+                    pagingData.map { entity ->
+                        val item = entity.mapToPresenter(
+                            onBookmarkAction = { sendEvent(Event.RequestUpdateBookmark(entity.placeName)) },
+                            onDeleteDayLogAction = { sendEvent(Event.RequestDeleteDayLog(entity.dayLogId)) }
+                        )
+                        PagingWithHeaderUiModel.PagingItem(item)
+                    }.insertSeparators { before, after ->
+                        if (after == null) {
+                            return@insertSeparators null
+                        }
+                        when (before) {
+                            null -> PagingWithHeaderUiModel.HeaderItem
+                            else -> null
+                        }
                     }
                 }
-            }
                 .cachedIn(viewModelScope)
                 .collectLatest {
-                    _latestPostsUiState.value = it
+                    _latestDayLogsUiState.value = it
                 }
         }
     }
@@ -140,10 +155,8 @@ class HomeViewModel @Inject constructor(
             eventHandler.event.collect { event ->
                 when (event) {
                     is Event.LoginEvent,
-                    is Event.LogoutEvent -> refreshLatestPosts(true)
-
-                    is Event.DeleteDayLog -> filterDeletedDayLog(event.postId)
-
+                    is Event.LogoutEvent -> refreshLatestDayLogs(true)
+                    is Event.DeleteDayLog -> filterDeletedDayLog(event.dayLogId)
                     is Event.UpdateBookmark -> updateDayLogBookmarked(event.bookmarks)
                     else -> {}
                 }
@@ -152,37 +165,33 @@ class HomeViewModel @Inject constructor(
     }
 
     private fun filterDeletedDayLog(deletedDayLogId: Int) {
-        _latestPostsUiState.getAndUpdate { pagingData ->
+        _latestDayLogsUiState.getAndUpdate { pagingData ->
             pagingData?.filter {
-                it is LatestPostUiState.PagingItem && it.item.postId != deletedDayLogId
+                it is PagingWithHeaderUiModel.PagingItem && it.item.dayLogId != deletedDayLogId
             }
         }
     }
 
     private fun updateDayLogBookmarked(myBookmarks: List<BookmarkModel>) {
-        _latestPostsUiState.getAndUpdate { pagingData ->
-            pagingData?.map { currentUiState ->
-                if (currentUiState is LatestPostUiState.PagingItem) {
-                    val updatedBookmarkItem = currentUiState.item.copy(
-                        isBookmarked = myBookmarks.any { currentUiState.item.placeName == it.placeName }
+        _latestDayLogsUiState.getAndUpdate { pagingData ->
+            pagingData?.map { currentPagingItem ->
+                if (currentPagingItem is PagingWithHeaderUiModel.PagingItem) {
+                    val updatedDayLogItem = currentPagingItem.item.copy(
+                        isBookmarked = myBookmarks.any { currentPagingItem.item.placeName == it.placeName }
                     )
 
-                    currentUiState.copy(item = updatedBookmarkItem)
+                    currentPagingItem.copy(item = updatedDayLogItem)
                 } else {
-                    currentUiState
+                    currentPagingItem
                 }
             }
         }
     }
 
-    fun refreshAll() {
-        fetchBanners()
-        fetchRankings()
-        refreshLatestPosts(true)
-    }
-
-    fun refreshLatestPosts(value: Boolean) {
-        _homeUiState.update { it.copy(refreshLatestPosts = value) }
+    fun refreshLatestDayLogs(doRefresh: Boolean) {
+        _homeUiState.update {
+            it.copy(refreshLatestDayLogs = doRefresh)
+        }
     }
 
     private fun initBannerUiState() {
@@ -192,21 +201,9 @@ class HomeViewModel @Inject constructor(
     private fun initRankingUiState() {
         _rankingsUiState.value = UiState.Init
     }
-
-    val updateCollapsed = fun(value: Boolean) {
-        _homeUiState.update {
-            it.copy(hasScrolledForToolbar = value)
-        }
-    }
 }
-
 
 data class HomeUiState(
-    val hasScrolledForToolbar: Boolean = false,
-    val refreshLatestPosts   : Boolean = false
+    val hasScrolled: Boolean = false,
+    val refreshLatestDayLogs : Boolean = false
 )
-
-sealed class LatestPostUiState {
-    object HeaderItem: LatestPostUiState()
-    data class PagingItem(val item: LatestPostItemUiState): LatestPostUiState()
-}

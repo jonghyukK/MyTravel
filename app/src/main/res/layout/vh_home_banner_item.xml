@@ -6,7 +6,7 @@
     <data>
         <variable
             name="bannerItem"
-            type="org.kjh.mytravel.model.Banner" />
+            type="org.kjh.mytravel.model.BannerItemUiState" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout

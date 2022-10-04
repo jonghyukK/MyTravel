@@ -5,9 +5,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.PagerSnapHelper
 import androidx.recyclerview.widget.RecyclerView
-import okhttp3.internal.notify
 import org.kjh.mytravel.databinding.VhHomeBannerRowBinding
-import org.kjh.mytravel.model.BannerItemUiState
 import org.kjh.mytravel.ui.common.OnNestedHorizontalTouchListener
 import org.kjh.mytravel.ui.common.OnSnapPagerScrollListener
 
@@ -18,40 +16,30 @@ import org.kjh.mytravel.ui.common.OnSnapPagerScrollListener
  *
  * Description:
  */
-class BannerHorizontalWrapAdapter
-    : RecyclerView.Adapter<BannerHorizontalWrapAdapter.HomeBannersOuterViewHolder>() {
+class BannerHorizontalWrapAdapter(
+    private val bannerListAdapter: BannerListAdapter
+) : RecyclerView.Adapter<BannerHorizontalWrapAdapter.HomeBannersOuterViewHolder>() {
     private val childViewState = mutableMapOf<Int, Parcelable?>()
-    private val bannerItems = mutableListOf<BannerItemUiState>()
-
-    fun setBannerItems(items: List<BannerItemUiState>) {
-        if (bannerItems.isEmpty()) {
-            bannerItems.addAll(items)
-            notifyItemInserted(0)
-        } else {
-            bannerItems.clear()
-            bannerItems.addAll(items)
-            notifyItemChanged(0)
-        }
-    }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) =
         HomeBannersOuterViewHolder(
             VhHomeBannerRowBinding.inflate(
                 LayoutInflater.from(parent.context), parent, false
-            )
+            ), bannerListAdapter, childViewState
         )
 
     override fun onBindViewHolder(holder: HomeBannersOuterViewHolder, position: Int) {
-        holder.bind(bannerItems)
+        holder.bind()
     }
 
-    override fun getItemCount() = bannerItems.size
+    override fun getItemCount() = 1
 
-    inner class HomeBannersOuterViewHolder(
-        val binding: VhHomeBannerRowBinding
+    class HomeBannersOuterViewHolder(
+        private val binding: VhHomeBannerRowBinding,
+        private val bannerListAdapter: BannerListAdapter,
+        private val childViewState: MutableMap<Int, Parcelable?>
     ): RecyclerView.ViewHolder(binding.root) {
         private val snapHelper = PagerSnapHelper()
-        private val bannerListAdapter = BannerListAdapter()
 
         init {
             binding.bannerRecyclerView.apply {
@@ -74,8 +62,7 @@ class BannerHorizontalWrapAdapter
             }
         }
 
-        fun bind(items: List<BannerItemUiState>) {
-            bannerListAdapter.submitList(items)
+        fun bind() {
             restorePosition()
         }
 

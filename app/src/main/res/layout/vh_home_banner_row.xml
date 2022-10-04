@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/test22"
+        android:id="@+id/cl_bannerOuterContainer"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
@@ -17,7 +17,6 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             android:orientation="horizontal"
-            addOnScrollListener="@{true}"
             tools:listitem="@layout/vh_home_banner_item" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>

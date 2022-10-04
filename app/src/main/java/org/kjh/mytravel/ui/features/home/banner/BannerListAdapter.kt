@@ -44,7 +44,7 @@ class BannerListAdapter
     }
 
     class BannerViewHolder(
-        private val binding : VhHomeBannerItemBinding
+        private val binding: VhHomeBannerItemBinding
     ) : RecyclerView.ViewHolder(binding.root) {
 
         init {

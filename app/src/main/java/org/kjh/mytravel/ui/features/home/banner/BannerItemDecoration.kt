@@ -1,6 +1,7 @@
 package org.kjh.mytravel.ui.features.home.banner
 
 import android.graphics.*
+import android.view.View
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import org.kjh.mytravel.ui.base.BaseItemDecoration
@@ -34,6 +35,38 @@ class BannerItemDecoration : BaseItemDecoration() {
         color       = Color.parseColor("#55000000")
         strokeCap   = Paint.Cap.ROUND
         isAntiAlias = true
+    }
+
+    override fun getItemOffsets(
+        outRect: Rect,
+        view: View,
+        parent: RecyclerView,
+        state: RecyclerView.State
+    ) {
+        super.getItemOffsets(outRect, view, parent, state)
+
+        parent.clearOnScrollListeners()
+        parent.addOnScrollListener(object: RecyclerView.OnScrollListener() {
+            val lm = parent.layoutManager as LinearLayoutManager
+
+            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                super.onScrolled(recyclerView, dx, dy)
+
+                val itemCount = lm.itemCount / 2
+                val firstItemVisible = lm.findFirstVisibleItemPosition()
+
+                if (itemCount != 0) {
+                    if (firstItemVisible != 1 && (firstItemVisible % itemCount == 1)) {
+                        lm.scrollToPosition(1)
+                    } else if (firstItemVisible == 0) {
+                        lm.scrollToPositionWithOffset(
+                            itemCount,
+                            -parent.computeHorizontalScrollOffset()
+                        )
+                    }
+                }
+            }
+        })
     }
 
     override fun onDrawOver(c: Canvas, parent: RecyclerView, state: RecyclerView.State) {
