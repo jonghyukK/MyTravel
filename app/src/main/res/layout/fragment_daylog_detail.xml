@@ -5,10 +5,6 @@
 
     <data>
         <variable
-            name="fragment"
-            type="org.kjh.mytravel.ui.features.daylog.DayLogDetailFragment" />
-
-        <variable
             name="viewModel"
             type="org.kjh.mytravel.ui.features.daylog.DayLogDetailViewModel" />
 
@@ -36,10 +32,9 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             adapter="@{concatAdapter}"
-            onScrollListenerWithToolbar="@{tbPlaceDetailToolbar}"
-            callback="@{viewModel.updateCollapsed}" />
+            onScrollActionPlaceDetail="@{viewModel.updateCollapsed}" />
 
-        <com.google.android.material.appbar.MaterialToolbar
+        <androidx.appcompat.widget.Toolbar
             android:id="@+id/tb_placeDetailToolbar"
             android:layout_width="0dp"
             android:layout_height="?attr/actionBarSize"

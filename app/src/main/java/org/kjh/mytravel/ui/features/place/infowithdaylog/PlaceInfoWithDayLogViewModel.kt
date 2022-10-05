@@ -9,14 +9,15 @@ import com.orhanobut.logger.Logger
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
+import org.kjh.data.Event
+import org.kjh.data.EventHandler
 import org.kjh.domain.entity.ApiResult
+import org.kjh.domain.usecase.GetMyProfileUseCase
 import org.kjh.domain.usecase.GetPlaceUseCase
 import org.kjh.mytravel.model.*
-import org.kjh.mytravel.ui.GlobalErrorHandler
+import org.kjh.mytravel.utils.containPlace
 
 /**
  * MyTravel
@@ -27,19 +28,11 @@ import org.kjh.mytravel.ui.GlobalErrorHandler
  */
 
 class PlaceInfoWithDayLogViewModel @AssistedInject constructor(
-    private val getPlaceUseCase   : GetPlaceUseCase,
-    private val globalErrorHandler: GlobalErrorHandler,
+    private val getPlaceUseCase : GetPlaceUseCase,
+    private val getMyProfileUseCase: GetMyProfileUseCase,
+    private val eventHandler    : EventHandler,
     @Assisted private val initPlaceName: String
 ): ViewModel() {
-
-    data class PlaceUiState(
-        val isLoading        : Boolean = false,
-        val placeItem        : Place? = null,
-        val isBookmarked     : Boolean = false,
-        val isAppBarCollapsed: Boolean = false,
-        val markerItem       : PlaceWithMarker? = null,
-        val cameraMoveEvent  : CameraUpdate? = null
-    )
 
     private val _uiState = MutableStateFlow(PlaceUiState())
     val uiState = _uiState.asStateFlow()
@@ -52,6 +45,7 @@ class PlaceInfoWithDayLogViewModel @AssistedInject constructor(
 
     init {
         fetchPlaceByPlaceName()
+        updateBookmarkState()
     }
 
     private fun fetchPlaceByPlaceName() {
@@ -79,8 +73,8 @@ class PlaceInfoWithDayLogViewModel @AssistedInject constructor(
                         is ApiResult.Error -> {
                             Logger.e(apiResult.throwable.localizedMessage!!)
 
-                            val errorMsg = "occur error [Fetch PlaceDetail API]"
-                            globalErrorHandler.sendError(errorMsg)
+                            eventHandler.emitEvent(
+                                Event.ApiError("occur error [Fetch PlaceDetail API]"))
 
                             _uiState.update {
                                 it.copy(isLoading = false)
@@ -91,8 +85,25 @@ class PlaceInfoWithDayLogViewModel @AssistedInject constructor(
         }
     }
 
-    fun updateBookmarkState(isBookmarked: Boolean) = _uiState.update {
-        it.copy(isBookmarked = isBookmarked)
+    private fun updateBookmarkState() {
+        viewModelScope.launch {
+            getMyProfileUseCase()
+                .map { userEntity ->
+                    userEntity?.bookMarks?.map { it.mapToPresenter() } ?: emptyList()
+                }
+                .distinctUntilChanged()
+                .collect { bookmarks ->
+                    _uiState.update {
+                        it.copy(isBookmarked = bookmarks.containPlace(initPlaceName))
+                    }
+                }
+        }
+    }
+
+    fun requestBookmarkUpdate() {
+        viewModelScope.launch {
+            eventHandler.emitEvent(Event.RequestUpdateBookmark(initPlaceName))
+        }
     }
 
     fun clearMarkerAndCameraMoveEvent() {
@@ -124,3 +135,12 @@ class PlaceInfoWithDayLogViewModel @AssistedInject constructor(
         }
     }
 }
+
+data class PlaceUiState(
+    val isLoading        : Boolean = false,
+    val placeItem        : Place? = null,
+    val isBookmarked     : Boolean = false,
+    val isAppBarCollapsed: Boolean = false,
+    val markerItem       : PlaceWithMarker? = null,
+    val cameraMoveEvent  : CameraUpdate? = null
+)

@@ -7,8 +7,7 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import org.kjh.mytravel.NavGraphDirections
 import org.kjh.mytravel.databinding.VhDayLogUserProfileItemBinding
-import org.kjh.mytravel.model.Post
-import org.kjh.mytravel.ui.features.daylog.SelectablePost
+import org.kjh.mytravel.ui.features.daylog.DayLogProfileItemUiState
 import org.kjh.mytravel.utils.navigateTo
 import org.kjh.mytravel.utils.onThrottleClick
 
@@ -20,17 +19,14 @@ import org.kjh.mytravel.utils.onThrottleClick
  * Description:
  */
 
-class DayLogDetailUserProfilesInnerAdapter(
-    private val onClickProfile: (Post) -> Unit
-) : ListAdapter<SelectablePost, DayLogDetailUserProfilesInnerAdapter.PlaceDetailUserProfileViewHolder>(
-    SELECTABLE_POST_COMPARATOR
-) {
+class DayLogDetailUserProfilesInnerAdapter
+    : ListAdapter<DayLogProfileItemUiState, PlaceDetailUserProfileViewHolder>(SELECTABLE_DAY_LOG_COMPARATOR) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PlaceDetailUserProfileViewHolder {
         return PlaceDetailUserProfileViewHolder(
             VhDayLogUserProfileItemBinding.inflate(
                 LayoutInflater.from(parent.context), parent, false
-            ), onClickProfile
+            )
         )
     }
 
@@ -38,43 +34,43 @@ class DayLogDetailUserProfilesInnerAdapter(
         holder.bind(getItem(position))
     }
 
-    class PlaceDetailUserProfileViewHolder(
-        val binding: VhDayLogUserProfileItemBinding,
-        val onClickProfile: (Post) -> Unit
-    ): RecyclerView.ViewHolder(binding.root) {
+    companion object {
+        private val SELECTABLE_DAY_LOG_COMPARATOR =
+            object : DiffUtil.ItemCallback<DayLogProfileItemUiState>() {
+                override fun areItemsTheSame(
+                    oldItem: DayLogProfileItemUiState,
+                    newItem: DayLogProfileItemUiState
+                ) = (oldItem.nickName == newItem.nickName) ||
+                        (oldItem.isSelected == newItem.isSelected)
 
-        init {
-            itemView.onThrottleClick {
-                binding.postItem?.let { post ->
-                    onClickProfile(post.postItem)
-                }
+                override fun areContentsTheSame(
+                    oldItem: DayLogProfileItemUiState,
+                    newItem: DayLogProfileItemUiState
+                ) = oldItem == newItem
             }
+    }
+}
 
-            binding.tvNickName.onThrottleClick { view ->
-                binding.postItem?.let { post ->
-                    val action = NavGraphDirections.actionGlobalUserFragment(post.postItem.email)
-                    view.navigateTo(action)
-                }
+class PlaceDetailUserProfileViewHolder(
+    val binding: VhDayLogUserProfileItemBinding
+): RecyclerView.ViewHolder(binding.root) {
+
+    init {
+        itemView.onThrottleClick {
+            binding.dayLogItem?.let { dayLog ->
+                dayLog.onChangeSelected()
             }
         }
 
-        fun bind(postItem: SelectablePost) {
-            binding.postItem = postItem
+        binding.tvNickName.onThrottleClick { view ->
+            binding.dayLogItem?.let { dayLog ->
+                val action = NavGraphDirections.actionGlobalUserFragment(dayLog.email)
+                view.navigateTo(action)
+            }
         }
     }
 
-    companion object {
-        private val SELECTABLE_POST_COMPARATOR = object: DiffUtil.ItemCallback<SelectablePost>() {
-            override fun areItemsTheSame(
-                oldItem: SelectablePost,
-                newItem: SelectablePost
-            ) = (oldItem.postItem.nickName == newItem.postItem.nickName) ||
-                    (oldItem.isSelected == newItem.isSelected)
-
-            override fun areContentsTheSame(
-                oldItem: SelectablePost,
-                newItem: SelectablePost
-            ) = oldItem == newItem
-        }
+    fun bind(dayLogItem: DayLogProfileItemUiState) {
+        binding.dayLogItem = dayLogItem
     }
 }

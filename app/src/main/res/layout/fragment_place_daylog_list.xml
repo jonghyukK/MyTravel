@@ -26,7 +26,7 @@
             app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
             app:spanCount="2"
             tools:listitem="@layout/vh_place_day_log_item"
-            bindItems="@{viewModel.uiState.placeItem.posts}"/>
+            bindItems="@{viewModel.uiState.placeItem.dayLogs}"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

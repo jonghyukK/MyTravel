@@ -9,13 +9,16 @@ import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
+import org.kjh.data.Event
+import org.kjh.data.EventHandler
 import org.kjh.domain.entity.ApiResult
+import org.kjh.domain.usecase.GetMyProfileUseCase
 import org.kjh.domain.usecase.GetPlaceUseCase
 import org.kjh.domain.usecase.GetPlaceWithAroundUseCase
+import org.kjh.mytravel.model.DayLog
 import org.kjh.mytravel.model.Place
-import org.kjh.mytravel.model.Post
 import org.kjh.mytravel.model.mapToPresenter
-import org.kjh.mytravel.ui.GlobalErrorHandler
+import org.kjh.mytravel.ui.common.PagingWithHeaderUiModel
 
 /**
  * MyTravel
@@ -25,59 +28,44 @@ import org.kjh.mytravel.ui.GlobalErrorHandler
  * Description:
  */
 
-sealed class AroundPlaceUiModel {
-    data class PlaceItem(val place: Place): AroundPlaceUiModel()
-    data class HeaderItem(val headerTitle: String): AroundPlaceUiModel()
-}
-
-data class SelectablePost(
-    val postItem  : Post,
-    val isSelected: Boolean = false
-)
-
 class DayLogDetailViewModel @AssistedInject constructor(
     private val getPlaceWithAroundUseCase: GetPlaceWithAroundUseCase,
-    private val getPlaceUseCase: GetPlaceUseCase,
-    private val globalErrorHandler: GlobalErrorHandler,
-    @Assisted private val initPlaceName: String,
-    @Assisted private val initPostId: Int
+    private val getPlaceUseCase         : GetPlaceUseCase,
+    private val getMyProfileUseCase     : GetMyProfileUseCase,
+    private val eventHandler            : EventHandler,
+    @Assisted private val initPlaceName : String,
+    @Assisted private val initDayLogId  : Int
 ): ViewModel() {
 
-    data class PlaceDetailUiState(
-        val isLoading      : Boolean = false,
-        val wholePostItems : List<SelectablePost> = listOf(),
-        val currentPostItem: Post? = null
-    )
-
-    private val _uiState = MutableStateFlow(PlaceDetailUiState())
+    private val _uiState = MutableStateFlow(DayLogDetailUiState())
     val uiState = _uiState.asStateFlow()
 
     private val _isCollapsed = MutableStateFlow(false)
     val isCollapsed = _isCollapsed.asStateFlow()
 
-    val aroundPlaceItemsPagingData = getPlaceWithAroundUseCase(initPlaceName)
-        .map { pagingData ->
-            pagingData.map {
-                AroundPlaceUiModel.PlaceItem(it.mapToPresenter())
-            }.filter { it.place.placeName != initPlaceName }
-        }
-        .map {
-            it.insertSeparators { before, after ->
-                if (after == null) {
-                    return@insertSeparators null
-                }
-
-                if (before == null) {
-                    AroundPlaceUiModel.HeaderItem("주변 가볼만한 장소")
-                } else {
-                    null
-                }
-            }
-        }
-        .cachedIn(viewModelScope)
+    val aroundPlaceItemsPagingData: Flow<PagingData<PagingWithHeaderUiModel<Place>>>
 
     init {
         fetchPlaceByPlaceName()
+        updateBookmarkState()
+
+        aroundPlaceItemsPagingData =
+            getPlaceWithAroundUseCase(initPlaceName)
+                .map { pagingData ->
+                    pagingData
+                        .filter { it.placeName != initPlaceName }
+                        .map { PagingWithHeaderUiModel.PagingItem(it.mapToPresenter()) }
+                        .insertSeparators { before, after ->
+                            if (after == null) {
+                                return@insertSeparators null
+                            }
+                            when (before) {
+                                null -> PagingWithHeaderUiModel.HeaderItem
+                                else -> null
+                            }
+                        }
+                }
+                .cachedIn(viewModelScope)
     }
 
     private fun fetchPlaceByPlaceName() {
@@ -85,60 +73,71 @@ class DayLogDetailViewModel @AssistedInject constructor(
             getPlaceUseCase(initPlaceName)
                 .collect { apiResult ->
                    when (apiResult) {
-                       is ApiResult.Loading -> _uiState.update {
-                           it.copy(isLoading = true)
-                       }
+                       is ApiResult.Loading -> isLoading(true)
 
                        is ApiResult.Success -> {
                            val result = apiResult.data.mapToPresenter()
+                           val dayLogs = result.dayLogs
 
-                           _uiState.update {
-                               it.copy(
-                                   isLoading       = false,
-                                   wholePostItems  = makeSelectablePostItems(result.posts),
-                                   currentPostItem = makeInitSelectedPostItem(result.posts)
+                           _uiState.update { currentUiState ->
+                               currentUiState.copy(
+                                   isLoading         = false,
+                                   wholeDayLogItems  = dayLogs,
+                                   currentDayLogItem = dayLogs.findDayLogByDayLogId(initDayLogId),
+                                   profileItems      = dayLogs.mapToDayLogProfileItems(
+                                       initDayLogId = initDayLogId,
+                                       onChangeCurrentDayLog = { changeCurrentDayLogItem(it) }
+                                   ),
+                                   onBookmark = { sendEventForUpdateBookmark(initPlaceName) }
                                )
                            }
                        }
 
                        is ApiResult.Error -> {
-                           val errorMsg = "occur Error [Fetch PlaceByPlaceName API]"
-                           globalErrorHandler.sendError(errorMsg)
-                           _uiState.update {
-                               it.copy(isLoading = false)
-                           }
+                           isLoading(false)
+                           eventHandler.emitEvent(
+                               Event.ApiError("occur Error [Fetch PlaceByPlaceName API]"))
                        }
                    }
                 }
         }
     }
 
-    private fun makeSelectablePostItems(posts: List<Post>) =
-        posts.mapIndexed { index, post ->
-            SelectablePost(
-                postItem   = post,
-                isSelected = if (initPostId == -1) index == 0 else initPostId == post.postId
-            )
+    private fun updateBookmarkState() {
+        viewModelScope.launch {
+            getMyProfileUseCase()
+                .map { it?.bookMarks }
+                .distinctUntilChanged()
+                .collect { bookmarks ->
+                    _uiState.update { currentUiState ->
+                        currentUiState.copy(
+                            isBookmarked = bookmarks?.any { it.placeName == initPlaceName } ?: false
+                        )
+                    }
+                }
         }
+    }
 
-    private fun makeInitSelectedPostItem(posts: List<Post>) =
-        if (initPostId == -1)
-            posts[0]
-        else
-            posts.find { it.postId == initPostId }
-
-    fun changeCurrentPostItem(selectedItem: Post) {
-        val updateSelectStatePosts = _uiState.value.wholePostItems.map { prevPost ->
-            prevPost.copy(
-                isSelected = prevPost.postItem.postId == selectedItem.postId
-            )
+    private fun sendEventForUpdateBookmark(placeName: String) {
+        viewModelScope.launch {
+            eventHandler.emitEvent(Event.RequestUpdateBookmark(placeName))
         }
+    }
 
+    private fun changeCurrentDayLogItem(selectedDayLogId: Int) {
+        _uiState.getAndUpdate { currentUiState ->
+            with (currentUiState) {
+                copy(
+                    currentDayLogItem = wholeDayLogItems.findDayLogByDayLogId(selectedDayLogId),
+                    profileItems      = profileItems.updateSelected(selectedDayLogId)
+                )
+            }
+        }
+    }
+
+    private fun isLoading(isLoading: Boolean) {
         _uiState.update {
-            it.copy(
-                wholePostItems = updateSelectStatePosts,
-                currentPostItem = selectedItem
-            )
+            it.copy(isLoading = isLoading)
         }
     }
 
@@ -148,18 +147,62 @@ class DayLogDetailViewModel @AssistedInject constructor(
 
     @AssistedFactory
     interface DayLogDetailAssistedFactory {
-        fun create(placeName: String, postId: Int): DayLogDetailViewModel
+        fun create(placeName: String, dayLogId: Int): DayLogDetailViewModel
     }
 
     companion object {
         fun provideFactory(
             assistedFactory: DayLogDetailAssistedFactory,
-            placeName: String,
-            postId: Int
+            initPlaceName: String,
+            initDayLogId: Int
         ): ViewModelProvider.Factory = object: ViewModelProvider.Factory {
             override fun <T : ViewModel> create(modelClass: Class<T>): T {
-                return assistedFactory.create(placeName, postId) as T
+                return assistedFactory.create(initPlaceName, initDayLogId) as T
             }
         }
     }
 }
+
+data class DayLogProfileItemUiState(
+    val profileImg  : String? = null,
+    val nickName    : String = "",
+    val email       : String = "",
+    val dayLogId    : Int = -1,
+    val isSelected  : Boolean = false,
+    val onChangeSelected : () -> Unit
+)
+
+data class DayLogDetailUiState(
+    val isLoading        : Boolean = false,
+    val currentDayLogItem: DayLog? = null,
+    val wholeDayLogItems : List<DayLog> = emptyList(),
+    val profileItems     : List<DayLogProfileItemUiState> = emptyList(),
+    val isBookmarked     : Boolean = false,
+    val onBookmark       : () -> Unit = {}
+)
+
+private fun List<DayLogProfileItemUiState>.updateSelected(selectedDayLogId: Int) =
+    this.map {
+        it.copy(isSelected = it.dayLogId == selectedDayLogId)
+    }
+
+private fun List<DayLog>.findDayLogByDayLogId(dayLogId: Int) =
+    if (dayLogId == -1)
+        first()
+    else
+        find { it.dayLogId == dayLogId}
+
+
+private fun List<DayLog>.mapToDayLogProfileItems(
+    initDayLogId         : Int,
+    onChangeCurrentDayLog: (Int) -> Unit
+) = mapIndexed { index, dayLog ->
+        DayLogProfileItemUiState(
+            profileImg  = dayLog.profileImg,
+            nickName    = dayLog.nickName,
+            email       = dayLog.email,
+            dayLogId    = dayLog.dayLogId,
+            isSelected  = (dayLog.dayLogId == initDayLogId) || (index == 0 && initDayLogId == -1),
+            onChangeSelected = { onChangeCurrentDayLog(dayLog.dayLogId) }
+        )
+    }

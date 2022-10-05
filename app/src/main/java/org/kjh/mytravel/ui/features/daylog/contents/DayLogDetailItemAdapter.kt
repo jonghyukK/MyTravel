@@ -5,8 +5,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import org.kjh.mytravel.NavGraphDirections
 import org.kjh.mytravel.databinding.VhDayLogDetailItemBinding
-import org.kjh.mytravel.model.Post
-import org.kjh.mytravel.ui.features.daylog.DayLogDetailViewModel
+import org.kjh.mytravel.model.DayLog
 import org.kjh.mytravel.utils.navigateTo
 import org.kjh.mytravel.utils.onThrottleClick
 
@@ -19,15 +18,15 @@ import org.kjh.mytravel.utils.onThrottleClick
  */
 
 class DayLogDetailItemAdapter(
-    private val onClickBookmark: (Post) -> Unit,
-    private val onClickShare   : (Post) -> Unit
+    private val onClickBookmark: (DayLog) -> Unit,
+    private val onClickShare   : (DayLog) -> Unit
 ): RecyclerView.Adapter<DayLogDetailItemAdapter.DayLogDetailItemViewHolder>() {
 
-    private var currentPostItem: Post? = null
+    private var currentDayLogItem: DayLog? = null
     private var isBookmarked   : Boolean = false
 
-    fun setPostItem(post: Post) {
-        currentPostItem = post
+    fun setDayLogItem(dayLog: DayLog) {
+        currentDayLogItem = dayLog
         notifyItemChanged(0)
     }
 
@@ -45,40 +44,40 @@ class DayLogDetailItemAdapter(
     }
 
     override fun onBindViewHolder(holder: DayLogDetailItemViewHolder, position: Int) {
-        currentPostItem?.let { holder.bind(it, isBookmarked)}
+        currentDayLogItem?.let { holder.bind(it, isBookmarked)}
     }
 
     override fun getItemCount() = 1
 
     class DayLogDetailItemViewHolder(
         private val binding        : VhDayLogDetailItemBinding,
-        private val onClickBookmark: (Post) -> Unit,
-        private val onClickShare   : (Post) -> Unit
+        private val onClickBookmark: (DayLog) -> Unit,
+        private val onClickShare   : (DayLog) -> Unit
     ): RecyclerView.ViewHolder(binding.root) {
 
         init {
             binding.clPlaceInfoContainer.onThrottleClick { view ->
-                binding.postItem?.let { post ->
+                binding.dayLogItem?.let { dayLog ->
                     view.navigateTo(
-                        NavGraphDirections.actionGlobalPlaceInfoWithDayLogFragment(post.placeName))
+                        NavGraphDirections.actionGlobalPlaceInfoWithDayLogFragment(dayLog.placeName))
                 }
             }
 
             binding.btnBookmark.onThrottleClick {
-                binding.postItem?.let { post ->
-                    onClickBookmark(post)
+                binding.dayLogItem?.let { dayLog ->
+                    onClickBookmark(dayLog)
                 }
             }
 
             binding.btnShare.onThrottleClick {
-                binding.postItem?.let { post ->
-                    onClickShare(post)
+                binding.dayLogItem?.let { dayLog ->
+                    onClickShare(dayLog)
                 }
             }
         }
 
-        fun bind(postItem: Post, isBookmarked: Boolean) {
-            binding.postItem = postItem
+        fun bind(dayLogItem: DayLog, isBookmarked: Boolean) {
+            binding.dayLogItem = dayLogItem
             binding.isBookmarked = isBookmarked
         }
     }

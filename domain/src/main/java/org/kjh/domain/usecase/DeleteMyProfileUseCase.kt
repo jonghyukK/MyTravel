@@ -9,8 +9,7 @@ import org.kjh.domain.repository.UserRepository
  *
  * Description:
  */
-class DeleteMyProfileUseCase(
-    private val userRepository: UserRepository
-) {
+class DeleteMyProfileUseCase(private val userRepository: UserRepository) {
+
     suspend operator fun invoke() = userRepository.deleteMyProfile()
 }

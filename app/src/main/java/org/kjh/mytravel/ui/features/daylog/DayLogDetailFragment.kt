@@ -1,11 +1,5 @@
 package org.kjh.mytravel.ui.features.daylog
 
-import android.graphics.Color
-import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
-import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
@@ -14,26 +8,15 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.navigation.ui.setupWithNavController
 import androidx.recyclerview.widget.ConcatAdapter
-import com.kakao.sdk.share.ShareClient
-import com.kakao.sdk.share.WebSharerClient
-import com.kakao.sdk.template.model.*
-import com.orhanobut.logger.Logger
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import org.kjh.mytravel.R
 import org.kjh.mytravel.databinding.FragmentDaylogDetailBinding
-import org.kjh.mytravel.model.Post
+import org.kjh.mytravel.model.DayLog
 import org.kjh.mytravel.ui.base.BaseFragment
 import org.kjh.mytravel.ui.features.daylog.around.AroundPlaceListAdapter
-import org.kjh.mytravel.ui.features.daylog.contents.DayLogDetailItemAdapter
-import org.kjh.mytravel.ui.features.daylog.images.DayLogDetailImagesInnerAdapter
-import org.kjh.mytravel.ui.features.daylog.images.DayLogDetailImagesOuterAdapter
-import org.kjh.mytravel.ui.features.daylog.profiles.DayLogDetailUserProfilesInnerAdapter
-import org.kjh.mytravel.ui.features.daylog.profiles.DayLogDetailUserProfilesOuterAdapter
-import org.kjh.mytravel.ui.features.profile.my.MyProfileViewModel
 import org.kjh.mytravel.utils.KakaoLinkUtils
-import org.kjh.mytravel.utils.containPlace
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -43,57 +26,29 @@ class DayLogDetailFragment
     @Inject
     lateinit var dayLogDetailViewModelFactory: DayLogDetailViewModel.DayLogDetailAssistedFactory
 
-    private val myProfileViewModel: MyProfileViewModel by activityViewModels()
     private val args: DayLogDetailFragmentArgs by navArgs()
     private val viewModel by viewModels<DayLogDetailViewModel> {
-        DayLogDetailViewModel.provideFactory(dayLogDetailViewModelFactory, args.placeName, args.postId)
-    }
-
-    private val imagesInnerAdapter by lazy {
-        DayLogDetailImagesInnerAdapter()
-    }
-
-    private val profilesInnerAdapter by lazy {
-        DayLogDetailUserProfilesInnerAdapter {
-            viewModel.changeCurrentPostItem(it)
-        }
-    }
-
-    private val contentAdapter by lazy {
-        DayLogDetailItemAdapter(
-            onClickBookmark = { post -> myProfileViewModel.updateBookmark(post.postId, post.placeName) },
-            onClickShare = { post -> KakaoLinkUtils.sendDayLogKakaoLink(requireContext(), post) }
+        DayLogDetailViewModel.provideFactory(
+            assistedFactory = dayLogDetailViewModelFactory,
+            initPlaceName = args.placeName,
+            initDayLogId  = args.dayLogId
         )
     }
-
-    private val aroundPlaceListAdapter by lazy {
-        AroundPlaceListAdapter()
+    private val dayLogDetailAdapter by lazy {
+        DayLogDetailAdapter(onClickShare = ::sendDayLogToKakaoLink)
     }
-
+    private val aroundPlaceListAdapter by lazy { AroundPlaceListAdapter() }
     private val concatAdapter by lazy {
         ConcatAdapter(
-            DayLogDetailImagesOuterAdapter(imagesInnerAdapter),
-            DayLogDetailUserProfilesOuterAdapter(profilesInnerAdapter),
-            contentAdapter,
+            dayLogDetailAdapter,
             aroundPlaceListAdapter
         )
     }
 
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        requireActivity().window.statusBarColor = Color.TRANSPARENT
-        return super.onCreateView(inflater, container, savedInstanceState)
-    }
-
     override fun initView() {
-        binding.fragment = this
         binding.viewModel = viewModel
         binding.concatAdapter = concatAdapter
         binding.placeName = args.placeName
-
         binding.tbPlaceDetailToolbar.setupWithNavController(findNavController())
     }
 
@@ -101,12 +56,8 @@ class DayLogDetailFragment
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 launch {
-                    viewModel.uiState.collect { uiState ->
-                        uiState.currentPostItem?.let {
-                            contentAdapter.setPostItem(it)
-                            imagesInnerAdapter.submitList(it.imageUrl)
-                            profilesInnerAdapter.submitList(uiState.wholePostItems)
-                        }
+                    viewModel.uiState.collect {
+                        dayLogDetailAdapter.setUiItem(it)
                     }
                 }
 
@@ -115,14 +66,16 @@ class DayLogDetailFragment
                         aroundPlaceListAdapter.submitData(it)
                     }
                 }
-
-                launch {
-                    myProfileViewModel.myProfileUiState.collect {
-                        val isBookmarked = it.myBookmarkItems.containPlace(args.placeName)
-                        contentAdapter.setBookmarked(isBookmarked)
-                    }
-                }
             }
         }
+    }
+
+    private fun sendDayLogToKakaoLink(dayLogItem: DayLog) {
+        KakaoLinkUtils.sendDayLogKakaoLink(
+            ctx = requireContext(),
+            placeName = dayLogItem.placeName,
+            content  = dayLogItem.content ?: "",
+            imageUrl = dayLogItem.imageUrl[0]
+        )
     }
 }

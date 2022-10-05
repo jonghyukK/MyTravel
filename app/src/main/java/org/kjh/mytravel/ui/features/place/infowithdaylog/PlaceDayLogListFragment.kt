@@ -5,7 +5,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import org.kjh.mytravel.R
 import org.kjh.mytravel.databinding.FragmentPlaceDaylogListBinding
 import org.kjh.mytravel.ui.base.BaseFragment
-import org.kjh.mytravel.ui.features.profile.PostsGridItemDecoration
+import org.kjh.mytravel.ui.features.profile.DayLogGridItemDecoration
 
 @AndroidEntryPoint
 class PlaceDayLogListFragment
@@ -20,7 +20,7 @@ class PlaceDayLogListFragment
         binding.placeDayLogRecyclerView.apply {
             setHasFixedSize(true)
             adapter = placeDayLogListAdapter
-            addItemDecoration(PostsGridItemDecoration(requireContext()))
+            addItemDecoration(DayLogGridItemDecoration())
         }
     }
 

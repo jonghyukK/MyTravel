@@ -46,8 +46,5 @@ class DayLogDetailUserProfileItemDecoration: BaseItemDecoration() {
                 outRect.right = size7
             }
         }
-
-        outRect.top = size15
-        outRect.bottom = size20
     }
 }

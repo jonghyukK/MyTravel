@@ -30,11 +30,11 @@ class AroundPlaceItemDecoration : BaseItemDecoration() {
         val isLeftItem = viewPosition % spanCount == 0
         val isRightItem = viewPosition % spanCount == 1
 
-        if (viewPosition == 3) {
+        if (viewPosition == 1) {
             outRect.top = 25.dpToPx().toInt()
         }
 
-        if (viewPosition >= 4) {
+        if (viewPosition >= 2) {
             when {
                 isLeftItem -> {
                     outRect.right = 1.dpToPx().toInt()
@@ -44,7 +44,7 @@ class AroundPlaceItemDecoration : BaseItemDecoration() {
                 }
             }
 
-            outRect.bottom =  4.dpToPx().toInt()
+            outRect.bottom = 4.dpToPx().toInt()
         }
     }
 }
