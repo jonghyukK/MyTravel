@@ -11,7 +11,6 @@ import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupWithNavController
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Job
-import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.launch
 import org.kjh.data.Event
 import org.kjh.mytravel.NavGraphDirections
@@ -29,37 +28,72 @@ class MainActivity : BaseActivity<ActivityMainBinding>(R.layout.activity_main) {
 
     private val homeViewModel  : HomeViewModel by viewModels()
     private val uploadViewModel: UploadViewModel by viewModels()
-    private lateinit var navController: NavController
-
     private var uploadHandleJob: Job? = null
+    private val onDestinationChangedListener: NavController.OnDestinationChangedListener
+    private lateinit var actionNavigateToNotLoginPage: () -> Unit
 
-    override fun initView() {
-        WindowCompat.setDecorFitsSystemWindows(window, false)
+    init {
+        onDestinationChangedListener =
+            NavController.OnDestinationChangedListener { nav, destination, arguments ->
+                val isShowBnv = arguments?.getBoolean(getString(R.string.key_show_bnv), false) == true
 
-        val navHostFragment = supportFragmentManager.findFragmentById(
-            R.id.nav_host_fragment
-        ) as NavHostFragment
-
-        navController = navHostFragment.navController.apply {
-            addOnDestinationChangedListener { _, destination, arguments ->
-                binding.bnvBottomNav.isVisible =
-                    arguments?.getBoolean(getString(R.string.key_show_bnv), false) == true
-
-                if (destination.id == R.id.homeFragment) {
-                    changeStartDestination(this)
-                }
+                updateBottomNavViewVisibility(isShowBnv)
+                changeStartDestinationIfNotHome(
+                    navController = nav,
+                    destinationId = destination.id
+                )
             }
-        }
-        binding.bnvBottomNav.setupWithNavController(navController)
     }
 
-    private fun changeStartDestination(navController: NavController) {
+    private fun updateBottomNavViewVisibility(isShowBnv: Boolean) {
+        binding.bnvBottomNav.isVisible = isShowBnv
+    }
+
+    private fun changeStartDestinationIfNotHome(
+        navController: NavController,
+        destinationId: Int
+    ) {
+        if (destinationId != R.id.homeFragment
+            || navController.graph.startDestinationId == R.id.home) {
+            return
+        }
+
         val navGraph = navController.graph
         if (navGraph.startDestinationId != R.id.home) {
             navGraph.setStartDestination(R.id.home)
 
             navController.graph = navGraph
         }
+    }
+
+    override fun initView() {
+        setWindowDecorFitsToFalse()
+        setNavController()
+    }
+
+    private fun setWindowDecorFitsToFalse() {
+        WindowCompat.setDecorFitsSystemWindows(window, false)
+    }
+
+    private fun setNavController() {
+        val navHostFragment = supportFragmentManager.findFragmentById(
+            R.id.nav_host_fragment
+        ) as NavHostFragment
+
+        val navController = navHostFragment.navController
+        navController.addOnDestinationChangedListener(onDestinationChangedListener)
+
+        setNavigateAction(navController)
+        setupWithNavControllerWithBnv(navController)
+    }
+
+    private fun setNavigateAction(navController: NavController) {
+        actionNavigateToNotLoginPage =
+            { navController.navigate(NavGraphDirections.actionGlobalNotLogin()) }
+    }
+
+    private fun setupWithNavControllerWithBnv(navController: NavController) {
+        binding.bnvBottomNav.setupWithNavController(navController)
     }
 
     override fun subscribeUi() {
@@ -80,10 +114,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>(R.layout.activity_main) {
                                     ctx = this@MainActivity,
                                     title = getString(R.string.title_need_login_dialog),
                                     msg = getString(R.string.desc_need_login_dialog),
-                                    posAction = {
-                                        val action = NavGraphDirections.actionGlobalNotLogin()
-                                        navController.navigate(action)
-                                    }
+                                    posAction = actionNavigateToNotLoginPage
                                 )
                             }
                             is Event.ApiError -> showToast(event.errorMsg)
@@ -96,7 +127,8 @@ class MainActivity : BaseActivity<ActivityMainBinding>(R.layout.activity_main) {
     }
 
     private fun addUploadHandleJobIfUploadRequested() {
-        uploadHandleJob = MainScope().launch {
+        uploadHandleJob?.cancel()
+        uploadHandleJob = lifecycleScope.launch {
             uploadViewModel.uploadState.collect { uploadState ->
                 when (uploadState) {
                     is UiState.Loading -> makeNotificationForUploadStart()
@@ -112,13 +144,13 @@ class MainActivity : BaseActivity<ActivityMainBinding>(R.layout.activity_main) {
         updateNotificationWhenUploadSuccessOrFailed(getString(R.string.upload_success))
         refreshHomeLatestDayLogs()
         initUploadStateAfterUpload()
-        cancelAndClearUploadJob()
+        clearUploadHandleJob()
     }
 
     private fun handleUploadFailed() {
         updateNotificationWhenUploadSuccessOrFailed(getString(R.string.upload_failed))
         initUploadStateAfterUpload()
-        cancelAndClearUploadJob()
+        clearUploadHandleJob()
     }
 
     private fun makeNotificationForUploadStart() {
@@ -137,8 +169,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>(R.layout.activity_main) {
         uploadViewModel.initUploadState()
     }
 
-    private fun cancelAndClearUploadJob() {
-        uploadHandleJob?.cancel()
+    private fun clearUploadHandleJob() {
         uploadHandleJob = null
     }
 }
