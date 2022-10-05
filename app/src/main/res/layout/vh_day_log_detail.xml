@@ -1,0 +1,163 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+        <variable
+            name="dayLogItem"
+            type="org.kjh.mytravel.ui.features.daylog.DayLogDetailUiState" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/imageRecyclerView"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            android:orientation="horizontal"
+            app:layout_constraintDimensionRatio="1:1"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            bindItems="@{dayLogItem.currentDayLogItem.imageUrl}"
+            tools:listitem="@layout/vh_day_log_image_item"/>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/userProfileRecyclerView"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:minHeight="80dp"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            android:orientation="horizontal"
+            app:layout_constraintTop_toBottomOf="@+id/imageRecyclerView"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:paddingVertical="15dp"
+            bindItems="@{dayLogItem.profileItems}"
+            tools:listitem="@layout/vh_day_log_user_profile_item"/>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/cl_placeInfoContainer"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:background="?attr/selectableItemBackground"
+            android:clickable="true"
+            android:focusable="true"
+            app:layout_constraintStart_toEndOf="@+id/startGuideLine"
+            app:layout_constraintEnd_toStartOf="@+id/endGuideLine"
+            app:layout_constraintTop_toBottomOf="@+id/userProfileRecyclerView">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_right_arrow"
+                app:layout_constraintBottom_toBottomOf="@+id/tv_placeAddress"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/tv_placeName" />
+
+            <TextView
+                android:id="@+id/tv_placeAddress"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:text="@{dayLogItem.currentDayLogItem.cityName + `, ` + dayLogItem.currentDayLogItem.subCityName}"
+                android:textSize="13sp"
+                app:layout_constraintStart_toStartOf="@+id/tv_placeName"
+                app:layout_constraintTop_toBottomOf="@+id/tv_placeName"
+                tools:text="강원, 삼척시"/>
+
+            <TextView
+                android:id="@+id/tv_placeName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@{dayLogItem.currentDayLogItem.placeName}"
+                android:textColor="#333"
+                android:textSize="17sp"
+                android:textStyle="bold"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:text="쏠비치 삼척"/>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <TextView
+            android:id="@+id/tv_content"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingVertical="25dp"
+            android:text="@{dayLogItem.currentDayLogItem.content}"
+            android:textColor="@color/black"
+            android:textSize="15sp"
+            app:layout_constraintStart_toEndOf="@+id/startGuideLine"
+            app:layout_constraintTop_toBottomOf="@+id/cl_placeInfoContainer"
+            tools:text="여기 엄청 좋아요!!"/>
+
+        <TextView
+            android:id="@+id/tv_date"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@{dayLogItem.currentDayLogItem.createdDate}"
+            app:layout_constraintStart_toEndOf="@+id/startGuideLine"
+            app:layout_constraintTop_toBottomOf="@+id/tv_content"
+            tools:text="2022-09-14"/>
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btn_share"
+            style="@style/Widget.Material3.Button.OutlinedButton.Icon"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:layout_constraintStart_toStartOf="@id/startGuideLine"
+            app:layout_constraintTop_toBottomOf="@+id/tv_date"
+            app:layout_constraintEnd_toStartOf="@+id/btn_bookmark"
+            android:layout_marginEnd="15dp"
+            android:layout_marginTop="30dp"
+            app:backgroundTint="@color/white"
+            app:strokeColor="@color/purple_500"
+            app:strokeWidth="1.5dp"
+            app:icon="@drawable/ic_share"
+            app:iconTint="@color/purple_500"
+            app:iconPadding="0dp"
+            app:iconSize="20dp"
+            android:textColor="@color/purple_500"
+            android:textSize="13sp"
+            android:text="@string/place_share"/>
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btn_bookmark"
+            style="@style/Widget.Material3.Button.OutlinedButton.Icon"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toTopOf="@+id/btn_share"
+            app:layout_constraintStart_toEndOf="@+id/btn_share"
+            app:layout_constraintEnd_toEndOf="@id/endGuideLine"
+            app:strokeColor="@color/purple_500"
+            app:iconTint="@color/purple_500"
+            app:iconSize="24dp"
+            app:strokeWidth="1.5dp"
+            android:textColor="@color/purple_500"
+            android:textSize="13sp"
+            android:text="@{dayLogItem.bookmarked ? @string/done_save : @string/do_save}"
+            app:icon="@{dayLogItem.bookmarked ? @drawable/ic_bookmark_active : @drawable/ic_bookmark_inactive}"
+            onThrottleClick="@{dayLogItem.onBookmark}"
+            tools:text="저장하기"
+            tools:icon="@drawable/ic_bookmark_inactive"/>
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/startGuideLine"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_begin="15dp" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/endGuideLine"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_end="15dp"/>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

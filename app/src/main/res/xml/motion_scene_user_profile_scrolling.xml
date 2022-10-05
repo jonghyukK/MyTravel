@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<MotionScene xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:motion="http://schemas.android.com/apk/res-auto">
+
+    <ConstraintSet android:id="@+id/cs_user_scrolling_start">
+        <Constraint
+            android:id="@+id/postsTabLayout"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            motion:layout_constraintBottom_toTopOf="@+id/postsViewPager"
+            motion:layout_constraintEnd_toEndOf="parent"
+            motion:layout_constraintStart_toStartOf="parent"
+            motion:layout_constraintTop_toBottomOf="@+id/layout_userProfileInfo" />
+        <Constraint
+            android:id="@+id/pb_loading"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            motion:layout_constraintBottom_toBottomOf="parent"
+            motion:layout_constraintEnd_toEndOf="parent"
+            motion:layout_constraintStart_toStartOf="parent"
+            motion:layout_constraintTop_toTopOf="parent"
+            motion:visibilityMode="ignore" />
+    </ConstraintSet>
+
+    <ConstraintSet android:id="@+id/cs_user_scrolling_end">
+        <Constraint
+            android:id="@+id/postsTabLayout"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            motion:layout_constraintBottom_toTopOf="@+id/postsViewPager"
+            motion:layout_constraintEnd_toEndOf="parent"
+            motion:layout_constraintStart_toStartOf="parent"
+            motion:layout_constraintTop_toBottomOf="@+id/tb_userToolbar" />
+        <Constraint
+            android:id="@+id/pb_loading"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            motion:layout_constraintBottom_toBottomOf="parent"
+            motion:layout_constraintEnd_toEndOf="parent"
+            motion:layout_constraintStart_toStartOf="parent"
+            motion:layout_constraintTop_toTopOf="parent"
+            motion:visibilityMode="ignore" />
+    </ConstraintSet>
+
+    <Transition
+        motion:constraintSetEnd="@+id/cs_user_scrolling_end"
+        motion:constraintSetStart="@id/cs_user_scrolling_start"
+        motion:layoutDuringTransition="honorRequest">
+
+        <OnSwipe
+            motion:onTouchUp="stop"
+            motion:touchAnchorId="@+id/postsViewPager" />
+    </Transition>
+</MotionScene>

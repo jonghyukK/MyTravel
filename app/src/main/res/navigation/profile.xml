@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/profile"
+    app:startDestination="@+id/profileFragment">
+
+    <!-- Upload Graph -->
+    <include app:graph="@navigation/upload" />
+
+    <!-- Profile Fragment -->
+    <fragment
+        android:id="@+id/profileFragment"
+        android:name="org.kjh.mytravel.ui.features.profile.my.ProfileFragment"
+        tools:layout="@layout/fragment_profile" >
+
+        <argument
+            android:name="@string/key_show_bnv"
+            android:defaultValue="true" />
+
+        <action
+            android:id="@+id/action_to_selectPhoto"
+            app:destination="@id/nav_nested_upload" />
+        <action
+            android:id="@+id/action_to_setting"
+            app:destination="@id/settingFragment" />
+        <action
+            android:id="@+id/action_to_profileEdit"
+            app:destination="@id/profileEditFragment"
+            app:enterAnim="@anim/slide_in_up"
+            app:exitAnim="@anim/fade_out"/>
+    </fragment>
+
+    <!-- Setting Fragment -->
+    <fragment
+        android:id="@+id/settingFragment"
+        android:name="org.kjh.mytravel.ui.features.settings.SettingFragment"
+        android:label="설정"
+        tools:layout="@layout/fragment_setting"/>
+
+    <!-- ProfileEdit Fragment -->
+    <fragment
+        android:id="@+id/profileEditFragment"
+        android:name="org.kjh.mytravel.ui.features.profile.edit.ProfileEditFragment"
+        android:label="프로필 편집"
+        tools:layout="@layout/fragment_profile_edit" />
+</navigation>

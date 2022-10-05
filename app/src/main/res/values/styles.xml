@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:android="http://schemas.android.com/apk/res/android">
+    <style name="circle">
+        <item name="cornerSize">50%</item>
+    </style>
+
+    <style name="style_title">
+        <item name="android:textStyle">bold</item>
+        <item name="android:textSize">18sp</item>
+        <item name="android:textColor">#333333</item>
+        <item name="android:paddingTop">20dp</item>
+        <item name="android:paddingStart">20dp</item>
+        <item name="android:paddingBottom">15dp</item>
+    </style>
+
+    <style name="CollapsingToolbarLayoutExpandedTextStyle">
+        <item name="android:textColor">@android:color/transparent</item>
+        <item name="android:textSize">0sp</item>
+    </style>
+
+    <style name="FullScreenDialog" parent="Theme.MaterialComponents.Light.Dialog">
+        <item name="android:windowIsFloating">false</item>
+        <item name="android:windowFullscreen">false</item>
+        <item name="android:windowBackground">@android:color/white</item>
+    </style>
+
+
+    <style name="CircleProfileImg">
+        <item name="android:scaleType">centerCrop</item>
+        <item name="shapeAppearanceOverlay">@style/circle</item>
+    </style>
+
+
+    <style name="Text_Bold">
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <!-- Color #444 -->
+    <style name="Text_Color444">
+        <item name="android:textColor">#444</item>
+    </style>
+    <style name="Text_Color444.size15"><item name="android:textSize">15sp</item></style>
+    <style name="Text_Color444.size14"><item name="android:textSize">14sp</item></style>
+
+    <style name="Text_Color444.size15.Bold"><item name="android:textStyle">bold</item></style>
+
+
+    <style name="Text_Color777">
+        <item name="android:textColor">#777</item>
+    </style>
+    <style name="Text_Color777.Size14"><item name="android:textSize">14sp</item></style>
+
+    <style name="Text_Color777.Size14.Bold"><item name="android:textStyle">bold</item></style>
+
+
+    <style name="TextInputLayoutStyle_Test" parent="Widget.Design.TextInputLayout">
+        <!-- No Focus 상태 밑줄 color -->
+        <item name="colorControlNormal">@color/shadow_black</item>
+
+        <!-- Focus 상태 밑줄 color -->
+        <item name="colorControlActivated">@color/purple_500</item>
+
+        <!-- No Focus 상태 Hint color -->
+        <item name="android:textColorHint">@color/shadow_black</item>
+
+        <!-- Focus 상태 Hint color -->
+        <item name="hintTextColor">@color/purple_500</item>
+
+        <!-- 입력 시 Text Color -->
+        <item name="android:textColor">@color/black</item>
+
+        <!-- End Icon Color -->
+        <item name="endIconTint">@color/black</item>
+
+        <!-- End Icon Mode -->
+        <item name="endIconMode">password_toggle</item>
+
+        <!-- 문제점 !!
+            1. TextInputLayout 내에
+            app:passwordToggleEnabled="true" 사용시
+            endIconTint 칼라가 안 먹히기 때문에
+            xml에선 passwordToggleEnabled Attribute는 삭제 하고,
+            Style에서 endIconMode="password_toggle"을 사용.
+
+            2. 해당 Style을 Xml에서 style, Theme 두 곳에 지정을 해줘야 함.
+            아니면 안먹히는 속성들이 있슴.
+
+            style="This Style"
+            android:theme="This Style"
+        -->
+    </style>
+</resources>

@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_nested_upload"
+    app:startDestination="@id/selectPhotoFragment">
+
+    <action
+        android:id="@+id/action_global_profileFragment"
+        app:destination="@id/profileFragment"
+        app:popUpTo="@+id/profileFragment"
+        app:popUpToInclusive="true" />
+
+    <!-- SelectPhoto Fragment -->
+    <fragment
+        android:id="@+id/selectPhotoFragment"
+        android:name="org.kjh.mytravel.ui.features.upload.select.SelectPhotoFragment"
+        tools:layout="@layout/fragment_select_photo"
+        android:label="사진 선택">
+        <action
+            android:id="@+id/action_to_uploadDayLog"
+            app:destination="@id/uploadDayLogFragment" />
+    </fragment>
+
+    <!-- UploadPost Fragment -->
+    <fragment
+        android:id="@+id/uploadDayLogFragment"
+        android:name="org.kjh.mytravel.ui.features.upload.UploadDayLogFragment"
+        android:label="내용 채우기"
+        tools:layout="@layout/fragment_upload_day_log">
+        <action
+            android:id="@+id/action_to_location"
+            app:destination="@id/locationFragment" />
+        <action
+            android:id="@+id/action_to_contentInput"
+            app:destination="@id/contentInputFragment" />
+    </fragment>
+
+    <!-- Location Fragment -->
+    <fragment
+        android:id="@+id/locationFragment"
+        android:name="org.kjh.mytravel.ui.features.upload.location.LocationFragment"
+        tools:layout="@layout/fragment_location"
+        android:label="위치 검색">
+        <action
+            android:id="@+id/action_to_location_search"
+            app:destination="@id/locationSearchFragment" />
+    </fragment>
+
+    <!-- ContentInput Fragment -->
+    <fragment
+        android:id="@+id/contentInputFragment"
+        android:name="org.kjh.mytravel.ui.features.upload.content.ContentInputFragment"
+        android:label="@string/input_content"
+        tools:layout="@layout/fragment_content_input"/>
+
+    <!-- LocationSearch Fragment -->
+    <dialog
+        android:id="@+id/locationSearchFragment"
+        android:name="org.kjh.mytravel.ui.features.upload.location.LocationSearchFragment"
+        android:label="LocationSearchFragment"
+        tools:layout="@layout/bs_fragment_location_search"/>
+</navigation>

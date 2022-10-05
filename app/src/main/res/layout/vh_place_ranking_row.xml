@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/cl_rankingRowContainer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#f7f7f7">
+
+        <include
+            android:id="@+id/layout_header"
+            layout="@layout/layout_home_section_header"
+            app:headerTitle="@{`이번 주 가장 핫한 장소 BEST 7`}" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rv_rankingRecyclerView"
+            android:layout_width="0dp"
+            android:layout_height="284dp"
+            app:layout_constraintTop_toBottomOf="@+id/layout_header"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:nestedScrollingEnabled="false"
+            android:layout_marginBottom="20dp"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            android:orientation="horizontal"
+            tools:listitem="@layout/vh_place_ranking_item"/>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

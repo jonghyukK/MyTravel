@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+        <variable
+            name="placeItem"
+            type="org.kjh.mytravel.model.Place" />
+        <variable
+            name="isOneItemMode"
+            type="Boolean" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/cl_placeContainer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingTop="@{isOneItemMode ? @dimen/dp20 : @dimen/dp0}"
+        android:paddingBottom="@{isOneItemMode ? @dimen/dp20 : @dimen/dp25}"
+        android:background="@color/white">
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/startGuideLine"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_begin="20dp"
+            app:layout_constraintStart_toStartOf="parent"/>
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/topGuideLine"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_percent="0.2" />
+
+        <ImageView
+            android:id="@+id/iv_locationIcon"
+            android:layout_width="20dp"
+            android:layout_height="0dp"
+            android:src="@drawable/ic_location"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toTopOf="@+id/tv_placeDesc"
+            app:layout_constraintStart_toStartOf="@id/startGuideLine" />
+
+        <TextView
+            android:id="@+id/tv_placeName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toTopOf="@+id/iv_locationIcon"
+            app:layout_constraintBottom_toBottomOf="@+id/iv_locationIcon"
+            app:layout_constraintStart_toEndOf="@+id/iv_locationIcon"
+            android:layout_marginStart="5dp"
+            android:text="@{placeItem.placeName}"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:textColor="@color/black"/>
+
+        <TextView
+            android:id="@+id/tv_placeDesc"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="13sp"
+            app:layout_constraintStart_toStartOf="@id/iv_locationIcon"
+            app:layout_constraintTop_toBottomOf="@+id/iv_locationIcon"
+            app:layout_constraintBottom_toTopOf="@+id/topGuideLine"
+            android:text="역사가 깊은 도시, 삼척에 오신걸 환영합니다." />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/dayLogImgRecyclerView"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:orientation="horizontal"
+            android:nestedScrollingEnabled="false"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/topGuideLine"
+            bindItems="@{placeItem.dayLogs}"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            tools:listitem="@layout/vh_place_by_city_name_item" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

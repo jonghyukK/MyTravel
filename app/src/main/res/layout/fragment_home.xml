@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+        <variable
+            name="viewModel"
+            type="org.kjh.mytravel.ui.features.home.HomeViewModel" />
+    </data>
+
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+        android:id="@+id/srl_swipeRefreshLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        onSwipeRefreshAction="@{viewModel.refreshActionForAll}">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/cl_homeContainer"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/homeConcatRecyclerView"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:background="@color/white"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                onScrollAction="@{viewModel.updateCollapsed}" />
+
+            <androidx.appcompat.widget.Toolbar
+                android:id="@+id/tb_homeToolbar"
+                android:layout_width="0dp"
+                android:layout_height="?attr/actionBarSize"
+                toolbarInsets="@{true}"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                android:background="@{viewModel.homeUiState.hasScrolled ? @color/white : @color/transparent}"
+                app:title="@{viewModel.homeUiState.hasScrolled ? @string/app_name : ``}" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+</layout>

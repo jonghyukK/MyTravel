@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+        <variable
+            name="dayLogItem"
+            type="org.kjh.mytravel.model.DayLog" />
+        <variable
+            name="isBookmarked"
+            type="Boolean" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/cl_placeInfoContainer"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:background="?attr/selectableItemBackground"
+            android:clickable="true"
+            android:focusable="true"
+            android:paddingStart="15dp"
+            android:paddingEnd="15dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_right_arrow"
+                app:layout_constraintBottom_toBottomOf="@+id/tv_placeAddress"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/tv_placeName" />
+
+            <TextView
+                android:id="@+id/tv_placeAddress"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:text="@{dayLogItem.cityName + `, ` + dayLogItem.subCityName}"
+                android:textSize="13sp"
+                app:layout_constraintStart_toStartOf="@+id/tv_placeName"
+                app:layout_constraintTop_toBottomOf="@+id/tv_placeName" />
+
+            <TextView
+                android:id="@+id/tv_placeName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@{dayLogItem.placeName}"
+                android:textColor="#333"
+                android:textSize="17sp"
+                android:textStyle="bold"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <TextView
+            android:id="@+id/tv_content"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingTop="25dp"
+            android:paddingBottom="25dp"
+            android:text="@{dayLogItem.content}"
+            android:textColor="@color/black"
+            android:textSize="15sp"
+            app:layout_constraintStart_toEndOf="@+id/startGuideLine"
+            app:layout_constraintTop_toBottomOf="@+id/cl_placeInfoContainer" />
+
+        <TextView
+            android:id="@+id/tv_date"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@{dayLogItem.createdDate}"
+            app:layout_constraintStart_toEndOf="@+id/startGuideLine"
+            app:layout_constraintTop_toBottomOf="@+id/tv_content" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btn_share"
+            style="@style/Widget.Material3.Button.OutlinedButton.Icon"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:layout_constraintStart_toStartOf="@id/startGuideLine"
+            app:layout_constraintTop_toBottomOf="@+id/tv_date"
+            app:layout_constraintEnd_toStartOf="@+id/btn_bookmark"
+            android:layout_marginEnd="15dp"
+            android:layout_marginTop="30dp"
+            app:backgroundTint="@color/white"
+            app:strokeColor="@color/purple_500"
+            app:strokeWidth="1.5dp"
+            app:icon="@drawable/ic_share"
+            app:iconTint="@color/purple_500"
+            app:iconPadding="0dp"
+            app:iconSize="20dp"
+            android:textColor="@color/purple_500"
+            android:textSize="13sp"
+            android:text="@string/place_share"/>
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btn_bookmark"
+            style="@style/Widget.Material3.Button.OutlinedButton.Icon"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toTopOf="@+id/btn_share"
+            app:layout_constraintStart_toEndOf="@+id/btn_share"
+            app:layout_constraintEnd_toEndOf="@id/endGuideLine"
+            app:strokeColor="@color/purple_500"
+            app:icon="@{isBookmarked ? @drawable/ic_bookmark_active : @drawable/ic_bookmark_inactive}"
+            app:iconTint="@color/purple_500"
+            app:iconSize="24dp"
+            app:strokeWidth="1.5dp"
+            android:textColor="@color/purple_500"
+            android:textSize="13sp"
+            android:text="@{isBookmarked ? @string/done_save : @string/do_save}" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/startGuideLine"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_begin="15dp" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/endGuideLine"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_end="15dp"/>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

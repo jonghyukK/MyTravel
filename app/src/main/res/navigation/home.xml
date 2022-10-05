@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/home"
+    app:startDestination="@+id/homeFragment">
+
+    <!-- Home Fragment -->
+    <fragment
+        android:id="@+id/homeFragment"
+        android:name="org.kjh.mytravel.ui.features.home.HomeFragment"
+        tools:layout="@layout/fragment_home" >
+        <action
+            android:id="@+id/action_to_placesBySubCity"
+            app:destination="@id/placesBySubCityFragment"
+            app:enterAnim="@anim/scale_up"
+            app:exitAnim="@anim/scale_up_over"
+            app:popEnterAnim="@anim/scale_down"
+            app:popExitAnim="@anim/fade_out"/>
+
+        <argument
+            android:name="@string/key_show_bnv"
+            android:defaultValue="true" />
+    </fragment>
+
+    <!-- PlacesBySubCity Fragment -->
+    <fragment
+        android:id="@+id/placesBySubCityFragment"
+        android:name="org.kjh.mytravel.ui.features.place.subcity.PlacesBySubCityFragment"
+        tools:layout="@layout/fragment_places_by_sub_city">
+
+        <argument
+            android:name="cityName"
+            app:argType="string" />
+    </fragment>
+
+</navigation>

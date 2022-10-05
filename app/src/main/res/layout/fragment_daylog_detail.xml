@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+        <variable
+            name="viewModel"
+            type="org.kjh.mytravel.ui.features.daylog.DayLogDetailViewModel" />
+
+        <variable
+            name="concatAdapter"
+            type="androidx.recyclerview.widget.ConcatAdapter" />
+
+        <variable
+            name="placeName"
+            type="String" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/cl_placeDetailContainer"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        fullscreenContainerInsetsWithToolbar="@{tbPlaceDetailToolbar}">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/dayLogDetailRecyclerView"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            adapter="@{concatAdapter}"
+            onScrollActionPlaceDetail="@{viewModel.updateCollapsed}" />
+
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/tb_placeDetailToolbar"
+            android:layout_width="0dp"
+            android:layout_height="?attr/actionBarSize"
+            toolbarInsets="@{true}"
+            android:background="@{viewModel.isCollapsed() ? @color/white : @color/transparent}"
+            app:title="@{viewModel.isCollapsed() ? placeName : ``}"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ProgressBar
+            android:id="@+id/pb_loading"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:isVisible="@{viewModel.uiState.loading}"/>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</layout>

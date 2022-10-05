@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+        <variable
+            name="viewModel"
+            type="org.kjh.mytravel.ui.features.place.subcity.PlacesBySubCityViewModel" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/cl_bsContainer"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:behavior_hideable="false"
+        android:saveEnabled="true"
+        app:behavior_fitToContents="false"
+        app:behavior_halfExpandedRatio="0.1"
+        android:background="@color/white"
+        android:layout_marginBottom="90dp"
+        app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior">
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

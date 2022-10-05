@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/splashFragment">
+
+    <include app:graph="@navigation/bookmark" />
+    <include app:graph="@navigation/profile" />
+    <include app:graph="@navigation/home" />
+    <include app:graph="@navigation/login_sign_up" />
+
+    <action
+        android:id="@+id/action_global_placeInfoWithDayLogFragment"
+        app:destination="@id/placeInfoWithDayLogFragment"
+        app:enterAnim="@anim/scale_up"
+        app:exitAnim="@anim/scale_up_over"
+        app:popEnterAnim="@anim/scale_down"
+        app:popExitAnim="@anim/fade_out" />
+
+    <action
+        android:id="@+id/action_global_userFragment"
+        app:destination="@id/userFragment"
+        app:enterAnim="@anim/scale_up"
+        app:exitAnim="@anim/scale_up_over"
+        app:popEnterAnim="@anim/scale_down"
+        app:popExitAnim="@anim/fade_out" />
+
+    <action
+        android:id="@+id/action_global_dayLogDetailFragment"
+        app:destination="@id/dayLogDetailFragment"
+        app:enterAnim="@anim/scale_up"
+        app:exitAnim="@anim/scale_up_over"
+        app:popEnterAnim="@anim/scale_down"
+        app:popExitAnim="@anim/fade_out"/>
+
+    <fragment
+        android:id="@+id/userFragment"
+        android:name="org.kjh.mytravel.ui.features.profile.user.UserFragment"
+        tools:layout="@layout/fragment_user">
+        <argument
+            android:name="userEmail"
+            app:argType="string" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/placeInfoWithDayLogFragment"
+        android:name="org.kjh.mytravel.ui.features.place.infowithdaylog.PlaceInfoWithDayLogFragment"
+        tools:layout="@layout/fragment_place_info_with_daylog">
+        <argument
+            android:name="placeName"
+            app:argType="string" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/dayLogDetailFragment"
+        android:name="org.kjh.mytravel.ui.features.daylog.DayLogDetailFragment"
+        tools:layout="@layout/fragment_daylog_detail">
+        <argument
+            android:name="placeName"
+            app:argType="string" />
+        <argument
+            android:name="dayLogId"
+            android:defaultValue="-1"
+            app:argType="integer" />
+        <deepLink
+            android:id="@+id/deepLink"
+            app:uri="kakao94cd3aaf873248b465d6ffbc3868aea5://kakaolink?placeName={placeName}" />
+    </fragment>
+    <fragment
+        android:id="@+id/splashFragment"
+        android:name="org.kjh.mytravel.ui.features.splash.SplashFragment"
+        android:label="SplashFragment" >
+        <action
+            android:id="@+id/action_to_home"
+            app:destination="@id/home"
+            app:popUpTo="@id/splashFragment"
+            app:popUpToInclusive="true"
+            app:launchSingleTop="true"/>
+    </fragment>
+
+    <action
+        android:id="@+id/action_global_notLogin"
+        app:destination="@id/login_sign_up"
+        app:restoreState="true"
+        app:enterAnim="@anim/slide_in_up"
+        app:exitAnim="@anim/fade_out" />
+</navigation>

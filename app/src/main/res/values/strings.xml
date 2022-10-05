@@ -1,3 +1,84 @@
 <resources>
     <string name="app_name">MyTravel</string>
+    <string name="key_show_bnv">showBnv</string>
+
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+
+    <!-- about Kakao -->
+    <string name="kakao_base_url">https://developers.kakao.com</string>
+    <string name="kakao_host">kakaolink</string>
+    <string name="kakao_scheme">kakao94cd3aaf873248b465d6ffbc3868aea5</string>
+    <string name="kakao_feed_btn_text">앱으로 보기</string>
+    <string name="error_not_installed_kakao">카카오톡이 설치되어 있지 않습니다.</string>
+    <string name="error_failed_share_kakao_link">카카오톡 공유가 실패하였습니다.</string>
+
+    <string name="bnv_tab_name_home">Home</string>
+    <string name="bnv_tab_name_bookmark">Bookmark</string>
+    <string name="bnv_tab_name_profile">Profile</string>
+    <string name="confirm">확인</string>
+    <string name="post">게시물</string>
+    <string name="follower">팔로워</string>
+    <string name="following">팔로잉</string>
+    <string name="follow">팔로우</string>
+    <string name="bookmark">북마크</string>
+    <string name="edit_profile">프로필 편집</string>
+    <string name="login">로그인</string>
+    <string name="logout">로그아웃</string>
+    <string name="sign_up">회원가입</string>
+    <string name="email_address">이메일 주소</string>
+    <string name="input_email_address">이메일 주소 입력</string>
+    <string name="password">비밀번호</string>
+    <string name="more_than_8">8자리 이상</string>
+    <string name="nickName">닉네임</string>
+    <string name="do_sign_up">가입하기</string>
+    <string name="edit">편집</string>
+    <string name="introduce">자기소개</string>
+    <string name="save">저장</string>
+    <string name="add_location">위치 추가</string>
+    <string name="show_map">지도 보기</string>
+    <string name="cancel">취소</string>
+    <string name="retry">다시 시도</string>
+    <string name="daylog">데이로그</string>
+    <string name="info">정보</string>
+    <string name="place_share">장소 공유</string>
+    <string name="do_save">저장하기</string>
+    <string name="done_save">저장됨</string>
+    <string name="input_content_hint">내용 입력..</string>
+    <string name="input_content">내용 입력</string>
+    <string name="input_complete">입력 완료</string>
+    <string name="noti_upload_title">게시물 업로드</string>
+    <string name="delete_post">게시물 삭제</string>
+    <string name="uploading">업로드 중입니다..</string>
+    <string name="upload_failed">업로드가 실패하였습니다.</string>
+    <string name="upload_success">업로드가 완료되었습니다.</string>
+    <string name="search_address_and_name">주소 및 명칭 검색</string>
+    <string name="search_address_hint">주소 혹은 장소 명칭 입력</string>
+    <string name="apply_current_place">현재 위치 적용</string>
+    <string name="search_empty">검색 결과가 없습니다. \n주소 혹은 장소 명칭을 확인해 주세요.</string>
+    <string name="input_content_your_experience">해당 장소에서의 경험을 적어주세요.</string>
+    <string name="input_place">장소를 추가해 주세요.</string>
+    <string name="title_place_ranking_best_7">이번 주 가장 핫한 장소 BEST 7</string>
+    <string name="title_latest_day_log">최근 올라온 여행지</string>
+    <string name="title_need_login_dialog">로그인 필요 기능</string>
+    <string name="desc_need_login_dialog">해당 기능은 로그인 후 이용하실 수 있습니다. 로그인하시겠습니까?</string>
+    <string name="desc_share_travel_to_friend_after_login_or_signup">로그인/회원가입 후 \n멋진 나의 여행지를 친구들에게 공유해 주세요!</string>
+    <string name="desc_nothing_bookmark">북마크된 장소가 없습니다.</string>
+    <string name="desc_do_bookmark_you_wish">관심있는 장소를 북마크하면 이 곳에서 모아볼 수 있습니다.</string>
+    <string name="desc_empty_my_posts">등록된 여행지가 없습니다.\n이번 주말, 여행을 떠나보시는 건 어떨까요?</string>
+    <string name="desc_empty_user_posts">등록된 여행지가 없습니다.</string>
+    <string name="perm_title_first">업로드 관련 필수 권한 요청</string>
+    <string name="perm_title_retry">권한 재요청</string>
+    <string name="perm_msg_first">앱의 사진 업로드를 위한 다음의 권한을 허용해야 업로드 기능을 사용할 수 있습니다.</string>
+    <string name="perm_msg_retry">해당 권한은 오직 사진 업로드 기능만을 위한 것입니다. \n[설정] -> [권한]에서 \'저장\' 권한을 허용해 주세요.</string>
+
+    <string name="error_home_banner_api">배너 정보를 불러올 수 없습니다.</string>
+    <string name="error_home_ranking_api">장소 랭킹 정보를 불러올 수 없습니다.</string>
+    <string name="error_profile_api">프로필 정보를 가져올 수 없습니다.</string>
+    <string name="error_profile_edit_api">프로필 정보 업데이트에 실패하였습니다.</string>
+    <string name="error_bookmark_add_remove_api">북마크 추가/삭제에 실패하였습니다.</string>
+    <string name="error_check_inputs">필수 입력 정보를 확인해 주세요.</string>
+    <string name="error_upload_fail">글쓰기에 실패하였습니다.</string>
+    <string name="error_map_search_fail">주소 검색이 실패하였습니다.</string>
+    <string name="error_place_info_api">장소 정보를 불러올 수 없습니다.</string>
+    <string name="error_whole_place_by_city_name_api">지역별 장소 모아보기 정보를 가져올 수 없습니다.</string>
 </resources>

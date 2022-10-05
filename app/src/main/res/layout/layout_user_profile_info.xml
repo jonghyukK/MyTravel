@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+        <variable
+            name="viewModel"
+            type="org.kjh.mytravel.ui.features.profile.user.UserViewModel" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/cl_userInfoContainer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <com.google.android.material.imageview.ShapeableImageView
+            android:id="@+id/siv_profileImg"
+            style="@style/CircleProfileImg"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            app:imgUrl="@{viewModel.uiState.userItem.profileImg}"
+            app:layout_constraintStart_toEndOf="@+id/leftGuideLine"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/tv_postCount"
+            style="@style/Text_Color444.size15.Bold"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@{String.valueOf(viewModel.uiState.userItem.postCount)}"
+            app:layout_constraintBottom_toTopOf="@+id/tv_post"
+            app:layout_constraintEnd_toEndOf="@id/tv_post"
+            app:layout_constraintStart_toStartOf="@id/tv_post"
+            app:layout_constraintTop_toTopOf="@+id/siv_profileImg"
+            app:layout_constraintVertical_chainStyle="packed" />
+
+        <TextView
+            android:id="@+id/tv_followerCount"
+            style="@style/Text_Color444.size15.Bold"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@{String.valueOf(viewModel.uiState.userItem.followCount)}"
+            app:layout_constraintBottom_toTopOf="@+id/tv_follower"
+            app:layout_constraintEnd_toEndOf="@+id/tv_follower"
+            app:layout_constraintStart_toStartOf="@+id/tv_follower"
+            app:layout_constraintTop_toTopOf="@+id/siv_profileImg"
+            app:layout_constraintVertical_chainStyle="packed" />
+
+        <TextView
+            android:id="@+id/tv_followingCount"
+            style="@style/Text_Color444.size15.Bold"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@{String.valueOf(viewModel.uiState.userItem.followingCount)}"
+            app:layout_constraintBottom_toTopOf="@+id/tv_following"
+            app:layout_constraintEnd_toEndOf="@+id/tv_following"
+            app:layout_constraintStart_toStartOf="@+id/tv_following"
+            app:layout_constraintTop_toTopOf="@+id/siv_profileImg"
+            app:layout_constraintVertical_chainStyle="packed" />
+
+        <TextView
+            android:id="@+id/tv_post"
+            style="@style/Text_Color777.Size14"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAlignment="center"
+            android:text="@string/post"
+            app:layout_constraintBottom_toBottomOf="@+id/siv_profileImg"
+            app:layout_constraintEnd_toStartOf="@+id/tv_follower"
+            app:layout_constraintStart_toEndOf="@+id/siv_profileImg"
+            app:layout_constraintTop_toBottomOf="@+id/tv_postCount" />
+
+        <TextView
+            android:id="@+id/tv_follower"
+            style="@style/Text_Color777.Size14"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAlignment="center"
+            android:text="@string/follower"
+            app:layout_constraintBottom_toBottomOf="@+id/siv_profileImg"
+            app:layout_constraintEnd_toStartOf="@+id/tv_following"
+            app:layout_constraintStart_toEndOf="@+id/tv_post"
+            app:layout_constraintTop_toBottomOf="@+id/tv_followerCount" />
+
+        <TextView
+            android:id="@+id/tv_following"
+            style="@style/Text_Color777.Size14"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAlignment="center"
+            android:text="@string/following"
+            app:layout_constraintBottom_toBottomOf="@+id/siv_profileImg"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/tv_follower"
+            app:layout_constraintTop_toBottomOf="@+id/tv_followingCount" />
+
+        <TextView
+            android:id="@+id/tv_userIntroduce"
+            style="@style/Text_Color444.size14"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="17dp"
+            app:isVisible="@{!viewModel.uiState.userItem.introduce.empty}"
+            android:text="@{viewModel.uiState.userItem.introduce}"
+            app:layout_constraintHorizontal_weight="0"
+            app:layout_constraintStart_toEndOf="@+id/leftGuideLine"
+            app:layout_constraintEnd_toStartOf="@id/rightGuideLine"
+            app:layout_constraintTop_toBottomOf="@+id/middleGuideLine"
+            app:layout_constraintBottom_toTopOf="@+id/btn_editProfile"/>
+
+        <Button
+            android:id="@+id/btn_editProfile"
+            style="?attr/materialButtonOutlinedStyle"
+            android:layout_width="0dp"
+            android:layout_height="45dp"
+            android:textSize="13sp"
+            android:text="@{viewModel.uiState.userItem.following ? @string/following : @string/follow}"
+            onThrottleClick="@{viewModel::requestUpdateFollowState}"
+            app:layout_goneMarginTop="17dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/leftGuideLine"
+            app:layout_constraintEnd_toEndOf="@id/rightGuideLine"
+            app:layout_constraintTop_toBottomOf="@+id/tv_userIntroduce"
+            app:strokeColor="@color/purple_500"/>
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/leftGuideLine"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_begin="20dp"/>
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/rightGuideLine"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_end="20dp"/>
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/middleGuideLine"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_begin="120dp"/>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

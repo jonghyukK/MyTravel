@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/bookmark"
+    app:startDestination="@+id/bookMarkFragment">
+
+    <fragment
+        android:id="@+id/bookMarkFragment"
+        android:name="org.kjh.mytravel.ui.features.bookmark.BookMarkFragment"
+        android:label="@string/bookmark"
+        tools:layout="@layout/fragment_book_mark">
+
+        <argument
+            android:name="@string/key_show_bnv"
+            android:defaultValue="true" />
+    </fragment>
+</navigation>
