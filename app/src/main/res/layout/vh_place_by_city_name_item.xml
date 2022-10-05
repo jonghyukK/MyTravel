@@ -4,8 +4,8 @@
 
     <data>
         <variable
-            name="postItem"
-            type="org.kjh.mytravel.model.Post" />
+            name="dayLogItem"
+            type="org.kjh.mytravel.model.DayLog" />
     </data>
 
     <androidx.cardview.widget.CardView
@@ -28,7 +28,7 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:imgUrl="@{postItem.imageUrl[0]}"/>
+                app:imgUrl="@{dayLogItem.imageUrl[0]}"/>
 
             <com.google.android.material.imageview.ShapeableImageView
                 android:id="@+id/siv_profileImg"
@@ -39,7 +39,7 @@
                 app:shapeAppearanceOverlay="@style/circle"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:imgUrl="@{postItem.profileImg}"/>
+                app:imgUrl="@{dayLogItem.profileImg}"/>
 
             <TextView
                 android:id="@+id/tv_nickName"
@@ -49,7 +49,7 @@
                 app:layout_constraintTop_toTopOf="@+id/siv_profileImg"
                 app:layout_constraintBottom_toBottomOf="@+id/siv_profileImg"
                 app:layout_constraintStart_toEndOf="@+id/siv_profileImg"
-                android:text="@{postItem.nickName}"
+                android:text="@{dayLogItem.nickName}"
                 android:textColor="@color/white"
                 android:autoSizeTextType="uniform"
                 android:autoSizeMaxTextSize="15sp"

@@ -6,16 +6,16 @@ import com.orhanobut.logger.Logger
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import org.kjh.data.Event
+import org.kjh.data.EventHandler
 import org.kjh.domain.entity.ApiResult
-import org.kjh.domain.repository.LoginPreferencesRepository
-import org.kjh.domain.usecase.GetLoginPreferenceUseCase
-import org.kjh.domain.usecase.GetUserUseCase
+import org.kjh.domain.usecase.DeleteDayLogUseCase
+import org.kjh.domain.usecase.DeleteMyProfileUseCase
+import org.kjh.domain.usecase.GetMyProfileUseCase
 import org.kjh.domain.usecase.UpdateBookmarkUseCase
-import org.kjh.mytravel.model.*
-import org.kjh.mytravel.ui.GlobalErrorHandler
-import org.kjh.mytravel.utils.updateBookmarkStateWithPosts
+import org.kjh.mytravel.model.User
+import org.kjh.mytravel.model.mapToPresenter
 import javax.inject.Inject
 
 /**
@@ -28,27 +28,21 @@ import javax.inject.Inject
 
 @HiltViewModel
 class MyProfileViewModel @Inject constructor(
-    private val getLoginPreferenceUseCase : GetLoginPreferenceUseCase,
-    private val loginPreferencesRepository: LoginPreferencesRepository,
-    private val getUserUseCase            : GetUserUseCase,
-    private val updateBookmarkUseCase     : UpdateBookmarkUseCase,
-    private val globalErrorHandler        : GlobalErrorHandler
+    private val getMyProfileUseCase   : GetMyProfileUseCase,
+    private val updateBookmarkUseCase : UpdateBookmarkUseCase,
+    private val deleteDayLogUseCase   : DeleteDayLogUseCase,
+    private val deleteMyProfileUseCase: DeleteMyProfileUseCase,
+    private val eventHandler          : EventHandler
 ): ViewModel() {
-
-    data class MyProfileUiState(
-        val myProfileItem   : User? = null,
-        val myPostItems     : List<Post> = emptyList(),
-        val myBookmarkItems : List<Bookmark> = emptyList()
-    )
 
     private val _isLoading = MutableStateFlow(false)
     val isLoading = _isLoading.asStateFlow()
 
-    private val _myProfileUiState = MutableStateFlow(MyProfileUiState())
-    val myProfileUiState = _myProfileUiState.asStateFlow()
+    private val _loginState: MutableStateFlow<LoginState> = MutableStateFlow(LoginState.Uninitialized)
+    val loginUiState = _loginState.asStateFlow()
 
-    private val _isNotLogIn: MutableStateFlow<Boolean?> = MutableStateFlow(null)
-    val isNotLogIn = _isNotLogIn.asStateFlow()
+    private val _myProfileUiState: MutableStateFlow<User?> = MutableStateFlow(null)
+    val myProfileUiState = _myProfileUiState.asStateFlow()
 
     private val _motionProgress = MutableStateFlow(0f)
     val motionProgress = _motionProgress.asStateFlow()
@@ -57,100 +51,92 @@ class MyProfileViewModel @Inject constructor(
     private fun hideLoading() { _isLoading.value = false }
 
     init {
-        checkLogin()
+        initLoginStateWithMyProfile()
+        handleEvent()
     }
 
-    private fun checkLogin() {
+    private fun initLoginStateWithMyProfile() {
         viewModelScope.launch {
-            loginPreferencesRepository.loginInfoPreferencesFlow
-                .collect {
-                    _isNotLogIn.value = !it.isLoggedIn
+            getMyProfileUseCase().collect { myProfile ->
+                _loginState.value = myProfile?.let {
+                    LoginState.LoggedIn
+                } ?: LoginState.NotLoggedIn
 
-                    if (it.isLoggedIn) {
-                        fetchMyProfile()
-                    } else {
-                        _myProfileUiState.value = MyProfileUiState()
-                    }
-                }
+                _myProfileUiState.value = myProfile?.mapToPresenter()
+            }
         }
     }
 
-    private fun fetchMyProfile() {
+    private fun handleEvent() {
         viewModelScope.launch {
-            getUserUseCase.getMyProfile(getLoginPreferenceUseCase().email)
-                .collect { apiResult ->
-                    when (apiResult) {
-                        is ApiResult.Loading -> showLoading()
-
-                        is ApiResult.Success -> {
-                            hideLoading()
-                            val result = apiResult.data.mapToPresenter()
-
-                            _myProfileUiState.value = MyProfileUiState(
-                                myProfileItem   = result,
-                                myPostItems     = result.posts,
-                                myBookmarkItems = result.bookMarks
-                            )
-                        }
-
-                        is ApiResult.Error -> {
-                            hideLoading()
-                            Logger.e(apiResult.throwable.localizedMessage!!)
-
-                            val errorMsg = "occur Error [Fetch My Profile API]"
-                            globalErrorHandler.sendError(errorMsg)
-                        }
-                    }
-                }
-        }
-    }
-
-    fun updateBookmark(postId: Int, placeName: String) {
-        viewModelScope.launch {
-            updateBookmarkUseCase(
-                myEmail   = getLoginPreferenceUseCase().email,
-                postId    = postId,
-                placeName = placeName
-            ).collect { apiResult ->
-                when (apiResult) {
-                    is ApiResult.Loading -> showLoading()
-
-                    is ApiResult.Success -> {
-                        hideLoading()
-
-                        val bookmarks = apiResult.data.map { it.mapToPresenter() }
-
-                        _myProfileUiState.update { profileState ->
-                            profileState.copy(
-                                myBookmarkItems = bookmarks,
-                                myPostItems     = profileState.myPostItems.updateBookmarkStateWithPosts(bookmarks)
-                            )
-                        }
-                    }
-
-                    is ApiResult.Error -> {
-                        hideLoading()
-                        Logger.e(apiResult.throwable.localizedMessage!!)
-
-                        val errorMsg = "occur Error [Update Bookmark API]"
-                        globalErrorHandler.sendError(errorMsg)
-                    }
+            eventHandler.event.collect { event ->
+                when (event) {
+                    is Event.RequestUpdateBookmark -> updateBookmark(event.placeName)
+                    is Event.RequestDeleteDayLog -> deleteDayLog(event.dayLogId)
+                    else -> {}
                 }
             }
         }
     }
 
-    fun updateMyProfile(profileItem: User) {
-        _myProfileUiState.update { profileState ->
-            profileState.copy(
-                myProfileItem   = profileItem,
-                myBookmarkItems = profileItem.bookMarks,
-                myPostItems     = profileItem.posts
-            )
+    fun updateBookmark(placeName: String) {
+        viewModelScope.launch {
+            if (_myProfileUiState.value == null) {
+                eventHandler.emitEvent(Event.ShowLoginDialogEvent)
+                return@launch
+            }
+
+            updateBookmarkUseCase(placeName)
+                .collect { apiResult ->
+                    when (apiResult) {
+                        is ApiResult.Loading -> showLoading()
+                        is ApiResult.Success -> hideLoading()
+                        is ApiResult.Error -> {
+                            hideLoading()
+                            Logger.e(apiResult.throwable.localizedMessage!!)
+
+                            eventHandler.emitEvent(Event.ApiError("occur Error [Update Bookmark API]"))
+                        }
+                    }
+                }
         }
+    }
+
+    fun deleteDayLog(dayLogId: Int) {
+        viewModelScope.launch {
+            deleteDayLogUseCase(dayLogId)
+                .collect { apiResult ->
+                    when (apiResult) {
+                        is ApiResult.Loading -> showLoading()
+                        is ApiResult.Success -> hideLoading()
+                        is ApiResult.Error -> {
+                            hideLoading()
+                            Logger.e(apiResult.throwable.localizedMessage!!)
+
+                            eventHandler.emitEvent(Event.ApiError("occur Error [Delete DayLog API]"))
+                        }
+                    }
+                }
+        }
+    }
+
+    fun requestLogOut() {
+        viewModelScope.launch {
+            deleteMyProfileUseCase()
+        }
+    }
+
+    fun updateMyProfile(profileItem: User) {
+        _myProfileUiState.value = profileItem
     }
 
     fun saveMotionProgress(value: Float) {
         _motionProgress.value = value
     }
+}
+
+sealed class LoginState {
+    object Uninitialized : LoginState()
+    object NotLoggedIn   : LoginState()
+    object LoggedIn      : LoginState()
 }

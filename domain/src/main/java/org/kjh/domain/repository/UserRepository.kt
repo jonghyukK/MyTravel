@@ -1,9 +1,7 @@
 package org.kjh.domain.repository
 
-import org.kjh.domain.entity.ApiResult
-import org.kjh.domain.entity.FollowEntity
-import org.kjh.domain.entity.UserEntity
 import kotlinx.coroutines.flow.Flow
+import org.kjh.domain.entity.*
 
 /**
  * MyTravel
@@ -14,18 +12,23 @@ import kotlinx.coroutines.flow.Flow
  */
 interface UserRepository {
 
-    suspend fun fetchMyProfile(
-        myEmail: String
+    val myProfileFlow: Flow<UserEntity?>
+
+    suspend fun fetchUser(targetEmail: String): Flow<ApiResult<UserEntity>>
+
+    suspend fun requestLogin(
+        email: String,
+        pw   : String
     ): Flow<ApiResult<UserEntity>>
 
-    suspend fun fetchUser(
-        myEmail    : String,
-        targetEmail: String? = null
+    suspend fun requestSignUp(
+        email: String,
+        pw   : String,
+        nick : String
     ): Flow<ApiResult<UserEntity>>
 
     suspend fun updateMyProfile(
         profileUrl  : String?,
-        email       : String,
         nickName    : String,
         introduce   : String?
     ): Flow<ApiResult<UserEntity>>
@@ -34,4 +37,20 @@ interface UserRepository {
         myEmail    : String,
         targetEmail: String
     ): Flow<ApiResult<FollowEntity>>
+
+    suspend fun updateMyBookmarks(placeName: String): Flow<ApiResult<List<BookmarkEntity>>>
+
+    suspend fun deleteMyProfile()
+
+    suspend fun deleteMyDayLog(dayLogId: Int): Flow<ApiResult<DeleteDayLogEntity>>
+
+    suspend fun uploadDayLog(
+        file        : List<String>,
+        content     : String? = null,
+        placeName   : String,
+        placeAddress: String,
+        placeRoadAddress: String,
+        x : String,
+        y : String
+    ): Flow<ApiResult<UserEntity>>
 }

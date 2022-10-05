@@ -13,28 +13,6 @@ import org.kjh.domain.entity.*
  */
 object ResponseMapper {
 
-    // SignUpModel -> SignUpEntity
-    fun responseToSignUpEntity(
-        response: ApiResult<SignUpModel>
-    ): ApiResult<SignUpEntity> {
-        return when (response) {
-            is ApiResult.Success -> ApiResult.Success(response.data.mapToDomain())
-            is ApiResult.Error   -> ApiResult.Error(response.throwable)
-            is ApiResult.Loading -> ApiResult.Loading
-        }
-    }
-
-    // LoginModel -> LoginEntity
-    fun responseToLoginEntity(
-        response: ApiResult<LoginModel>
-    ): ApiResult<LoginEntity> {
-        return when (response) {
-            is ApiResult.Success -> ApiResult.Success(response.data.mapToDomain())
-            is ApiResult.Error   -> ApiResult.Error(response.throwable)
-            is ApiResult.Loading -> ApiResult.Loading
-        }
-    }
-
     // UserModel -> UserEntity
     fun responseToUserEntity(
         response: ApiResult<UserModel>
@@ -92,8 +70,8 @@ object ResponseMapper {
 
     // List<PlaceWithRankModel> -> List<PlaceWithRankEntity>
     fun responseToPlaceRankingList(
-        response: ApiResult<List<PlaceWithRankModel>>
-    ): ApiResult<List<PlaceWithRankEntity>> {
+        response: ApiResult<List<PlaceRankingModel>>
+    ): ApiResult<List<PlaceRankingEntity>> {
         return when (response) {
             is ApiResult.Success -> ApiResult.Success(response.data.map { it.mapToDomain() })
             is ApiResult.Error   -> ApiResult.Error(response.throwable)
@@ -133,14 +111,4 @@ object ResponseMapper {
             is ApiResult.Loading -> ApiResult.Loading
         }
     }
-
-//    fun responseToPostsEntity(
-//        response: ApiResult<PostsApiModel>
-//    ): ApiResult<PostEntity> {
-//        return when (response) {
-//            is ApiResult.Success -> ApiResult.Success(response.data)
-//            is ApiResult.Error   -> ApiResult.Error(response.throwable)
-//            is ApiResult.Loading -> ApiResult.Loading
-//        }
-//    }
 }

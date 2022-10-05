@@ -3,11 +3,12 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph"
-    app:startDestination="@+id/home">
+    app:startDestination="@id/splashFragment">
 
     <include app:graph="@navigation/bookmark" />
     <include app:graph="@navigation/profile" />
     <include app:graph="@navigation/home" />
+    <include app:graph="@navigation/login_sign_up" />
 
     <action
         android:id="@+id/action_global_placeInfoWithDayLogFragment"
@@ -59,11 +60,29 @@
             android:name="placeName"
             app:argType="string" />
         <argument
-            android:name="postId"
+            android:name="dayLogId"
             android:defaultValue="-1"
             app:argType="integer" />
         <deepLink
             android:id="@+id/deepLink"
             app:uri="kakao94cd3aaf873248b465d6ffbc3868aea5://kakaolink?placeName={placeName}" />
     </fragment>
+    <fragment
+        android:id="@+id/splashFragment"
+        android:name="org.kjh.mytravel.ui.features.splash.SplashFragment"
+        android:label="SplashFragment" >
+        <action
+            android:id="@+id/action_to_home"
+            app:destination="@id/home"
+            app:popUpTo="@id/splashFragment"
+            app:popUpToInclusive="true"
+            app:launchSingleTop="true"/>
+    </fragment>
+
+    <action
+        android:id="@+id/action_global_notLogin"
+        app:destination="@id/login_sign_up"
+        app:restoreState="true"
+        app:enterAnim="@anim/slide_in_up"
+        app:exitAnim="@anim/fade_out" />
 </navigation>

@@ -17,7 +17,6 @@ import org.kjh.data.Event
 import org.kjh.mytravel.NavGraphDirections
 import org.kjh.mytravel.R
 import org.kjh.mytravel.databinding.ActivityMainBinding
-import org.kjh.mytravel.model.User
 import org.kjh.mytravel.ui.base.BaseActivity
 import org.kjh.mytravel.ui.common.Dialogs
 import org.kjh.mytravel.ui.common.UiState
@@ -51,13 +50,11 @@ class MainActivity : BaseActivity<ActivityMainBinding>(R.layout.activity_main) {
                 }
             }
         }
-
         binding.bnvBottomNav.setupWithNavController(navController)
     }
 
     private fun changeStartDestination(navController: NavController) {
         val navGraph = navController.graph
-
         if (navGraph.startDestinationId != R.id.home) {
             navGraph.setStartDestination(R.id.home)
 
@@ -89,7 +86,6 @@ class MainActivity : BaseActivity<ActivityMainBinding>(R.layout.activity_main) {
                                     }
                                 )
                             }
-
                             is Event.ApiError -> showToast(event.errorMsg)
                             else -> {}
                         }
@@ -104,7 +100,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>(R.layout.activity_main) {
             uploadViewModel.uploadState.collect { uploadState ->
                 when (uploadState) {
                     is UiState.Loading -> makeNotificationForUploadStart()
-                    is UiState.Success -> handleUploadSuccess(uploadState.data)
+                    is UiState.Success -> handleUploadSuccess()
                     is UiState.Error -> handleUploadFailed()
                     UiState.Init -> {}
                 }
@@ -112,9 +108,9 @@ class MainActivity : BaseActivity<ActivityMainBinding>(R.layout.activity_main) {
         }
     }
 
-    private fun handleUploadSuccess(newProfileItem: User) {
+    private fun handleUploadSuccess() {
         updateNotificationWhenUploadSuccessOrFailed(getString(R.string.upload_success))
-        refreshHomeLatestPosts()
+        refreshHomeLatestDayLogs()
         initUploadStateAfterUpload()
         cancelAndClearUploadJob()
     }
@@ -133,8 +129,8 @@ class MainActivity : BaseActivity<ActivityMainBinding>(R.layout.activity_main) {
         NotificationUtils.updateUploadNotification(this@MainActivity, resultMsg)
     }
 
-    private fun refreshHomeLatestPosts() {
-        homeViewModel.refreshLatestPosts(true)
+    private fun refreshHomeLatestDayLogs() {
+        homeViewModel.refreshLatestDayLogs(true)
     }
 
     private fun initUploadStateAfterUpload() {

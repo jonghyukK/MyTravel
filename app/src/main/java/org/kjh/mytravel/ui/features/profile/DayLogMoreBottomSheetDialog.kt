@@ -15,8 +15,8 @@ import org.kjh.mytravel.utils.onThrottleClick
  */
 
 class DayLogMoreBottomSheetDialog(
-    private val isMyDayLog  : Boolean,
-    private val deleteAction: () -> Unit,
+    private val isMyDayLog : Boolean = false,
+    private val deleteAction: () -> Unit = {},
     private val kakaoShareAction: () -> Unit
 ) : BaseBottomSheetDialogFragment<BsDialogDayLogMoreBinding>(R.layout.bs_dialog_day_log_more) {
 

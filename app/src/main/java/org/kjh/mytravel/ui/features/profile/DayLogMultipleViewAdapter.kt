@@ -6,9 +6,9 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.PagerSnapHelper
 import androidx.recyclerview.widget.RecyclerView
-import org.kjh.mytravel.databinding.VhGridPostItemBinding
-import org.kjh.mytravel.databinding.VhLinearPostRowItemBinding
-import org.kjh.mytravel.model.Post
+import org.kjh.mytravel.databinding.VhGridDayLogItemBinding
+import org.kjh.mytravel.databinding.VhLinearDayLogRowItemBinding
+import org.kjh.mytravel.model.DayLog
 import org.kjh.mytravel.ui.common.OnNestedHorizontalTouchListener
 import org.kjh.mytravel.ui.common.OnSnapPagerScrollListener
 import org.kjh.mytravel.utils.navigateToDayLogDetail
@@ -27,24 +27,33 @@ sealed class ViewType {
     object Linear: ViewType()
 }
 
-class PostMultipleViewAdapter(
+class DayLogMultipleViewAdapter(
     private val viewType       : ViewType = ViewType.Grid,
-    private val onClickBookmark: (Post) -> Unit
-): ListAdapter<Post, RecyclerView.ViewHolder>(Post.diffCallback) {
+    private val onClickBookmark: (DayLog) -> Unit,
+    private val onClickMore    : (DayLog) -> Unit
+): ListAdapter<DayLog, RecyclerView.ViewHolder>(DayLog.diffCallback) {
+
+    init {
+        setHasStableIds(true)
+    }
+
+    override fun getItemId(position: Int): Long {
+        return getItem(position).dayLogId.toLong()
+    }
 
     private val childViewState = mutableMapOf<Int, Parcelable?>()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) =
         when (this.viewType) {
             ViewType.Grid ->
-                PostGridItemViewHolder(
-                    VhGridPostItemBinding.inflate(
+                DayLogGridItemViewHolder(
+                    VhGridDayLogItemBinding.inflate(
                         LayoutInflater.from(parent.context), parent, false
                     ), onClickBookmark
                 )
             ViewType.Linear ->
-                PostsLinearOuterViewHolder(
-                    VhLinearPostRowItemBinding.inflate(
+                DayLogsLinearOuterViewHolder(
+                    VhLinearDayLogRowItemBinding.inflate(
                         LayoutInflater.from(parent.context), parent, false
                     )
                 )
@@ -52,27 +61,25 @@ class PostMultipleViewAdapter(
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         when (viewType) {
-            ViewType.Grid   -> (holder as PostGridItemViewHolder).bind(getItem(position))
-            ViewType.Linear -> (holder as PostsLinearOuterViewHolder).bind(getItem(position))
+            ViewType.Grid   -> (holder as DayLogGridItemViewHolder).bind(getItem(position))
+            ViewType.Linear -> (holder as DayLogsLinearOuterViewHolder).bind(getItem(position))
         }
     }
 
     // Linear ViewHolder for Posts.
-    inner class PostsLinearOuterViewHolder(
-        val binding: VhLinearPostRowItemBinding
+    inner class DayLogsLinearOuterViewHolder(
+        val binding: VhLinearDayLogRowItemBinding
     ): RecyclerView.ViewHolder(binding.root) {
 
         private val snapHelper =  PagerSnapHelper()
-        private val imageAdapters = PostsLinearImageAdapter {
-            binding.postItem?.let { post ->
-                binding.root.navigateToDayLogDetail(post.placeName, post.postId)
+        private val imageAdapters = DayLogsLinearImageAdapter {
+            binding.dayLogItem?.let { dayLog ->
+                binding.root.navigateToDayLogDetail(dayLog.placeName, dayLog.dayLogId)
             }
         }
 
         init {
-            binding.postImgRecyclerView.apply {
-                itemAnimator = null
-                setHasFixedSize(true)
+            binding.dayLogImgRecyclerView.apply {
                 adapter = imageAdapters
                 addItemDecoration(LineIndicatorDecoration())
                 addOnItemTouchListener(OnNestedHorizontalTouchListener())
@@ -83,21 +90,27 @@ class PostMultipleViewAdapter(
                         listener = object : OnSnapPagerScrollListener.OnChangeListener {
                             override fun onSnapped(position: Int) {
                                 childViewState[layoutPosition] =
-                                    binding.postImgRecyclerView.layoutManager?.onSaveInstanceState()
+                                    binding.dayLogImgRecyclerView.layoutManager?.onSaveInstanceState()
                             }
                         }
                     ))
             }
 
             binding.ivBookmark.onThrottleClick {
-                binding.postItem?.let {
+                binding.dayLogItem?.let {
                     onClickBookmark(it)
+                }
+            }
+
+            binding.ivMore.onThrottleClick {
+                binding.dayLogItem?.let {
+                    onClickMore(it)
                 }
             }
         }
 
-        fun bind(item: Post) {
-            binding.postItem = item
+        fun bind(item: DayLog) {
+            binding.dayLogItem = item
 
             imageAdapters.setItems(item.imageUrl)
             restorePosition()
@@ -108,35 +121,35 @@ class PostMultipleViewAdapter(
             val state = childViewState[key]
 
             if (state != null) {
-                binding.postImgRecyclerView.layoutManager?.onRestoreInstanceState(state)
+                binding.dayLogImgRecyclerView.layoutManager?.onRestoreInstanceState(state)
             } else {
-                binding.postImgRecyclerView.layoutManager?.scrollToPosition(0)
+                binding.dayLogImgRecyclerView.layoutManager?.scrollToPosition(0)
             }
         }
     }
 
     // Grid ViewHolder for Posts.
-    class PostGridItemViewHolder(
-        private val binding        : VhGridPostItemBinding,
-        private val onClickBookmark: (Post) -> Unit
+    class DayLogGridItemViewHolder(
+        private val binding        : VhGridDayLogItemBinding,
+        private val onClickBookmark: (DayLog) -> Unit
     ): RecyclerView.ViewHolder(binding.root) {
 
         init {
             itemView.onThrottleClick { view ->
-                binding.postItem?.let { post ->
-                    view.navigateToDayLogDetail(post.placeName, post.postId)
+                binding.dayLogItem?.let { dayLog ->
+                    view.navigateToDayLogDetail(dayLog.placeName, dayLog.dayLogId)
                 }
             }
 
             binding.ivBookmark.onThrottleClick {
-                binding.postItem?.let {
+                binding.dayLogItem?.let {
                     onClickBookmark(it)
                 }
             }
         }
 
-        fun bind(item: Post) {
-            binding.postItem = item
+        fun bind(item: DayLog) {
+            binding.dayLogItem = item
         }
     }
 }

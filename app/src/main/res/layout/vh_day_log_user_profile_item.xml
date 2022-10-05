@@ -5,8 +5,8 @@
 
     <data>
         <variable
-            name="postItem"
-            type="org.kjh.mytravel.ui.features.daylog.SelectablePost" />
+            name="dayLogItem"
+            type="org.kjh.mytravel.ui.features.daylog.DayLogProfileItemUiState" />
     </data>
 
 
@@ -23,8 +23,8 @@
             android:layout_height="wrap_content"
             android:paddingStart="5dp"
             android:paddingEnd="10dp"
-            app:isVisible="@{postItem.selected}"
-            android:text="@{postItem.postItem.nickName}"
+            app:isVisible="@{dayLogItem.selected}"
+            android:text="@{dayLogItem.nickName}"
             android:textColor="@color/black"
             android:textSize="15sp"
             android:visibility="gone"
@@ -38,7 +38,7 @@
             android:layout_width="50dp"
             android:layout_height="50dp"
             android:padding="5dp"
-            app:imgUrl="@{postItem.postItem.profileImg}"
+            app:imgUrl="@{dayLogItem.profileImg}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />

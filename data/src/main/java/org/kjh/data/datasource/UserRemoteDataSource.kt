@@ -1,10 +1,9 @@
 package org.kjh.data.datasource
 
-import android.util.Log
 import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import org.kjh.data.api.ApiService
+import org.kjh.data.model.BookmarkModel
 import org.kjh.data.model.FollowModel
 import org.kjh.data.model.UserModel
 import org.kjh.data.model.base.BaseApiModel
@@ -19,13 +18,10 @@ import javax.inject.Inject
  * Description:
  */
 interface UserRemoteDataSource {
-    suspend fun fetchMyProfile(
-        myEmail: String
-    ): BaseApiModel<UserModel>
 
     suspend fun fetchUser(
-        myEmail    : String,
-        targetEmail: String? = null
+        myEmail    : String?,
+        targetEmail: String
     ): BaseApiModel<UserModel>
 
     suspend fun updateMyProfile(
@@ -39,18 +35,46 @@ interface UserRemoteDataSource {
         myEmail    : String,
         targetEmail: String
     ): BaseApiModel<FollowModel>
+
+    suspend fun requestLogin(
+        email: String,
+        pw   : String
+    ): BaseApiModel<UserModel>
+
+    suspend fun requestSignUp(
+        email   : String,
+        pw      : String,
+        nickName: String
+    ): BaseApiModel<UserModel>
+
+    suspend fun deleteMyDayLog(
+        dayLogId: Int,
+        email : String
+    ): BaseApiModel<UserModel>
+
+    suspend fun updateMyBookmarks(
+        myEmail  : String,
+        placeName: String
+    ): BaseApiModel<List<BookmarkModel>>
+
+    suspend fun uploadDayLog(
+        file        : List<String>,
+        email       : String,
+        content     : String? = null,
+        placeName   : String,
+        placeAddress: String,
+        placeRoadAddress: String,
+        x : String,
+        y : String
+    ): BaseApiModel<UserModel>
 }
 
 class UserRemoteDataSourceImpl @Inject constructor(
     private val apiService: ApiService,
     private val ioDispatcher: CoroutineDispatcher
 ): UserRemoteDataSource {
-    override suspend fun fetchMyProfile(myEmail: String)
-    = withContext(ioDispatcher) {
-        apiService.fetchUser(myEmail)
-    }
 
-    override suspend fun fetchUser(myEmail: String, targetEmail: String?)
+    override suspend fun fetchUser(myEmail: String?, targetEmail: String)
     = withContext(ioDispatcher) {
         apiService.fetchUser(myEmail, targetEmail)
     }
@@ -74,5 +98,56 @@ class UserRemoteDataSourceImpl @Inject constructor(
         targetEmail: String
     ) = withContext(ioDispatcher) {
         apiService.updateFollowState(myEmail, targetEmail)
+    }
+
+    override suspend fun requestLogin(
+        email: String,
+        pw   : String
+    ) = withContext(ioDispatcher) {
+        apiService.requestLogin(email, pw)
+    }
+
+    override suspend fun requestSignUp(
+        email   : String,
+        pw      : String,
+        nickName: String
+    ) = withContext(ioDispatcher) {
+        apiService.createUser(email, pw, nickName)
+    }
+
+    override suspend fun deleteMyDayLog(
+        dayLogId: Int,
+        email: String
+    ) = withContext(ioDispatcher) {
+        apiService.deleteDayLog(dayLogId, email)
+    }
+
+    override suspend fun updateMyBookmarks(
+        myEmail  : String,
+        placeName: String
+    ) = withContext(ioDispatcher) {
+        apiService.updateMyBookmarks(myEmail, placeName)
+    }
+
+    override suspend fun uploadDayLog(
+        file        : List<String>,
+        email       : String,
+        content     : String?,
+        placeName   : String,
+        placeAddress: String,
+        placeRoadAddress: String,
+        x           : String,
+        y           : String
+    ) = withContext(ioDispatcher) {
+        apiService.uploadDayLog(
+            x            = x,
+            y            = y,
+            file         = FileUtils.makeFormDataListForUpload(file),
+            email        = email,
+            content      = content,
+            placeName    = placeName,
+            placeAddress = placeAddress,
+            placeRoadAddress = placeRoadAddress
+        )
     }
 }

@@ -1,14 +1,12 @@
 package org.kjh.data.datasource
 
 import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import org.kjh.data.api.ApiService
 import org.kjh.data.model.BannerModel
 import org.kjh.data.model.base.BaseApiModel
 import org.kjh.data.model.PlaceModel
-import org.kjh.data.model.PlaceWithAroundModel
-import org.kjh.data.model.PlaceWithRankModel
+import org.kjh.data.model.PlaceRankingModel
 import javax.inject.Inject
 
 /**
@@ -30,7 +28,7 @@ interface PlaceRemoteDataSource {
     ): BaseApiModel<List<PlaceModel>>
 
     suspend fun fetchPlaceRankings()
-    : BaseApiModel<List<PlaceWithRankModel>>
+    : BaseApiModel<List<PlaceRankingModel>>
 
     suspend fun fetchPlaceBanners()
     : BaseApiModel<List<BannerModel>>

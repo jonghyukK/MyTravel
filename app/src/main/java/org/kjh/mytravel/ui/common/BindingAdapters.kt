@@ -1,9 +1,9 @@
 package org.kjh.mytravel.ui.common
 
-import android.graphics.Color
 import android.os.Build
 import android.view.View
 import android.view.WindowInsets
+import android.widget.EditText
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.widget.Toolbar
@@ -12,6 +12,7 @@ import androidx.core.view.get
 import androidx.core.view.isVisible
 import androidx.core.view.updateLayoutParams
 import androidx.core.view.updatePadding
+import androidx.core.widget.doOnTextChanged
 import androidx.databinding.BindingAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
@@ -22,12 +23,16 @@ import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
 import org.kjh.mytravel.R
 import org.kjh.mytravel.model.*
+import org.kjh.mytravel.ui.features.bookmark.BookmarkItemUiState
 import org.kjh.mytravel.ui.features.bookmark.BookmarkListAdapter
+import org.kjh.mytravel.ui.features.daylog.DayLogProfileItemUiState
+import org.kjh.mytravel.ui.features.daylog.images.DayLogDetailImagesInnerAdapter
+import org.kjh.mytravel.ui.features.daylog.profiles.DayLogDetailUserProfilesInnerAdapter
 import org.kjh.mytravel.ui.features.home.banner.BannerListAdapter
 import org.kjh.mytravel.ui.features.place.infowithdaylog.PlaceDayLogListAdapter
+import org.kjh.mytravel.ui.features.place.subcity.PlacesBySubCityDayLogListAdapter
 import org.kjh.mytravel.ui.features.place.subcity.PlacesBySubCityListAdapter
-import org.kjh.mytravel.ui.features.place.subcity.PlacesBySubCityPostListAdapter
-import org.kjh.mytravel.ui.features.profile.PostMultipleViewAdapter
+import org.kjh.mytravel.ui.features.profile.DayLogMultipleViewAdapter
 import org.kjh.mytravel.ui.features.upload.UploadTempImagesAdapter
 import org.kjh.mytravel.ui.features.upload.location.LocationQueryResultAdapter
 import org.kjh.mytravel.ui.features.upload.select.MediaStoreImageListAdapter
@@ -117,14 +122,6 @@ object BindingAdapters {
     }
 
     @JvmStatic
-    @BindingAdapter("bindPostItems")
-    fun bindPostItems(view: RecyclerView, items: List<Post>?) {
-        val adapter = view.adapter
-
-        (adapter as PlacesBySubCityPostListAdapter).setPostItems(items?: listOf())
-    }
-
-    @JvmStatic
     @BindingAdapter("currentState", "stateCallback")
     fun bindBottomSheetState(view: View, state: Int, stateCallback: (Int) -> Unit) {
         val behavior = BottomSheetBehavior.from(view).apply {
@@ -172,59 +169,54 @@ object BindingAdapters {
     }
 
     @JvmStatic
-    @BindingAdapter("onScrollListenerWithToolbar", "callback")
-    fun RecyclerView.bindOnScrollListenerForToolbarCollapsed(
-        toolbar : Toolbar,
-        callback: (Boolean) -> Unit
-    ) {
-        clearOnScrollListeners()
-        addOnScrollListener(object: RecyclerView.OnScrollListener() {
-            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
-                super.onScrolled(recyclerView, dx, dy)
+    @BindingAdapter("bindItems")
+    fun RecyclerView.bindItems(items: List<*>?) {
+        this.adapter?.let {
+            when (it) {
+                is DayLogMultipleViewAdapter ->
+                    it.submitList(items.avoidUncheckedWarnAndCast<DayLog>())
 
-                val toolbarHeight = toolbar.layoutParams.height
-                val scrollRange = computeVerticalScrollOffset()
-                val compareHeight = getChildAt(0).height
+                is PlaceDayLogListAdapter ->
+                    it.submitList(items.avoidUncheckedWarnAndCast<DayLog>())
 
-                callback(scrollRange > compareHeight - toolbarHeight)
+                is PlacesBySubCityDayLogListAdapter ->
+                    it.setDayLogItems(items.avoidUncheckedWarnAndCast<DayLog>())
+
+                is MediaStoreImageListAdapter ->
+                    it.submitList(items.avoidUncheckedWarnAndCast<MediaStoreImage>())
+
+                is SelectedPhotoListAdapter ->
+                    it.submitList(items.avoidUncheckedWarnAndCast<MediaStoreImage>())
+
+                is UploadTempImagesAdapter ->
+                    it.submitList(items.avoidUncheckedWarnAndCast<MediaStoreImage>())
+
+                is BookmarkListAdapter ->
+                    it.submitList(items.avoidUncheckedWarnAndCast<BookmarkItemUiState>())
+
+                is LocationQueryResultAdapter ->
+                    it.submitList(items.avoidUncheckedWarnAndCast<MapQueryItem>())
+
+                is BannerListAdapter ->
+                    it.submitList(items.avoidUncheckedWarnAndCast<BannerItemUiState>())
+
+                is PlacesBySubCityListAdapter ->
+                    it.submitList(items.avoidUncheckedWarnAndCast<Place>())
+
+                is DayLogDetailImagesInnerAdapter ->
+                    it.submitList(items.avoidUncheckedWarnAndCast<String>())
+
+                is DayLogDetailUserProfilesInnerAdapter ->
+                    it.submitList(items.avoidUncheckedWarnAndCast<DayLogProfileItemUiState>())
             }
-        })
+        }
     }
 
     @JvmStatic
-    @BindingAdapter("bindItems")
-    fun RecyclerView.bindItems(items: List<*>?) {
-        val adapter = this.adapter
-
-        adapter?.let {
-            when (adapter) {
-                is PostMultipleViewAdapter ->
-                    adapter.submitList(items.avoidUncheckedWarnAndCast<Post>())
-
-                is PlaceDayLogListAdapter ->
-                    adapter.submitList(items.avoidUncheckedWarnAndCast<Post>())
-
-                is MediaStoreImageListAdapter ->
-                    adapter.submitList(items.avoidUncheckedWarnAndCast<MediaStoreImage>())
-
-                is SelectedPhotoListAdapter ->
-                    adapter.submitList(items.avoidUncheckedWarnAndCast<MediaStoreImage>())
-
-                is UploadTempImagesAdapter ->
-                    adapter.submitList(items.avoidUncheckedWarnAndCast<MediaStoreImage>())
-
-                is BookmarkListAdapter ->
-                    adapter.submitList(items.avoidUncheckedWarnAndCast<Bookmark>())
-
-                is LocationQueryResultAdapter ->
-                    adapter.submitList(items.avoidUncheckedWarnAndCast<MapQueryItem>())
-
-                is BannerListAdapter ->
-                    adapter.submitList(items.avoidUncheckedWarnAndCast<BannerItemUiState>())
-
-                is PlacesBySubCityListAdapter ->
-                    adapter.submitList(items.avoidUncheckedWarnAndCast<Place>())
-            }
+    @BindingAdapter("onTextChanged")
+    fun EditText.bindOnTextChanged(onChangedCallback: (String) -> Unit) {
+        doOnTextChanged { text, _, _, _ ->
+            onChangedCallback(text.toString())
         }
     }
 
@@ -251,17 +243,11 @@ object BindingAdapters {
     }
 
     @JvmStatic
-    @BindingAdapter("tint")
-    fun setIconColorFilter(v: ImageView, colorCode: String) {
-        v.setColorFilter(Color.parseColor(colorCode))
-    }
-
-    @JvmStatic
     @BindingAdapter("app:onFocusLost")
     fun TextInputEditText.onFocusLost(view: TextInputLayout) {
         setOnFocusChangeListener { _, hasFocus ->
             if (hasFocus) {
-                view.error          = null
+                view.error = null
                 view.isErrorEnabled = false
             } else {
                 val inputText = text.toString()

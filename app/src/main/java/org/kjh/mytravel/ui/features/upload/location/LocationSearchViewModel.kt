@@ -45,7 +45,7 @@ class LocationSearchViewModel @Inject constructor(
 
                         is ApiResult.Error -> {
                             Logger.e("${apiResult.throwable.message}")
-                            _uiState.value = UiState.Error(Throwable("occur Error [request Search Place API]"))
+                            _uiState.value = UiState.Error("occur Error [request Search Place API]")
                         }
                     }
                 }

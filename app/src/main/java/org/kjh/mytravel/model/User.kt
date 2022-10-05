@@ -19,7 +19,7 @@ data class User(
     val followCount    : Int,
     val introduce      : String?,
     val isFollowing    : Boolean,
-    val posts          : List<Post>,
+    val dayLogs        : List<DayLog>,
     val bookMarks      : List<Bookmark>
 )
 
@@ -34,6 +34,6 @@ fun UserEntity.mapToPresenter() =
         followCount,
         introduce,
         isFollowing,
-        posts.map { it.mapToPresenter() },
-        bookMarks.map { it.mapToPresenter()}
+        dayLogs.map { it.mapToPresenter() },
+        bookMarks.map { it.mapToPresenter() }
     )

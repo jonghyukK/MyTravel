@@ -9,7 +9,7 @@ import org.kjh.mytravel.model.MediaStoreImage
 
 /**
  * MyTravel
- * Class: WritePostImagesAdapter
+ * Class: UploadTempImagesAdapter
  * Created by jonghyukkang on 2022/01/23.
  *
  * Description:

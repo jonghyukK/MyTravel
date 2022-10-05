@@ -9,9 +9,7 @@ import org.kjh.domain.repository.PlaceRepository
  *
  * Description:
  */
-class GetPlacesBySubCityNameUseCase(
-    private val placeRepository: PlaceRepository
-) {
+class GetPlacesBySubCityNameUseCase(private val placeRepository: PlaceRepository) {
     suspend operator fun invoke(subCityName: String) =
         placeRepository.fetchPlacesBySubCityName(subCityName)
 }

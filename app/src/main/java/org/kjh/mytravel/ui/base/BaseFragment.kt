@@ -1,5 +1,6 @@
 package org.kjh.mytravel.ui.base
 
+import android.graphics.Color
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -8,6 +9,7 @@ import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
 import androidx.fragment.app.Fragment
+import org.kjh.mytravel.R
 
 /**
  * MyTravel
@@ -31,6 +33,7 @@ abstract class BaseFragment<B: ViewDataBinding>(
         _binding = DataBindingUtil.inflate(inflater, layoutId, container, false)
         binding.lifecycleOwner = viewLifecycleOwner
 
+        setStatusBarColor()
         return binding.root
     }
 
@@ -41,15 +44,22 @@ abstract class BaseFragment<B: ViewDataBinding>(
         subscribeUi()
     }
 
-    abstract fun initView()
-    abstract fun subscribeUi()
-
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
     }
 
+    abstract fun initView()
+    abstract fun subscribeUi()
+
     fun showToast(msg: String) {
         Toast.makeText(requireContext(), msg, Toast.LENGTH_SHORT).show()
+    }
+
+    private fun setStatusBarColor() {
+        if (layoutId == R.layout.fragment_home
+            || layoutId == R.layout.fragment_daylog_detail) {
+            requireActivity().window.statusBarColor= Color.TRANSPARENT
+        }
     }
 }

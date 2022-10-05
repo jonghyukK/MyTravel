@@ -9,9 +9,7 @@ import org.kjh.domain.repository.PlaceRepository
  *
  * Description:
  */
-class GetPlaceUseCase(
-    private val placeRepository: PlaceRepository
-) {
+class GetPlaceUseCase(private val placeRepository: PlaceRepository) {
     suspend operator fun invoke(placeName: String) =
         placeRepository.fetchPlaceByPlaceName(placeName)
 }

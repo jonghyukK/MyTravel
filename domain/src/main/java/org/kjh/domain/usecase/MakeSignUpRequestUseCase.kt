@@ -9,9 +9,10 @@ import org.kjh.domain.repository.UserRepository
  *
  * Description:
  */
-class MakeSignUpRequestUseCase(
-    private val userRepository: UserRepository
-){
-    suspend operator fun invoke(email: String, pw: String, nickName: String) =
-        userRepository.requestSignUp(email, pw, nickName)
+class MakeSignUpRequestUseCase(private val userRepository: UserRepository) {
+    suspend operator fun invoke(
+        email   : String,
+        pw      : String,
+        nickName: String
+    ) = userRepository.requestSignUp(email, pw, nickName)
 }

@@ -1,5 +1,6 @@
 package org.kjh.data.model
 
+import com.google.gson.annotations.SerializedName
 import org.kjh.domain.entity.PlaceEntity
 
 /**
@@ -20,7 +21,8 @@ data class PlaceModel(
     val x               : String,
     val y               : String,
     val placeImg        : String,
-    val posts           : List<PostModel>
+    @SerializedName("posts")
+    val dayLogs         : List<DayLogModel>
 )
 
 fun PlaceModel.mapToDomain() =
@@ -34,5 +36,5 @@ fun PlaceModel.mapToDomain() =
         x,
         y,
         placeImg,
-        posts.map { it.mapToDomain() }
+        dayLogs.map { it.mapToDomain() }
     )

@@ -4,19 +4,19 @@
 
     <data>
         <variable
-            name="postItem"
-            type="org.kjh.mytravel.model.Post" />
+            name="dayLogItem"
+            type="org.kjh.mytravel.model.DayLog" />
     </data>
 
     <androidx.cardview.widget.CardView
-        android:id="@+id/cv_postItemSmallContainer"
+        android:id="@+id/cv_dayLogItemSmallContainer"
         android:layout_width="match_parent"
         android:layout_height="200dp"
         app:cardCornerRadius="8dp"
         app:cardElevation="0dp">
 
         <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/cl_postItemSmallContainer"
+            android:id="@+id/cl_dayLogItemSmallContainer"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
@@ -25,7 +25,7 @@
                 android:layout_width="0dp"
                 android:layout_height="0dp"
                 android:scaleType="centerCrop"
-                app:imgUrl="@{postItem.imageUrl[0]}"
+                app:imgUrl="@{dayLogItem.imageUrl[0]}"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintBottom_toBottomOf="parent"
@@ -36,7 +36,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textColor="@color/white"
-                android:text="@{postItem.placeName}"
+                android:text="@{dayLogItem.placeName}"
                 android:textStyle="bold"
                 android:textSize="15sp"
                 android:layout_marginStart="8dp"
@@ -48,7 +48,7 @@
                 android:id="@+id/tv_placeAddress"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@{postItem.placeAddress}"
+                android:text="@{dayLogItem.placeAddress}"
                 android:textColor="@color/white"
                 android:textSize="13sp"
                 android:layout_marginStart="8dp"

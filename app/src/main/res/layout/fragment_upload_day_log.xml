@@ -11,7 +11,7 @@
 
         <variable
             name="fragment"
-            type="org.kjh.mytravel.ui.features.upload.UploadPostFragment" />
+            type="org.kjh.mytravel.ui.features.upload.UploadDayLogFragment" />
 
         <variable
             name="myProfileViewModel"
@@ -23,7 +23,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:fitsSystemWindows="true"
-        tools:context=".ui.features.upload.UploadPostFragment">
+        tools:context=".ui.features.upload.UploadDayLogFragment">
 
         <com.google.android.material.appbar.MaterialToolbar
             android:id="@+id/tb_writePostToolbar"
@@ -73,7 +73,7 @@
                             android:layout_marginStart="15dp"
                             app:layout_constraintTop_toTopOf="parent"
                             app:layout_constraintStart_toStartOf="parent"
-                            app:imgUrl="@{myProfileViewModel.myProfileUiState.myProfileItem.profileImg}"/>
+                            app:imgUrl="@{myProfileViewModel.myProfileUiState.profileImg}"/>
 
                         <TextView
                             android:id="@+id/tv_nickName"
@@ -83,7 +83,7 @@
                             android:textSize="14sp"
                             android:textColor="@color/black"
                             android:textStyle="bold"
-                            android:text="@{myProfileViewModel.myProfileUiState.myProfileItem.nickName}"
+                            android:text="@{myProfileViewModel.myProfileUiState.nickName}"
                             app:layout_constraintTop_toTopOf="@+id/siv_profileImg"
                             app:layout_constraintStart_toEndOf="@+id/siv_profileImg"
                             app:layout_constraintBottom_toTopOf="@+id/tv_placeName"/>

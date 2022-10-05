@@ -24,7 +24,7 @@ data class Place(
     val x       : String,
     val y       : String,
     val placeImg: String,
-    val posts   : List<Post>
+    val dayLogs   : List<DayLog>
 ) {
     companion object {
         val diffCallback = object : DiffUtil.ItemCallback<Place>() {
@@ -53,7 +53,7 @@ fun PlaceEntity.mapToPresenter() =
         x,
         y,
         placeImg,
-        posts.map { it.mapToPresenter() }
+        dayLogs.map { it.mapToPresenter() }
     )
 
 fun Place.withMarker(markerClickCallback: ((Marker) -> Unit)? = null): PlaceWithMarker =

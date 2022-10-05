@@ -50,7 +50,7 @@ class LocationSearchFragment
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.uiState.collect { state ->
                     if (state is UiState.Error) {
-                        state.exception.message?.let {
+                        state.errorMsg.let {
                             Toast.makeText(requireContext(), it, Toast.LENGTH_SHORT).show()
                             viewModel.initUiState()
                         }

@@ -5,8 +5,8 @@
 
     <data>
         <variable
-            name="postItem"
-            type="org.kjh.mytravel.model.Post" />
+            name="dayLogItem"
+            type="org.kjh.mytravel.model.DayLog" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -15,14 +15,30 @@
         android:layout_height="wrap_content"
         android:paddingBottom="35dp">
 
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/top_info_guideLine"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_begin="15dp"/>
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/bottom_info_guideLine"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_begin="75dp"/>
+
         <com.google.android.material.imageview.ShapeableImageView
             android:id="@+id/siv_profileImg"
             style="@style/CircleProfileImg"
-            android:layout_width="35dp"
-            android:layout_height="35dp"
-            app:layout_constraintTop_toTopOf="parent"
+            android:layout_width="37dp"
+            android:layout_height="37dp"
+            app:layout_constraintTop_toBottomOf="@+id/top_info_guideLine"
             app:layout_constraintStart_toEndOf="@+id/startGuideLine"
-            app:imgUrl="@{postItem.profileImg}"/>
+            app:layout_constraintBottom_toTopOf="@+id/bottom_info_guideLine"
+            app:imgUrl="@{dayLogItem.profileImg}"
+            tools:src="@drawable/ic_check_circle"/>
 
         <TextView
             android:id="@+id/tv_nickName"
@@ -32,10 +48,12 @@
             android:textSize="14sp"
             android:textColor="@color/black"
             android:textStyle="bold"
-            android:text="@{postItem.nickName}"
-            app:layout_constraintTop_toTopOf="@+id/siv_profileImg"
+            android:text="@{dayLogItem.nickName}"
+            app:layout_constraintVertical_chainStyle="packed"
+            app:layout_constraintTop_toBottomOf="@+id/top_info_guideLine"
             app:layout_constraintStart_toEndOf="@+id/siv_profileImg"
-            app:layout_constraintBottom_toTopOf="@+id/tv_placeName"/>
+            app:layout_constraintBottom_toTopOf="@+id/tv_placeName"
+            tools:text="nickName"/>
 
         <TextView
             android:id="@+id/tv_placeName"
@@ -43,20 +61,30 @@
             android:layout_height="wrap_content"
             android:textSize="13sp"
             android:textColor="#777"
-            android:text="@{postItem.placeName + ` | ` + postItem.cityName + `, ` + postItem.subCityName}"
+            android:text="@{dayLogItem.placeName + ` | ` + dayLogItem.cityName + `, ` + dayLogItem.subCityName}"
             app:layout_constraintStart_toStartOf="@+id/tv_nickName"
             app:layout_constraintTop_toBottomOf="@+id/tv_nickName"
-            app:layout_constraintBottom_toBottomOf="@+id/siv_profileImg"/>
+            app:layout_constraintBottom_toTopOf="@+id/bottom_info_guideLine"
+            tools:text="place"/>
+
+        <ImageView
+            android:id="@+id/iv_more"
+            android:layout_width="35dp"
+            android:layout_height="48dp"
+            android:src="@drawable/ic_more"
+            android:layout_marginEnd="10dp"
+            app:layout_constraintTop_toBottomOf="@+id/top_info_guideLine"
+            app:layout_constraintBottom_toTopOf="@+id/bottom_info_guideLine"
+            app:layout_constraintEnd_toEndOf="parent"/>
 
         <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/postImgRecyclerView"
+            android:id="@+id/dayLogImgRecyclerView"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="13dp"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             android:orientation="horizontal"
             android:nestedScrollingEnabled="false"
-            app:layout_constraintTop_toBottomOf="@+id/siv_profileImg"
+            app:layout_constraintTop_toBottomOf="@+id/bottom_info_guideLine"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             tools:listitem="@layout/vh_square_image_large"/>
@@ -65,10 +93,10 @@
             android:id="@+id/tv_content"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:text="@{postItem.content}"
+            android:text="@{dayLogItem.content}"
             android:textSize="13sp"
             android:textColor="@color/black"
-            app:layout_constraintTop_toBottomOf="@+id/postImgRecyclerView"
+            app:layout_constraintTop_toBottomOf="@+id/dayLogImgRecyclerView"
             app:layout_constraintStart_toEndOf="@+id/startGuideLine"
             app:layout_constraintEnd_toStartOf="@+id/endGuideline"
             android:textAlignment="textStart" />
@@ -77,9 +105,9 @@
             android:id="@+id/iv_bookmark"
             android:layout_width="30dp"
             android:layout_height="30dp"
-            android:src="@{postItem.isBookmarked ? @drawable/ic_bookmark_active : @drawable/ic_bookmark_inactive}"
+            android:src="@{dayLogItem.isBookmarked ? @drawable/ic_bookmark_active : @drawable/ic_bookmark_inactive}"
             android:layout_marginEnd="15dp"
-            app:layout_constraintTop_toBottomOf="@+id/postImgRecyclerView"
+            app:layout_constraintTop_toBottomOf="@+id/dayLogImgRecyclerView"
             app:layout_constraintEnd_toEndOf="parent"/>
 
         <TextView
@@ -91,7 +119,7 @@
             android:textColor="#9e9e9e"
             app:layout_constraintTop_toBottomOf="@+id/tv_content"
             app:layout_constraintStart_toEndOf="@+id/startGuideLine"
-            android:text="@{postItem.createdDate}"/>
+            android:text="@{dayLogItem.createdDate}"/>
 
         <androidx.constraintlayout.widget.Guideline
             android:id="@+id/startGuideLine"

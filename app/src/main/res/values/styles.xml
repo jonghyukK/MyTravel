@@ -52,4 +52,41 @@
 
     <style name="Text_Color777.Size14.Bold"><item name="android:textStyle">bold</item></style>
 
+
+    <style name="TextInputLayoutStyle_Test" parent="Widget.Design.TextInputLayout">
+        <!-- No Focus 상태 밑줄 color -->
+        <item name="colorControlNormal">@color/shadow_black</item>
+
+        <!-- Focus 상태 밑줄 color -->
+        <item name="colorControlActivated">@color/purple_500</item>
+
+        <!-- No Focus 상태 Hint color -->
+        <item name="android:textColorHint">@color/shadow_black</item>
+
+        <!-- Focus 상태 Hint color -->
+        <item name="hintTextColor">@color/purple_500</item>
+
+        <!-- 입력 시 Text Color -->
+        <item name="android:textColor">@color/black</item>
+
+        <!-- End Icon Color -->
+        <item name="endIconTint">@color/black</item>
+
+        <!-- End Icon Mode -->
+        <item name="endIconMode">password_toggle</item>
+
+        <!-- 문제점 !!
+            1. TextInputLayout 내에
+            app:passwordToggleEnabled="true" 사용시
+            endIconTint 칼라가 안 먹히기 때문에
+            xml에선 passwordToggleEnabled Attribute는 삭제 하고,
+            Style에서 endIconMode="password_toggle"을 사용.
+
+            2. 해당 Style을 Xml에서 style, Theme 두 곳에 지정을 해줘야 함.
+            아니면 안먹히는 속성들이 있슴.
+
+            style="This Style"
+            android:theme="This Style"
+        -->
+    </style>
 </resources>

@@ -19,18 +19,18 @@ interface ApiService {
         @Query("email"   ) email    : String,
         @Query("pw"      ) pw       : String,
         @Query("nickName") nickName : String
-    ): BaseApiModel<SignUpModel>
+    ): BaseApiModel<UserModel>
 
     @GET("user/login")
     suspend fun requestLogin(
         @Query("email") email    : String,
         @Query("pw"   ) pw       : String
-    ): BaseApiModel<LoginModel>
+    ): BaseApiModel<UserModel>
 
     @GET("user")
     suspend fun fetchUser(
-        @Query("myEmail"    ) myEmail    : String,
-        @Query("targetEmail") targetEmail: String? = null
+        @Query("myEmail"    ) myEmail    : String?,
+        @Query("targetEmail") targetEmail: String
     ): BaseApiModel<UserModel>
 
     @Multipart
@@ -50,11 +50,11 @@ interface ApiService {
 
 
     /***********************************************
-     *  about Post.
+     *  about DayLog.
      ***********************************************/
     @Multipart
     @POST("user/upload")
-    suspend fun uploadPost(
+    suspend fun uploadDayLog(
         @Part file: List<MultipartBody.Part>,
         @Query("email"          ) email         : String,
         @Query("content"        ) content       : String? = null,
@@ -66,10 +66,16 @@ interface ApiService {
     ): BaseApiModel<UserModel>
 
     @GET("post/recent")
-    suspend fun fetchLatestPosts(
+    suspend fun fetchLatestDayLogs(
         @Query("page") page: Int,
         @Query("size") size: Int
-    ): BaseApiModel<List<PostModel>>
+    ): BaseApiModel<List<DayLogModel>>
+
+    @DELETE("post/delete")
+    suspend fun deleteDayLog(
+        @Query("postId") postId: Int,
+        @Query("email" ) email : String
+    ): BaseApiModel<UserModel>
 
 
     /***********************************************
@@ -89,7 +95,7 @@ interface ApiService {
 
     @GET("place/ranking")
     suspend fun fetchPlaceRankings()
-    : BaseApiModel<List<PlaceWithRankModel>>
+    : BaseApiModel<List<PlaceRankingModel>>
 
     @GET("banners")
     suspend fun fetchPlaceBanners()
@@ -107,7 +113,6 @@ interface ApiService {
     @PUT("bookmarks")
     suspend fun updateMyBookmarks(
         @Query("myEmail") myEmail    : String,
-        @Query("postId") postId      : Int,
         @Query("placeName") placeName: String
     ): BaseApiModel<List<BookmarkModel>>
 

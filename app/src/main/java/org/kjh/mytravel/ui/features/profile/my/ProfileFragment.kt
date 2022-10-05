@@ -3,20 +3,20 @@ package org.kjh.mytravel.ui.features.profile.my
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import com.google.android.material.tabs.TabLayoutMediator
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.launch
+import org.kjh.mytravel.NavGraphDirections
 import org.kjh.mytravel.R
 import org.kjh.mytravel.databinding.FragmentProfileBinding
 import org.kjh.mytravel.model.User
 import org.kjh.mytravel.ui.base.BaseFragment
 import org.kjh.mytravel.ui.common.Dialogs
-import org.kjh.mytravel.ui.features.profile.POSTS_GRID_PAGE_INDEX
-import org.kjh.mytravel.ui.features.profile.POSTS_LINEAR_PAGE_INDEX
-import org.kjh.mytravel.ui.features.profile.PostsTabPagerAdapter
+import org.kjh.mytravel.ui.features.profile.DAY_LOGS_GRID_PAGE_INDEX
+import org.kjh.mytravel.ui.features.profile.DAY_LOGS_LINEAR_PAGE_INDEX
+import org.kjh.mytravel.ui.features.profile.DayLogsTabPagerAdapter
 import org.kjh.mytravel.utils.*
 
 
@@ -31,12 +31,7 @@ class ProfileFragment
         if (isGranted) {
             navigateTo(ProfileFragmentDirections.actionToSelectPhoto())
         } else {
-            Dialogs.showDefaultDialog(
-                ctx   = requireContext(),
-                title = getString(R.string.perm_title_retry),
-                msg   = getString(R.string.perm_msg_retry),
-                posAction = { startActivityToSystemSettings() }
-            )
+            showDialogForRequestPermissionRetry()
         }
     }
 
@@ -56,64 +51,74 @@ class ProfileFragment
 
         val tabLayout = binding.postsTabLayout
         val viewPager = binding.postsViewPager.apply {
-            adapter = PostsTabPagerAdapter(this@ProfileFragment)
+            adapter = DayLogsTabPagerAdapter(this@ProfileFragment)
             isUserInputEnabled = false
         }
 
         TabLayoutMediator(tabLayout, viewPager) { tab, position ->
             when (position) {
-                POSTS_GRID_PAGE_INDEX -> tab.setIcon(R.drawable.ic_grid_view)
-                POSTS_LINEAR_PAGE_INDEX -> tab.setIcon(R.drawable.ic_linear_view)
+                DAY_LOGS_GRID_PAGE_INDEX -> tab.setIcon(R.drawable.ic_grid_view)
+                DAY_LOGS_LINEAR_PAGE_INDEX -> tab.setIcon(R.drawable.ic_linear_view)
             }
         }.attach()
     }
 
     override fun subscribeUi() {
-        myProfileViewModel.isNotLogIn
-            .flowWithLifecycle(viewLifecycleOwner.lifecycle, Lifecycle.State.STARTED)
-            .onEach { isNotLogin ->
-                if (isNotLogin != null && isNotLogin) {
-                    navigateTo(ProfileFragmentDirections.actionToNotLogin())
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                myProfileViewModel.loginUiState.collect { loginState ->
+                    when (loginState) {
+                        is LoginState.Uninitialized -> postponeEnterTransition()
+                        is LoginState.NotLoggedIn -> {
+                            navigateTo(NavGraphDirections.actionGlobalNotLogin())
+                            startPostponedEnterTransition()
+                        }
+                        is LoginState.LoggedIn -> startPostponedEnterTransition()
+                    }
                 }
             }
-            .launchIn(viewLifecycleOwner.lifecycleScope)
+        }
+    }
+
+    override fun onDestroyView() {
+        myProfileViewModel.saveMotionProgress(binding.mlProfileContainer.progress)
+        super.onDestroyView()
     }
 
     private fun checkPermission() {
         when {
             hasPermission() -> navigateTo(ProfileFragmentDirections.actionToSelectPhoto())
 
-            shouldShowRequestPermissionRationale(PERM_READ_EXTERNAL_STORAGE) -> {
-                Dialogs.showDefaultDialog(
-                    ctx   = requireContext(),
-                    title = getString(R.string.perm_title_retry),
-                    msg   = getString(R.string.perm_msg_retry),
-                    posAction = { startActivityToSystemSettings() }
-                )
-            }
+            shouldShowRequestPermissionRationale(PERM_READ_EXTERNAL_STORAGE) ->
+                showDialogForRequestPermissionRetry()
 
             else -> {
                 if (!hasPermission()) {
-                    Dialogs.showDefaultDialog(
-                        ctx   = requireContext(),
-                        title = getString(R.string.perm_title_first),
-                        msg   = getString(R.string.perm_msg_first),
-                        posAction = { requestPermissionLauncher.launch(PERM_READ_EXTERNAL_STORAGE) }
-                    )
+                    showDialogForRequestPermissionFirst()
                 }
             }
         }
     }
 
-    fun navigateToProfileEditPage(myProfileItem: User) {
-        navigateTo(ProfileFragmentDirections.actionToProfileEdit(
-                myProfileItem.profileImg, myProfileItem.nickName, myProfileItem.introduce
-            )
+    private fun showDialogForRequestPermissionFirst() {
+        Dialogs.showDefaultDialog(
+            ctx   = requireContext(),
+            title = getString(R.string.perm_title_first),
+            msg   = getString(R.string.perm_msg_first),
+            posAction = { requestPermissionLauncher.launch(PERM_READ_EXTERNAL_STORAGE) }
         )
     }
 
-    override fun onDestroyView() {
-        myProfileViewModel.saveMotionProgress(binding.mlProfileContainer.progress)
-        super.onDestroyView()
+    private fun showDialogForRequestPermissionRetry() {
+        Dialogs.showDefaultDialog(
+            ctx   = requireContext(),
+            title = getString(R.string.perm_title_retry),
+            msg   = getString(R.string.perm_msg_retry),
+            posAction = { startActivityToSystemSettings() }
+        )
+    }
+
+    fun navigateToProfileEditPage() {
+        navigateTo(ProfileFragmentDirections.actionToProfileEdit())
     }
 }

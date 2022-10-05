@@ -9,8 +9,6 @@ import org.kjh.domain.repository.MapRepository
  *
  * Description:
  */
-class SearchMapUseCase(
-    private val mapRepository: MapRepository
-) {
+class SearchMapUseCase(private val mapRepository: MapRepository) {
     suspend operator fun invoke(query: String) = mapRepository.searchPlace(query)
 }

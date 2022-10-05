@@ -8,44 +8,44 @@ import org.kjh.mytravel.utils.onThrottleClick
 
 /**
  * MyTravel
- * Class: PostsLinearImageAdapter
+ * Class: DayLogsLinearImageAdapter
  * Created by jonghyukkang on 2022/05/23.
  *
  * Description:
  */
 
-class PostsLinearImageAdapter(
-    private val onClickPostImg: () -> Unit
-) : RecyclerView.Adapter<PostsLinearImageAdapter.PostLinearInnerViewHolder>() {
+class DayLogsLinearImageAdapter(
+    private val onClickDayLogImg: () -> Unit
+) : RecyclerView.Adapter<DayLogsLinearImageAdapter.DayLogLinearInnerViewHolder>() {
 
-    private val postImages = mutableListOf<String>()
+    private val dayLogImages = mutableListOf<String>()
 
     fun setItems(items: List<String>) {
-        postImages.clear()
-        postImages.addAll(items)
+        dayLogImages.clear()
+        dayLogImages.addAll(items)
         notifyDataSetChanged()
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) =
-        PostLinearInnerViewHolder(
+        DayLogLinearInnerViewHolder(
             VhSquareImageLargeBinding.inflate(
                 LayoutInflater.from(parent.context), parent, false
-            ), onClickPostImg
+            ), onClickDayLogImg
         )
 
-    override fun onBindViewHolder(holder: PostLinearInnerViewHolder, position: Int) {
-        holder.bind(postImages[position])
+    override fun onBindViewHolder(holder: DayLogLinearInnerViewHolder, position: Int) {
+        holder.bind(dayLogImages[position])
     }
 
-    override fun getItemCount() = postImages.size
+    override fun getItemCount() = dayLogImages.size
 
-    class PostLinearInnerViewHolder(
+    class DayLogLinearInnerViewHolder(
         private val binding: VhSquareImageLargeBinding,
-        private val onClickPostImg: () -> Unit
+        private val onClickDayLogImg: () -> Unit
     ): RecyclerView.ViewHolder(binding.root) {
 
         init {
-            itemView.onThrottleClick { onClickPostImg() }
+            itemView.onThrottleClick { onClickDayLogImg() }
         }
 
         fun bind(url: String) {

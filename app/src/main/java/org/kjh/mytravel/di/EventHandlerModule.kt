@@ -5,7 +5,7 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import kotlinx.coroutines.CoroutineScope
-import org.kjh.mytravel.ui.GlobalErrorHandler
+import org.kjh.data.EventHandler
 import javax.inject.Singleton
 
 /**
@@ -18,11 +18,9 @@ import javax.inject.Singleton
 
 @Module
 @InstallIn(SingletonComponent::class)
-object GlobalHandlerModule {
+object EventHandlerModule {
 
     @Singleton
     @Provides
-    fun provideGlobalErrorHandler(
-        coroutineScope: CoroutineScope
-    ): GlobalErrorHandler = GlobalErrorHandler(coroutineScope)
+    fun provideEventHandler(): EventHandler = EventHandler()
 }

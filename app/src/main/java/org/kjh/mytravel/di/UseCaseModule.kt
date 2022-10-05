@@ -1,11 +1,15 @@
 package org.kjh.mytravel.di
 
-import org.kjh.domain.repository.*
-import org.kjh.domain.usecase.*
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
+import org.kjh.domain.repository.DayLogRepository
+import org.kjh.domain.repository.MapRepository
+import org.kjh.domain.repository.PlaceRepository
+import org.kjh.domain.repository.UserRepository
+import org.kjh.domain.usecase.*
+import javax.inject.Singleton
 
 /**
  * MyTravel
@@ -19,95 +23,106 @@ import dagger.hilt.components.SingletonComponent
 @InstallIn(SingletonComponent::class)
 object UseCaseModule {
 
-    @Provides
-    fun provideGetLoginPreferenceUseCase(
-        loginPreferencesRepository: LoginPreferencesRepository
-    ): GetLoginPreferenceUseCase = GetLoginPreferenceUseCase(loginPreferencesRepository)
-
+    @Singleton
     @Provides
     fun provideGetPlaceRankingUseCase(
         placeRepository: PlaceRepository
     ): GetPlaceRankingUseCase = GetPlaceRankingUseCase(placeRepository)
 
+    @Singleton
     @Provides
     fun provideGetPlaceUseCase(
         placeRepository: PlaceRepository
     ): GetPlaceUseCase = GetPlaceUseCase(placeRepository)
 
+    @Singleton
     @Provides
     fun provideGetPlaceWithAroundUseCase(
         placeRepository: PlaceRepository
     ): GetPlaceWithAroundUseCase = GetPlaceWithAroundUseCase(placeRepository)
 
+    @Singleton
     @Provides
-    fun provideGetRecentPostsUseCase(
-        postRepository: PostRepository
-    ): GetRecentPostsUseCase = GetRecentPostsUseCase(postRepository)
+    fun provideGetLatestDayLogUseCase(
+        getMyProfileUseCase: GetMyProfileUseCase,
+        dayLogRepository     : DayLogRepository
+    ): GetLatestDayLogUseCase = GetLatestDayLogUseCase(getMyProfileUseCase, dayLogRepository)
 
+    @Singleton
     @Provides
     fun provideGetUserUseCase(
         userRepository: UserRepository
     ): GetUserUseCase = GetUserUseCase(userRepository)
 
+    @Singleton
     @Provides
     fun provideMakeLoginRequestUseCase(
-        loginRepository             : LoginRepository,
-        saveLogInPreferenceUseCase  : SaveLogInPreferenceUseCase
-    ): MakeLoginRequestUseCase = MakeLoginRequestUseCase(loginRepository, saveLogInPreferenceUseCase)
+        userRepository: UserRepository
+    ): MakeLoginRequestUseCase = MakeLoginRequestUseCase(userRepository)
 
-    @Provides
-    fun provideMakeLogOutRequestUseCase(
-        loginPreferencesRepository: LoginPreferencesRepository
-    ): MakeLogOutRequestUseCase = MakeLogOutRequestUseCase(loginPreferencesRepository)
-
+    @Singleton
     @Provides
     fun provideMakeRequestFollowOrNotUseCase(
         userRepository: UserRepository
     ): MakeRequestFollowOrNotUseCase = MakeRequestFollowOrNotUseCase(userRepository)
 
+    @Singleton
     @Provides
     fun provideMakeSignUpRequestUseCase(
-        repository: SignUpRepository,
-        saveLogInPreferenceUseCase: SaveLogInPreferenceUseCase,
-    ): MakeSignUpRequestUseCase = MakeSignUpRequestUseCase(repository, saveLogInPreferenceUseCase)
+        userRepository: UserRepository
+    ): MakeSignUpRequestUseCase = MakeSignUpRequestUseCase(userRepository)
 
-    @Provides
-    fun provideSaveLogInPreferenceUseCase(
-        loginPreferencesRepository: LoginPreferencesRepository
-    ): SaveLogInPreferenceUseCase = SaveLogInPreferenceUseCase(loginPreferencesRepository)
-
+    @Singleton
     @Provides
     fun provideSearchMapUseCase(
         mapRepository: MapRepository
     ): SearchMapUseCase = SearchMapUseCase(mapRepository)
 
+    @Singleton
     @Provides
     fun provideUpdateBookMarkUseCase(
-        bookmarkRepository: BookmarkRepository
-    ): UpdateBookmarkUseCase = UpdateBookmarkUseCase(bookmarkRepository)
+        userRepository: UserRepository
+    ): UpdateBookmarkUseCase = UpdateBookmarkUseCase(userRepository)
 
-    @Provides
-    fun provideGetBookmarkUseCase(
-        bookmarkRepository: BookmarkRepository
-    ): GetBookmarkUseCase = GetBookmarkUseCase(bookmarkRepository)
-
+    @Singleton
     @Provides
     fun provideUpdateProfileUseCase(
         userRepository: UserRepository
     ): UpdateProfileUseCase = UpdateProfileUseCase(userRepository)
 
+    @Singleton
     @Provides
-    fun provideUploadPostUseCase(
-        postRepository: PostRepository
-    ): UploadPostUseCase = UploadPostUseCase(postRepository)
+    fun provideUploadDayLogUseCase(
+        userRepository: UserRepository
+    ): UploadDayLogUseCase = UploadDayLogUseCase(userRepository)
 
+    @Singleton
     @Provides
     fun provideGetHomeBannersUseCase(
         placeRepository: PlaceRepository
     ): GetHomeBannersUseCase = GetHomeBannersUseCase(placeRepository)
 
+    @Singleton
     @Provides
     fun provideGetPlacesBySubCityNameUseCase(
         placeRepository: PlaceRepository
     ): GetPlacesBySubCityNameUseCase = GetPlacesBySubCityNameUseCase(placeRepository)
+
+    @Singleton
+    @Provides
+    fun provideDeleteDayLogUseCase(
+        userRepository: UserRepository
+    ): DeleteDayLogUseCase = DeleteDayLogUseCase(userRepository)
+
+    @Singleton
+    @Provides
+    fun provideDeleteMyUserUseCase(
+        userRepository: UserRepository
+    ): DeleteMyProfileUseCase = DeleteMyProfileUseCase(userRepository)
+
+    @Singleton
+    @Provides
+    fun provideGetMyProfileUseCase(
+        userRepository: UserRepository
+    ): GetMyProfileUseCase = GetMyProfileUseCase(userRepository)
 }

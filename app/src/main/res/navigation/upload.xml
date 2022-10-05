@@ -18,16 +18,16 @@
         tools:layout="@layout/fragment_select_photo"
         android:label="사진 선택">
         <action
-            android:id="@+id/action_to_uploadPost"
-            app:destination="@id/uploadPostFragment" />
+            android:id="@+id/action_to_uploadDayLog"
+            app:destination="@id/uploadDayLogFragment" />
     </fragment>
 
     <!-- UploadPost Fragment -->
     <fragment
-        android:id="@+id/uploadPostFragment"
-        android:name="org.kjh.mytravel.ui.features.upload.UploadPostFragment"
+        android:id="@+id/uploadDayLogFragment"
+        android:name="org.kjh.mytravel.ui.features.upload.UploadDayLogFragment"
         android:label="내용 채우기"
-        tools:layout="@layout/fragment_upload_post">
+        tools:layout="@layout/fragment_upload_day_log">
         <action
             android:id="@+id/action_to_location"
             app:destination="@id/locationFragment" />

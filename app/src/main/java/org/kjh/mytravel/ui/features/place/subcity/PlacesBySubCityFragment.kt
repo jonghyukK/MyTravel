@@ -26,7 +26,6 @@ import org.kjh.mytravel.utils.statusBarHeight
 import javax.inject.Inject
 
 // todo : SubCity Page UI 경량화 작업 필요.
-
 @AndroidEntryPoint
 class PlacesBySubCityFragment :
     BaseMapFragment<FragmentPlacesBySubCityBinding>(R.layout.fragment_places_by_sub_city) {
@@ -36,7 +35,7 @@ class PlacesBySubCityFragment :
 
     private val args: PlacesBySubCityFragmentArgs by navArgs()
     private val placeListByCityNameAdapter by lazy { PlacesBySubCityListAdapter() }
-    private val selectedPlaceImageListAdapter by lazy { PlacesBySubCityPostListAdapter() }
+    private val selectedPlaceImageListAdapter by lazy { PlacesBySubCityDayLogListAdapter() }
     private val viewModel: PlacesBySubCityViewModel by viewModels {
         PlacesBySubCityViewModel.provideFactory(subCityNameAssistedFactory, args.cityName)
     }
@@ -59,10 +58,10 @@ class PlacesBySubCityFragment :
             adapter = placeListByCityNameAdapter
         }
 
-        binding.layoutSelectedPlace.postImgRecyclerView.apply {
+        binding.layoutSelectedPlace.dayLogImgRecyclerView.apply {
             setHasFixedSize(true)
             adapter = selectedPlaceImageListAdapter
-            addItemDecoration(PlacesBySubCityPostItemDecoration())
+            addItemDecoration(PlacesBySubCityDayLogItemDecoration())
         }
 
         initBottomSheetBehavior()

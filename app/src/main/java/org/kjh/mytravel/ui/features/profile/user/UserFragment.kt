@@ -10,14 +10,16 @@ import androidx.navigation.fragment.navArgs
 import androidx.navigation.ui.setupWithNavController
 import com.google.android.material.tabs.TabLayoutMediator
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.filterNot
+import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.launch
 import org.kjh.mytravel.R
 import org.kjh.mytravel.databinding.FragmentUserBinding
 import org.kjh.mytravel.ui.base.BaseFragment
 import org.kjh.mytravel.ui.common.UiState
-import org.kjh.mytravel.ui.features.profile.POSTS_GRID_PAGE_INDEX
-import org.kjh.mytravel.ui.features.profile.POSTS_LINEAR_PAGE_INDEX
-import org.kjh.mytravel.ui.features.profile.PostsTabPagerAdapter
+import org.kjh.mytravel.ui.features.profile.DAY_LOGS_GRID_PAGE_INDEX
+import org.kjh.mytravel.ui.features.profile.DAY_LOGS_LINEAR_PAGE_INDEX
+import org.kjh.mytravel.ui.features.profile.DayLogsTabPagerAdapter
 import org.kjh.mytravel.ui.features.profile.my.MyProfileViewModel
 import javax.inject.Inject
 
@@ -40,14 +42,14 @@ class UserFragment
 
         val tabLayout = binding.postsTabLayout
         val viewPager = binding.postsViewPager.apply {
-            adapter = PostsTabPagerAdapter(this@UserFragment)
+            adapter = DayLogsTabPagerAdapter(this@UserFragment)
             isUserInputEnabled = false
         }
 
         TabLayoutMediator(tabLayout, viewPager) { tab, position ->
             when (position) {
-                POSTS_GRID_PAGE_INDEX -> tab.setIcon(R.drawable.ic_grid_view)
-                POSTS_LINEAR_PAGE_INDEX -> tab.setIcon(R.drawable.ic_linear_view)
+                DAY_LOGS_GRID_PAGE_INDEX -> tab.setIcon(R.drawable.ic_grid_view)
+                DAY_LOGS_LINEAR_PAGE_INDEX -> tab.setIcon(R.drawable.ic_linear_view)
             }
         }.attach()
     }
@@ -56,8 +58,10 @@ class UserFragment
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 launch {
-                    myProfileViewModel.myProfileUiState.collect { state ->
-                        viewModel.updatePostsWithBookmark(state.myBookmarkItems)
+                    myProfileViewModel.myProfileUiState
+                        .filterNotNull()
+                        .collect { state ->
+                            viewModel.updatePostsWithBookmark(state.bookMarks)
                     }
                 }
 

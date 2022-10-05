@@ -1,4 +1,4 @@
-package org.kjh.mytravel.ui.features
+package org.kjh.mytravel.ui.features.splash
 
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Lifecycle
@@ -22,6 +22,7 @@ import org.kjh.mytravel.utils.navigateTo
  * Description:
  */
 
+// todo - Android 12 Splash Screen 적용해야 함 (현재 임시)
 @AndroidEntryPoint
 class SplashFragment: BaseFragment<FragmentSplashBinding>(R.layout.fragment_splash) {
 

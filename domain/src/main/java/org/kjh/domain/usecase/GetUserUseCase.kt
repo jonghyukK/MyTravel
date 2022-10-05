@@ -10,15 +10,6 @@ import org.kjh.domain.repository.UserRepository
  * Description:
  */
 
-class GetUserUseCase(
-    private val userRepository: UserRepository
-){
-    suspend fun getMyProfile(
-        myEmail: String
-    ) = userRepository.fetchMyProfile(myEmail)
-
-    suspend operator fun invoke(
-        myEmail    : String,
-        targetEmail: String? = null
-    ) = userRepository.fetchUser(myEmail, targetEmail)
+class GetUserUseCase(private val userRepository: UserRepository) {
+    suspend operator fun invoke(targetEmail: String) = userRepository.fetchUser(targetEmail)
 }

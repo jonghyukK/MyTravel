@@ -35,13 +35,13 @@ class PlacesBySubCityListAdapter
     class PlacesBySubCityViewHolder(
         private val binding : VhPlacesBySubCityRowBinding
     ): RecyclerView.ViewHolder(binding.root) {
-        private val postListAdapter = PlacesBySubCityPostListAdapter()
+        private val dayLogListAdapter = PlacesBySubCityDayLogListAdapter()
 
         init {
-            binding.postImgRecyclerView.apply {
+            binding.dayLogImgRecyclerView.apply {
                 setHasFixedSize(true)
-                adapter = postListAdapter
-                addItemDecoration(PlacesBySubCityPostItemDecoration())
+                adapter = dayLogListAdapter
+                addItemDecoration(PlacesBySubCityDayLogItemDecoration())
                 addOnItemTouchListener(OnNestedHorizontalTouchListener())
             }
 

@@ -117,7 +117,7 @@
             android:layout_marginTop="20dp"
             android:textSize="13sp"
             android:textColor="#ff0000"
-            app:textWithVisible="@{viewModel.uiState.apiResultError}"
+            app:textWithVisible="@{viewModel.uiState.isFailure()}"
             app:layout_constraintTop_toBottomOf="@+id/til_nickName"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"/>

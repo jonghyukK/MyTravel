@@ -9,9 +9,7 @@ import org.kjh.domain.repository.PlaceRepository
  *
  * Description:
  */
-class GetPlaceWithAroundUseCase(
-    private val placeRepository: PlaceRepository
-) {
+class GetPlaceWithAroundUseCase(private val placeRepository: PlaceRepository) {
     operator fun invoke(placeName: String) =
         placeRepository.fetchPlaceByPlaceNameWithAround(placeName)
 }

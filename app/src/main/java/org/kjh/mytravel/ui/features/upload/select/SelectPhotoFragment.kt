@@ -46,7 +46,7 @@ class SelectPhotoFragment
             inflateMenu(R.menu.menu_next)
             onThrottleMenuItemClick { menu ->
                 when (menu.itemId) {
-                    R.id.next -> navigateTo(SelectPhotoFragmentDirections.actionToUploadPost())
+                    R.id.next -> navigateTo(SelectPhotoFragmentDirections.actionToUploadDayLog())
                 }
             }
         }

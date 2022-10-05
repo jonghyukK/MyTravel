@@ -81,8 +81,7 @@ class ProfileEditViewModel @Inject constructor(
                         eventHandler.emitEvent(
                             Event.ApiError("occur Error [Update Profile API]"))
 
-                        _profileUpdateState.value =
-                            UpdateProfileUiState.Failure(errorMsg)
+                        _profileUpdateState.value = UpdateProfileUiState.Failure(errorMsg)
                     }
                 }
             }

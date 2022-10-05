@@ -7,8 +7,8 @@
         <import type="android.view.View" />
 
         <variable
-            name="myProfileViewModel"
-            type="org.kjh.mytravel.ui.features.profile.my.MyProfileViewModel" />
+            name="viewModel"
+            type="org.kjh.mytravel.ui.features.bookmark.BookmarkViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -71,7 +71,7 @@
             android:id="@+id/group_bookmarkEmpty"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:isVisible="@{myProfileViewModel.myProfileUiState.myBookmarkItems.size == 0}"
+            app:isVisible="@{viewModel.uiState.bookmarkItems.size == 0}"
             app:constraint_referenced_ids="iv_bookmark, tv_nothing_bookmark_desc1, tv_do_bookmark" />
 
         <androidx.recyclerview.widget.RecyclerView
@@ -84,7 +84,8 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
             app:spanCount="3"
-            bindItems="@{myProfileViewModel.myProfileUiState.myBookmarkItems}"/>
+            bindItems="@{viewModel.uiState.bookmarkItems}"
+            tools:listitem="@layout/vh_bookmark_day_log_item"/>
 
         <ProgressBar
             android:id="@+id/pb_loading"
@@ -94,7 +95,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:isVisible="@{myProfileViewModel.isLoading()}" />
+            app:isVisible="@{viewModel.uiState.loading}" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

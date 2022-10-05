@@ -7,7 +7,7 @@ import androidx.navigation.ui.setupWithNavController
 import androidx.recyclerview.widget.PagerSnapHelper
 import dagger.hilt.android.AndroidEntryPoint
 import org.kjh.mytravel.R
-import org.kjh.mytravel.databinding.FragmentUploadPostBinding
+import org.kjh.mytravel.databinding.FragmentUploadDayLogBinding
 import org.kjh.mytravel.ui.base.BaseFragment
 import org.kjh.mytravel.ui.common.Dialogs
 import org.kjh.mytravel.ui.features.profile.LineIndicatorDecoration
@@ -18,8 +18,8 @@ import org.kjh.mytravel.utils.onThrottleMenuItemClick
 import org.kjh.mytravel.utils.startActivityToSystemSettings
 
 @AndroidEntryPoint
-class UploadPostFragment
-    : BaseFragment<FragmentUploadPostBinding>(R.layout.fragment_upload_post) {
+class UploadDayLogFragment
+    : BaseFragment<FragmentUploadDayLogBinding>(R.layout.fragment_upload_day_log) {
 
     private val uploadViewModel   : UploadViewModel by activityViewModels()
     private val myProfileViewModel: MyProfileViewModel by activityViewModels()
@@ -63,7 +63,7 @@ class UploadPostFragment
     }
 
     private fun requestUploadAndNavigateToHome() {
-        uploadViewModel.requestUploadPost()
+        uploadViewModel.requestUploadDayLog()
         navigateToHome()
     }
 
@@ -78,11 +78,11 @@ class UploadPostFragment
     }
 
     fun navigateToLocationPage() {
-        navigateTo(UploadPostFragmentDirections.actionToLocation())
+        navigateTo(UploadDayLogFragmentDirections.actionToLocation())
     }
 
     fun navigateToContentInputPage() {
-        navigateTo(UploadPostFragmentDirections.actionToContentInput())
+        navigateTo(UploadDayLogFragmentDirections.actionToContentInput())
     }
 
     override fun subscribeUi() {}
@@ -103,7 +103,7 @@ class UploadPostFragment
             msg   = getString(R.string.perm_msg_retry),
             negAction = {
                 findNavController().navigate(
-                    UploadPostFragmentDirections.actionGlobalProfileFragment()
+                    UploadDayLogFragmentDirections.actionGlobalProfileFragment()
                 )
             },
             posAction = { startActivityToSystemSettings() }

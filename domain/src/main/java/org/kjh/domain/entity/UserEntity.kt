@@ -18,6 +18,6 @@ data class UserEntity(
     val followCount    : Int,
     val introduce      : String?,
     val isFollowing    : Boolean,
-    val posts          : List<PostEntity>,
+    val dayLogs        : List<DayLogEntity>,
     val bookMarks      : List<BookmarkEntity>
 )

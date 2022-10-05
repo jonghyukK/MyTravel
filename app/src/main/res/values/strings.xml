@@ -47,6 +47,7 @@
     <string name="input_content">내용 입력</string>
     <string name="input_complete">입력 완료</string>
     <string name="noti_upload_title">게시물 업로드</string>
+    <string name="delete_post">게시물 삭제</string>
     <string name="uploading">업로드 중입니다..</string>
     <string name="upload_failed">업로드가 실패하였습니다.</string>
     <string name="upload_success">업로드가 완료되었습니다.</string>
@@ -57,6 +58,9 @@
     <string name="input_content_your_experience">해당 장소에서의 경험을 적어주세요.</string>
     <string name="input_place">장소를 추가해 주세요.</string>
     <string name="title_place_ranking_best_7">이번 주 가장 핫한 장소 BEST 7</string>
+    <string name="title_latest_day_log">최근 올라온 여행지</string>
+    <string name="title_need_login_dialog">로그인 필요 기능</string>
+    <string name="desc_need_login_dialog">해당 기능은 로그인 후 이용하실 수 있습니다. 로그인하시겠습니까?</string>
     <string name="desc_share_travel_to_friend_after_login_or_signup">로그인/회원가입 후 \n멋진 나의 여행지를 친구들에게 공유해 주세요!</string>
     <string name="desc_nothing_bookmark">북마크된 장소가 없습니다.</string>
     <string name="desc_do_bookmark_you_wish">관심있는 장소를 북마크하면 이 곳에서 모아볼 수 있습니다.</string>

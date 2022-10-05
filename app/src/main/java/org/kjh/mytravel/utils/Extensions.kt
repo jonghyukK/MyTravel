@@ -5,9 +5,7 @@ import android.content.Intent
 import android.content.pm.PackageManager.PERMISSION_GRANTED
 import android.net.Uri
 import android.provider.Settings
-import android.util.DisplayMetrics
 import android.util.Patterns
-import android.util.TypedValue
 import android.view.MenuItem
 import android.view.View
 import androidx.appcompat.widget.Toolbar
@@ -19,7 +17,7 @@ import androidx.navigation.fragment.findNavController
 import org.kjh.mytravel.BuildConfig
 import org.kjh.mytravel.NavGraphDirections
 import org.kjh.mytravel.model.Bookmark
-import org.kjh.mytravel.model.Post
+import org.kjh.mytravel.model.DayLog
 import org.kjh.mytravel.ui.common.OnThrottleClickListener
 import org.kjh.mytravel.ui.common.OnThrottleMenuItemClickListener
 
@@ -70,13 +68,13 @@ fun View.navigateToPlaceInfoWithDayLog(placeName: String) {
     navigateTo(action)
 }
 
-fun Fragment.navigateToDayLogDetail(placeName: String, postId: Int = -1) {
-    val action = NavGraphDirections.actionGlobalDayLogDetailFragment(placeName, postId)
+fun Fragment.navigateToDayLogDetail(placeName: String, dayLogId: Int = -1) {
+    val action = NavGraphDirections.actionGlobalDayLogDetailFragment(placeName, dayLogId)
     navigateTo(action)
 }
 
-fun View.navigateToDayLogDetail(placeName: String, postId: Int = -1) {
-    val action = NavGraphDirections.actionGlobalDayLogDetailFragment(placeName, postId)
+fun View.navigateToDayLogDetail(placeName: String, dayLogId: Int = -1) {
+    val action = NavGraphDirections.actionGlobalDayLogDetailFragment(placeName, dayLogId)
     navigateTo(action)
 }
 
@@ -91,9 +89,9 @@ fun View.navigateTo(action: NavDirections) {
 inline fun <reified T> List<*>?.avoidUncheckedWarnAndCast(): List<T> =
     this?.filterIsInstance<T>() ?: emptyList()
 
-fun List<Post>.updateBookmarkStateWithPosts(bookmarks: List<Bookmark>) = this.map { post ->
-    post.copy(
-        isBookmarked = bookmarks.containPlace(post.placeName)
+fun List<DayLog>.updateBookmarkStateWithDayLogs(bookmarks: List<Bookmark>) = this.map { dayLog ->
+    dayLog.copy(
+        isBookmarked = bookmarks.containPlace(dayLog.placeName)
     )
 }
 

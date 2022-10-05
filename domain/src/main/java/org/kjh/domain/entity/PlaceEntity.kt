@@ -17,5 +17,5 @@ data class PlaceEntity(
     val x               : String,
     val y               : String,
     val placeImg        : String,
-    val posts           : List<PostEntity>
+    val dayLogs         : List<DayLogEntity>
 )

@@ -9,9 +9,7 @@ import org.kjh.domain.repository.UserRepository
  *
  * Description:
  */
-class MakeRequestFollowOrNotUseCase(
-    private val userRepository: UserRepository
-) {
+class MakeRequestFollowOrNotUseCase(private val userRepository: UserRepository) {
     suspend operator fun invoke(myEmail: String, targetEmail: String) =
         userRepository.updateFollowState(myEmail, targetEmail)
 }

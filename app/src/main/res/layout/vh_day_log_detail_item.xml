@@ -5,8 +5,8 @@
 
     <data>
         <variable
-            name="postItem"
-            type="org.kjh.mytravel.model.Post" />
+            name="dayLogItem"
+            type="org.kjh.mytravel.model.DayLog" />
         <variable
             name="isBookmarked"
             type="Boolean" />
@@ -42,7 +42,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="4dp"
-                android:text="@{postItem.cityName + `, ` + postItem.subCityName}"
+                android:text="@{dayLogItem.cityName + `, ` + dayLogItem.subCityName}"
                 android:textSize="13sp"
                 app:layout_constraintStart_toStartOf="@+id/tv_placeName"
                 app:layout_constraintTop_toBottomOf="@+id/tv_placeName" />
@@ -51,7 +51,7 @@
                 android:id="@+id/tv_placeName"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@{postItem.placeName}"
+                android:text="@{dayLogItem.placeName}"
                 android:textColor="#333"
                 android:textSize="17sp"
                 android:textStyle="bold"
@@ -65,7 +65,7 @@
             android:layout_height="wrap_content"
             android:paddingTop="25dp"
             android:paddingBottom="25dp"
-            android:text="@{postItem.content}"
+            android:text="@{dayLogItem.content}"
             android:textColor="@color/black"
             android:textSize="15sp"
             app:layout_constraintStart_toEndOf="@+id/startGuideLine"
@@ -75,7 +75,7 @@
             android:id="@+id/tv_date"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@{postItem.createdDate}"
+            android:text="@{dayLogItem.createdDate}"
             app:layout_constraintStart_toEndOf="@+id/startGuideLine"
             app:layout_constraintTop_toBottomOf="@+id/tv_content" />
 

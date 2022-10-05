@@ -14,10 +14,11 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import org.kjh.data.Event
+import org.kjh.data.EventHandler
 import org.kjh.domain.entity.ApiResult
 import org.kjh.domain.usecase.GetPlacesBySubCityNameUseCase
 import org.kjh.mytravel.model.*
-import org.kjh.mytravel.ui.GlobalErrorHandler
 import org.kjh.mytravel.utils.NaverMapUtils
 
 /**
@@ -28,16 +29,9 @@ import org.kjh.mytravel.utils.NaverMapUtils
  * Description:
  */
 
-
-data class PlacesBySubCityUiState(
-    val isLoading : Boolean = false,
-    val placeItems : List<Place> = listOf(),
-    val placeWithMarkerMap : Map<String, PlaceWithMarker> = mapOf()
-)
-
 class PlacesBySubCityViewModel @AssistedInject constructor(
     private val getPlacesBySubCityNameUseCase: GetPlacesBySubCityNameUseCase,
-    private val globalErrorHandler: GlobalErrorHandler,
+    private val eventHandler: EventHandler,
     @Assisted private val initSubCityName: String
 ): ViewModel() {
 
@@ -84,8 +78,7 @@ class PlacesBySubCityViewModel @AssistedInject constructor(
 
                         is ApiResult.Error -> {
                             Logger.e(apiResult.throwable.localizedMessage!!)
-                            val errorMsg = "occur Error [Fetch Places by Subcity API]"
-                            globalErrorHandler.sendError(errorMsg)
+                            eventHandler.emitEvent(Event.ApiError("occur Error [Fetch Places by Subcity API]"))
 
                             _uiState.update {
                                 it.copy(isLoading = false)
@@ -146,3 +139,9 @@ class PlacesBySubCityViewModel @AssistedInject constructor(
         }
     }
 }
+
+data class PlacesBySubCityUiState(
+    val isLoading : Boolean = false,
+    val placeItems : List<Place> = listOf(),
+    val placeWithMarkerMap : Map<String, PlaceWithMarker> = mapOf()
+)

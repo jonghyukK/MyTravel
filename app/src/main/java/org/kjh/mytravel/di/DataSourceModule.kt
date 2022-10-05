@@ -1,13 +1,14 @@
 package org.kjh.mytravel.di
 
-import org.kjh.data.api.ApiService
-import org.kjh.data.api.KakaoApiService
-import org.kjh.data.datasource.*
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import kotlinx.coroutines.CoroutineDispatcher
+import org.kjh.data.api.ApiService
+import org.kjh.data.api.KakaoApiService
+import org.kjh.data.dao.UserDao
+import org.kjh.data.datasource.*
 import javax.inject.Singleton
 
 /**
@@ -24,17 +25,9 @@ object DataSourceModule {
 
     @Singleton
     @Provides
-    fun provideSignUpRemoteDataSource(
-        apiService: ApiService,
-        @IoDispatcher ioDispatcher: CoroutineDispatcher
-    ): SignUpRemoteDataSource = SignUpDataSourceImpl(apiService, ioDispatcher)
-
-    @Singleton
-    @Provides
-    fun provideLoginRemoteDataSource(
-        apiService: ApiService,
-        @IoDispatcher ioDispatcher: CoroutineDispatcher
-    ): LoginRemoteDataSource = LoginDataSourceImpl(apiService, ioDispatcher)
+    fun provideUserLocalDataSource(
+        userDao: UserDao
+    ): UserLocalDataSource = UserLocalDataSourceImpl(userDao)
 
     @Singleton
     @Provides
@@ -45,10 +38,10 @@ object DataSourceModule {
 
     @Singleton
     @Provides
-    fun providePostRemoteDataSource(
+    fun provideDayLogRemoteDataSource(
         apiService: ApiService,
         @IoDispatcher ioDispatcher: CoroutineDispatcher
-    ): PostRemoteDataSource = PostRemoteDataSourceImpl(apiService, ioDispatcher)
+    ): DayLogRemoteDataSource = DayLogRemoteDataSourceImpl(apiService, ioDispatcher)
 
     @Singleton
     @Provides
@@ -56,13 +49,6 @@ object DataSourceModule {
         apiService: ApiService,
         @IoDispatcher ioDispatcher: CoroutineDispatcher
     ): PlaceRemoteDataSource = PlaceRemoteDataSourceImpl(apiService, ioDispatcher)
-
-    @Singleton
-    @Provides
-    fun provideBookmarkRemoteDataSource(
-        apiService: ApiService,
-        @IoDispatcher ioDispatcher: CoroutineDispatcher
-    ): BookmarkRemoteDataSource = BookmarkRemoteDataSourceImpl(apiService, ioDispatcher)
 
     @Singleton
     @Provides

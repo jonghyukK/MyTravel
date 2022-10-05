@@ -45,7 +45,6 @@ class BannerItemDecoration : BaseItemDecoration() {
     ) {
         super.getItemOffsets(outRect, view, parent, state)
 
-        parent.clearOnScrollListeners()
         parent.addOnScrollListener(object: RecyclerView.OnScrollListener() {
             val lm = parent.layoutManager as LinearLayoutManager
 
