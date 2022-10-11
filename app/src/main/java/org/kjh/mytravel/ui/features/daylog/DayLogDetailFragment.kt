@@ -4,9 +4,7 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
-import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
-import androidx.navigation.ui.setupWithNavController
 import androidx.recyclerview.widget.ConcatAdapter
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
@@ -49,7 +47,6 @@ class DayLogDetailFragment
         binding.viewModel = viewModel
         binding.concatAdapter = concatAdapter
         binding.placeName = args.placeName
-        binding.tbPlaceDetailToolbar.setupWithNavController(findNavController())
     }
 
     override fun subscribeUi() {

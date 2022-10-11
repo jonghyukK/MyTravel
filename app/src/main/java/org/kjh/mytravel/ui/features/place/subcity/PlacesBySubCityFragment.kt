@@ -7,9 +7,7 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
-import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
-import androidx.navigation.ui.setupWithNavController
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetBehavior.STATE_COLLAPSED
 import com.google.android.material.bottomsheet.BottomSheetBehavior.STATE_HIDDEN
@@ -22,7 +20,6 @@ import org.kjh.mytravel.databinding.FragmentPlacesBySubCityBinding
 import org.kjh.mytravel.model.PlaceWithMarker
 import org.kjh.mytravel.ui.base.BaseMapFragment
 import org.kjh.mytravel.utils.navigationHeight
-import org.kjh.mytravel.utils.statusBarHeight
 import javax.inject.Inject
 
 // todo : SubCity Page UI 경량화 작업 필요.
@@ -49,8 +46,6 @@ class PlacesBySubCityFragment :
         binding.subCityName = args.cityName
         binding.fragment    = this
 
-        binding.tbPlaceListByCityNameToolbar.setupWithNavController(findNavController())
-
         val mapFragment = childFragmentManager.findFragmentById(R.id.map) as MapFragment
         mapFragment.getMapAsync(this)
 
@@ -74,14 +69,13 @@ class PlacesBySubCityFragment :
 
         binding.map.doOnLayout {
             bsBehavior = BottomSheetBehavior.from(binding.bsContainer).apply {
-                val toolBarHeight   = binding.tbPlaceListByCityNameToolbar.layoutParams.height
+                val toolBarHeight   = binding.layoutPlaceSubCityToolbar.tbToolBar.layoutParams.height
                 val deviceHeight    = requireActivity().window.decorView.height
-                val statusBarHeight = requireContext().statusBarHeight()
                 val navHeight       = requireContext().navigationHeight()
-                val maxExpandedHeight = deviceHeight - (statusBarHeight + toolBarHeight + navHeight)
+                val maxExpandedHeight = deviceHeight - (toolBarHeight + navHeight)
 
                 initMapHeight = it.measuredHeight
-                bsPeekHeight  = deviceHeight - (toolBarHeight + initMapHeight + statusBarHeight + navHeight)
+                bsPeekHeight  = deviceHeight - (toolBarHeight + initMapHeight + navHeight)
 
                 maxHeight  = maxExpandedHeight
                 peekHeight = bsPeekHeight

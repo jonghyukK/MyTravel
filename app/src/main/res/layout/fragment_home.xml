@@ -31,16 +31,10 @@
                 app:layout_constraintTop_toTopOf="parent"
                 onScrollAction="@{viewModel.updateCollapsed}" />
 
-            <androidx.appcompat.widget.Toolbar
-                android:id="@+id/tb_homeToolbar"
-                android:layout_width="0dp"
-                android:layout_height="?attr/actionBarSize"
-                toolbarInsets="@{true}"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                android:background="@{viewModel.homeUiState.hasScrolled ? @color/white : @color/transparent}"
-                app:title="@{viewModel.homeUiState.hasScrolled ? @string/app_name : ``}" />
+            <include
+                layout="@layout/layout_toolbar_common"
+                app:title="@{viewModel.homeUiState.hasScrolled ? @string/app_name : ``}"
+                app:isTransparentBg="@{!viewModel.homeUiState.hasScrolled}" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>

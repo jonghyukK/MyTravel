@@ -1,8 +1,11 @@
 package org.kjh.mytravel.ui
 
+import android.os.Build
+import android.view.WindowInsets
 import androidx.activity.viewModels
 import androidx.core.view.WindowCompat
 import androidx.core.view.isVisible
+import androidx.core.view.updatePadding
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
@@ -22,6 +25,7 @@ import org.kjh.mytravel.ui.common.UiState
 import org.kjh.mytravel.ui.features.home.HomeViewModel
 import org.kjh.mytravel.ui.features.upload.UploadViewModel
 import org.kjh.mytravel.utils.NotificationUtils
+import org.kjh.mytravel.utils.navigationHeight
 
 @AndroidEntryPoint
 class MainActivity : BaseActivity<ActivityMainBinding>(R.layout.activity_main) {
@@ -38,6 +42,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>(R.layout.activity_main) {
                 val isShowBnv = arguments?.getBoolean(getString(R.string.key_show_bnv), false) == true
 
                 updateBottomNavViewVisibility(isShowBnv)
+                adjustNavHostFragmentInset(isShowBnv)
                 changeStartDestinationIfNotHome(
                     navController = nav,
                     destinationId = destination.id
@@ -47,6 +52,19 @@ class MainActivity : BaseActivity<ActivityMainBinding>(R.layout.activity_main) {
 
     private fun updateBottomNavViewVisibility(isShowBnv: Boolean) {
         binding.bnvBottomNav.isVisible = isShowBnv
+    }
+
+    private fun adjustNavHostFragmentInset(hasBnv: Boolean) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+            binding.navHostFragment.setOnApplyWindowInsetsListener { v, insets ->
+                val windowNavBar = insets.getInsets(WindowInsets.Type.navigationBars())
+
+                v.updatePadding(bottom = if (hasBnv) 0 else windowNavBar.bottom)
+                insets
+            }
+        } else {
+            binding.navHostFragment.updatePadding(bottom = if (hasBnv) 0 else navigationHeight())
+        }
     }
 
     private fun changeStartDestinationIfNotHome(

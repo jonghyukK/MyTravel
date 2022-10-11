@@ -6,16 +6,15 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
-import androidx.navigation.ui.setupWithNavController
-import com.naver.maps.map.*
+import com.naver.maps.map.MapFragment
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import org.kjh.mytravel.R
 import org.kjh.mytravel.databinding.FragmentLocationBinding
 import org.kjh.mytravel.model.MapQueryItem
 import org.kjh.mytravel.ui.base.BaseMapFragment
-import org.kjh.mytravel.utils.NaverMapUtils
 import org.kjh.mytravel.ui.features.upload.UploadViewModel
+import org.kjh.mytravel.utils.NaverMapUtils
 
 @AndroidEntryPoint
 class LocationFragment :
@@ -27,8 +26,6 @@ class LocationFragment :
     override fun initView() {
         binding.viewModel = viewModel
         binding.fragment = this
-
-        binding.tbLocationToolbar.setupWithNavController(findNavController())
 
         val mapFragment = childFragmentManager.findFragmentById(R.id.map) as MapFragment
         mapFragment.getMapAsync(this)

@@ -3,7 +3,6 @@ package org.kjh.mytravel.ui.features.upload
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.NavOptions
 import androidx.navigation.fragment.findNavController
-import androidx.navigation.ui.setupWithNavController
 import androidx.recyclerview.widget.PagerSnapHelper
 import dagger.hilt.android.AndroidEntryPoint
 import org.kjh.mytravel.R
@@ -33,8 +32,7 @@ class UploadDayLogFragment
         binding.myProfileViewModel = myProfileViewModel
         binding.fragment = this
 
-        binding.tbWritePostToolbar.apply {
-            setupWithNavController(findNavController())
+        binding.layoutUploadToolbar.tbToolBar.apply {
             inflateMenu(R.menu.menu_upload)
             onThrottleMenuItemClick { menu ->
                 if (menu.itemId == R.id.upload) {

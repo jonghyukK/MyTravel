@@ -5,12 +5,9 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
-import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
-import androidx.navigation.ui.setupWithNavController
 import com.google.android.material.tabs.TabLayoutMediator
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.flow.filterNot
 import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.launch
 import org.kjh.mytravel.R
@@ -37,8 +34,6 @@ class UserFragment
 
     override fun initView() {
         binding.viewModel = viewModel
-
-        binding.tbUserToolbar.setupWithNavController(findNavController())
 
         val tabLayout = binding.postsTabLayout
         val viewPager = binding.postsViewPager.apply {
@@ -75,10 +70,5 @@ class UserFragment
                 }
             }
         }
-    }
-
-    override fun onDestroyView() {
-        viewModel.saveMotionProgress(binding.mlUserContainer.progress)
-        super.onDestroyView()
     }
 }

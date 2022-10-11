@@ -5,7 +5,6 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
-import androidx.navigation.ui.setupWithNavController
 import com.canhub.cropper.CropImageContract
 import com.canhub.cropper.CropImageView
 import com.canhub.cropper.options
@@ -36,7 +35,6 @@ class ProfileEditFragment
     override fun initView() {
         binding.viewModel = viewModel
         binding.fragment  = this
-        binding.tbProfileEditToolbar.setupWithNavController(findNavController())
     }
 
     override fun subscribeUi() {

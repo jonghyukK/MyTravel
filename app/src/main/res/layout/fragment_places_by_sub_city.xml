@@ -18,16 +18,11 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/container"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:fitsSystemWindows="true">
+        android:layout_height="match_parent">
 
-        <com.google.android.material.appbar.MaterialToolbar
-            android:id="@+id/tb_placeListByCityNameToolbar"
-            android:layout_width="0dp"
-            android:layout_height="?attr/actionBarSize"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
+        <include
+            android:id="@+id/layout_place_sub_city_toolbar"
+            layout="@layout/layout_toolbar_common"
             app:title="@{subCityName}" />
 
         <androidx.fragment.app.FragmentContainerView
@@ -38,7 +33,7 @@
             app:layout_constraintHeight_percent="0.55"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tb_placeListByCityNameToolbar" />
+            app:layout_constraintTop_toBottomOf="@+id/layout_place_sub_city_toolbar" />
 
         <androidx.coordinatorlayout.widget.CoordinatorLayout
             android:id="@+id/cdl_placeBySubCityContainer"

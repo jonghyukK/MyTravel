@@ -3,26 +3,47 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
-        <variable
-            name="myProfileViewModel"
-            type="org.kjh.mytravel.ui.features.profile.my.MyProfileViewModel" />
+        <import type="kotlin.jvm.functions.Function0" />
+        <import type="kotlin.Unit" />
 
         <variable
-            name="fragment"
-            type="org.kjh.mytravel.ui.features.profile.my.ProfileFragment" />
+            name="profileImg"
+            type="String" />
+        <variable
+            name="dayLogCount"
+            type="String" />
+        <variable
+            name="followCount"
+            type="String" />
+        <variable
+            name="followingCount"
+            type="String" />
+        <variable
+            name="introduce"
+            type="String" />
+        <variable
+            name="isMyProfile"
+            type="Boolean" />
+        <variable
+            name="isFollowing"
+            type="Boolean" />
+        <variable
+            name="onAction"
+            type="Function0" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/cl_profileInfoContainer"
+        android:id="@+id/cl_userInfoContainer"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:background="@color/white">
 
         <com.google.android.material.imageview.ShapeableImageView
             android:id="@+id/siv_profileImg"
             style="@style/CircleProfileImg"
             android:layout_width="100dp"
             android:layout_height="100dp"
-            app:imgUrl="@{myProfileViewModel.myProfileUiState.profileImg}"
+            app:imgUrl="@{profileImg}"
             app:layout_constraintStart_toEndOf="@+id/leftGuideLine"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -31,7 +52,7 @@
             style="@style/Text_Color444.size15.Bold"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@{String.valueOf(myProfileViewModel.myProfileUiState.postCount)}"
+            android:text="@{dayLogCount}"
             app:layout_constraintBottom_toTopOf="@+id/tv_post"
             app:layout_constraintEnd_toEndOf="@id/tv_post"
             app:layout_constraintStart_toStartOf="@id/tv_post"
@@ -43,7 +64,7 @@
             style="@style/Text_Color444.size15.Bold"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@{String.valueOf(myProfileViewModel.myProfileUiState.followCount)}"
+            android:text="@{followCount}"
             app:layout_constraintBottom_toTopOf="@+id/tv_follower"
             app:layout_constraintEnd_toEndOf="@+id/tv_follower"
             app:layout_constraintStart_toStartOf="@+id/tv_follower"
@@ -55,7 +76,7 @@
             style="@style/Text_Color444.size15.Bold"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@{String.valueOf(myProfileViewModel.myProfileUiState.followingCount)}"
+            android:text="@{followingCount}"
             app:layout_constraintBottom_toTopOf="@+id/tv_following"
             app:layout_constraintEnd_toEndOf="@+id/tv_following"
             app:layout_constraintStart_toStartOf="@+id/tv_following"
@@ -104,8 +125,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginBottom="17dp"
-            app:isVisible="@{!myProfileViewModel.myProfileUiState.introduce.empty}"
-            android:text="@{myProfileViewModel.myProfileUiState.introduce}"
+            android:text="@{introduce}"
             app:layout_constraintHorizontal_weight="0"
             app:layout_constraintStart_toEndOf="@+id/leftGuideLine"
             app:layout_constraintEnd_toStartOf="@id/rightGuideLine"
@@ -117,9 +137,9 @@
             style="?attr/materialButtonOutlinedStyle"
             android:layout_width="0dp"
             android:layout_height="45dp"
-            android:text="@string/edit_profile"
             android:textSize="13sp"
-            onThrottleClick="@{fragment::navigateToProfileEditPage}"
+            android:text="@{isMyProfile ? @string/edit_profile : isFollowing ? @string/following : @string/follow}"
+            onThrottleClick="@{() -> onAction.invoke()}"
             app:layout_goneMarginTop="17dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toEndOf="@+id/leftGuideLine"

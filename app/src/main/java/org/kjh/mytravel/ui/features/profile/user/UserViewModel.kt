@@ -52,9 +52,6 @@ class UserViewModel @AssistedInject constructor(
     private val _followState: MutableStateFlow<UiState<Follow>> = MutableStateFlow(UiState.Init)
     val followState = _followState.asStateFlow()
 
-    private val _motionProgress = MutableStateFlow(0f)
-    val motionProgress = _motionProgress.asStateFlow()
-
     init {
         fetchUserByEmail()
     }
@@ -87,7 +84,7 @@ class UserViewModel @AssistedInject constructor(
         }
     }
 
-    fun requestUpdateFollowState() {
+    val requestUpdateFollowState = fun() {
         viewModelScope.launch {
             val myProfile = getMyProfileUseCase().firstOrNull()
             if (myProfile == null) {
@@ -141,10 +138,6 @@ class UserViewModel @AssistedInject constructor(
 
     fun initFollowState() {
         _followState.value = UiState.Init
-    }
-
-    fun saveMotionProgress(value: Float) {
-        _motionProgress.value = value
     }
 
     @AssistedFactory

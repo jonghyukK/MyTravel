@@ -1,11 +1,16 @@
 package org.kjh.mytravel.ui.features.place.infowithdaylog
 
+import androidx.core.view.get
 import androidx.fragment.app.viewModels
-import androidx.navigation.fragment.findNavController
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.navArgs
-import androidx.navigation.ui.setupWithNavController
 import com.google.android.material.tabs.TabLayoutMediator
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.launch
 import org.kjh.mytravel.R
 import org.kjh.mytravel.databinding.FragmentPlaceInfoWithDaylogBinding
 import org.kjh.mytravel.ui.base.BaseFragment
@@ -28,8 +33,7 @@ class PlaceInfoWithDayLogFragment
         binding.viewModel = viewModel
         binding.placeName = args.placeName
 
-        binding.tbPlacePagerToolbar.apply {
-            setupWithNavController(findNavController())
+        binding.layoutPlaceInfoToolbar.tbToolBar.apply {
             inflateMenu(R.menu.menu_bookmark)
             onThrottleMenuItemClick { menu ->
                 if (menu.itemId == R.id.bookmark) {
@@ -56,5 +60,20 @@ class PlaceInfoWithDayLogFragment
             else -> null
         }
 
-    override fun subscribeUi() {}
+    override fun subscribeUi() {
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.uiState
+                    .map { it.isBookmarked }
+                    .distinctUntilChanged()
+                    .collect { isBookmarked ->
+                        binding.layoutPlaceInfoToolbar.tbToolBar.menu[0]
+                            .setIcon(changeBookmarkIconBy(isBookmarked))
+                    }
+            }
+        }
+    }
+
+    private fun changeBookmarkIconBy(isBookmarked: Boolean) =
+        if (isBookmarked) R.drawable.ic_rank else R.drawable.ic_bookmark
 }

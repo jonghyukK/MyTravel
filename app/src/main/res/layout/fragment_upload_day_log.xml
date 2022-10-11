@@ -22,23 +22,18 @@
         android:id="@+id/cl_writePostContainer"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:fitsSystemWindows="true"
         tools:context=".ui.features.upload.UploadDayLogFragment">
 
-        <com.google.android.material.appbar.MaterialToolbar
-            android:id="@+id/tb_writePostToolbar"
-            android:layout_width="0dp"
-            android:layout_height="?attr/actionBarSize"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+        <include
+            android:id="@+id/layout_upload_toolbar"
+            layout="@layout/layout_toolbar_common" />
 
         <ScrollView
             android:id="@+id/sv_scrollView"
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:fillViewport="true"
-            app:layout_constraintTop_toBottomOf="@+id/tb_writePostToolbar"
+            app:layout_constraintTop_toBottomOf="@+id/layout_upload_toolbar"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintBottom_toBottomOf="parent">

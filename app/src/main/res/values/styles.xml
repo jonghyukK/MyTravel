@@ -89,4 +89,13 @@
             android:theme="This Style"
         -->
     </style>
+
+
+    <style name="ExpandedAppBar" parent="@android:style/TextAppearance.Medium">
+        <item name="android:textSize">@dimen/dp20</item>
+        <item name="android:textColor">#333</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+
 </resources>

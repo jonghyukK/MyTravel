@@ -15,42 +15,31 @@
     <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:id="@+id/cdl_placeInfoWithDayLogContainer"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:fitsSystemWindows="true"
-        android:background="@color/white">
+        android:layout_height="match_parent">
 
         <com.google.android.material.appbar.AppBarLayout
-            android:id="@+id/abl_placeInfoWithDayLogAppBar"
+            android:id="@+id/abl_placeInfoWithDayLogAppBarLayout"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@color/white"
-            bindOffsetChangedListener="@{viewModel.updateCollapsedState}">
+            android:layout_height="wrap_content">
 
             <com.google.android.material.appbar.CollapsingToolbarLayout
                 android:id="@+id/ctl_placeInfoWithDayLogCollapsingToolbar"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                app:titleCollapseMode="fade"
+                app:title="@{placeName}"
+                app:expandedTitleTextColor="@color/transparent"
                 app:layout_scrollFlags="scroll|exitUntilCollapsed|snap"
-                app:title="@{viewModel.uiState.isAppBarCollapsed ? placeName : ``}">
-
-                <androidx.appcompat.widget.Toolbar
-                    android:id="@+id/tb_placePagerToolbar"
-                    android:layout_width="match_parent"
-                    android:layout_height="?attr/actionBarSize"
-                    isBookmarked="@{viewModel.uiState.bookmarked}"
-                    app:layout_collapseMode="pin" />
+                setApplyWindowInsetListenerAsNull="@{true}">
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:id="@+id/ll_titleViewContainer"
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
-                    android:layout_marginStart="20dp"
-                    android:paddingTop="10dp"
-                    android:paddingBottom="10dp"
-                    android:layout_marginTop="?attr/actionBarSize"
-                    app:layout_collapseMode="parallax"
-                    app:layout_collapseParallaxMultiplier="1.0">
+                    android:padding="@dimen/dp20"
+                    android:background="@color/white"
+                    marginTopForSumToolbarAndStatusBar="@{true}" >
 
                     <TextView
                         android:id="@+id/tv_title"
@@ -58,21 +47,25 @@
                         android:layout_height="wrap_content"
                         app:layout_constraintTop_toTopOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
+                        android:layout_marginBottom="8dp"
+                        app:layout_constraintBottom_toTopOf="@+id/tv_subTitle"
                         android:text="@{viewModel.uiState.placeItem.placeName}"
                         android:textSize="20sp"
                         android:textColor="#333333"
-                        android:textStyle="bold"/>
+                        android:textStyle="bold"
+                        tools:text="PlaceName"/>
 
                     <TextView
                         android:id="@+id/tv_subTitle"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="8dp"
                         app:layout_constraintTop_toBottomOf="@+id/tv_title"
                         app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintBottom_toBottomOf="parent"
                         android:text="@{viewModel.uiState.placeItem.cityName}"
                         android:textSize="16sp"
-                        android:textColor="#555555"/>
+                        android:textColor="#555555"
+                        tools:text="subTitle"/>
 
                     <TextView
                         android:id="@+id/tv_subTitle2"
@@ -83,8 +76,16 @@
                         app:layout_constraintStart_toEndOf="@+id/tv_subTitle"
                         android:text="@{`| ` + viewModel.uiState.placeItem.subCityName}"
                         android:textSize="16sp"
-                        android:textColor="#666666"/>
+                        android:textColor="#666666"
+                        tools:text="| subTitle2"/>
                 </androidx.constraintlayout.widget.ConstraintLayout>
+
+                <include
+                    android:id="@+id/layout_place_info_toolbar"
+                    layout="@layout/layout_toolbar_common"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/toolbar_height"
+                    app:layout_collapseMode="pin"/>
             </com.google.android.material.appbar.CollapsingToolbarLayout>
 
             <com.google.android.material.tabs.TabLayout
@@ -99,12 +100,12 @@
             android:layout_height="match_parent"
             app:layout_behavior="@string/appbar_scrolling_view_behavior" />
 
-        <ProgressBar
-            android:id="@+id/pb_loading"
+        <include
+            layout="@layout/layout_progress_bar_common"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            app:isVisible="@{viewModel.uiState.loading}"/>
+            app:show="@{viewModel.uiState.loading}"/>
 
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 </layout>

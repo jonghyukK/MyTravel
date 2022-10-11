@@ -44,9 +44,6 @@ class MyProfileViewModel @Inject constructor(
     private val _myProfileUiState: MutableStateFlow<User?> = MutableStateFlow(null)
     val myProfileUiState = _myProfileUiState.asStateFlow()
 
-    private val _motionProgress = MutableStateFlow(0f)
-    val motionProgress = _motionProgress.asStateFlow()
-
     private fun showLoading() { _isLoading.value = true }
     private fun hideLoading() { _isLoading.value = false }
 
@@ -128,10 +125,6 @@ class MyProfileViewModel @Inject constructor(
 
     fun updateMyProfile(profileItem: User) {
         _myProfileUiState.value = profileItem
-    }
-
-    fun saveMotionProgress(value: Float) {
-        _motionProgress.value = value
     }
 }
 

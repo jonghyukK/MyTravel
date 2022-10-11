@@ -12,21 +12,16 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/cl_inputContentContainer"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:fitsSystemWindows="true">
+        android:layout_height="match_parent">
 
-        <com.google.android.material.appbar.MaterialToolbar
-            android:id="@+id/tb_contentInputToolbar"
-            android:layout_width="0dp"
-            android:layout_height="?attr/actionBarSize"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent" />
+        <include
+            android:id="@+id/layout_content_input_toolbar"
+            layout="@layout/layout_toolbar_common" />
 
         <com.google.android.material.textfield.TextInputLayout
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            app:layout_constraintTop_toBottomOf="@+id/tb_contentInputToolbar"
+            app:layout_constraintTop_toBottomOf="@+id/layout_content_input_toolbar"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:boxBackgroundColor="@color/white"

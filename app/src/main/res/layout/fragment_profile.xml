@@ -12,64 +12,65 @@
             type="org.kjh.mytravel.ui.features.profile.my.ProfileFragment" />
     </data>
 
-    <androidx.constraintlayout.motion.widget.MotionLayout
-        android:id="@+id/ml_profileContainer"
+    <androidx.coordinatorlayout.widget.CoordinatorLayout
+        android:id="@+id/cdl_profileContainer"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        app:layoutDescription="@xml/motion_scene_profile_scrolling"
-        motionProgress="@{myProfileViewModel.motionProgress}"
-        toolbarInsets="@{tbProfileToolbar}">
+        android:layout_height="match_parent">
 
-        <include
-            android:id="@+id/layout_profileInfo"
-            layout="@layout/layout_profile_info"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            app:fragment="@{fragment}"
-            app:layout_constraintBottom_toTopOf="@+id/postsTabLayout"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tb_profileToolbar"
-            app:myProfileViewModel="@{myProfileViewModel}" />
+        <com.google.android.material.appbar.AppBarLayout
+            android:id="@+id/abl_profileAppBarLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
 
-        <com.google.android.material.tabs.TabLayout
-            android:id="@+id/postsTabLayout"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            app:layout_constraintBottom_toTopOf="@+id/postsViewPager"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/layout_profileInfo" />
+            <com.google.android.material.appbar.CollapsingToolbarLayout
+                android:id="@+id/ctl_profileCollapsingToolbarLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:titleEnabled="false"
+                app:layout_scrollFlags="scroll|exitUntilCollapsed|snap"
+                setApplyWindowInsetListenerAsNull="@{true}">
+
+                <include
+                    android:id="@+id/layout_profileInfo"
+                    layout="@layout/layout_profile_info"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:profileImg="@{myProfileViewModel.myProfileUiState.profileImg}"
+                    app:dayLogCount="@{String.valueOf(myProfileViewModel.myProfileUiState.postCount)}"
+                    app:followCount="@{String.valueOf(myProfileViewModel.myProfileUiState.followCount)}"
+                    app:followingCount="@{String.valueOf(myProfileViewModel.myProfileUiState.followingCount)}"
+                    app:introduce="@{myProfileViewModel.myProfileUiState.introduce}"
+                    app:isMyProfile="@{true}"
+                    app:onAction="@{fragment.navigateToProfileEditPage}"
+                    marginTopForSumToolbarAndStatusBar="@{true}"/>
+
+                <include
+                    android:id="@+id/layout_profile_toolbar"
+                    layout="@layout/layout_toolbar_common"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/toolbar_height"
+                    app:layout_collapseMode="pin"
+                    app:title="@{myProfileViewModel.myProfileUiState.nickName}" />
+            </com.google.android.material.appbar.CollapsingToolbarLayout>
+
+            <com.google.android.material.tabs.TabLayout
+                android:id="@+id/postsTabLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+        </com.google.android.material.appbar.AppBarLayout>
 
         <androidx.viewpager2.widget.ViewPager2
             android:id="@+id/postsViewPager"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
             android:background="@color/white"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/postsTabLayout" />
+            app:layout_behavior="@string/appbar_scrolling_view_behavior" />
 
-        <ProgressBar
-            android:id="@+id/pb_loading"
+        <include
+            layout="@layout/layout_progress_bar_common"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:isVisible="@{myProfileViewModel.isLoading()}"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <com.google.android.material.appbar.MaterialToolbar
-            android:id="@+id/tb_profileToolbar"
-            android:layout_width="0dp"
-            android:layout_height="?attr/actionBarSize"
-            android:background="@color/white"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:title="@{myProfileViewModel.myProfileUiState.nickName}" />
-
-    </androidx.constraintlayout.motion.widget.MotionLayout>
+            app:show="@{myProfileViewModel.isLoading()}"
+            android:gravity="center|center_vertical" />
+    </androidx.coordinatorlayout.widget.CoordinatorLayout>
 </layout>

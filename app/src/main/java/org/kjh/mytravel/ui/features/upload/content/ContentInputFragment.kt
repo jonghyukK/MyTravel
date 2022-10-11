@@ -1,9 +1,7 @@
 package org.kjh.mytravel.ui.features.upload.content
 
 import androidx.fragment.app.activityViewModels
-import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
-import androidx.navigation.ui.setupWithNavController
 import org.kjh.mytravel.R
 import org.kjh.mytravel.databinding.FragmentContentInputBinding
 import org.kjh.mytravel.ui.base.BaseFragment
@@ -18,8 +16,7 @@ class ContentInputFragment
     override fun initView() {
         binding.uploadViewModel = uploadViewModel
 
-        binding.tbContentInputToolbar.apply {
-            setupWithNavController(findNavController())
+        binding.layoutContentInputToolbar.tbToolBar.apply {
             inflateMenu(R.menu.menu_complete)
             onThrottleMenuItemClick { menu ->
                 if (menu.itemId == R.id.complete) {

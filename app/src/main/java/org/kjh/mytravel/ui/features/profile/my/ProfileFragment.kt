@@ -11,7 +11,6 @@ import kotlinx.coroutines.launch
 import org.kjh.mytravel.NavGraphDirections
 import org.kjh.mytravel.R
 import org.kjh.mytravel.databinding.FragmentProfileBinding
-import org.kjh.mytravel.model.User
 import org.kjh.mytravel.ui.base.BaseFragment
 import org.kjh.mytravel.ui.common.Dialogs
 import org.kjh.mytravel.ui.features.profile.DAY_LOGS_GRID_PAGE_INDEX
@@ -39,7 +38,7 @@ class ProfileFragment
         binding.fragment = this
         binding.myProfileViewModel = myProfileViewModel
 
-        binding.tbProfileToolbar.apply {
+        binding.layoutProfileToolbar.tbToolBar.apply {
             inflateMenu(R.menu.menu_profile)
             onThrottleMenuItemClick { menuItem ->
                 when (menuItem.itemId) {
@@ -80,11 +79,6 @@ class ProfileFragment
         }
     }
 
-    override fun onDestroyView() {
-        myProfileViewModel.saveMotionProgress(binding.mlProfileContainer.progress)
-        super.onDestroyView()
-    }
-
     private fun checkPermission() {
         when {
             hasPermission() -> navigateTo(ProfileFragmentDirections.actionToSelectPhoto())
@@ -118,7 +112,7 @@ class ProfileFragment
         )
     }
 
-    fun navigateToProfileEditPage() {
+    val navigateToProfileEditPage = fun() {
         navigateTo(ProfileFragmentDirections.actionToProfileEdit())
     }
 }

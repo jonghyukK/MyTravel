@@ -30,7 +30,7 @@ fun RecyclerView.bindOnScrollListener(scrollAction: (Boolean) -> Unit) {
         override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
             super.onScrolled(recyclerView, dx, dy)
 
-            val toolbarHeight = rootView.findViewById<Toolbar>(R.id.tb_homeToolbar)?.height ?: 0
+            val toolbarHeight = rootView.findViewById<Toolbar>(R.id.tb_toolBar)?.height ?: 0
             val scrollRange = computeVerticalScrollOffset()
             val compareHeight = findViewById<RecyclerView>(R.id.bannerRecyclerView)?.height ?: 0
 

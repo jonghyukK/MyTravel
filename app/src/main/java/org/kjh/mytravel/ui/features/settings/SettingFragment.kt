@@ -6,7 +6,6 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.NavOptions
 import androidx.navigation.fragment.findNavController
-import androidx.navigation.ui.setupWithNavController
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import org.kjh.mytravel.R
@@ -23,7 +22,6 @@ class SettingFragment : BaseFragment<FragmentSettingBinding>(R.layout.fragment_s
 
     override fun initView() {
         binding.myProfileViewModel = myProfileViewModel
-        binding.tbSettingToolbar.setupWithNavController(findNavController())
     }
 
     override fun subscribeUi() {
