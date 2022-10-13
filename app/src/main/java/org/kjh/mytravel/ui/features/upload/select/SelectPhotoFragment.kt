@@ -1,11 +1,15 @@
 package org.kjh.mytravel.ui.features.upload.select
 
 import android.net.Uri
+import android.os.Build
+import androidx.core.view.WindowInsetsCompat
+import androidx.core.view.get
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.setupWithNavController
 import androidx.recyclerview.selection.SelectionTracker
@@ -41,8 +45,7 @@ class SelectPhotoFragment
         binding.viewModel       = viewModel
         binding.uploadViewModel = uploadViewModel
 
-        binding.tbSelectPhotoToolbar.apply {
-            setupWithNavController(findNavController())
+        binding.layoutSelectPhotoToolbar.tbToolBar.apply {
             inflateMenu(R.menu.menu_next)
             onThrottleMenuItemClick { menu ->
                 when (menu.itemId) {
@@ -74,6 +77,9 @@ class SelectPhotoFragment
             .flowWithLifecycle(viewLifecycleOwner.lifecycle, Lifecycle.State.STARTED)
             .onEach { uploadItem ->
                 setTrackerItemSelected(uploadItem.selectedImageItems)
+
+                binding.layoutSelectPhotoToolbar.tbToolBar.menu[0].isVisible =
+                    uploadItem.selectedImageItems.isNotEmpty()
             }
             .launchIn(viewLifecycleOwner.lifecycleScope)
     }

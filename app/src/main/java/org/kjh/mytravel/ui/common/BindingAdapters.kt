@@ -1,14 +1,16 @@
 package org.kjh.mytravel.ui.common
 
-import android.os.Build
 import android.view.View
 import android.view.ViewGroup
-import android.view.WindowInsets
 import android.widget.EditText
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.widget.Toolbar
-import androidx.core.view.*
+import androidx.constraintlayout.motion.widget.MotionLayout
+import androidx.core.view.children
+import androidx.core.view.isVisible
+import androidx.core.view.updateLayoutParams
+import androidx.core.view.updatePadding
 import androidx.core.widget.doOnTextChanged
 import androidx.databinding.BindingAdapter
 import androidx.navigation.findNavController
@@ -16,7 +18,6 @@ import androidx.navigation.ui.setupWithNavController
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.google.android.material.appbar.AppBarLayout
-import com.google.android.material.appbar.CollapsingToolbarLayout
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetBehavior.STATE_HIDDEN
 import com.google.android.material.textfield.TextInputEditText
@@ -52,14 +53,6 @@ import org.kjh.mytravel.utils.statusBarHeight
 object BindingAdapters {
 
     @JvmStatic
-    @BindingAdapter("setApplyWindowInsetListenerAsNull")
-    fun CollapsingToolbarLayout.bindOnApplyWindowInsetListenerAsNull(shouldSetNull: Boolean) {
-        if (shouldSetNull) {
-            ViewCompat.setOnApplyWindowInsetsListener(this, null)
-        }
-    }
-
-    @JvmStatic
     @BindingAdapter("marginTopForSumToolbarAndStatusBar")
     fun View.bindMarginWithToolbarAndStatusBarHeight(value: Boolean) {
         val statusBarHeight = context.statusBarHeight()
@@ -77,20 +70,25 @@ object BindingAdapters {
             setupWithNavController(findNavController())
         }
 
+        val statusBarHeight = context.statusBarHeight()
         val toolbarHeight = layoutParams.height
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-            setOnApplyWindowInsetsListener { v, insets ->
-                val sysWindow = insets.getInsets(WindowInsets.Type.statusBars())
 
-                v.updateLayoutParams { height = toolbarHeight + sysWindow.top }
-                v.updatePadding(top = sysWindow.top)
-                insets
-            }
-        } else {
-            val statusBarHeight = context.statusBarHeight()
+        updateLayoutParams { height = toolbarHeight + statusBarHeight }
+        updatePadding(top = statusBarHeight)
+    }
 
-            updateLayoutParams { height = toolbarHeight + statusBarHeight  }
-            updatePadding(top = statusBarHeight)
+    @JvmStatic
+    @BindingAdapter("setToolbarInset")
+    fun MotionLayout.bindInsetsForToolbarInMotionLayout(value: Boolean) {
+        val childToolBar       = children.filterIsInstance<Toolbar>().toList()[0]
+        val childToolbarHeight = childToolBar.layoutParams.height
+        val statusBarHeight    = context.statusBarHeight()
+        val wholeToolbarHeight = childToolbarHeight + statusBarHeight
+
+        constraintSetIds.map { id ->
+            updateState(id, getConstraintSet(id).apply {
+                constrainHeight(childToolBar.id, wholeToolbarHeight)
+            })
         }
     }
 
@@ -191,12 +189,6 @@ object BindingAdapters {
         doOnTextChanged { text, _, _, _ ->
             onChangedCallback(text.toString())
         }
-    }
-
-    @JvmStatic
-    @BindingAdapter("isVisibleMenu")
-    fun bindShowMenu(view: Toolbar, isVisible: Boolean) {
-        view.menu[0].isVisible = isVisible
     }
 
     @JvmStatic

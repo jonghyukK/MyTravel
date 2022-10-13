@@ -67,7 +67,7 @@
         <entry key="app/src/main/res/layout/fragment_profile_edit.xml" value="0.4638888888888889" />
         <entry key="app/src/main/res/layout/fragment_profile_posts.xml" value="0.1" />
         <entry key="app/src/main/res/layout/fragment_select_bucket_bottom_sheet.xml" value="0.43425925925925923" />
-        <entry key="app/src/main/res/layout/fragment_select_photo.xml" value="0.3275" />
+        <entry key="app/src/main/res/layout/fragment_select_photo.xml" value="0.1" />
         <entry key="app/src/main/res/layout/fragment_setting.xml" value="0.28425925925925927" />
         <entry key="app/src/main/res/layout/fragment_splash.xml" value="0.6541666666666667" />
         <entry key="app/src/main/res/layout/fragment_test.xml" value="0.42063492063492064" />
@@ -99,7 +99,7 @@
         <entry key="app/src/main/res/layout/layout_progress_bar_common.xml" value="0.7153846153846154" />
         <entry key="app/src/main/res/layout/layout_proress_bar_common.xml" value="0.5805555555555556" />
         <entry key="app/src/main/res/layout/layout_toolbar.xml" value="0.15092592592592594" />
-        <entry key="app/src/main/res/layout/layout_toolbar_common.xml" value="0.4078125" />
+        <entry key="app/src/main/res/layout/layout_toolbar_common.xml" value="0.1" />
         <entry key="app/src/main/res/layout/layout_user_profile_info.xml" value="0.4822888283378747" />
         <entry key="app/src/main/res/layout/layout_viewstub.xml" value="0.22685185185185186" />
         <entry key="app/src/main/res/layout/vh_around_place_header_item.xml" value="0.5396498455200824" />

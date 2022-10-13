@@ -1,7 +1,5 @@
 package org.kjh.mytravel.ui
 
-import android.os.Build
-import android.view.WindowInsets
 import androidx.activity.viewModels
 import androidx.core.view.WindowCompat
 import androidx.core.view.isVisible
@@ -39,10 +37,10 @@ class MainActivity : BaseActivity<ActivityMainBinding>(R.layout.activity_main) {
     init {
         onDestinationChangedListener =
             NavController.OnDestinationChangedListener { nav, destination, arguments ->
-                val isShowBnv = arguments?.getBoolean(getString(R.string.key_show_bnv), false) == true
+                val showBnv = arguments?.getBoolean(getString(R.string.key_show_bnv), false) == true
 
-                updateBottomNavViewVisibility(isShowBnv)
-                adjustNavHostFragmentInset(isShowBnv)
+                updateVisibilityForBottomNavViewBy(showBnv)
+                setNavHostFragmentPaddingBottomWhether(showBnv)
                 changeStartDestinationIfNotHome(
                     navController = nav,
                     destinationId = destination.id
@@ -50,21 +48,12 @@ class MainActivity : BaseActivity<ActivityMainBinding>(R.layout.activity_main) {
             }
     }
 
-    private fun updateBottomNavViewVisibility(isShowBnv: Boolean) {
-        binding.bnvBottomNav.isVisible = isShowBnv
+    private fun updateVisibilityForBottomNavViewBy(showBnv: Boolean) {
+        binding.bnvBottomNav.isVisible = showBnv
     }
 
-    private fun adjustNavHostFragmentInset(hasBnv: Boolean) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-            binding.navHostFragment.setOnApplyWindowInsetsListener { v, insets ->
-                val windowNavBar = insets.getInsets(WindowInsets.Type.navigationBars())
-
-                v.updatePadding(bottom = if (hasBnv) 0 else windowNavBar.bottom)
-                insets
-            }
-        } else {
-            binding.navHostFragment.updatePadding(bottom = if (hasBnv) 0 else navigationHeight())
-        }
+    private fun setNavHostFragmentPaddingBottomWhether(hasBnv: Boolean) {
+        binding.navHostFragment.updatePadding(bottom = if (hasBnv) 0 else navigationHeight())
     }
 
     private fun changeStartDestinationIfNotHome(

@@ -29,8 +29,7 @@
                 app:titleCollapseMode="fade"
                 app:title="@{placeName}"
                 app:expandedTitleTextColor="@color/transparent"
-                app:layout_scrollFlags="scroll|exitUntilCollapsed|snap"
-                setApplyWindowInsetListenerAsNull="@{true}">
+                app:layout_scrollFlags="scroll|exitUntilCollapsed|snap">
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:id="@+id/ll_titleViewContainer"

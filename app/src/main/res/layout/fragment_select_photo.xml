@@ -14,13 +14,13 @@
 
     <androidx.constraintlayout.motion.widget.MotionLayout
         android:id="@+id/ctl_selectPhotoContainer"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        setToolbarInset="@{true}"
         showSelectedItems="@{uploadViewModel.uploadItem.selectedImageItems.size > 0}"
         enableMotionAnim="@{viewModel.enableMotionAnim}"
         updateMotionAnimEnabled="@{viewModel.updateMotionAnimEnabled}"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:fitsSystemWindows="true"
-        app:layoutDescription="@xml/motion_scene_selected_photo_height">
+        app:layoutDescription="@xml/motion_scene_selected_photo">
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/selectedImgRecyclerView"
@@ -34,7 +34,7 @@
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tb_selectPhotoToolbar"
+            app:layout_constraintTop_toBottomOf="@+id/layout_select_photo_toolbar"
             tools:listitem="@layout/vh_selected_media_store_img_item" />
 
         <androidx.recyclerview.widget.RecyclerView
@@ -46,19 +46,11 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tb_selectPhotoToolbar"
+            app:layout_constraintTop_toBottomOf="@+id/layout_select_photo_toolbar"
             app:spanCount="3" />
 
-        <com.google.android.material.appbar.MaterialToolbar
-            android:id="@+id/tb_selectPhotoToolbar"
-            isVisibleMenu="@{uploadViewModel.uploadItem.selectedImageItems.size() != 0}"
-            android:layout_width="0dp"
-            android:layout_height="?attr/actionBarSize"
-            android:background="@color/white"
-            android:elevation="1dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
+        <include
+            android:id="@+id/layout_select_photo_toolbar"
+            layout="@layout/layout_toolbar_common" />
     </androidx.constraintlayout.motion.widget.MotionLayout>
 </layout>

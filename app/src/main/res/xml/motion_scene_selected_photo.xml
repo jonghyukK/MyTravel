@@ -9,6 +9,7 @@
         motion:duration="100"
         motion:motionInterpolator="linear"
         motion:layoutDuringTransition="honorRequest">
+
     </Transition>
 
     <ConstraintSet android:id="@+id/cs_selected_items_height_start">
@@ -16,8 +17,8 @@
             android:id="@+id/selectedImgRecyclerView"
             motion:layout_constraintEnd_toEndOf="parent"
             android:layout_width="0dp"
-            android:layout_height="0dp"
-            motion:layout_constraintTop_toBottomOf="@+id/tb_selectPhotoToolbar"
+            android:layout_height="wrap_content"
+            motion:layout_constraintTop_toBottomOf="@+id/layout_select_photo_toolbar"
             motion:layout_constraintStart_toStartOf="parent" />
         <Constraint
             android:id="@+id/mediaStoreImgRecyclerView"
@@ -25,8 +26,8 @@
             android:layout_width="0dp"
             android:layout_height="0dp"
             motion:layout_constraintBottom_toBottomOf="parent"
-            motion:layout_constraintStart_toStartOf="parent"
-            motion:layout_constraintTop_toBottomOf="@id/tb_selectPhotoToolbar" />
+            motion:layout_constraintTop_toBottomOf="@+id/layout_select_photo_toolbar"
+            motion:layout_constraintStart_toStartOf="parent" />
     </ConstraintSet>
 
     <ConstraintSet android:id="@+id/cs_selected_items_height_end">
@@ -35,7 +36,7 @@
             motion:layout_constraintEnd_toEndOf="parent"
             android:layout_width="0dp"
             android:layout_height="90dp"
-            motion:layout_constraintTop_toBottomOf="@+id/tb_selectPhotoToolbar"
+            motion:layout_constraintTop_toBottomOf="@+id/layout_select_photo_toolbar"
             motion:layout_constraintStart_toStartOf="parent" />
         <Constraint
             android:id="@+id/mediaStoreImgRecyclerView"
