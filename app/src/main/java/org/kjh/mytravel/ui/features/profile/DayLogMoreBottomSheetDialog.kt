@@ -3,8 +3,7 @@ package org.kjh.mytravel.ui.features.profile
 import org.kjh.mytravel.R
 import org.kjh.mytravel.databinding.BsDialogDayLogMoreBinding
 import org.kjh.mytravel.ui.base.BaseBottomSheetDialogFragment
-import org.kjh.mytravel.utils.KakaoLinkUtils
-import org.kjh.mytravel.utils.onThrottleClick
+import org.kjh.mytravel.ui.common.setOnThrottleClickListener
 
 /**
  * MyTravel
@@ -23,12 +22,12 @@ class DayLogMoreBottomSheetDialog(
     override fun initView() {
         binding.isMyDayLog = isMyDayLog
 
-        binding.btnDelete.onThrottleClick {
+        binding.btnDelete.setOnThrottleClickListener {
             deleteAction()
             dismiss()
         }
 
-        binding.btnShare.onThrottleClick {
+        binding.btnShare.setOnThrottleClickListener {
             kakaoShareAction()
             dismiss()
         }

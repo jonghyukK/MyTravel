@@ -5,8 +5,8 @@ import androidx.navigation.fragment.findNavController
 import org.kjh.mytravel.R
 import org.kjh.mytravel.databinding.FragmentContentInputBinding
 import org.kjh.mytravel.ui.base.BaseFragment
+import org.kjh.mytravel.ui.common.setOnThrottleMenuClickListener
 import org.kjh.mytravel.ui.features.upload.UploadViewModel
-import org.kjh.mytravel.utils.onThrottleMenuItemClick
 
 class ContentInputFragment
     : BaseFragment<FragmentContentInputBinding>(R.layout.fragment_content_input) {
@@ -18,7 +18,7 @@ class ContentInputFragment
 
         binding.layoutContentInputToolbar.tbToolBar.apply {
             inflateMenu(R.menu.menu_complete)
-            onThrottleMenuItemClick { menu ->
+            setOnThrottleMenuClickListener { menu ->
                 if (menu.itemId == R.id.complete) {
                     popBackStackAfterUpdateContent()
                 }

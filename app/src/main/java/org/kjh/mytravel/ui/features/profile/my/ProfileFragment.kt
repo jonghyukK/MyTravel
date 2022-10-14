@@ -11,8 +11,11 @@ import kotlinx.coroutines.launch
 import org.kjh.mytravel.NavGraphDirections
 import org.kjh.mytravel.R
 import org.kjh.mytravel.databinding.FragmentProfileBinding
+import org.kjh.mytravel.databinding.LayoutProfileInfoBinding
+import org.kjh.mytravel.databinding.LayoutProfileInfoBindingImpl
 import org.kjh.mytravel.ui.base.BaseFragment
 import org.kjh.mytravel.ui.common.Dialogs
+import org.kjh.mytravel.ui.common.setOnThrottleMenuClickListener
 import org.kjh.mytravel.ui.features.profile.DAY_LOGS_GRID_PAGE_INDEX
 import org.kjh.mytravel.ui.features.profile.DAY_LOGS_LINEAR_PAGE_INDEX
 import org.kjh.mytravel.ui.features.profile.DayLogsTabPagerAdapter
@@ -40,7 +43,7 @@ class ProfileFragment
 
         binding.layoutProfileToolbar.tbToolBar.apply {
             inflateMenu(R.menu.menu_profile)
-            onThrottleMenuItemClick { menuItem ->
+            setOnThrottleMenuClickListener { menuItem ->
                 when (menuItem.itemId) {
                     R.id.write_post -> checkPermission()
                     R.id.settings   -> navigateTo(ProfileFragmentDirections.actionToSetting())
@@ -50,7 +53,7 @@ class ProfileFragment
 
         val tabLayout = binding.postsTabLayout
         val viewPager = binding.postsViewPager.apply {
-            adapter = DayLogsTabPagerAdapter(this@ProfileFragment)
+            adapter = DayLogsTabPagerAdapter(this@ProfileFragment, true)
             isUserInputEnabled = false
         }
 

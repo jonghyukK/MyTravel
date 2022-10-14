@@ -7,9 +7,9 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import org.kjh.mytravel.NavGraphDirections
 import org.kjh.mytravel.databinding.VhDayLogUserProfileItemBinding
+import org.kjh.mytravel.ui.common.setOnThrottleClickListener
 import org.kjh.mytravel.ui.features.daylog.DayLogProfileItemUiState
 import org.kjh.mytravel.utils.navigateTo
-import org.kjh.mytravel.utils.onThrottleClick
 
 /**
  * MyTravel
@@ -56,13 +56,13 @@ class PlaceDetailUserProfileViewHolder(
 ): RecyclerView.ViewHolder(binding.root) {
 
     init {
-        itemView.onThrottleClick {
+        itemView.setOnThrottleClickListener {
             binding.dayLogItem?.let { dayLog ->
                 dayLog.onChangeSelected()
             }
         }
 
-        binding.tvNickName.onThrottleClick { view ->
+        binding.tvNickName.setOnThrottleClickListener { view ->
             binding.dayLogItem?.let { dayLog ->
                 val action = NavGraphDirections.actionGlobalUserFragment(dayLog.email)
                 view.navigateTo(action)

@@ -14,7 +14,7 @@ import kotlinx.coroutines.launch
 import org.kjh.mytravel.R
 import org.kjh.mytravel.databinding.FragmentPlaceInfoWithDaylogBinding
 import org.kjh.mytravel.ui.base.BaseFragment
-import org.kjh.mytravel.utils.onThrottleMenuItemClick
+import org.kjh.mytravel.ui.common.setOnThrottleMenuClickListener
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -35,7 +35,7 @@ class PlaceInfoWithDayLogFragment
 
         binding.layoutPlaceInfoToolbar.tbToolBar.apply {
             inflateMenu(R.menu.menu_bookmark)
-            onThrottleMenuItemClick { menu ->
+            setOnThrottleMenuClickListener { menu ->
                 if (menu.itemId == R.id.bookmark) {
                     viewModel.requestBookmarkUpdate()
                 }

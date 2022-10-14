@@ -18,8 +18,8 @@ import org.kjh.mytravel.model.BannerItemUiState
 import org.kjh.mytravel.model.LatestDayLogItemUiState
 import org.kjh.mytravel.model.PlaceRankingItemUiState
 import org.kjh.mytravel.model.mapToPresenter
-import org.kjh.mytravel.ui.common.PagingWithHeaderUiModel
-import org.kjh.mytravel.ui.common.UiState
+import org.kjh.mytravel.model.common.PagingWithHeaderUiModel
+import org.kjh.mytravel.model.common.UiState
 import javax.inject.Inject
 
 /**

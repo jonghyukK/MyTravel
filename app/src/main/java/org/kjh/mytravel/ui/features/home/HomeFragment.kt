@@ -15,7 +15,7 @@ import org.kjh.mytravel.R
 import org.kjh.mytravel.databinding.FragmentHomeBinding
 import org.kjh.mytravel.model.LatestDayLogItemUiState
 import org.kjh.mytravel.ui.base.BaseFragment
-import org.kjh.mytravel.ui.common.UiState
+import org.kjh.mytravel.model.common.UiState
 import org.kjh.mytravel.ui.features.home.banner.BannerHorizontalWrapAdapter
 import org.kjh.mytravel.ui.features.home.banner.BannerListAdapter
 import org.kjh.mytravel.ui.features.home.latest.LatestDayLogPagingDataAdapter

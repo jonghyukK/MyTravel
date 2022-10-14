@@ -6,8 +6,8 @@ import androidx.recyclerview.widget.RecyclerView
 import org.kjh.mytravel.NavGraphDirections
 import org.kjh.mytravel.databinding.VhDayLogDetailItemBinding
 import org.kjh.mytravel.model.DayLog
+import org.kjh.mytravel.ui.common.setOnThrottleClickListener
 import org.kjh.mytravel.utils.navigateTo
-import org.kjh.mytravel.utils.onThrottleClick
 
 /**
  * MyTravel
@@ -56,20 +56,20 @@ class DayLogDetailItemAdapter(
     ): RecyclerView.ViewHolder(binding.root) {
 
         init {
-            binding.clPlaceInfoContainer.onThrottleClick { view ->
+            binding.clPlaceInfoContainer.setOnThrottleClickListener { view ->
                 binding.dayLogItem?.let { dayLog ->
                     view.navigateTo(
                         NavGraphDirections.actionGlobalPlaceInfoWithDayLogFragment(dayLog.placeName))
                 }
             }
 
-            binding.btnBookmark.onThrottleClick {
+            binding.btnBookmark.setOnThrottleClickListener {
                 binding.dayLogItem?.let { dayLog ->
                     onClickBookmark(dayLog)
                 }
             }
 
-            binding.btnShare.onThrottleClick {
+            binding.btnShare.setOnThrottleClickListener {
                 binding.dayLogItem?.let { dayLog ->
                     onClickShare(dayLog)
                 }

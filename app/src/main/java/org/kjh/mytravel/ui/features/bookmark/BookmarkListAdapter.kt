@@ -6,8 +6,8 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import org.kjh.mytravel.databinding.VhBookmarkDayLogItemBinding
+import org.kjh.mytravel.ui.common.setOnThrottleClickListener
 import org.kjh.mytravel.utils.navigateToDayLogDetail
-import org.kjh.mytravel.utils.onThrottleClick
 
 /**
  * MyTravel
@@ -46,13 +46,12 @@ class BookmarkListAdapter
     }
 }
 
-
 class BookmarkItemViewHolder(
     private val binding : VhBookmarkDayLogItemBinding
 ): RecyclerView.ViewHolder(binding.root) {
 
     init {
-        itemView.onThrottleClick { view ->
+        itemView.setOnThrottleClickListener { view ->
             binding.bookmarkItem?.let { item ->
                 view.navigateToDayLogDetail(item.placeName)
             }

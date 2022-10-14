@@ -6,8 +6,8 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import org.kjh.mytravel.databinding.VhPlaceRankingItemBinding
 import org.kjh.mytravel.model.PlaceRankingItemUiState
+import org.kjh.mytravel.ui.common.setOnThrottleClickListener
 import org.kjh.mytravel.utils.navigateToPlaceInfoWithDayLog
-import org.kjh.mytravel.utils.onThrottleClick
 
 /**
  * MyTravel
@@ -35,7 +35,7 @@ class PlaceRankingListAdapter
     ): RecyclerView.ViewHolder(binding.root) {
 
         init {
-            itemView.onThrottleClick { view ->
+            itemView.setOnThrottleClickListener { view ->
                 binding.rankingItem?.let { place ->
                     view.navigateToPlaceInfoWithDayLog(place.placeName)
                 }

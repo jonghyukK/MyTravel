@@ -12,7 +12,7 @@ import org.kjh.mytravel.R
 import org.kjh.mytravel.databinding.BsFragmentLocationSearchBinding
 import org.kjh.mytravel.model.MapQueryItem
 import org.kjh.mytravel.ui.base.BaseBottomSheetDialogFragment
-import org.kjh.mytravel.ui.common.UiState
+import org.kjh.mytravel.model.common.UiState
 
 @AndroidEntryPoint
 class LocationSearchFragment

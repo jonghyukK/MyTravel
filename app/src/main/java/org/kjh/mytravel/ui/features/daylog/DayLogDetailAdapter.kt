@@ -11,11 +11,12 @@ import org.kjh.mytravel.databinding.VhDayLogDetailBinding
 import org.kjh.mytravel.model.DayLog
 import org.kjh.mytravel.ui.common.OnNestedHorizontalTouchListener
 import org.kjh.mytravel.ui.common.OnSnapPagerScrollListener
+import org.kjh.mytravel.ui.common.setOnThrottleClickListener
 import org.kjh.mytravel.ui.features.daylog.images.DayLogDetailImagesInnerAdapter
 import org.kjh.mytravel.ui.features.daylog.profiles.DayLogDetailUserProfileItemDecoration
 import org.kjh.mytravel.ui.features.daylog.profiles.DayLogDetailUserProfilesInnerAdapter
 import org.kjh.mytravel.utils.navigateTo
-import org.kjh.mytravel.utils.onThrottleClick
+
 
 /**
  * MyTravel
@@ -86,7 +87,7 @@ class DayLogDetailAdapter(
                 addItemDecoration(DayLogDetailUserProfileItemDecoration())
             }
 
-            binding.clPlaceInfoContainer.onThrottleClick { view ->
+            binding.clPlaceInfoContainer.setOnThrottleClickListener { view ->
                 binding.dayLogItem?.currentDayLogItem?.let { dayLog ->
                     view.navigateTo(
                         NavGraphDirections.actionGlobalPlaceInfoWithDayLogFragment(dayLog.placeName)
@@ -94,7 +95,7 @@ class DayLogDetailAdapter(
                 }
             }
 
-            binding.btnShare.onThrottleClick {
+            binding.btnShare.setOnThrottleClickListener {
                 binding.dayLogItem?.currentDayLogItem?.let { item ->
                     onClickShare(item)
                 }

@@ -22,7 +22,7 @@ import org.kjh.mytravel.model.Bookmark
 import org.kjh.mytravel.model.Follow
 import org.kjh.mytravel.model.User
 import org.kjh.mytravel.model.mapToPresenter
-import org.kjh.mytravel.ui.common.UiState
+import org.kjh.mytravel.model.common.UiState
 import org.kjh.mytravel.utils.updateBookmarkStateWithDayLogs
 
 /**

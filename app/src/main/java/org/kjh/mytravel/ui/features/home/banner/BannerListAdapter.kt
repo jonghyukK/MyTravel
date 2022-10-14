@@ -6,9 +6,9 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import org.kjh.mytravel.databinding.VhHomeBannerItemBinding
 import org.kjh.mytravel.model.BannerItemUiState
+import org.kjh.mytravel.ui.common.setOnThrottleClickListener
 import org.kjh.mytravel.ui.features.home.HomeFragmentDirections
 import org.kjh.mytravel.utils.navigateTo
-import org.kjh.mytravel.utils.onThrottleClick
 
 /**
  * MyTravel
@@ -48,7 +48,7 @@ class BannerListAdapter
     ) : RecyclerView.ViewHolder(binding.root) {
 
         init {
-            itemView.onThrottleClick { view ->
+            itemView.setOnThrottleClickListener { view ->
                 binding.bannerItem?.bannerTopic?.let { bannerTopic ->
                     view.navigateTo(
                         HomeFragmentDirections.actionToPlacesBySubCity(bannerTopic))

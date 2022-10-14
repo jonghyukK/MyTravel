@@ -13,8 +13,8 @@ import kotlin.math.abs
  */
 
 class OnNestedHorizontalTouchListener: RecyclerView.SimpleOnItemTouchListener() {
-    var initialX = 0f
-    var initialY = 0f
+    private var initialX = 0f
+    private var initialY = 0f
 
     override fun onInterceptTouchEvent(rv: RecyclerView, e: MotionEvent): Boolean {
         if (e.action == MotionEvent.ACTION_DOWN) {

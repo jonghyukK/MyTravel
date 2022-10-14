@@ -13,7 +13,7 @@ import kotlinx.coroutines.launch
 import org.kjh.mytravel.R
 import org.kjh.mytravel.databinding.FragmentUserBinding
 import org.kjh.mytravel.ui.base.BaseFragment
-import org.kjh.mytravel.ui.common.UiState
+import org.kjh.mytravel.model.common.UiState
 import org.kjh.mytravel.ui.features.profile.DAY_LOGS_GRID_PAGE_INDEX
 import org.kjh.mytravel.ui.features.profile.DAY_LOGS_LINEAR_PAGE_INDEX
 import org.kjh.mytravel.ui.features.profile.DayLogsTabPagerAdapter
@@ -37,7 +37,7 @@ class UserFragment
 
         val tabLayout = binding.postsTabLayout
         val viewPager = binding.postsViewPager.apply {
-            adapter = DayLogsTabPagerAdapter(this@UserFragment)
+            adapter = DayLogsTabPagerAdapter(this@UserFragment, false)
             isUserInputEnabled = false
         }
 

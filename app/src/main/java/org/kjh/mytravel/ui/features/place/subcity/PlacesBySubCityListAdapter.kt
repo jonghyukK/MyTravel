@@ -7,8 +7,8 @@ import androidx.recyclerview.widget.RecyclerView
 import org.kjh.mytravel.databinding.VhPlacesBySubCityRowBinding
 import org.kjh.mytravel.model.Place
 import org.kjh.mytravel.ui.common.OnNestedHorizontalTouchListener
+import org.kjh.mytravel.ui.common.setOnThrottleClickListener
 import org.kjh.mytravel.utils.navigateToPlaceInfoWithDayLog
-import org.kjh.mytravel.utils.onThrottleClick
 
 /**
  * MyTravel
@@ -45,7 +45,7 @@ class PlacesBySubCityListAdapter
                 addOnItemTouchListener(OnNestedHorizontalTouchListener())
             }
 
-            itemView.onThrottleClick { view ->
+            itemView.setOnThrottleClickListener { view ->
                 binding.placeItem?.let { place ->
                     view.navigateToPlaceInfoWithDayLog(place.placeName)
                 }

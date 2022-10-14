@@ -14,11 +14,11 @@ import org.kjh.mytravel.databinding.VhLatestDayLogRowItemBinding
 import org.kjh.mytravel.model.LatestDayLogItemUiState
 import org.kjh.mytravel.ui.common.OnNestedHorizontalTouchListener
 import org.kjh.mytravel.ui.common.OnSnapPagerScrollListener
-import org.kjh.mytravel.ui.common.PagingWithHeaderUiModel
+import org.kjh.mytravel.model.common.PagingWithHeaderUiModel
+import org.kjh.mytravel.ui.common.setOnThrottleClickListener
 import org.kjh.mytravel.ui.features.profile.LineIndicatorDecoration
 import org.kjh.mytravel.utils.navigateTo
 import org.kjh.mytravel.utils.navigateToDayLogDetail
-import org.kjh.mytravel.utils.onThrottleClick
 
 /**
  * MyTravel
@@ -91,31 +91,31 @@ class LatestDayLogPagingDataAdapter(
         }
 
         init {
-            itemView.onThrottleClick { view ->
+            itemView.setOnThrottleClickListener { view ->
                 binding.latestDayLogItem?.let { item ->
                     view.navigateToDayLogDetail(item.placeName, item.dayLogId)
                 }
             }
 
-            binding.tvNickName.onThrottleClick { view ->
+            binding.tvNickName.setOnThrottleClickListener { view ->
                 binding.latestDayLogItem?.let { item ->
                     view.navigateTo(NavGraphDirections.actionGlobalUserFragment(item.email))
                 }
             }
 
-            binding.sivProfileImg.onThrottleClick { view ->
+            binding.sivProfileImg.setOnThrottleClickListener { view ->
                 binding.latestDayLogItem?.let { item ->
                     view.navigateTo(NavGraphDirections.actionGlobalUserFragment(item.email))
                 }
             }
 
-            binding.ivMore.onThrottleClick {
+            binding.ivMore.setOnThrottleClickListener {
                 binding.latestDayLogItem?.let {
                     onClickMenu(it)
                 }
             }
 
-            binding.ivBookmark.onThrottleClick {
+            binding.ivBookmark.setOnThrottleClickListener {
                 binding.latestDayLogItem?.onBookmark?.invoke()
             }
 

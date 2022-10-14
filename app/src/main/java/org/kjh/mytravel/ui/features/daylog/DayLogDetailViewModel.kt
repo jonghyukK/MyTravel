@@ -18,7 +18,7 @@ import org.kjh.domain.usecase.GetPlaceWithAroundUseCase
 import org.kjh.mytravel.model.DayLog
 import org.kjh.mytravel.model.Place
 import org.kjh.mytravel.model.mapToPresenter
-import org.kjh.mytravel.ui.common.PagingWithHeaderUiModel
+import org.kjh.mytravel.model.common.PagingWithHeaderUiModel
 
 /**
  * MyTravel

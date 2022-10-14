@@ -11,9 +11,10 @@ import org.kjh.mytravel.R
 import org.kjh.mytravel.databinding.VhAroundPlaceHeaderItemBinding
 import org.kjh.mytravel.databinding.VhAroundPlaceItemBinding
 import org.kjh.mytravel.model.Place
-import org.kjh.mytravel.ui.common.PagingWithHeaderUiModel
+import org.kjh.mytravel.model.common.PagingWithHeaderUiModel
+import org.kjh.mytravel.ui.common.setOnThrottleClickListener
 import org.kjh.mytravel.utils.navigateTo
-import org.kjh.mytravel.utils.onThrottleClick
+
 
 /**
  * MyTravel
@@ -106,7 +107,7 @@ class AroundPlaceItemViewHolder(
 ) : RecyclerView.ViewHolder(binding.root) {
 
     init {
-        itemView.onThrottleClick { view ->
+        itemView.setOnThrottleClickListener { view ->
             binding.placeItem?.let { place ->
                 view.navigateTo(
                     NavGraphDirections.actionGlobalDayLogDetailFragment(place.placeName))

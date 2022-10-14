@@ -10,6 +10,7 @@ import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
 import androidx.fragment.app.Fragment
 import org.kjh.mytravel.R
+import org.kjh.mytravel.databinding.LayoutProfileInfoBinding
 
 /**
  * MyTravel

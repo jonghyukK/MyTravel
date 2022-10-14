@@ -21,10 +21,10 @@ import org.kjh.mytravel.databinding.FragmentSelectPhotoBinding
 import org.kjh.mytravel.model.MediaStoreImage
 import org.kjh.mytravel.ui.base.BaseFragment
 import org.kjh.mytravel.ui.common.Dialogs
+import org.kjh.mytravel.ui.common.setOnThrottleMenuClickListener
 import org.kjh.mytravel.ui.features.upload.UploadViewModel
 import org.kjh.mytravel.utils.hasPermission
 import org.kjh.mytravel.utils.navigateTo
-import org.kjh.mytravel.utils.onThrottleMenuItemClick
 import org.kjh.mytravel.utils.startActivityToSystemSettings
 
 @AndroidEntryPoint
@@ -47,7 +47,7 @@ class SelectPhotoFragment
 
         binding.layoutSelectPhotoToolbar.tbToolBar.apply {
             inflateMenu(R.menu.menu_next)
-            onThrottleMenuItemClick { menu ->
+            setOnThrottleMenuClickListener { menu ->
                 when (menu.itemId) {
                     R.id.next -> navigateTo(SelectPhotoFragmentDirections.actionToUploadDayLog())
                 }

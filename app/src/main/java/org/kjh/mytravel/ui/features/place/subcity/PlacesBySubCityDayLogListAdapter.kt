@@ -5,8 +5,8 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import org.kjh.mytravel.databinding.VhPlaceByCityNameItemBinding
 import org.kjh.mytravel.model.DayLog
+import org.kjh.mytravel.ui.common.setOnThrottleClickListener
 import org.kjh.mytravel.utils.navigateToDayLogDetail
-import org.kjh.mytravel.utils.onThrottleClick
 
 /**
  * MyTravel
@@ -45,7 +45,7 @@ class PlacesBySubCityDayLogListAdapter
     ): RecyclerView.ViewHolder(binding.root) {
 
         init {
-            itemView.onThrottleClick { view ->
+            itemView.setOnThrottleClickListener { view ->
                 binding.dayLogItem?.let { dayLog ->
                     view.navigateToDayLogDetail(dayLog.placeName, dayLog.dayLogId)
                 }

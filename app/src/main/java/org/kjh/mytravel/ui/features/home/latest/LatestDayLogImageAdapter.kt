@@ -4,7 +4,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import org.kjh.mytravel.databinding.VhSquareImageLargeBinding
-import org.kjh.mytravel.utils.onThrottleClick
+import org.kjh.mytravel.ui.common.setOnThrottleClickListener
 
 /**
  * MyTravel
@@ -45,7 +45,7 @@ class LatestDayLogImageAdapter(
     ): RecyclerView.ViewHolder(binding.root) {
 
         init {
-            itemView.onThrottleClick { onClickImg() }
+            itemView.setOnThrottleClickListener { onClickImg() }
         }
 
         fun bind(imgResource: String) {

@@ -19,7 +19,7 @@ import org.kjh.mytravel.R
 import org.kjh.mytravel.databinding.ActivityMainBinding
 import org.kjh.mytravel.ui.base.BaseActivity
 import org.kjh.mytravel.ui.common.Dialogs
-import org.kjh.mytravel.ui.common.UiState
+import org.kjh.mytravel.model.common.UiState
 import org.kjh.mytravel.ui.features.home.HomeViewModel
 import org.kjh.mytravel.ui.features.upload.UploadViewModel
 import org.kjh.mytravel.utils.NotificationUtils

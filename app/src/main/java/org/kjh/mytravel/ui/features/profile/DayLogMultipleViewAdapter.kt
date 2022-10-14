@@ -11,8 +11,8 @@ import org.kjh.mytravel.databinding.VhLinearDayLogRowItemBinding
 import org.kjh.mytravel.model.DayLog
 import org.kjh.mytravel.ui.common.OnNestedHorizontalTouchListener
 import org.kjh.mytravel.ui.common.OnSnapPagerScrollListener
+import org.kjh.mytravel.ui.common.setOnThrottleClickListener
 import org.kjh.mytravel.utils.navigateToDayLogDetail
-import org.kjh.mytravel.utils.onThrottleClick
 
 /**
  * MyTravel
@@ -33,15 +33,11 @@ class DayLogMultipleViewAdapter(
     private val onClickMore    : (DayLog) -> Unit
 ): ListAdapter<DayLog, RecyclerView.ViewHolder>(DayLog.diffCallback) {
 
+    private val childViewState = mutableMapOf<Int, Parcelable?>()
+
     init {
         setHasStableIds(true)
     }
-
-    override fun getItemId(position: Int): Long {
-        return getItem(position).dayLogId.toLong()
-    }
-
-    private val childViewState = mutableMapOf<Int, Parcelable?>()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) =
         when (this.viewType) {
@@ -64,6 +60,10 @@ class DayLogMultipleViewAdapter(
             ViewType.Grid   -> (holder as DayLogGridItemViewHolder).bind(getItem(position))
             ViewType.Linear -> (holder as DayLogsLinearOuterViewHolder).bind(getItem(position))
         }
+    }
+
+    override fun getItemId(position: Int): Long {
+        return getItem(position).dayLogId.toLong()
     }
 
     // Linear ViewHolder for Posts.
@@ -96,13 +96,13 @@ class DayLogMultipleViewAdapter(
                     ))
             }
 
-            binding.ivBookmark.onThrottleClick {
+            binding.ivBookmark.setOnThrottleClickListener {
                 binding.dayLogItem?.let {
                     onClickBookmark(it)
                 }
             }
 
-            binding.ivMore.onThrottleClick {
+            binding.ivMore.setOnThrottleClickListener {
                 binding.dayLogItem?.let {
                     onClickMore(it)
                 }
@@ -135,13 +135,13 @@ class DayLogMultipleViewAdapter(
     ): RecyclerView.ViewHolder(binding.root) {
 
         init {
-            itemView.onThrottleClick { view ->
+            itemView.setOnThrottleClickListener { view ->
                 binding.dayLogItem?.let { dayLog ->
                     view.navigateToDayLogDetail(dayLog.placeName, dayLog.dayLogId)
                 }
             }
 
-            binding.ivBookmark.onThrottleClick {
+            binding.ivBookmark.setOnThrottleClickListener {
                 binding.dayLogItem?.let {
                     onClickBookmark(it)
                 }

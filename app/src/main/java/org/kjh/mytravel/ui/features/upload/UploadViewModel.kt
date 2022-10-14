@@ -5,17 +5,15 @@ import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import org.kjh.domain.entity.ApiResult
-import org.kjh.domain.usecase.GetMyProfileUseCase
 import org.kjh.domain.usecase.UploadDayLogUseCase
 import org.kjh.mytravel.model.MapQueryItem
 import org.kjh.mytravel.model.MediaStoreImage
 import org.kjh.mytravel.model.User
 import org.kjh.mytravel.model.mapToPresenter
-import org.kjh.mytravel.ui.common.UiState
+import org.kjh.mytravel.model.common.UiState
 import javax.inject.Inject
 
 /**

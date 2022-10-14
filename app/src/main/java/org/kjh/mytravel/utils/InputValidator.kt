@@ -1,5 +1,7 @@
 package org.kjh.mytravel.utils
 
+import android.util.Patterns
+
 /**
  * MyTravel
  * Class: InputValidator
@@ -33,7 +35,7 @@ object InputValidator {
 
     private fun checkEmailValidate(email: String?) = when {
         email.isNullOrBlank() -> Email.ERROR_EMPTY
-        !email.isValidPattern() -> Email.ERROR_PATTERN
+        !email.isValidEmailPattern() -> Email.ERROR_PATTERN
         else -> Email.VALIDATE
     }
 
@@ -68,3 +70,6 @@ object InputValidator {
         ERROR_EMPTY("닉네임을 입력해 주세요.")
     }
 }
+
+private fun String.isValidEmailPattern(): Boolean =
+    Patterns.EMAIL_ADDRESS.matcher(this).matches()

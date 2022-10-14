@@ -12,21 +12,28 @@ import androidx.appcompat.widget.Toolbar
  */
 
 class OnThrottleMenuItemClickListener(
-    private val action  : (MenuItem) -> Unit,
-    private val interval: Long = 400
+    private val onClickMenuAction: (MenuItem) -> Unit
 ): Toolbar.OnMenuItemClickListener {
 
     private var lastTimeClicked: Long = 0
 
-    override fun onMenuItemClick(item: MenuItem): Boolean {
-        val recentClickTime = lastTimeClicked
-        lastTimeClicked = System.currentTimeMillis()
+    private fun isSafe(): Boolean =
+        (System.currentTimeMillis() - lastTimeClicked) > CLICK_INTERVAL
 
-        return if (System.currentTimeMillis() - recentClickTime < interval) {
-            false
-        } else {
-            action(item)
-            true
+    override fun onMenuItemClick(item: MenuItem): Boolean {
+        if (isSafe()) {
+            onClickMenuAction(item)
         }
+        lastTimeClicked = System.currentTimeMillis()
+        return isSafe()
     }
+
+    companion object {
+        const val CLICK_INTERVAL = 500
+    }
+}
+
+fun Toolbar.setOnThrottleMenuClickListener(action: (MenuItem) -> Unit) {
+    val listener = OnThrottleMenuItemClickListener { action(it) }
+    setOnMenuItemClickListener(listener)
 }

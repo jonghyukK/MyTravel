@@ -22,6 +22,7 @@ import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetBehavior.STATE_HIDDEN
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
+import com.orhanobut.logger.Logger
 import org.kjh.mytravel.R
 import org.kjh.mytravel.model.*
 import org.kjh.mytravel.ui.features.bookmark.BookmarkItemUiState
@@ -39,7 +40,6 @@ import org.kjh.mytravel.ui.features.upload.location.LocationQueryResultAdapter
 import org.kjh.mytravel.ui.features.upload.select.MediaStoreImageListAdapter
 import org.kjh.mytravel.ui.features.upload.select.SelectedPhotoListAdapter
 import org.kjh.mytravel.utils.InputValidator
-import org.kjh.mytravel.utils.avoidUncheckedWarnAndCast
 import org.kjh.mytravel.utils.statusBarHeight
 
 /**
@@ -116,9 +116,8 @@ object BindingAdapters {
 
     @JvmStatic
     @BindingAdapter("onThrottleClick")
-    fun View.onThrottleClick(action: () -> Unit) {
-        val listener = View.OnClickListener { action() }
-        setOnClickListener(OnThrottleClickListener(listener))
+    fun bindOnThrottleClickListener(v: View, action: () -> Unit) {
+        v.setOnThrottleClickListener { action() }
     }
 
     @JvmStatic
@@ -193,7 +192,7 @@ object BindingAdapters {
 
     @JvmStatic
     @BindingAdapter("app:isVisible")
-    fun View.bindVisible(isVisible: Boolean = true) {
+    fun View.bindVisible(isVisible: Boolean = false) {
         this.isVisible = isVisible
     }
 
@@ -245,3 +244,6 @@ private fun View.isTopLevelFragment() =
                 || it == R.id.bookMarkFragment
                 || it == R.id.profileFragment
     } ?: false
+
+private inline fun <reified T> List<*>?.avoidUncheckedWarnAndCast(): List<T> =
+    this?.filterIsInstance<T>() ?: emptyList()

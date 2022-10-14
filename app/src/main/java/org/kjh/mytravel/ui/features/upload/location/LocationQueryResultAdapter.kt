@@ -6,7 +6,7 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import org.kjh.mytravel.databinding.VhSearchLocationItemBinding
 import org.kjh.mytravel.model.MapQueryItem
-import org.kjh.mytravel.utils.onThrottleClick
+import org.kjh.mytravel.ui.common.setOnThrottleClickListener
 
 /**
  * MyTravel
@@ -36,7 +36,7 @@ class LocationQueryResultAdapter(
     ): RecyclerView.ViewHolder(binding.root) {
 
         init {
-            itemView.onThrottleClick {
+            itemView.setOnThrottleClickListener {
                 binding.mapQueryItem?.let {
                     onClickQueryItem(it)
                 }

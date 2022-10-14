@@ -10,22 +10,27 @@ import android.view.View
  * Description:
  */
 class OnThrottleClickListener(
-    private val clickListener: View.OnClickListener,
-    private val interval     : Long = 400
+    private val onClickAction: (View) -> Unit
 ): View.OnClickListener {
 
-    private var clickable = true
+    private var lastTimeClicked: Long = 0
+
+    private fun isSafe(): Boolean =
+        (System.currentTimeMillis() - lastTimeClicked) > CLICK_INTERVAL
 
     override fun onClick(v: View?) {
-        if (clickable) {
-            clickable = false
-            v?.run {
-                postDelayed({
-                    clickable = true
-                }, interval)
-
-                clickListener.onClick(v)
-            }
+        if (isSafe() && v != null) {
+            onClickAction(v)
         }
+        lastTimeClicked = System.currentTimeMillis()
     }
+
+    companion object {
+        const val CLICK_INTERVAL = 500
+    }
+}
+
+fun View.setOnThrottleClickListener(action: (View) -> Unit) {
+    val listener = OnThrottleClickListener { action(it) }
+    setOnClickListener(listener)
 }

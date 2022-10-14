@@ -12,7 +12,7 @@ import org.kjh.domain.entity.ApiResult
 import org.kjh.domain.usecase.SearchMapUseCase
 import org.kjh.mytravel.model.MapQueryItem
 import org.kjh.mytravel.model.mapToPresenter
-import org.kjh.mytravel.ui.common.UiState
+import org.kjh.mytravel.model.common.UiState
 import javax.inject.Inject
 
 /**

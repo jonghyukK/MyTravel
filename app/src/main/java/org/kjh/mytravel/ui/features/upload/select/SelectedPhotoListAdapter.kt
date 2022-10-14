@@ -6,7 +6,7 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import org.kjh.mytravel.databinding.VhSelectedMediaStoreImgItemBinding
 import org.kjh.mytravel.model.MediaStoreImage
-import org.kjh.mytravel.utils.onThrottleClick
+import org.kjh.mytravel.ui.common.setOnThrottleClickListener
 
 /**
  * MyTravel
@@ -36,7 +36,7 @@ class SelectedPhotoListAdapter(
     ): RecyclerView.ViewHolder(binding.root) {
 
         init {
-            binding.ivDeleteImg.onThrottleClick { view ->
+            binding.ivDeleteImg.setOnThrottleClickListener { view ->
                 binding.item?.let { item ->
                     onDeleteImg(item)
                 }
