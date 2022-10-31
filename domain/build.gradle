@@ -10,9 +10,9 @@ java {
 
 dependencies {
     // Coroutine
-    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutine_version"
+    implementation deps.coroutines.android
 
     // Paging3
-    implementation "androidx.paging:paging-common-ktx:$paging3_version"
+    implementation deps.paging3.common
 
 }

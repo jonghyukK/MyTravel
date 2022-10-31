@@ -14,8 +14,8 @@ import kotlinx.coroutines.launch
 import org.kjh.mytravel.R
 import org.kjh.mytravel.databinding.FragmentHomeBinding
 import org.kjh.mytravel.model.LatestDayLogItemUiState
-import org.kjh.mytravel.ui.base.BaseFragment
 import org.kjh.mytravel.model.common.UiState
+import org.kjh.mytravel.ui.base.BaseFragment
 import org.kjh.mytravel.ui.features.home.banner.BannerHorizontalWrapAdapter
 import org.kjh.mytravel.ui.features.home.banner.BannerListAdapter
 import org.kjh.mytravel.ui.features.home.latest.LatestDayLogPagingDataAdapter
@@ -28,8 +28,7 @@ import org.kjh.mytravel.utils.KakaoLinkUtils
 @AndroidEntryPoint
 class HomeFragment : BaseFragment<FragmentHomeBinding>(R.layout.fragment_home) {
 
-    val viewModel: HomeViewModel by activityViewModels()
-
+    private val viewModel: HomeViewModel by activityViewModels()
     private val bannerListAdapter by lazy { BannerListAdapter() }
     private val rankingListAdapter by lazy { PlaceRankingListAdapter() }
     private val latestDayLogListAdapter by lazy {
@@ -49,6 +48,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(R.layout.fragment_home) {
         binding.viewModel = viewModel
 
         binding.homeConcatRecyclerView.apply {
+            setHasFixedSize(true)
             itemAnimator = null
             adapter = homeConcatAdapter
         }

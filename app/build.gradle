@@ -7,12 +7,12 @@ plugins {
 }
 
 android {
-    compileSdk 31
+    compileSdk build_versions.compile_sdk
 
     defaultConfig {
         applicationId "org.kjh.mytravel"
-        minSdk 23
-        targetSdk 31
+        minSdk build_versions.min_sdk
+        targetSdk build_versions.target_sdk
         versionCode 1
         versionName "1.0"
 
@@ -36,6 +36,7 @@ android {
     dataBinding {
         enabled = true
     }
+    namespace 'org.kjh.mytravel'
 }
 
 dependencies {
@@ -43,81 +44,75 @@ dependencies {
     implementation project(path: ':domain')
     implementation project(path: ':data')
 
-    implementation 'androidx.core:core-ktx:1.8.0'
-    implementation 'androidx.appcompat:appcompat:1.4.2'
-    implementation 'com.google.android.material:material:1.6.1'
-    implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
+    implementation deps.core_ktx
+    implementation deps.app_compat
+    implementation deps.material
+    implementation deps.constraint_layout
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
-    testImplementation 'junit:junit:4.+'
-    androidTestImplementation 'androidx.test.ext:junit:1.1.3'
-    androidTestImplementation 'androidx.test.espresso:espresso-core:3.4.0'
+    testImplementation deps.junit
+    androidTestImplementation deps.atsl.ext_junit
+    androidTestImplementation deps.espresso.core
 
     // Fragment
-    implementation "androidx.fragment:fragment-ktx:$fragment_version"
+    implementation deps.fragment.runtime_ktx
 
     // Navigation
-    implementation "androidx.navigation:navigation-fragment-ktx:$navigation_version"
-    implementation "androidx.navigation:navigation-ui-ktx:$navigation_version"
-    implementation "androidx.navigation:navigation-dynamic-features-fragment:$navigation_version"
+    implementation deps.navigation.fragment_ktx
+    implementation deps.navigation.ui_ktx
 
     // RecyclerView, selection
-    implementation "androidx.recyclerview:recyclerview:$recyclerview_version"
-    implementation "androidx.recyclerview:recyclerview-selection:$selection_version"
+    implementation deps.recyclerview.runtime
+    implementation deps.recyclerview.selection
 
     // LifeCycle
-    implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycle_version"
-    implementation "androidx.lifecycle:lifecycle-runtime-ktx:$lifecycle_version"
-    implementation "androidx.lifecycle:lifecycle-livedata-ktx:$lifecycle_version"
-    implementation "androidx.lifecycle:lifecycle-common-java8:$lifecycle_version"
-    implementation "androidx.lifecycle:lifecycle-extensions:$lifecycle_extension_version"
+    implementation deps.lifecycle.runtime_ktx
+    implementation deps.lifecycle.java8
+    implementation deps.lifecycle.viewmodel_ktx
+    implementation deps.lifecycle.livedata_ktx
+    implementation deps.lifecycle.extensions
 
     // Coroutine
-    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutine_version"
-
-    // Data Store
-    implementation "androidx.datastore:datastore-preferences:$datastore_version"
-    implementation "androidx.datastore:datastore-core:$datastore_version"
+    implementation deps.coroutines.android
 
     // Hilt
-    implementation "com.google.dagger:hilt-android:$hilt_version"
-    kapt "com.google.dagger:hilt-android-compiler:$hilt_version"
+    implementation deps.hilt.android
+    kapt deps.hilt.compiler
 
     // Retrofit
-    implementation "com.squareup.retrofit2:retrofit:$retrofit_version"
-    implementation "com.squareup.retrofit2:converter-gson:$retrofit_version"
+    implementation deps.retrofit.runtime
+    implementation deps.retrofit.gson
 
     // OkHttp
-    implementation "com.squareup.okhttp3:okhttp:$okhttp_version"
-    implementation "com.squareup.okhttp3:logging-interceptor:$okhttp_version"
+    implementation deps.okhttp.runtime
+    implementation deps.okhttp.logging_interceptor
 
     // Logger
-    implementation "com.orhanobut:logger:$logger_version"
+    implementation deps.logger
 
     // Glide
-    implementation "com.github.bumptech.glide:glide:$glide_version"
-    kapt "com.github.bumptech.glide:compiler:$glide_version"
+    implementation deps.glide.runtime
+    kapt deps.glide.complier
 
     // Naver Map
-    implementation "com.naver.maps:map-sdk:$navermap_version"
+    implementation deps.navermap
 
     // Image Cropper
-    implementation "com.github.CanHub:Android-Image-Cropper:$image_cropper_version"
+    implementation deps.image_cropper
 
     // Paging3
-    implementation "androidx.paging:paging-runtime-ktx:$paging3_version"
-
-    // WorkManager
-    implementation "androidx.work:work-runtime-ktx:$work_version"
+    implementation deps.paging3.runtime_ktx
 
     // Kakao SDK All
-    implementation "com.kakao.sdk:v2-all:$kakao_sdk_version"
-
-    // Skeleton Bones
-    implementation "com.github.EudyContreras:Skeleton-Bones:$skeleton_version"
+    implementation deps.kakao_sdk_v2_all
 
     // Room
-    implementation "androidx.room:room-runtime:$room_version"
-    implementation "androidx.room:room-ktx:$room_version"
-    annotationProcessor "androidx.room:room-compiler:$room_version"
-    kapt "androidx.room:room-compiler:$room_version"
+    implementation deps.room.runtime
+    implementation deps.room.ktx
+    annotationProcessor deps.room.complier
+    kapt deps.room.complier
+
+    // ExoPlayer
+    implementation deps.exoplayer.core
+    implementation deps.exoplayer.dash
+    implementation deps.exoplayer.ui
 }

@@ -37,7 +37,9 @@ class BookmarkViewModel @Inject constructor(
         viewModelScope.launch {
             getMyProfileUseCase()
                 .map { userEntity ->
-                    userEntity?.bookMarks?.map { it.mapToPresenter() } ?: emptyList()
+                    userEntity?.bookMarks?.map {
+                        it.mapToPresenter()
+                    } ?: emptyList()
                 }
                 .distinctUntilChanged()
                 .collect { bookmarks ->

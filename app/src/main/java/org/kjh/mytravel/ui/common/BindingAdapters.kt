@@ -225,16 +225,13 @@ object BindingAdapters {
     @JvmStatic
     @BindingAdapter("app:imgUrl")
     fun bindImageWithUrl(view: ImageView, imgUrl: String?) {
-        imgUrl?.run {
+        imgUrl?.let {
             Glide.with(view)
                 .load(imgUrl)
                 .thumbnail(0.33f)
                 .centerCrop()
                 .into(view)
-        } ?: Glide.with(view)
-            .load(R.drawable.ic_launcher_background)
-            .centerCrop()
-            .into(view)
+        }
     }
 }
 

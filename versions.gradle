@@ -1,0 +1,138 @@
+ext.deps = [:]
+
+def versions = [:]
+versions.kotlin = '1.7.20'
+versions.android_gradle_plugin = '7.3.1'
+versions.core_ktx = '1.8.0'
+versions.constraint_layout = '2.1.4'
+versions.appcompat = '1.5.1'
+versions.material = '1.7.0'
+versions.junit = '4.12'
+versions.espresso = '3.4.0'
+versions.atsl_junit = '1.1.3'
+versions.fragment = '1.5.4'
+versions.navigation = '2.5.3'
+versions.recyclerview = '1.3.0-alpha02'
+versions.selection = '1.2.0-alpha01'
+versions.lifecycle = '2.5.1'
+versions.lifecycle_extension = '2.2.0'
+versions.coroutines = '1.6.4'
+versions.hilt = '2.42'
+versions.retrofit = '2.9.0'
+versions.okhttp = '5.0.0-alpha.2'
+versions.glide = '4.13.2'
+versions.navermap = '3.13.0'
+versions.image_cropper = '3.3.5'
+versions.paging3 = '3.1.1'
+versions.kakao_sdk = '2.11.0'
+versions.room = '2.4.3'
+versions.logger = '2.2.0'
+versions.exoplayer = '2.18.1'
+ext.versions = versions
+
+def build_versions = [:]
+build_versions.min_sdk = 23
+build_versions.compile_sdk = 32
+build_versions.target_sdk = 32
+ext.build_versions = build_versions
+
+def deps = [:]
+
+deps.android_gradle_plugin = "com.android.tools.build:gradle:$versions.android_gradle_plugin"
+
+deps.core_ktx = "androidx.core:core-ktx:$versions.core_ktx"
+
+deps.app_compat = "androidx.appcompat:appcompat:$versions.appcompat"
+
+deps.material = "com.google.android.material:material:$versions.material"
+
+deps.junit = "junit:junit:$versions.junit"
+
+deps.constraint_layout = "androidx.constraintlayout:constraintlayout:$versions.constraint_layout"
+
+def kotlin = [:]
+kotlin.plugin = "org.jetbrains.kotlin:kotlin-gradle-plugin:$versions.kotlin"
+deps.kotlin = kotlin
+
+def espresso = [:]
+espresso.core = "androidx.test.espresso:espresso-core:$versions.espresso"
+deps.espresso = espresso
+
+def atsl = [:]
+atsl.ext_junit = "androidx.test.ext:junit:$versions.atsl_junit"
+deps.atsl = atsl
+
+def fragment = [:]
+fragment.runtime_ktx = "androidx.fragment:fragment-ktx:$versions.fragment"
+deps.fragment = fragment
+
+def navigation = [:]
+navigation.fragment_ktx = "androidx.navigation:navigation-fragment-ktx:$versions.navigation"
+navigation.ui_ktx = "androidx.navigation:navigation-ui-ktx:$versions.navigation"
+navigation.safe_args_plugin = "androidx.navigation:navigation-safe-args-gradle-plugin:$versions.navigation"
+deps.navigation = navigation
+
+def recyclerview = [:]
+recyclerview.runtime = "androidx.recyclerview:recyclerview:$versions.recyclerview"
+recyclerview.selection = "androidx.recyclerview:recyclerview-selection:$versions.selection"
+deps.recyclerview = recyclerview
+
+def lifecycle = [:]
+lifecycle.runtime_ktx = "androidx.lifecycle:lifecycle-runtime-ktx:$versions.lifecycle"
+lifecycle.java8 = "androidx.lifecycle:lifecycle-common-java8:$versions.lifecycle"
+lifecycle.viewmodel_ktx = "androidx.lifecycle:lifecycle-viewmodel-ktx:$versions.lifecycle"
+lifecycle.livedata_ktx = "androidx.lifecycle:lifecycle-livedata-ktx:$versions.lifecycle"
+lifecycle.extensions = "androidx.lifecycle:lifecycle-extensions:$versions.lifecycle_extension"
+deps.lifecycle = lifecycle
+
+def coroutines = [:]
+coroutines.android = "org.jetbrains.kotlinx:kotlinx-coroutines-android:$versions.coroutines"
+deps.coroutines = coroutines
+
+def hilt = [:]
+hilt.plugin = "com.google.dagger:hilt-android-gradle-plugin:$versions.hilt"
+hilt.android = "com.google.dagger:hilt-android:$versions.hilt"
+hilt.compiler = "com.google.dagger:hilt-android-compiler:$versions.hilt"
+deps.hilt = hilt
+
+def retrofit = [:]
+retrofit.runtime = "com.squareup.retrofit2:retrofit:$versions.retrofit"
+retrofit.gson = "com.squareup.retrofit2:converter-gson:$versions.retrofit"
+deps.retrofit = retrofit
+
+def okhttp = [:]
+okhttp.runtime = "com.squareup.okhttp3:okhttp:$versions.okhttp"
+okhttp.logging_interceptor = "com.squareup.okhttp3:logging-interceptor:$versions.okhttp"
+deps.okhttp = okhttp
+
+def glide = [:]
+glide.runtime = "com.github.bumptech.glide:glide:$versions.glide"
+glide.complier = "com.github.bumptech.glide:compiler:$versions.glide"
+deps.glide = glide
+
+def room = [:]
+room.runtime = "androidx.room:room-runtime:$versions.room"
+room.ktx = "androidx.room:room-ktx:$versions.room"
+room.complier = "androidx.room:room-compiler:$versions.room"
+deps.room = room
+
+def paging3 = [:]
+paging3.runtime_ktx = "androidx.paging:paging-runtime-ktx:$versions.paging3"
+paging3.common = "androidx.paging:paging-common-ktx:$versions.paging3"
+deps.paging3 = paging3
+
+def exoplayer = [:]
+exoplayer.core = "com.google.android.exoplayer:exoplayer-core:$versions.exoplayer"
+exoplayer.dash = "com.google.android.exoplayer:exoplayer-dash:$versions.exoplayer"
+exoplayer.ui = "com.google.android.exoplayer:exoplayer-ui:$versions.exoplayer"
+deps.exoplayer = exoplayer
+
+deps.navermap = "com.naver.maps:map-sdk:$versions.navermap"
+
+deps.image_cropper = "com.github.CanHub:Android-Image-Cropper:$versions.image_cropper"
+
+deps.kakao_sdk_v2_all = "com.kakao.sdk:v2-all:$versions.kakao_sdk"
+
+deps.logger = "com.orhanobut:logger:$versions.logger"
+
+ext.deps = deps
